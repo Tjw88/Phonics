@@ -23,6 +23,18 @@ daily adventure. The parent area (⚙, gated) has Today, Sound map, Words read, 
 **Prototype tools** to skip days or fast-forward simulated play, which is the only way to see the
 "three separate days" mastery gate without waiting three real days.
 
+## Hosting (GitHub Pages)
+
+`.github/workflows/pages.yml` runs the tests, builds, and publishes the site on every push. One-time setup:
+**repo Settings → Pages → Build and deployment → Source: "GitHub Actions"**. The site then lives at
+`https://<owner>.github.io/Phonics/` (the exact URL is shown on that Settings page and in the workflow run).
+
+Things to know: Pages sites are **public on the internet** (on a private repo too, unless the organisation has
+GitHub Enterprise); the site carries `noindex` and a `robots.txt` that disallows crawlers, but that only asks
+search engines not to list it. The audio is machine-generated and unreviewed, so treat the link as a prototype
+to share with known people, not something to publicise. The workflow triggers on pushes to
+`claude/new-session-djz0vn` and `main`; if you rename the default branch, edit the `branches:` line.
+
 ## What is built (against the spec)
 
 | Spec item | Status |
