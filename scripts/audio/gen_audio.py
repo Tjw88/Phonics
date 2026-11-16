@@ -22,18 +22,33 @@ OUT = os.path.join(ROOT, "public", "audio")
 SR = E.RATE
 VARIANTS = [(50, 125), (54, 125), (46, 125)]  # (pitch, rate) - small variation so repeats do not sound identical
 
-# phoneme key -> (espeak mnemonic, expected IPA). IPA is what UK phonics teaches for the MVP sets.
-PHONEMES = {
-    "s": ("s", "s"), "a": ("a", "æ"), "t": ("t", "t"), "p": ("p", "p"),
-    "i": ("I", "ɪ"), "n": ("n", "n"), "m": ("m", "m"), "d": ("d", "d"),
-    "g": ("g", "ɡ"), "o": ("0", "ɒ"), "k": ("k", "k"), "e": ("E", "ɛ"),
-    "u": ("V", "ʌ"), "r": ("r-", "ɹ"), "h": ("h", "h"), "b": ("b", "b"),
-    "f": ("f", "f"), "l": ("l", "l"),
+# phoneme key -> espeak mnemonic. The SAME mnemonic is realised differently by each accent's voice file
+# (e.g. [[V]] is /ʌ/ in RP but /ʊ/ in the Lancashire voice), so one table serves every accent.
+MNEMONIC = {
+    "s": "s", "a": "a", "t": "t", "p": "p", "i": "I", "n": "n", "m": "m", "d": "d", "g": "g", "o": "0", "k": "k",
+    "e": "E", "u": "V", "r": "r-", "h": "h", "b": "b", "f": "f", "l": "l",
 }
-GRAPHEME_IPA = {  # grapheme -> expected IPA (digraphs map to the same single sound)
-    "s": "s", "a": "æ", "t": "t", "p": "p", "i": "ɪ", "n": "n", "m": "m", "d": "d", "g": "ɡ", "o": "ɒ", "c": "k",
-    "k": "k", "ck": "k", "e": "ɛ", "u": "ʌ", "r": "ɹ", "h": "h", "b": "b", "f": "f", "ff": "f", "l": "l", "ll": "l",
-    "ss": "s", "gg": "ɡ",
+# What each accent SHOULD teach, as IPA. Anything not listed here is the RP value below.
+BASE_IPA = {
+    "s": "s", "a": "æ", "t": "t", "p": "p", "i": "ɪ", "n": "n", "m": "m", "d": "d", "g": "ɡ", "o": "ɒ", "k": "k",
+    "e": "ɛ", "u": "ʌ", "r": "ɹ", "h": "h", "b": "b", "f": "f", "l": "l",
+}
+ACCENTS = {
+    "rp": {"label": "Southern British (RP)", "voice": "en-GB-x-rp", "ipa": {}},
+    # FOOT-STRUT merger (cup = /kʊp/) and short /a/ in pass/bath: the two features that change what phonics teaches.
+    # The engine's only northern voice is Lancashire; there is no Yorkshire voice.
+    # (West Midlands, en-GB-x-gbcwmd, was rejected outright: it drops /h/ ("hill" -> /ɪl/), which would teach /h/ wrongly.)
+    "north": {"label": "Northern English", "voice": "en-GB-x-gbclan", "ipa": {"a": "a", "u": "ʊ"}},
+    # Scots /r/ is a tap: the engine's own isolated /r/ is a ~40 ms tap, so it is used instead of the formant approximant.
+    "scotland": {"label": "Scottish", "voice": "en-GB-scotland", "ipa": {"a": "a", "r": "r"}, "espeak_r": True,
+                 "enabled": False,
+                 "why_disabled": "espeak-ng renders a lone Scots /r/ as silence, and its isolated /i/ comes out as /e/ although the same "
+                                 "voice says \"kit\" with /ɪ/; without a human ear that conflict cannot be resolved. Run with --all to retry."},
+}
+GRAPHEME_KEY = {  # grapheme -> phoneme key (digraphs share the single sound)
+    "s": "s", "a": "a", "t": "t", "p": "p", "i": "i", "n": "n", "m": "m", "d": "d", "g": "g", "o": "o", "c": "k",
+    "k": "k", "ck": "k", "e": "e", "u": "u", "r": "r", "h": "h", "b": "b", "f": "f", "ff": "f", "l": "l", "ll": "l",
+    "ss": "s", "gg": "g",
 }
 STOPS = {"p", "t", "k", "b", "d", "g"}
 VOICELESS_STOPS = {"p", "t", "k"}
@@ -41,11 +56,10 @@ MAX_MS = {"s": 420, "f": 420, "h": 380, "m": 380, "n": 380, "l": 380, "r": 380}
 VOWELS = {"a", "i", "o", "e", "u"}
 FRICATIVE_LONG = {"s": "s:", "f": "f:", "h": "h:"}  # the engine's own lengthening works for these
 # espeak-ng renders a lone /b d g/ as SILENCE and a lone /m n l r/ as ~40 ms, so these seven come from formant.py
-FORMANT_SOUNDS = {"m", "n", "l", "r", "b", "d", "g"}
+WEAK_FORM_WORDS = {"an", "in", "it", "at", "am", "ad", "on", "up", "us", "if", "as", "is"}  # engine may reduce these
+FORMANT_SOUNDS = {"m", "n", "l", "r", "b", "d", "g"}  # (Scottish /r/ is the exception: see ACCENTS)
 F0_VARIANTS = [200, 190, 212]
 
-# Words whose southern-British pronunciation does not use the sound the grapheme teaches (BATH split etc).
-ACCENT_CLASHES = {"pass", "mass"}  # only excluded if the engine actually clashes (mass is fine in RP; pass is /pɑːs/)
 
 PHRASES = {
     "play": "Play", "play_again": "Play again", "play_together": "Play together", "next": "Next",
@@ -113,9 +127,9 @@ def write_wav(path, x):
         w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR); w.writeframes(x.astype(np.int16).tobytes())
 
 
-def render_phoneme(key, mn, variant):
+def render_phoneme(key, mn, variant, voice, use_formant):
     pitch, rate = VARIANTS[variant]
-    if key in FORMANT_SOUNDS:
+    if use_formant:
         f0 = F0_VARIANTS[variant]
         sig = FM.sustained(key, f0=f0) if key in FM.SUSTAINED else FM.voiced_stop(key, f0=f0)
         ok, detail = FM.check(key, sig)
@@ -123,11 +137,11 @@ def render_phoneme(key, mn, variant):
         vv = voicing(clip)
         return clip, {"source": "formant-synth", "self_check": detail, "self_check_ok": bool(ok), "ms": round(len(clip) / SR * 1000),
                       "voiced_fraction": round(sum(vv) / max(1, len(vv)), 2), "peak": int(np.abs(clip).max())}
-    E.set_voice(pitch=pitch, rate=rate)
+    E.set_voice(voice, pitch=pitch, rate=rate)
     raw = trim_lead(E.synth(f"[[{FRICATIVE_LONG.get(key, mn)}]]"))
     info = {"source": "espeak-ng"}
     if key in STOPS:
-        # espeak adds a vowel-like release to a bare stop ("puh"). Keep only the burst (+ aspiration for voiceless).
+        # keep only the burst (+ aspiration for voiceless stops)
         v = voicing(raw)
         first_voiced = next((i for i, f in enumerate(v) if f), None)
         hop = int(SR * 0.005)
@@ -135,8 +149,7 @@ def render_phoneme(key, mn, variant):
             cut = (first_voiced * hop if first_voiced is not None else int(SR * 0.12))
             cut = int(np.clip(cut, SR * 0.04, SR * 0.14))
         else:
-            cut = int(SR * 0.085)  # voiced stops: burst + a short voiced release, as in clipped phonics recordings
-        info["trimmed_from_ms"] = round(len(raw) / SR * 1000)
+            cut = int(SR * 0.085)
         clip = fade(raw[:cut], 12)
     else:
         cap = MAX_MS.get(key, 380 if key in VOWELS else 400)
@@ -147,107 +160,136 @@ def render_phoneme(key, mn, variant):
                   "peak": int(np.abs(clip).max())}
 
 
-def main():
-    bank = json.load(open(os.path.join(HERE, "bank.json")))
-    report = {"engine": "espeak-ng (formant synthesis), voice en-GB-x-rp", "phonemes": {}, "words": {}, "phrases": {}, "problems": []}
-    manifest = {"phonemes": {}, "words": {}, "phrases": {}}
+def rel_url(*parts):
+    return "/".join(parts)
 
-    # ---- 1. isolated sounds -------------------------------------------------
-    for key, (mn, ipa) in PHONEMES.items():
-        E.set_voice(pitch=50, rate=125)
-        if key in FORMANT_SOUNDS:
-            got, ok = "n/a (formant synth)", True  # no engine transcription exists for these; see self_check in each file entry
+
+def generate(accent, cfg, bank, shared):
+    """Generate one accent pack under public/audio/<accent>/. Formant sounds (accent-independent) live in public/audio/shared/."""
+    voice = cfg["voice"]
+    ipa = {**BASE_IPA, **cfg["ipa"]}
+    out = os.path.join(OUT, accent)
+    os.makedirs(out, exist_ok=True)
+    report = {"accent": accent, "label": cfg["label"], "voice": voice, "engine": "espeak-ng (formant synthesis)",
+              "expected_ipa": ipa, "phonemes": {}, "words": {}, "phrases": {}, "problems": []}
+    manifest = {"accent": accent, "label": cfg["label"], "voice": voice, "phonemes": {}, "words": {}, "phrases": {}, "sources": {}}
+
+    # ---- 1. isolated sounds ---------------------------------------------------
+    for key, mn in MNEMONIC.items():
+        use_formant = key in FORMANT_SOUNDS and not (key == "r" and cfg.get("espeak_r"))
+        E.set_voice(voice, pitch=50, rate=125)
+        trace_mn = "r" if (key == "r" and cfg.get("espeak_r")) else FRICATIVE_LONG.get(key, mn)
+        if use_formant:
+            got, ok = "n/a (formant synth)", True  # no engine transcription exists; see self_check in each file entry
         else:
-            got = norm_ipa(E.trace(f"[[{FRICATIVE_LONG.get(key, mn)}]]"), drop_length=key not in VOWELS)
-            ok = got == norm_ipa(ipa)
-        entry = {"mnemonic": mn, "expected_ipa": ipa, "engine_ipa": got, "ipa_match": ok, "files": []}
+            got = norm_ipa(E.trace(f"[[{trace_mn}]]"), drop_length=key not in VOWELS)
+            ok = got == norm_ipa(ipa[key])
+        entry = {"mnemonic": trace_mn, "expected_ipa": ipa[key], "engine_ipa": got, "ipa_match": ok, "files": []}
         if not ok:
-            report["problems"].append(f"phoneme /{key}/: engine synthesised {got!r}, expected {ipa!r}; NOT written")
+            report["problems"].append(f"[{accent}] /{key}/: engine synthesised {got!r}, expected {ipa[key]!r}; NOT written")
             report["phonemes"][key] = entry
             continue
         for v in range(len(VARIANTS)):
-            clip, m = render_phoneme(key, mn, v)
-            rel = f"phonemes/{key}_{v}.wav"
-            write_wav(os.path.join(OUT, rel), clip)
+            if use_formant and len(shared.get(key, [])) > v:  # accent-independent: generated once, reused
+                rel, m = shared[key][v]
+            else:
+                clip, m = render_phoneme(key, "r" if trace_mn == "r" else mn, v, voice, use_formant)
+                rel = rel_url("shared" if use_formant else accent, "phonemes", f"{key}_{v}.wav")
+                write_wav(os.path.join(OUT, rel), clip)
+                if use_formant:
+                    shared.setdefault(key, []).append((rel, m))
             entry["files"].append({"file": rel, **m})
             manifest["phonemes"].setdefault(key, []).append(rel)
-            manifest.setdefault("sources", {})[key] = m.get("source", "espeak-ng")
-            # mechanical checks
+            manifest["sources"][key] = m.get("source", "espeak-ng")
+            tap_ok = key == "r" and cfg.get("espeak_r")  # a tapped /r/ is naturally ~40 ms
             if m["peak"] < 1500:
-                report["problems"].append(f"/{key}/ v{v}: SILENT (peak {m['peak']}) FAILED")
+                report["problems"].append(f"[{accent}] /{key}/ v{v}: SILENT (peak {m['peak']}) FAILED")
             if m.get("self_check_ok") is False:
-                report["problems"].append(f"/{key}/ v{v}: formant self-check failed: {m['self_check']}")
+                report["problems"].append(f"[{accent}] /{key}/ v{v}: formant self-check failed: {m['self_check']}")
             if key in VOICELESS_STOPS and m["voiced_fraction"] > 0.25:
-                report["problems"].append(f"/{key}/ v{v}: {m['voiced_fraction']:.0%} voiced after trimming, vowel tail likely")
-            if key not in STOPS and m["ms"] < 150:
-                report["problems"].append(f"/{key}/ v{v}: only {m['ms']} ms, too short to hear as a held sound")
+                report["problems"].append(f"[{accent}] /{key}/ v{v}: {m['voiced_fraction']:.0%} voiced after trimming, vowel tail likely")
+            if key not in STOPS and m["ms"] < 150 and not tap_ok:
+                report["problems"].append(f"[{accent}] /{key}/ v{v}: only {m['ms']} ms, too short to hear as a held sound")
             if key in STOPS and m["ms"] < 50:
-                report["problems"].append(f"/{key}/ v{v}: only {m['ms']} ms, may be inaudible (needs a human listen)")
+                report["problems"].append(f"[{accent}] /{key}/ v{v}: only {m['ms']} ms, may be inaudible (needs a human listen)")
             if key in STOPS and m["ms"] > 150:
-                report["problems"].append(f"/{key}/ v{v}: {m['ms']} ms is too long for a stop")
+                report["problems"].append(f"[{accent}] /{key}/ v{v}: {m['ms']} ms is too long for a stop")
         report["phonemes"][key] = entry
 
-    # ---- 2. words: audited against the taught grapheme->sound map ------------------
-    E.set_voice(pitch=56, rate=115)
+    # ---- 2. words: the engine must say each word with the sounds THIS accent teaches ----
+    E.set_voice(voice, pitch=56, rate=115)
     removed = []
     for w in bank["words"]:
         text, gr = w["text"], w["graphemes"]
-        expected = norm_ipa("".join(GRAPHEME_IPA[g] for g in gr))
+        expected = norm_ipa("".join(ipa[GRAPHEME_KEY[g]] for g in gr))
         engine = norm_ipa(E.trace(text))
         entry = {"graphemes": gr, "expected_ipa": expected, "engine_ipa_for_text": engine}
-        if text in ACCENT_CLASHES and engine != expected:
-            entry["status"] = "excluded: accent clash"
-            report["problems"].append(f'word "{text}": RP says {engine!r} but the taught sounds give {expected!r}; excluded (decision needed)')
-            removed.append(text)
-            report["words"][text] = entry
-            continue
         if engine == expected:
             samples, entry["status"] = E.synth(text), "ok (rendered from text)"
         else:
-            # function words ("an", "it") get weak forms; build the word from its taught phonemes instead, then re-verify
+            # function words ("an", "it") can get weak forms: try building from the taught phonemes, then re-verify
             mn_seq, vowel_done = "", False
             for g in gr:
-                key = {"c": "k", "ck": "k", "ff": "f", "ll": "l", "ss": "s", "gg": "g"}.get(g, g)
-                m = PHONEMES[key][0]
+                key = GRAPHEME_KEY[g]
+                m = MNEMONIC[key]
                 if key in VOWELS and not vowel_done:
                     m, vowel_done = "'" + m, True
                 mn_seq += m
             built = norm_ipa(E.trace(f"[[{mn_seq}]]"))
-            if built == expected:
+            # only accept a built word if it matches AND the engine's own reading of the text is a mere weak form,
+            # never a genuine accent difference (e.g. RP /pɑːs/ for "pass")
+            weak_form = text in WEAK_FORM_WORDS
+            if built == expected and weak_form:
                 samples, entry["status"] = E.synth(f"[[{mn_seq}]]"), f"ok (built from phonemes [[{mn_seq}]]; text said {engine!r})"
             else:
-                entry["status"] = f"FAILED: text {engine!r}, built {built!r}, expected {expected!r}"
-                report["problems"].append(f'word "{text}": {entry["status"]}')
+                entry["status"] = f"excluded in this accent: engine says {engine!r}, taught sounds give {expected!r}"
+                removed.append(text)
                 report["words"][text] = entry
                 continue
         samples = level(fade(trim_lead(samples), 30), 3000.0)
-        rel = f"words/{text}.wav"
+        rel = rel_url(accent, "words", f"{text}.wav")
         write_wav(os.path.join(OUT, rel), samples)
         manifest["words"][text] = rel
         entry["ms"] = round(len(samples) / SR * 1000)
         report["words"][text] = entry
 
-    # ---- 3. fixed phrases (dynamic text such as the child's nickname cannot be pre-rendered) ----
-    E.set_voice(pitch=56, rate=135)
+    # ---- 3. fixed phrases ----------------------------------------------------------
+    E.set_voice(voice, pitch=56, rate=135)
     for k, t in PHRASES.items():
         samples = level(fade(trim_lead(E.synth(t)), 40), 3000.0)
-        rel = f"phrases/{k}.wav"
+        rel = rel_url(accent, "phrases", f"{k}.wav")
         write_wav(os.path.join(OUT, rel), samples)
         manifest["phrases"][k] = rel
         report["phrases"][k] = {"text": t, "ms": round(len(samples) / SR * 1000)}
 
-    manifest["removed_words"] = removed
-    json.dump(manifest, open(os.path.join(OUT, "manifest.json"), "w"), indent=1, ensure_ascii=False)
-    json.dump(report, open(os.path.join(HERE, "audit.json"), "w"), indent=1, ensure_ascii=False)
-    json.dump(report, open(os.path.join(OUT, "audit.json"), "w"), indent=1, ensure_ascii=False)  # served to the audition page
+    manifest["removed_words"] = sorted(removed)
+    report["removed_words"] = sorted(removed)
+    json.dump(manifest, open(os.path.join(out, "manifest.json"), "w"), indent=1, ensure_ascii=False)
+    json.dump(report, open(os.path.join(out, "audit.json"), "w"), indent=1, ensure_ascii=False)
+    json.dump(report, open(os.path.join(HERE, f"audit-{accent}.json"), "w"), indent=1, ensure_ascii=False)
+    return manifest, report
 
-    n_w = len(manifest["words"])
-    print(f"phoneme sets: {len(manifest['phonemes'])}/{len(PHONEMES)}  words: {n_w}/{len(bank['words'])}  phrases: {len(manifest['phrases'])}")
-    print(f"removed (accent clash): {removed}")
-    print("PROBLEMS:" if report["problems"] else "no mechanical problems")
-    for p in report["problems"]:
-        print("  -", p)
-    return 1 if any("NOT written" in p or "FAILED" in p or "self-check failed" in p for p in report["problems"]) else 0
+
+def main():
+    import shutil
+    bank = json.load(open(os.path.join(HERE, "bank.json")))
+    shutil.rmtree(OUT, ignore_errors=True)
+    shared = {}
+    bad = 0
+    index = {"accents": {}}
+    for accent, cfg in ACCENTS.items():
+        if not cfg.get("enabled", True) and "--all" not in sys.argv:
+            print(f"[{accent:8s}] {cfg['label']}: DISABLED - {cfg['why_disabled']}")
+            continue
+        manifest, report = generate(accent, cfg, bank, shared)
+        index["accents"][accent] = {"label": cfg["label"], "voice": cfg["voice"], "removed_words": manifest["removed_words"]}
+        print(f"[{accent:8s}] {cfg['label']}: sounds {len(manifest['phonemes'])}/{len(MNEMONIC)}  words {len(manifest['words'])}/{len(bank['words'])}"
+              f"  phrases {len(manifest['phrases'])}  excluded words: {manifest['removed_words']}")
+        for p in report["problems"]:
+            print("   -", p)
+        bad += sum(1 for p in report["problems"] if "NOT written" in p or "FAILED" in p or "self-check failed" in p)
+    json.dump(index, open(os.path.join(OUT, "index.json"), "w"), indent=1, ensure_ascii=False)
+    return 1 if bad else 0
 
 
 if __name__ == "__main__":

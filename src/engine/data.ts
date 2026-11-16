@@ -88,7 +88,7 @@ const rows: Row[] = [
   ['t-e-ll'], ['s-e-ll'], ['b-i-ll'],
   ['l-i-p', '👄'], ['l-a-p'], ['l-e-g', '🦵'], ['l-o-g', '🪵', 'd'], ['l-e-t'], ['l-i-d'], ['l-i-t'],
   ['m-e-ss'], ['m-i-ss'], ['k-i-ss'], ['h-i-ss'], ['m-o-ss', '🌿', 'd'], ['b-o-ss'], ['f-u-ss'], ['l-e-ss'],
-  ['m-a-ss'], // "pass" removed: southern British says /pɑːs/ (BATH vowel), which clashes with the taught /a/
+  ['p-a-ss'], ['m-a-ss'], // "pass": RP /pɑːs/ (BATH vowel) clashes with the taught /a/, so it is excluded per accent (ACCENT_EXCLUDE)
 ];
 
 export const BANK: Word[] = rows.map(([seg, emoji, flags = '']) => ({
@@ -103,3 +103,21 @@ export const BANK: Word[] = rows.map(([seg, emoji, flags = '']) => ({
 export const UNSUITABLE = new Set([
   'ass', 'tit', 'tits', 'dick', 'cock', 'fag', 'sex', 'pee', 'poo', 'bum', 'god', 'cum', 'gun',
 ]);
+
+// ---- Accents -------------------------------------------------------------------------------------------------
+// The curriculum (grapheme order, sets, mastery) is the SAME in every accent and progress is keyed by letter, so
+// switching accent keeps a child's progress. What changes per accent: the audio pack, and which words are usable
+// (a word is excluded when the accent says it with a different vowel from the one the letter teaches).
+export type AccentId = 'rp' | 'north';
+export interface Accent { id: AccentId; label: string; note: string }
+export const ACCENTS: Accent[] = [
+  { id: 'rp', label: 'Southern British (RP)', note: '“bus” and “put” have different vowels; “pass” has a long a, so it is left out.' },
+  {
+    id: 'north', label: 'Northern English',
+    note: '“bus” and “put” share the same vowel and “pass” has a short a. Voice is Lancashire; there is no Yorkshire-specific voice yet.',
+  },
+];
+export const DEFAULT_ACCENT: AccentId = 'rp';
+/** Words dropped per accent. Must equal the generated audio's `removed_words` (a test enforces it). */
+export const ACCENT_EXCLUDE: Record<AccentId, readonly string[]> = { rp: ['pass'], north: [] };
+export const bankFor = (accent: AccentId): Word[] => BANK.filter((w) => !ACCENT_EXCLUDE[accent].includes(w.text));

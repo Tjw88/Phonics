@@ -1,6 +1,6 @@
 import { type Grapheme, type Word } from '../engine/data';
 import { shuffle, type Rng } from '../engine/dates';
-import { BANK } from '../engine/data';
+import { bankFor, type AccentId } from '../engine/data';
 import { phonemeOf, slashed, type PlacementItem } from '../engine/session';
 import { setOpensNext, type ChildState } from '../engine/state';
 import { blip, playSequence, praise, soft, speak, tap } from './audio';
@@ -193,9 +193,9 @@ export const robotTalk = async (ctx: Ctx, word: Word, distractors: Word[]): Prom
 
 /** Rhyme Rocket (rhyme). Used for Sound Play (band B) and as the third practice game before print blending opens. */
 export const rimeOf = (w: Word): string => w.graphemes.slice(1).join('-');
-export const rhymeSets = (): Word[][] => {
+export const rhymeSets = (accent: AccentId): Word[][] => {
   const by = new Map<string, Word[]>();
-  for (const w of BANK.filter((x) => x.emoji && x.graphemes.length === 3)) {
+  for (const w of bankFor(accent).filter((x) => x.emoji && x.graphemes.length === 3)) {
     const k = rimeOf(w);
     by.set(k, [...(by.get(k) ?? []), w]);
   }

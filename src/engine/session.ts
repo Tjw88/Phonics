@@ -1,4 +1,4 @@
-import { BANK, GRAPHEMES, GRAPHEME_BY_ID, graphemesInSet, type Grapheme, type Word } from './data';
+import { GRAPHEMES, GRAPHEME_BY_ID, bankFor, graphemesInSet, type Grapheme, type Word } from './data';
 import { shuffle, type Rng } from './dates';
 import { isDecodable } from './linter';
 import { pickReview } from './review';
@@ -29,7 +29,7 @@ export const printBlendOpen = (s: ChildState): boolean => s.startSet > 1 || setO
 /** Print words decodable from what has been introduced so far, never oral-only or unsuitable. */
 export const decodableWords = (s: ChildState): Word[] => {
   const taught = introducedIds(s);
-  return BANK.filter((w) => isDecodable(w, taught));
+  return bankFor(s.accent).filter((w) => isDecodable(w, taught));
 };
 
 const containsPhoneme = (w: Word, phoneme: string) => w.graphemes.some((id) => phonemeOf(id) === phoneme);
@@ -79,7 +79,7 @@ export const startAdventure = (s: ChildState, today: string, rng: Rng): Plan => 
   const pool = decodableWords(s);
 
   // Oral blending uses pictured words and shows no letters, so it is available from day one.
-  const pictured = BANK.filter((w) => w.emoji);
+  const pictured = bankFor(s.accent).filter((w) => w.emoji);
   const robotWords = pickWords(pictured.filter((w) => !newSound || containsPhoneme(w, newSound.phoneme)), s, newSound, 3, rng);
   if (robotWords.length < 3) robotWords.push(...pickWords(pictured.filter((w) => !robotWords.includes(w)), s, null, 3 - robotWords.length, rng));
 

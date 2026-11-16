@@ -1,0 +1,16 @@
+{
+ "accents": {
+  "rp": {
+   "label": "Southern British (RP)",
+   "voice": "en-GB-x-rp",
+   "removed_words": [
+    "pass"
+   ]
+  },
+  "north": {
+   "label": "Northern English",
+   "voice": "en-GB-x-gbclan",
+   "removed_words": []
+  }
+ }
+}

@@ -50,15 +50,22 @@ const loadBuffer = (rel: string): Promise<AudioBuffer | null> => {
   return p;
 };
 
-/** Fetch the manifest and decode every phoneme clip up front so touch-to-sound stays fast. */
-export const initAudio = async (): Promise<void> => {
+/**
+ * Fetch an accent's manifest and decode every phoneme clip up front so touch-to-sound stays fast.
+ * Calling it again with another accent swaps the whole pack (buffers are keyed by file path, so nothing clashes).
+ */
+export const initAudio = async (accent: string): Promise<void> => {
   try {
-    const res = await fetch(url('manifest.json'));
-    if (!res.ok) return;
-    manifest = (await res.json()) as Manifest;
-    await Promise.all(Object.values(manifest.phonemes).flat().map(loadBuffer));
+    const res = await fetch(url(`${accent}/manifest.json`));
+    if (!res.ok) {
+      manifest = null; // tone/speech fallback
+      return;
+    }
+    const m = (await res.json()) as Manifest;
+    await Promise.all(Object.values(m.phonemes).flat().map(loadBuffer));
+    manifest = m;
   } catch {
-    manifest = null; // tone/speech fallback
+    manifest = null;
   }
 };
 export const audioSource = (phoneme: string): string => manifest?.sources?.[phoneme] ?? 'tone (no clip)';

@@ -8,14 +8,14 @@ The engine (`src/engine`) is plain TypeScript with no DOM, so its logic ports to
 ```bash
 npm install
 npm run dev          # play it (iPad-landscape-shaped, works on desktop and touch)
-npm test             # 28 tests (engine + audio/curriculum sync)
+npm test             # 35 tests (engine, accents, audio/curriculum sync)
 npm run lint:content # decodability / suitability linter over the word bank
 npm run sim          # pacing simulation (synthetic children through the real engine)
 npm run build && npx vite preview --port 4173 &  node scripts/e2e.cjs   # browser end-to-end test (needs Playwright; VP=390x844 for phone size)
 
 # regenerate the audio (needs: pip install espeakng-loader numpy)
 npx tsx scripts/export-bank.ts && python3 scripts/audio/gen_audio.py
-# then open /audio-check.html to audition every sound, word and phrase
+# then open /audio-check.html (add ?accent=north) to audition every sound, word and phrase
 ```
 
 First launch: parental gate (multiplication), nickname + age band, pick and name a dino, placement game, then the
@@ -30,6 +30,7 @@ daily adventure. The parent area (⚙, gated) has Today, Sound map, Words read, 
 | Sets 1-5 in spec order, one new sound per day; the next set opens when 3 of 4 sounds are secure and the 4th is carried forward | Built (changed from whole-set gating, see findings) |
 | Mastery gate (3 separate days), errorless 1→2→3 choices, spaced review of hardest sounds | Built, with a stricter definition of "right" (≥2 correct and ≥60% that day) |
 | Companion grows with progress (accessory per set), plank-by-plank Bridge Builder, glowing feed target | Built |
+| Accent option (setup step + parent Settings): Southern British (RP) or Northern English | Built; Scottish held back (see Accents) |
 | Audio | Generated, not recorded, see below |
 | Placement game → starting set | Built (sets 1-3 only; never grants mastery) |
 | 6-step daily adventure, goodnight, treasure, off-screen mission | Built |
@@ -68,6 +69,34 @@ Known weak points to listen for: stops are clipped bursts (~70-110 ms), so /p/ /
 each item Good / Bad / Unsure, then export the marks as JSON. The spec's rule stands: *a wrong sound is the most
 damaging defect*, so nothing here should reach a child before a phonics specialist has heard every sound.
 The child's nickname cannot be pre-rendered, so it is never spoken; captions carry it.
+
+## Accents
+
+The accent is a setting (chosen at setup, changeable in the parent area). **The curriculum, sound order, mastery
+gate and a child's progress are identical in every accent**, so switching keeps progress (tested). What changes:
+
+| | Southern British (RP) | Northern English |
+|---|---|---|
+| Voice (espeak-ng) | `en-GB-x-rp` | `en-GB-x-gbclan` (Lancashire) |
+| `a` taught as | /æ/ | /a/ |
+| `u` taught as | /ʌ/ ("bus" and "put" differ) | /ʊ/ ("bus" and "put" share a vowel) |
+| Words usable | 133 ("pass" is left out: RP says /pɑːs/) | all 134 |
+
+Each accent's expected sounds are written down in `gen_audio.py` and **every clip and word is checked against them
+using the engine's own phoneme trace**; a pack with a mismatch fails the build rather than shipping. Which words
+an accent drops is kept in `ACCENT_EXCLUDE` (`data.ts`) and a test fails if it ever disagrees with the audio.
+
+What is **not** covered, honestly:
+
+- **There is no Yorkshire voice.** The only northern voice the engine has is Lancashire. It shares the two features
+  that matter most for phonics (bus/put, short a), but other Yorkshire features are not modelled.
+- **Scottish is built but switched off.** The engine renders a lone Scots /r/ as silence, and its isolated /i/ comes
+  out as /e/ although the same voice says "kit" with /ɪ/. Without a human ear I can't resolve that, so it is held
+  back (`python3 scripts/audio/gen_audio.py --all` retries it).
+- **West Midlands was rejected:** its voice drops /h/ ("hill" → /ɪl/), which would teach /h/ wrongly.
+- Other accent features (th-fronting, glottal /t/, h-dropping, vowel length rules) are not modelled, and every accent
+  pack still needs a native-speaking phonics specialist to listen to it. The spec notes a regional pack is a
+  "meaningful later option"; this is the mechanism for it, not a finished set of regional voices.
 
 ## Findings: where the spec's own rules disagree or underperform
 

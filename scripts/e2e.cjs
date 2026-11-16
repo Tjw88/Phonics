@@ -76,6 +76,8 @@ async function playAdventure(page, { wrongFirst = false, shot } = {}) {
   const page = await ctx.newPage();
   page.on('pageerror', (e) => errors.push(String(e)));
   page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
+  const manifestRequests = [];
+  page.on('request', (r) => { const m = r.url().match(/audio\/(\w+)\/manifest\.json/); if (m) manifestRequests.push(m[1]); });
   const externalRequests = [];
   page.on('request', (r) => { if (!r.url().startsWith(new URL(url).origin) && !r.url().startsWith('data:')) externalRequests.push(r.url()); });
 
@@ -83,6 +85,8 @@ async function playAdventure(page, { wrongFirst = false, shot } = {}) {
   await page.goto(url);
   await passGate(page);
   await page.fill('[data-testid=nick]', 'Tom');
+  await page.click('[data-testid=accent-north]');
+  check(/short a/.test(await page.textContent('[data-testid=accent-note]')), 'choosing Northern English explains the differences (short a, shared bus/put vowel)');
   await page.click('[data-testid=setup-next]');
   await page.locator('[data-testid=egg]').nth(1).click();
   await page.fill('[data-testid=companion-name]', 'Dotty');
@@ -103,6 +107,7 @@ async function playAdventure(page, { wrongFirst = false, shot } = {}) {
   check(st.startSet === 2, `placement 2/2 on set 1 then misses -> starts at set 2 (got ${st.startSet})`);
   check(Object.keys(st.sounds).sort().join() === 'a,p,s,t', 'placed sounds seeded as introduced, not secure');
   check(!Object.values(st.sounds).some((r) => r.correctDays.length), 'placement grants no mastery days');
+  check(st.accent === 'north' && manifestRequests.includes('north'), `northern accent saved and its audio pack fetched (requests: ${[...new Set(manifestRequests)].join(',')})`);
   check(st.nickname === 'Tom' && !JSON.stringify(st).includes('@'), 'only a nickname is stored, no email/real name fields');
 
   log('DAY 1 (first adventure, one deliberate mistake)');
@@ -129,6 +134,15 @@ async function playAdventure(page, { wrongFirst = false, shot } = {}) {
   check(cell === 'learning', 'new sound shows as learning (not secure after one day)');
   await page.screenshot({ path: `${shots}/parent-sounds.png` });
   await page.click('[data-testid=tab-settings]');
+  const before = await page.evaluate(() => JSON.parse(localStorage.getItem('soundling.proto.v1')).sounds);
+  await page.selectOption('[data-testid=accent]', 'rp');
+  await page.waitForTimeout(400);
+  const afterRp = await page.evaluate(() => JSON.parse(localStorage.getItem('soundling.proto.v1')));
+  check(afterRp.accent === 'rp' && manifestRequests.includes('rp'), 'switching to RP in settings saves it and loads the RP pack');
+  check(JSON.stringify(afterRp.sounds) === JSON.stringify(before), 'progress is untouched by the accent switch');
+  check(/long a/.test(await page.textContent('[data-testid=accent-help]')), 'settings explain what RP changes');
+  await page.selectOption('[data-testid=accent]', 'north');
+  await page.waitForTimeout(300);
   await page.click('[data-testid=ff-7]');
   await page.click('[data-testid=parent-close]');
   await page.waitForSelector('[data-testid=greeting]');

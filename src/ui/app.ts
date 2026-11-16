@@ -1,4 +1,4 @@
-import { BANK, GRAPHEMES, MNEMONICS, type Word } from '../engine/data';
+import { ACCENTS, GRAPHEMES, MNEMONICS, bankFor, type AccentId, type Word } from '../engine/data';
 import { seeded, shuffle } from '../engine/dates';
 import { strugglingSounds } from '../engine/review';
 import {
@@ -50,7 +50,7 @@ export class App {
       this.banner, this.hintCard, this.stage,
     );
     document.addEventListener('pointerdown', unlockAudio, { once: true });
-    void initAudio();
+    void initAudio(this.s.accent);
     setInterval(() => this.tick(), 1000);
   }
 
@@ -142,17 +142,31 @@ export class App {
       class: `btn choice${k === band ? ' on' : ''}`, 'data-testid': `band-${k}`,
       onClick: () => { band = k; bandBtns.forEach((x, i) => x.classList.toggle('on', i === (k === 'B' ? 0 : 1))); },
     }, k === 'B' ? 'Sound Play · ages 2–3, play together' : 'Phonics journey · ages 3–5'));
+    let accent: AccentId = this.s.accent;
+    const accentNote = h('p', { class: 'muted', 'data-testid': 'accent-note' }, ACCENTS.find((a) => a.id === accent)?.note ?? '');
+    const accentBtns = ACCENTS.map((a) => h('button', {
+      class: `btn choice small${a.id === accent ? ' on' : ''}`, 'data-testid': `accent-${a.id}`,
+      onClick: () => {
+        accent = a.id;
+        accentBtns.forEach((x, i) => x.classList.toggle('on', ACCENTS[i]?.id === accent));
+        accentNote.textContent = a.note;
+        void initAudio(accent);
+      },
+    }, a.label));
     const go = bigButton('Next', 'setup-next');
     this.stage.replaceChildren(
       h('div', { class: 'scene setup' }, h('h1', {}, 'Welcome to Soundling'),
         h('p', {}, 'No account, email, photo or real name needed. Everything stays on this device.'),
-        input, h('div', { class: 'row' }, bandBtns), go.el),
+        input, h('div', { class: 'row' }, bandBtns),
+        h('p', { class: 'caption small' }, 'How do you say your sounds?'),
+        h('div', { class: 'row' }, accentBtns), accentNote, go.el),
     );
     await go.pressed;
     nick = input.value.trim() || 'Friend';
     this.s = newChild();
     this.s.nickname = nick;
     this.s.band = band;
+    this.s.accent = accent;
 
     // choose and name a companion
     let chosen = 0;
@@ -286,7 +300,7 @@ export class App {
     this.persist();
     if (this.overLimit()) return this.goodnight(plan);
 
-    const pictured = BANK.filter((w) => w.emoji);
+    const pictured = bankFor(this.s.accent).filter((w) => w.emoji);
     for (const [i, w] of plan.robotWords.entries()) {
       const others = shuffle(pictured.filter((x) => x.text !== w.text && x.graphemes[0] !== w.graphemes[0]), ctx.rng).slice(0, Math.min(3, i + 1));
       await robotTalk(ctx, w, others);
@@ -301,7 +315,7 @@ export class App {
         recordWord(s, w.text, r.firstTryCorrect, today);
       }
     } else {
-      const groups = shuffle(rhymeSets(), ctx.rng).slice(0, 2);
+      const groups = shuffle(rhymeSets(this.s.accent), ctx.rng).slice(0, 2);
       for (const grp of groups) {
         const [a, b] = shuffle(grp, ctx.rng) as [Word, Word];
         const others = shuffle(pictured.filter((x) => !grp.includes(x)), ctx.rng).slice(0, 2);
@@ -393,8 +407,8 @@ export class App {
     this.inChild = true;
     const ctx = this.ctx();
     await this.interlude([companionEl(this.s, 'big'), h('p', { class: 'caption', 'data-testid': 'coplay' }, 'Find a grown-up to play with you!')]);
-    const pictured = BANK.filter((w) => w.emoji);
-    for (const grp of shuffle(rhymeSets(), ctx.rng).slice(0, 3)) {
+    const pictured = bankFor(this.s.accent).filter((w) => w.emoji);
+    for (const grp of shuffle(rhymeSets(this.s.accent), ctx.rng).slice(0, 3)) {
       const [a, b] = shuffle(grp, ctx.rng) as [Word, Word];
       await rhymeRocket(ctx, a, b, shuffle(pictured.filter((x) => !grp.includes(x)), ctx.rng).slice(0, 1));
     }
@@ -463,6 +477,15 @@ export class App {
       } else {
         const sel = h('select', { 'data-testid': 'limit', onChange: (e: Event) => { s.dailyLimitMin = Number((e.target as HTMLSelectElement).value); this.persist(); } },
           [10, 15, 20, 30].map((m) => h('option', { value: String(m), selected: m === s.dailyLimitMin }, `${m} minutes`)));
+        const accentSel = h('select', {
+          'data-testid': 'accent',
+          onChange: (e: Event) => {
+            s.accent = (e.target as HTMLSelectElement).value as AccentId;
+            this.persist();
+            void initAudio(s.accent);
+            draw();
+          },
+        }, ACCENTS.map((a) => h('option', { value: a.id, selected: a.id === s.accent }, a.label)));
         const mute = h('label', {}, h('input', { type: 'checkbox', onChange: (e: Event) => setMuted((e.target as HTMLInputElement).checked) }), ' Mute sound');
         const fast = (days: number, acc: number) => h('button', {
           class: 'btn small', 'data-testid': `ff-${days}`,
@@ -474,6 +497,8 @@ export class App {
         }, `Fast-forward ${days} day${days > 1 ? 's' : ''} at ${Math.round(acc * 100)}%`);
         body.append(h('h2', {}, 'Settings'),
           h('label', {}, 'Daily limit ', sel), mute,
+          h('label', {}, 'Accent ', accentSel),
+          h('p', { class: 'muted', 'data-testid': 'accent-help' }, `${ACCENTS.find((a) => a.id === s.accent)?.note ?? ''} Choose the one that matches how you and your child’s school say the sounds. Your child’s progress is kept when you switch.`),
           h('p', { class: 'muted' }, 'Microphone: off (not implemented in this prototype). Reminders: off.'),
           h('h3', {}, 'Prototype tools'),
           h('p', { class: 'muted' }, 'These move the on-device clock so the three-separate-days mastery gate can be tried without waiting.'),

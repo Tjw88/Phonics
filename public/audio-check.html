@@ -21,6 +21,7 @@
 </head>
 <body>
 <h1>Audio audition</h1>
+<p class="row"><label>Accent <select id="accent"></select></label></p>
 <p class="note"><strong>Everything here is machine-generated and nobody has listened to it yet.</strong> (It was built by an AI model, which cannot hear audio; it was only checked with measurements.)
 Play each item, then mark it Good / Bad / Unsure. Pay most attention to: a vowel tacked onto a consonant (“puh”, “buh”, “mm-uh”), a wrong vowel, a sound that is too quiet or too short to hear, and anything marked
 <em>formant-synth</em>. Your marks stay in this browser; use <em>Export</em> to save them.</p>
@@ -31,6 +32,7 @@ Play each item, then mark it Good / Bad / Unsure. Pay most attention to: a vowel
 <h2>Phrases</h2><div class="grid" id="phrases"></div>
 
 <script>
+const ACCENT = new URLSearchParams(location.search).get('accent') || 'rp';
 const KEY = 'soundling.audit.marks.v1';
 let marks = {}; try { marks = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch {}
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(marks)); } catch {} count(); };
@@ -61,12 +63,16 @@ function card(id, symbol, files, meta, flag) {
 }
 
 (async () => {
-  const [m, a] = await Promise.all([fetch('./audio/manifest.json').then(r => r.json()), fetch('./audio/audit.json').then(r => r.json())]);
+  const idx = await fetch('./audio/index.json').then(r => r.json());
+  const sel = document.getElementById('accent');
+  Object.entries(idx.accents).forEach(([id, a]) => sel.append(el('option', { value: id, textContent: a.label + ' (' + a.voice + ')', selected: id === ACCENT })));
+  sel.onchange = () => { location.search = '?accent=' + sel.value; };
+  const [m, a] = await Promise.all([fetch(`./audio/${ACCENT}/manifest.json`).then(r => r.json()), fetch(`./audio/${ACCENT}/audit.json`).then(r => r.json())]);
   const S = document.getElementById('sounds');
   for (const [k, files] of Object.entries(m.phonemes)) {
     const ph = a.phonemes[k], f0 = ph.files[0];
     const synth = f0.source === 'formant-synth';
-    S.append(card('sound:' + k, '/' + k + '/', files,
+    S.append(card(ACCENT + ':sound:' + k, '/' + k + '/', files,
       `${f0.source} · ${f0.ms} ms · expected ${ph.expected_ipa} · engine said ${ph.engine_ipa}` + (f0.self_check ? ' · ' + f0.self_check : ''),
       synth ? 'Hand-built synthesis: highest audit priority.' : ''));
   }
@@ -74,11 +80,11 @@ function card(id, symbol, files, meta, flag) {
   const words = Object.keys(m.words).sort();
   const drawWords = (q = '') => { W.replaceChildren(...words.filter(w => w.includes(q)).map(w => {
     const e = a.words[w];
-    return card('word:' + w, w, [m.words[w]], `${e.status} · expected ${e.expected_ipa}`, e.status.startsWith('ok (built') ? 'Built from phonemes, not from the spelling.' : '');
+    return card(ACCENT + ':word:' + w, w, [m.words[w]], `${e.status} · expected ${e.expected_ipa}`, e.status.startsWith('ok (built') ? 'Built from phonemes, not from the spelling.' : '');
   })); };
   drawWords(); document.getElementById('q').oninput = (e) => drawWords(e.target.value.trim().toLowerCase());
   const P = document.getElementById('phrases');
-  for (const [k, rel] of Object.entries(m.phrases)) P.append(card('phrase:' + k, k, [rel], a.phrases[k].text));
+  for (const [k, rel] of Object.entries(m.phrases)) P.append(card(ACCENT + ':phrase:' + k, k, [rel], a.phrases[k].text));
   count();
 })();
 document.getElementById('export').onclick = () => {

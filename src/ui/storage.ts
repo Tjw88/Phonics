@@ -9,7 +9,7 @@ export const load = (): ChildState => {
     const raw = localStorage.getItem(KEY);
     if (raw) {
       const s = JSON.parse(raw) as ChildState;
-      if (s.version === 1) return s;
+      if (s.version === 1) return { ...newChild(), ...s }; // fill fields added since this save was written (e.g. accent)
     }
   } catch {
     /* corrupted or unavailable storage: start fresh */

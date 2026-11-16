@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { BANK, GRAPHEMES, graphemesInSet } from './data';
+import { ACCENTS, ACCENT_EXCLUDE, BANK, GRAPHEMES, bankFor, graphemesInSet } from './data';
 import { seeded } from './dates';
 import { idsUpToSet, isDecodable, lintBank, lintWord } from './linter';
 import { pickReview } from './review';
@@ -236,21 +236,56 @@ describe('pacing vs the spec’s success targets', () => {
   });
 });
 
-describe('generated audio stays in sync with the curriculum', () => {
-  const root = new URL('../../public/audio/', import.meta.url);
-  const manifest = JSON.parse(readFileSync(new URL('manifest.json', root), 'utf8')) as {
-    phonemes: Record<string, string[]>; words: Record<string, string>; sources: Record<string, string>;
-  };
-  const audit = JSON.parse(readFileSync(new URL('../../scripts/audio/audit.json', import.meta.url), 'utf8')) as { problems: string[] };
+describe('accents', () => {
+  it('RP drops "pass" (BATH vowel); northern English keeps it', () => {
+    expect(bankFor('rp').some((w) => w.text === 'pass')).toBe(false);
+    expect(bankFor('north').some((w) => w.text === 'pass')).toBe(true);
+  });
+  it('only excludes words that exist in the bank', () => {
+    for (const a of ACCENTS) for (const w of ACCENT_EXCLUDE[a.id]) expect(BANK.some((b) => b.text === w), w).toBe(true);
+  });
+  it('the planner honours the accent: "pass" is plannable for a northern child only', () => {
+    const mk = (accent: 'rp' | 'north') => {
+      const s = newChild();
+      s.accent = accent;
+      for (const g of GRAPHEMES) introduce(s, g.id, D(1));
+      return decodableWords(s).map((w) => w.text);
+    };
+    expect(mk('rp')).not.toContain('pass');
+    expect(mk('north')).toContain('pass');
+  });
+  it('switching accent keeps progress, because progress is keyed by letter not by accent', () => {
+    const s = newChild();
+    introduce(s, 's', D(1));
+    for (const d of [1, 2, 3]) good(s, 's', D(d));
+    s.accent = 'north';
+    expect(isSecure(s, 's')).toBe(true);
+  });
+});
 
-  it('has a clip for every sound in the curriculum, and every file exists', () => {
-    for (const g of GRAPHEMES) expect(manifest.phonemes[g.phoneme], `phoneme /${g.phoneme}/`).toBeTruthy();
-    for (const files of Object.values(manifest.phonemes)) for (const f of files) expect(existsSync(new URL(f, root)), f).toBe(true);
-  });
-  it('has a clip for every word in the bank', () => {
-    for (const w of BANK) expect(manifest.words[w.text], `word "${w.text}"`).toBeTruthy();
-  });
-  it('the audio audit reported no mechanical problems', () => {
-    expect(audit.problems).toEqual([]);
-  });
+describe('generated audio stays in sync with the curriculum, per accent', () => {
+  const root = new URL('../../public/audio/', import.meta.url);
+  for (const accent of ACCENTS) {
+    describe(accent.label, () => {
+      const manifest = JSON.parse(readFileSync(new URL(`${accent.id}/manifest.json`, root), 'utf8')) as {
+        phonemes: Record<string, string[]>; words: Record<string, string>; removed_words: string[];
+      };
+      const audit = JSON.parse(readFileSync(new URL(`../../scripts/audio/audit-${accent.id}.json`, import.meta.url), 'utf8')) as { problems: string[] };
+
+      it('has a clip for every sound, and every file exists', () => {
+        for (const g of GRAPHEMES) expect(manifest.phonemes[g.phoneme], `phoneme /${g.phoneme}/`).toBeTruthy();
+        for (const files of Object.values(manifest.phonemes)) for (const f of files) expect(existsSync(new URL(f, root)), f).toBe(true);
+      });
+      it('has a clip for every usable word, and the exclusions match the engine data', () => {
+        expect([...manifest.removed_words].sort()).toEqual([...ACCENT_EXCLUDE[accent.id]].sort());
+        for (const w of bankFor(accent.id)) {
+          expect(manifest.words[w.text], `word "${w.text}"`).toBeTruthy();
+          expect(existsSync(new URL(manifest.words[w.text] as string, root)), w.text).toBe(true);
+        }
+      });
+      it('the audio audit reported no mechanical problems', () => {
+        expect(audit.problems).toEqual([]);
+      });
+    });
+  }
 });

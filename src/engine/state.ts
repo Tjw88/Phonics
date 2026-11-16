@@ -1,5 +1,5 @@
 import { addDays } from './dates';
-import { GRAPHEMES, GRAPHEME_BY_ID, MAX_SET, graphemesInSet, type Grapheme } from './data';
+import { DEFAULT_ACCENT, GRAPHEMES, GRAPHEME_BY_ID, MAX_SET, graphemesInSet, type AccentId, type Grapheme } from './data';
 
 /** Days of correct, unscaffolded answers needed to call a sound secure (spec: three separate days). */
 export const MASTERY_DAYS = 3;
@@ -31,6 +31,7 @@ export interface Companion { kind: string; name: string }
 export interface ChildState {
   nickname: string;
   band: 'B' | 'C';
+  accent: AccentId; // audio pack and word list; progress is accent-independent
   companion: Companion | null;
   startSet: number; // placement result, 1 = from scratch
   sounds: Record<string, SoundRecord>;
@@ -48,6 +49,7 @@ export interface ChildState {
 export const newChild = (): ChildState => ({
   nickname: '',
   band: 'C',
+  accent: DEFAULT_ACCENT,
   companion: null,
   startSet: 1,
   sounds: {},
