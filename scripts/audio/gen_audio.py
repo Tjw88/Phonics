@@ -67,7 +67,9 @@ PHRASES = {
     "find_grownup": "Find a grown-up to play with you!", "treasure": "You found a treasure!",
     "island_asleep": "Zzz. The island is asleep.", "listen_robot": "Listen to the robot.",
     "which_rhymes": "Which one rhymes?", "tap_sounds": "Tap each sound, in order.", "blend_it": "Now blend them. Which word is it?",
-    "again": "Let's tap the sounds again.", "pick_egg": "Pick an egg.", "show_grownup": "Show a grown-up",
+    "again": "Let's tap the sounds again.",
+    "drum_prompt": "Beat the drum once for each sound.", "safari_prompt": "Find things that start with the sound.",
+    "kitchen_prompt": "Build the word.", "trace_prompt": "Trace the letter. Start at the green dot.", "pick_egg": "Pick an egg.", "show_grownup": "Show a grown-up",
 }
 
 
@@ -253,6 +255,26 @@ def generate(accent, cfg, bank, shared):
         entry["ms"] = round(len(samples) / SR * 1000)
         report["words"][text] = entry
 
+    # ---- 2b. Sound Safari words: audited on their FIRST sound in this accent ----------------------
+    E.set_voice(voice, pitch=56, rate=115)
+    removed_safari = []
+    report["safari"] = {}
+    for it in bank.get("safari", []):
+        word, p = it["word"], it["p"]
+        got = norm_ipa(E.trace(word))
+        exp = norm_ipa(ipa[p])
+        if not got.startswith(exp):
+            report["safari"][word] = f"excluded: starts with {got[:3]!r}, expected {exp!r}"
+            removed_safari.append(word)
+            continue
+        report["safari"][word] = "ok"
+        if word not in manifest["words"]:
+            samples = level(fade(trim_lead(E.synth(word)), 30), 3000.0)
+            rel = rel_url(accent, "words", f"{word}.wav")
+            write_wav(os.path.join(OUT, rel), samples)
+            manifest["words"][word] = rel
+    manifest["removed_safari"] = sorted(removed_safari)
+
     # ---- 3. fixed phrases ----------------------------------------------------------
     E.set_voice(voice, pitch=56, rate=135)
     for k, t in PHRASES.items():
@@ -282,9 +304,9 @@ def main():
             print(f"[{accent:8s}] {cfg['label']}: DISABLED - {cfg['why_disabled']}")
             continue
         manifest, report = generate(accent, cfg, bank, shared)
-        index["accents"][accent] = {"label": cfg["label"], "voice": cfg["voice"], "removed_words": manifest["removed_words"]}
+        index["accents"][accent] = {"label": cfg["label"], "voice": cfg["voice"], "removed_words": manifest["removed_words"], "removed_safari": manifest["removed_safari"]}
         print(f"[{accent:8s}] {cfg['label']}: sounds {len(manifest['phonemes'])}/{len(MNEMONIC)}  words {len(manifest['words'])}/{len(bank['words'])}"
-              f"  phrases {len(manifest['phrases'])}  excluded words: {manifest['removed_words']}")
+              f"  phrases {len(manifest['phrases'])}  excluded words: {manifest['removed_words']}  excluded safari: {manifest['removed_safari']}")
         for p in report["problems"]:
             print("   -", p)
         bad += sum(1 for p in report["problems"] if "NOT written" in p or "FAILED" in p or "self-check failed" in p)

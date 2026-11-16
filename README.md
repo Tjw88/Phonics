@@ -8,7 +8,7 @@ The engine (`src/engine`) is plain TypeScript with no DOM, so its logic ports to
 ```bash
 npm install
 npm run dev          # play it (iPad-landscape-shaped, works on desktop and touch)
-npm test             # 35 tests (engine, accents, audio/curriculum sync)
+npm test             # 51 tests (engine, accents, games, audio/curriculum sync)
 npm run lint:content # decodability / suitability linter over the word bank
 npm run sim          # pacing simulation (synthetic children through the real engine)
 npm run build && npx vite preview --port 4173 &  node scripts/e2e.cjs   # browser end-to-end test (needs Playwright; VP=390x844 for phone size)
@@ -35,7 +35,8 @@ daily adventure. The parent area (⚙, gated) has Today, Sound map, Words read, 
 | Audio | Generated, not recorded, see below |
 | Placement game → starting set | Built (sets 1-3 only; never grants mastery) |
 | 6-step daily adventure, goodnight, treasure, off-screen mission | Built |
-| Games: Robot Talk, Feed the Creature, Bridge Builder, Rhyme Rocket | Built (4 of the 8 MVP games) |
+| All 8 MVP games: Feed the Creature, Robot Talk, Beat the Drum, Sound Safari, Word Kitchen, Bridge Builder, Rhyme Rocket, Trace Trail (optional, parent setting) | Built; Free Play is a menu of all of them |
+| Sound-friends: 23 original drawn characters, one per sound | Built |
 | Sound buttons (dot / bar), lower case, single-storey "a" typeface (Andika, bundled) | Built; confirmed in screenshots |
 | Sound Play for ages 2-3 (co-play, listening only) | Minimal version |
 | Parent area behind gate, sound map, words read, watch-out flags, daily limit + 2-minute warning (banner plus browser speech, not a recorded voice) | Built |
@@ -43,30 +44,46 @@ daily adventure. The parent area (⚙, gated) has Today, Sound map, Words read, 
 | Content linter (decodable at point of use, unsuitable words, duplicate pictures) | Built |
 | Banned patterns (streaks, guilt, timers, random rewards, upsell in child screens) | None present |
 
-**Not built:** Beat the Drum, Sound Safari, Word Kitchen, Trace Trail, microphone, CloudKit sync, StoreKit,
-Rive/SpriteKit animation (CSS only), other worlds, Free Play is a simple loop, no iPhone-specific layouts.
+**Not built:** microphone, CloudKit sync, StoreKit, Rive/SpriteKit animation (CSS only), other worlds, iPhone-specific layouts.
 
 ## Look and feel
 
 All art is original inline SVG (no images, no third-party code, works offline): four baby-dino companions with
-blinking eyes and moods (happy, mouth-open, "oh", sleepy), a robot, a rocket, a treasure chest, and a calm Dino
-Valley backdrop that turns to night when the island sleeps. Game feel:
+blinking eyes and moods, 23 sound-friends (Sid the snake is bent like an s, Ollie the octopus has a round "o" mouth,
+Iggy the inchworm's head is the dot of the i), a robot, rocket, drum, cooking pot, treasure chest, and a calm Dino
+Valley backdrop that turns to night when the island sleeps.
 
-- **Feed the Creature:** drag a letter (or tap it); the dino opens wide as it nears, the letter flies in, the dino
-  gulps with a squash, and sparkles. A wrong letter makes the dino say "oh", then it models the sound again.
-- **Robot Talk:** the robot's lights flash and coloured beads light up, one per sound. Beads, not letters: this is
-  the oral stage.
-- **Bridge Builder:** each sound button drops a plank; the right word sends the dino hopping across to a flag.
-- **Rhyme Rocket:** the right rhyme fills the fuel tube, then the rocket launches.
-- **Make it real / treasure:** the word's picture bursts out with rays; the treasure chest opens by itself on the
-  sound's own friend (known in advance, never random).
-- Synthesised sound effects (pop, whoosh, chomp, thud, sparkle, launch); sparkles stop under Reduce Motion, and
-  every celebration is under 3 seconds and ends on any tap.
+| Game | What the child does |
+|---|---|
+| Feed the Creature | Drag a letter into the dino's mouth (or tap it): it opens wide, gulps with a squash, sparkles. Wrong letter: the dino says "oh" and models the sound |
+| Robot Talk | The robot says a word in sounds, lighting one bead per sound (no letters: oral stage); pick the picture |
+| Beat the Drum | Tap the drum once per sound in a picture's name; each beat plays the next sound. Wrong count: the sounds are modelled and the child retries |
+| Sound Safari | Hunt a scene for things that start with today's sound; a wrong tap just says that word |
+| Word Kitchen | Tap letter tiles in order to build the word and cook it; a wrong letter goes back, the right ones stay |
+| Bridge Builder | Each sound button drops a plank; the right word sends the dino across |
+| Rhyme Rocket | The right rhyme fuels the rocket, which launches |
+| Trace Trail | Trace the letter from the green start dot; it only counts in order, so start and direction matter. **Off by default** (schools teach different formations); turn it on in the parent Settings |
+
+The adventure rotates the games without randomness: Feed the Creature, then Safari / Robot / Drum in turn, then
+Bridge / Kitchen (or Rhyme Rocket before printed words open). Free Play is a menu of every game.
+
+Other rules kept: celebrations are under 3 seconds and end on any tap, sparkles and backdrop motion stop under
+Reduce Motion (tested), the treasure chest always holds the sound's own friend (never random).
 
 What this is **not**: I can only judge how it looks in screenshots and that it behaves correctly; **whether it is
-fun is for you and real children to say**. Not yet done: the sound-friend characters and picture cards are still
-emoji (so they look different per device), the sound effects are plain synthesised tones, and performance has not
-been measured on a real iPad.
+fun is for you and real children to say**. Still emoji: the picture cards (so they look different per device). Not
+measured: performance on a real iPad. Letter-formation paths follow a common convention and need a phonics
+specialist's review.
+
+## Sound effects and music
+
+All synthesised in the browser: soft bell chimes that climb a pentatonic scale with each correct answer in a row
+(deterministic; a miss quietly resets it), a gentle "boop-boop" for a wrong answer (never a buzzer), distinct
+effects for chomping, planks, drum, launch, chest, and so on, through a small soft "room". Calm background music
+(a fixed pattern, no randomness) ducks under any speech or sound and slows to a lullaby when the island sleeps; it
+has its own switch in the parent Settings. **Nobody has listened to any of this yet**, and whether the music helps
+or distracts a child learning sounds is a real question for play-testing (it is on by default because the spec
+asks for it; switch it off if it gets in the way).
 
 ## Audio: generated, never listened to
 
@@ -84,7 +101,8 @@ audio instead, so this prototype generates it, but two things need saying plainl
 | a i o e u, s f h, p t k | espeak-ng phoneme input | The engine's own phoneme trace must equal the taught sound (e.g. `a` → æ, `u` → ʌ); duration; voicing; not silent |
 | m n l r, b d g | My own small source-filter synthesiser (`scripts/audio/formant.py`), because espeak renders a lone /b d g/ as pure silence and /m n l r/ as ~40 ms | Formant estimate (LPC) lands within 20% of textbook values; burst energy in the expected band. **This confirms the code does what I told it, not that it sounds like /m/.** |
 | 133 words | espeak-ng text-to-speech, RP voice | The engine's phoneme trace for each word must equal the sounds the grapheme table teaches; 133/133 match. "pass" was dropped because RP says /pɑːs/, not the taught /a/ |
-| 17 fixed phrases | espeak-ng | Duration only |
+| 71 Sound Safari words | espeak-ng text-to-speech | The engine's phoneme trace must START with the right first sound in that accent (71/71 in both packs) |
+| 21 fixed phrases | espeak-ng | Duration only |
 
 Known weak points to listen for: stops are clipped bursts (~70-110 ms), so /p/ /t/ /k/ may sound faint or clicky;
 /b/ /d/ /g/ carry a short voiced release (a touch of "uh" is likely); the formant nasals and liquids are buzzy.

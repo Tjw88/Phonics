@@ -1,3 +1,4 @@
+import { setNightMusic } from './audio';
 import { h, reducedMotion } from './dom';
 
 const COLOURS = ['#ff6b9a', '#ffd166', '#4cc3d9', '#8ee27a', '#9b8bf0', '#ff9f43'];
@@ -57,4 +58,5 @@ export const mount = (stage: HTMLElement, ...kids: Node[]): void => {
 
 export const setNight = (night: boolean): void => {
   document.body.classList.toggle('night', night);
+  setNightMusic(night);
 };

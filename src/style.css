@@ -282,3 +282,91 @@ body.night .hint-empty { color: #fff; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
   #scene-bg .cloud, #scene-bg .smoke circle, #scene-bg .sun .rays { animation: none !important; }
 }
+
+/* ---------- sound-friends ---------- */
+.friend-wrap { display: inline-block; line-height: 0; width: 100%; }
+.friend { width: 100%; height: auto; display: block; overflow: visible; }
+.friend .eyes { transform-box: fill-box; transform-origin: center; animation: blink 5.5s infinite; }
+.story .mn .friend-wrap { width: 82%; animation: bob 3s ease-in-out infinite; }
+.prize { padding: 6%; }
+.prize .friend-wrap { width: 100%; }
+.treasure .friend-wrap { width: clamp(90px, 20vw, 130px); }
+.treasure { line-height: 1; }
+
+/* ---------- Beat the Drum ---------- */
+.drumscene { gap: 12px; }
+.drum { border: 0; background: transparent; cursor: pointer; width: min(70vw, 300px); padding: 0; line-height: 0; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.drum svg { width: 100%; height: auto; overflow: visible; transition: transform 0.08s; }
+.drum.hit svg { animation: drumhit 0.22s ease-out; }
+.drum.hit .skin { fill: #fff; }
+@keyframes drumhit { 0% { transform: scale(1); } 30% { transform: scale(1.07, 0.9); } 100% { transform: scale(1); } }
+.bead.pop { animation: pop 0.3s cubic-bezier(0.2, 1.8, 0.4, 1); }
+.btn.go.small-go { min-width: 110px; min-height: 76px; font-size: 2.2rem; }
+
+/* ---------- Sound Safari ---------- */
+.safari-field {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; width: min(100%, 660px); padding: 18px; border-radius: 32px;
+  background: radial-gradient(circle at 15% 20%, #b6e6a1 0 40px, transparent 41px), radial-gradient(circle at 85% 75%, #a5dc8f 0 50px, transparent 51px), linear-gradient(#d6f1c9, #bde7a8);
+  box-shadow: inset 0 0 0 5px #8bcf72;
+}
+.safari-item {
+  border: 0; cursor: pointer; border-radius: 28px; aspect-ratio: 1; display: grid; place-items: center; min-height: 96px; background: #ffffffc8; box-shadow: 0 6px 0 #5aa04a55;
+  animation: drop-in 0.5s cubic-bezier(0.2, 1.5, 0.4, 1) backwards; touch-action: manipulation; transition: transform 0.15s, opacity 0.3s;
+}
+.safari-item .emoji { font-size: clamp(2.6rem, 8vw, 4rem); display: inline-block; animation: bob 3.2s ease-in-out infinite; animation-delay: var(--bob, 0s); }
+.safari-item:active { transform: scale(0.94); }
+.safari-item.wobble { animation: wobble 0.5s ease-in-out; }
+.safari-item.found { background: #fff8dd; box-shadow: 0 0 0 5px var(--sun), 0 6px 0 #c99a1e; animation: pop-big 0.6s cubic-bezier(0.2, 1.6, 0.4, 1); }
+.tray { gap: 10px; }
+.slot-found { display: grid; place-items: center; width: 68px; height: 68px; border-radius: 20px; border: 4px dashed #ffffffcc; background: #ffffff66; font-size: 2.4rem; }
+.slot-found.filled { border: 4px solid var(--sun); background: #fff8dd; animation: pop 0.4s cubic-bezier(0.2, 1.8, 0.4, 1); }
+
+/* ---------- Word Kitchen ---------- */
+.kitchen-row { gap: 22px; align-items: flex-end; }
+.pot-wrap { position: relative; width: clamp(130px, 26vw, 190px); }
+.pot { line-height: 0; }
+.pot svg { width: 100%; height: auto; overflow: visible; }
+.pot.cooking svg { animation: wobble 0.25s ease-in-out infinite; }
+.pot.cooking .steam { opacity: 0.9; animation: steam 0.9s ease-out infinite; }
+.pot.cooking .lid { animation: lidhop 0.3s ease-in-out infinite alternate; transform-box: fill-box; }
+@keyframes steam { from { transform: translateY(8px); opacity: 0.9; } to { transform: translateY(-14px); opacity: 0; } }
+@keyframes lidhop { to { transform: translateY(-6px); } }
+.dish { position: absolute; left: 50%; top: 20%; font-size: clamp(3.6rem, 10vw, 5.5rem); line-height: 1; transform: translate(-50%, 0) scale(0); opacity: 0; transition: transform 0.7s cubic-bezier(0.2, 1.7, 0.4, 1), opacity 0.2s; }
+.dish.out { transform: translate(-50%, -85%) scale(1); opacity: 1; z-index: 3; }
+.board { gap: 10px; padding: 14px 18px; border-radius: 24px; background: #e7c590; box-shadow: inset 0 0 0 4px #c89a58, 0 6px 0 #a77a3a55; min-height: 100px; }
+.kslot { width: 84px; height: 84px; border-radius: 22px; border: 4px dashed #a77a3a; background: #f5e2bd; font: inherit; font-size: 3.2rem; color: var(--ink); cursor: pointer; display: grid; place-items: center; transition: transform 0.15s; }
+.kslot.filled { border-style: solid; background: #fff; box-shadow: 0 4px 0 #a77a3a66; }
+.kslot.bounce { animation: pop-big 0.4s cubic-bezier(0.2, 1.6, 0.4, 1); }
+.kslot.wobble { animation: wobble 0.5s ease-in-out; border-color: #c24a73; }
+.ktile { min-width: 96px; min-height: 96px; font-size: 3.6rem; cursor: pointer; touch-action: manipulation; }
+.ktile.used { opacity: 0.25; box-shadow: none; transform: scale(0.92); }
+
+/* ---------- Trace Trail ---------- */
+.trace-board { width: min(100%, 520px); padding: 14px; border-radius: 32px; background: var(--bg, #f3e3b7); box-shadow: inset 0 0 0 6px var(--rim, #d9bf7a), 0 6px 0 #0002; touch-action: none; }
+.trace-board.sand { --bg: #f3e3b7; --rim: #d9bf7a; --ink: #b8863b; }
+.trace-board.paint { --bg: #fbfbff; --rim: #cfd3f5; --ink: #ef476f; }
+.trace-board.mud { --bg: #cdb596; --rim: #a58a65; --ink: #6b4a2a; }
+.trace-svg { width: 100%; height: auto; max-height: 52vh; display: block; touch-action: none; cursor: crosshair; user-select: none; }
+.trace-svg .rule { stroke: #00000022; stroke-width: 1.5; } .trace-svg .rule.dashed { stroke-dasharray: 4 5; }
+.trace-svg .guide { fill: none; stroke: #ffffffaa; stroke-width: 17; stroke-linecap: round; stroke-linejoin: round; }
+.trace-svg .guide.active { stroke: #fff; }
+.trace-svg .ink { fill: none; stroke: var(--ink, #b8863b); stroke-width: 11; stroke-linecap: round; stroke-linejoin: round; }
+.trace-svg .startdot { fill: #2fbf71; stroke: #fff; stroke-width: 3; animation: ring 1s ease-in-out infinite; }
+.trace-svg .arrow { fill: none; stroke: #2fbf71; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
+.trace-svg .firefly { fill: #ffd166; stroke: #fff; stroke-width: 2; animation: ring 0.9s ease-in-out infinite; filter: drop-shadow(0 0 4px #ffd166); }
+.trace-pet { width: clamp(70px, 14vw, 100px); }
+
+/* ---------- Free Play menu ---------- */
+.gamegrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; width: min(100%, 700px); }
+.gamebtn { display: flex; flex-direction: column; align-items: center; gap: 6px; min-height: 120px; padding: 14px 8px; border: 0; border-radius: 28px; background: #fff; font: inherit; font-weight: 700; color: var(--ink); cursor: pointer; box-shadow: 0 7px 0 #1d355733, inset 0 0 0 4px #4cc3d955; transition: transform 0.1s; }
+.gamebtn:active { transform: translateY(5px); box-shadow: 0 2px 0 #1d355733, inset 0 0 0 4px #4cc3d955; }
+.gamebtn .gicon { font-size: 3rem; line-height: 1; } .gamebtn .gname { font-size: 1.05rem; }
+label.check { display: flex; align-items: center; gap: 10px; min-height: 48px; }
+label.check input { width: 28px; height: 28px; }
+
+@media (max-width: 600px) {
+  .safari-field { grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 12px; }
+  .safari-item { min-height: 80px; } .slot-found { width: 54px; height: 54px; }
+  .kslot { width: 68px; height: 68px; font-size: 2.6rem; } .ktile { min-width: 80px; min-height: 80px; font-size: 3rem; }
+  .kitchen-row { flex-direction: column; align-items: center; }
+}

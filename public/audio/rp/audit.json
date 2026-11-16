@@ -2056,7 +2056,7 @@
  "phrases": {
   "play": {
    "text": "Play",
-   "ms": 467
+   "ms": 466
   },
   "play_again": {
    "text": "Play again",
@@ -2076,11 +2076,11 @@
   },
   "hello": {
    "text": "Hello!",
-   "ms": 547
+   "ms": 548
   },
   "two_minutes": {
    "text": "Two more minutes, then it's sleepy time.",
-   "ms": 2799
+   "ms": 2807
   },
   "find_grownup": {
    "text": "Find a grown-up to play with you!",
@@ -2114,9 +2114,25 @@
    "text": "Let's tap the sounds again.",
    "ms": 1955
   },
+  "drum_prompt": {
+   "text": "Beat the drum once for each sound.",
+   "ms": 2437
+  },
+  "safari_prompt": {
+   "text": "Find things that start with the sound.",
+   "ms": 2494
+  },
+  "kitchen_prompt": {
+   "text": "Build the word.",
+   "ms": 1033
+  },
+  "trace_prompt": {
+   "text": "Trace the letter. Start at the green dot.",
+   "ms": 2927
+  },
   "pick_egg": {
    "text": "Pick an egg.",
-   "ms": 746
+   "ms": 754
   },
   "show_grownup": {
    "text": "Show a grown-up",
@@ -2124,6 +2140,99 @@
   }
  },
  "problems": [],
+ "safari": {
+  "sun": "ok",
+  "sock": "ok",
+  "snake": "ok",
+  "star": "ok",
+  "soap": "ok",
+  "ant": "ok",
+  "apple": "ok",
+  "alligator": "ok",
+  "axe": "ok",
+  "tap": "ok",
+  "tiger": "ok",
+  "tent": "ok",
+  "turtle": "ok",
+  "tooth": "ok",
+  "train": "ok",
+  "pig": "ok",
+  "pen": "ok",
+  "pizza": "ok",
+  "panda": "ok",
+  "parrot": "ok",
+  "pear": "ok",
+  "insect": "ok",
+  "ink": "ok",
+  "iguana": "ok",
+  "nut": "ok",
+  "net": "ok",
+  "nest": "ok",
+  "nose": "ok",
+  "nail": "ok",
+  "mouse": "ok",
+  "map": "ok",
+  "moon": "ok",
+  "mug": "ok",
+  "monkey": "ok",
+  "milk": "ok",
+  "dog": "ok",
+  "drum": "ok",
+  "duck": "ok",
+  "door": "ok",
+  "dolphin": "ok",
+  "goat": "ok",
+  "grapes": "ok",
+  "gift": "ok",
+  "guitar": "ok",
+  "gorilla": "ok",
+  "octopus": "ok",
+  "orange": "ok",
+  "otter": "ok",
+  "ox": "ok",
+  "cat": "ok",
+  "cup": "ok",
+  "cow": "ok",
+  "kite": "ok",
+  "key": "ok",
+  "camel": "ok",
+  "car": "ok",
+  "cake": "ok",
+  "egg": "ok",
+  "elephant": "ok",
+  "envelope": "ok",
+  "umbrella": "ok",
+  "up": "ok",
+  "rabbit": "ok",
+  "rainbow": "ok",
+  "robot": "ok",
+  "rocket": "ok",
+  "ring": "ok",
+  "rose": "ok",
+  "hat": "ok",
+  "hen": "ok",
+  "horse": "ok",
+  "house": "ok",
+  "hippo": "ok",
+  "heart": "ok",
+  "bus": "ok",
+  "ball": "ok",
+  "bat": "ok",
+  "bee": "ok",
+  "banana": "ok",
+  "bed": "ok",
+  "fish": "ok",
+  "fox": "ok",
+  "frog": "ok",
+  "flower": "ok",
+  "feather": "ok",
+  "fire": "ok",
+  "lion": "ok",
+  "leaf": "ok",
+  "lemon": "ok",
+  "log": "ok",
+  "lollipop": "ok"
+ },
  "removed_words": [
   "pass"
  ]

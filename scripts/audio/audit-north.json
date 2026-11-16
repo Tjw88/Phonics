@@ -62,23 +62,23 @@
     {
      "file": "north/phonemes/a_0.wav",
      "source": "espeak-ng",
-     "ms": 291,
+     "ms": 290,
      "voiced_fraction": 0.94,
-     "peak": 9991
+     "peak": 9951
     },
     {
      "file": "north/phonemes/a_1.wav",
      "source": "espeak-ng",
      "ms": 290,
      "voiced_fraction": 0.96,
-     "peak": 9758
+     "peak": 9766
     },
     {
      "file": "north/phonemes/a_2.wav",
      "source": "espeak-ng",
-     "ms": 291,
+     "ms": 292,
      "voiced_fraction": 0.93,
-     "peak": 10646
+     "peak": 10619
     }
    ]
   },
@@ -150,14 +150,14 @@
      "file": "north/phonemes/i_0.wav",
      "source": "espeak-ng",
      "ms": 270,
-     "voiced_fraction": 0.98,
-     "peak": 9578
+     "voiced_fraction": 0.96,
+     "peak": 9647
     },
     {
      "file": "north/phonemes/i_1.wav",
      "source": "espeak-ng",
-     "ms": 270,
-     "voiced_fraction": 0.94,
+     "ms": 271,
+     "voiced_fraction": 0.96,
      "peak": 9502
     },
     {
@@ -165,7 +165,7 @@
      "source": "espeak-ng",
      "ms": 270,
      "voiced_fraction": 0.96,
-     "peak": 9911
+     "peak": 9755
     }
    ]
   },
@@ -319,22 +319,22 @@
      "file": "north/phonemes/o_0.wav",
      "source": "espeak-ng",
      "ms": 301,
-     "voiced_fraction": 0.95,
-     "peak": 9158
+     "voiced_fraction": 0.93,
+     "peak": 8996
     },
     {
      "file": "north/phonemes/o_1.wav",
      "source": "espeak-ng",
      "ms": 300,
      "voiced_fraction": 0.95,
-     "peak": 10646
+     "peak": 11241
     },
     {
      "file": "north/phonemes/o_2.wav",
      "source": "espeak-ng",
-     "ms": 302,
-     "voiced_fraction": 0.89,
-     "peak": 9249
+     "ms": 303,
+     "voiced_fraction": 0.91,
+     "peak": 9290
     }
    ]
   },
@@ -377,22 +377,22 @@
      "file": "north/phonemes/e_0.wav",
      "source": "espeak-ng",
      "ms": 301,
-     "voiced_fraction": 0.7,
-     "peak": 13338
+     "voiced_fraction": 0.68,
+     "peak": 13249
     },
     {
      "file": "north/phonemes/e_1.wav",
      "source": "espeak-ng",
      "ms": 300,
      "voiced_fraction": 0.77,
-     "peak": 13096
+     "peak": 12955
     },
     {
      "file": "north/phonemes/e_2.wav",
      "source": "espeak-ng",
      "ms": 303,
-     "voiced_fraction": 0.46,
-     "peak": 13389
+     "voiced_fraction": 0.54,
+     "peak": 13345
     }
    ]
   },
@@ -406,22 +406,22 @@
      "file": "north/phonemes/u_0.wav",
      "source": "espeak-ng",
      "ms": 291,
-     "voiced_fraction": 0.91,
-     "peak": 12307
+     "voiced_fraction": 0.87,
+     "peak": 12108
     },
     {
      "file": "north/phonemes/u_1.wav",
      "source": "espeak-ng",
      "ms": 290,
      "voiced_fraction": 0.94,
-     "peak": 12073
+     "peak": 12088
     },
     {
      "file": "north/phonemes/u_2.wav",
      "source": "espeak-ng",
      "ms": 292,
-     "voiced_fraction": 0.87,
-     "peak": 13190
+     "voiced_fraction": 0.83,
+     "peak": 13181
     }
    ]
   },
@@ -631,7 +631,7 @@
    "expected_ipa": "tap",
    "engine_ipa_for_text": "tap",
    "status": "ok (rendered from text)",
-   "ms": 435
+   "ms": 436
   },
   "sap": {
    "graphemes": [
@@ -642,7 +642,7 @@
    "expected_ipa": "sap",
    "engine_ipa_for_text": "sap",
    "status": "ok (rendered from text)",
-   "ms": 498
+   "ms": 499
   },
   "in": {
    "graphemes": [
@@ -682,7 +682,7 @@
    "expected_ipa": "am",
    "engine_ipa_for_text": "am",
    "status": "ok (rendered from text)",
-   "ms": 451
+   "ms": 452
   },
   "ad": {
    "graphemes": [
@@ -725,7 +725,7 @@
    "expected_ipa": "tɪp",
    "engine_ipa_for_text": "tɪp",
    "status": "ok (rendered from text)",
-   "ms": 413
+   "ms": 414
   },
   "tin": {
    "graphemes": [
@@ -736,7 +736,7 @@
    "expected_ipa": "tɪn",
    "engine_ipa_for_text": "tɪn",
    "status": "ok (rendered from text)",
-   "ms": 456
+   "ms": 457
   },
   "pin": {
    "graphemes": [
@@ -791,7 +791,7 @@
    "expected_ipa": "map",
    "engine_ipa_for_text": "map",
    "status": "ok (rendered from text)",
-   "ms": 513
+   "ms": 512
   },
   "mat": {
    "graphemes": [
@@ -813,7 +813,7 @@
    "expected_ipa": "mad",
    "engine_ipa_for_text": "mad",
    "status": "ok (rendered from text)",
-   "ms": 508
+   "ms": 507
   },
   "sad": {
    "graphemes": [
@@ -835,7 +835,7 @@
    "expected_ipa": "dad",
    "engine_ipa_for_text": "dad",
    "status": "ok (rendered from text)",
-   "ms": 404
+   "ms": 392
   },
   "did": {
    "graphemes": [
@@ -857,7 +857,7 @@
    "expected_ipa": "dɪp",
    "engine_ipa_for_text": "dɪp",
    "status": "ok (rendered from text)",
-   "ms": 405
+   "ms": 406
   },
   "nap": {
    "graphemes": [
@@ -879,7 +879,7 @@
    "expected_ipa": "nɪp",
    "engine_ipa_for_text": "nɪp",
    "status": "ok (rendered from text)",
-   "ms": 490
+   "ms": 491
   },
   "tan": {
    "graphemes": [
@@ -890,7 +890,7 @@
    "expected_ipa": "tan",
    "engine_ipa_for_text": "tan",
    "status": "ok (rendered from text)",
-   "ms": 466
+   "ms": 467
   },
   "pad": {
    "graphemes": [
@@ -934,7 +934,7 @@
    "expected_ipa": "dɪɡ",
    "engine_ipa_for_text": "dɪɡ",
    "status": "ok (rendered from text)",
-   "ms": 393
+   "ms": 394
   },
   "dot": {
    "graphemes": [
@@ -945,7 +945,7 @@
    "expected_ipa": "dɒt",
    "engine_ipa_for_text": "dɒt",
    "status": "ok (rendered from text)",
-   "ms": 398
+   "ms": 399
   },
   "got": {
    "graphemes": [
@@ -967,7 +967,7 @@
    "expected_ipa": "ɡap",
    "engine_ipa_for_text": "ɡap",
    "status": "ok (rendered from text)",
-   "ms": 425
+   "ms": 426
   },
   "cat": {
    "graphemes": [
@@ -978,7 +978,7 @@
    "expected_ipa": "kat",
    "engine_ipa_for_text": "kat",
    "status": "ok (rendered from text)",
-   "ms": 404
+   "ms": 405
   },
   "cap": {
    "graphemes": [
@@ -1000,7 +1000,7 @@
    "expected_ipa": "kan",
    "engine_ipa_for_text": "kan",
    "status": "ok (rendered from text)",
-   "ms": 473
+   "ms": 474
   },
   "cot": {
    "graphemes": [
@@ -1055,7 +1055,7 @@
    "expected_ipa": "pɒt",
    "engine_ipa_for_text": "pɒt",
    "status": "ok (rendered from text)",
-   "ms": 398
+   "ms": 397
   },
   "pop": {
    "graphemes": [
@@ -1066,7 +1066,7 @@
    "expected_ipa": "pɒp",
    "engine_ipa_for_text": "pɒp",
    "status": "ok (rendered from text)",
-   "ms": 437
+   "ms": 436
   },
   "top": {
    "graphemes": [
@@ -1077,7 +1077,7 @@
    "expected_ipa": "tɒp",
    "engine_ipa_for_text": "tɒp",
    "status": "ok (rendered from text)",
-   "ms": 446
+   "ms": 445
   },
   "mop": {
    "graphemes": [
@@ -1088,7 +1088,7 @@
    "expected_ipa": "mɒp",
    "engine_ipa_for_text": "mɒp",
    "status": "ok (rendered from text)",
-   "ms": 503
+   "ms": 504
   },
   "not": {
    "graphemes": [
@@ -1099,7 +1099,7 @@
    "expected_ipa": "nɒt",
    "engine_ipa_for_text": "nɒt",
    "status": "ok (rendered from text)",
-   "ms": 485
+   "ms": 486
   },
   "nod": {
    "graphemes": [
@@ -1110,7 +1110,7 @@
    "expected_ipa": "nɒd",
    "engine_ipa_for_text": "nɒd",
    "status": "ok (rendered from text)",
-   "ms": 530
+   "ms": 529
   },
   "pod": {
    "graphemes": [
@@ -1164,7 +1164,7 @@
    "expected_ipa": "pak",
    "engine_ipa_for_text": "pak",
    "status": "ok (rendered from text)",
-   "ms": 388
+   "ms": 387
   },
   "tack": {
    "graphemes": [
@@ -1175,7 +1175,7 @@
    "expected_ipa": "tak",
    "engine_ipa_for_text": "tak",
    "status": "ok (rendered from text)",
-   "ms": 398
+   "ms": 397
   },
   "neck": {
    "graphemes": [
@@ -1186,7 +1186,7 @@
    "expected_ipa": "nɛk",
    "engine_ipa_for_text": "nɛk",
    "status": "ok (rendered from text)",
-   "ms": 495
+   "ms": 494
   },
   "peck": {
    "graphemes": [
@@ -1197,7 +1197,7 @@
    "expected_ipa": "pɛk",
    "engine_ipa_for_text": "pɛk",
    "status": "ok (rendered from text)",
-   "ms": 398
+   "ms": 397
   },
   "deck": {
    "graphemes": [
@@ -1208,7 +1208,7 @@
    "expected_ipa": "dɛk",
    "engine_ipa_for_text": "dɛk",
    "status": "ok (rendered from text)",
-   "ms": 398
+   "ms": 399
   },
   "pen": {
    "graphemes": [
@@ -1219,7 +1219,7 @@
    "expected_ipa": "pɛn",
    "engine_ipa_for_text": "pɛn",
    "status": "ok (rendered from text)",
-   "ms": 479
+   "ms": 478
   },
   "ten": {
    "graphemes": [
@@ -1241,7 +1241,7 @@
    "expected_ipa": "nɛt",
    "engine_ipa_for_text": "nɛt",
    "status": "ok (rendered from text)",
-   "ms": 494
+   "ms": 495
   },
   "pet": {
    "graphemes": [
@@ -1263,7 +1263,7 @@
    "expected_ipa": "mɛn",
    "engine_ipa_for_text": "mɛn",
    "status": "ok (rendered from text)",
-   "ms": 572
+   "ms": 573
   },
   "red": {
    "graphemes": [
@@ -1274,7 +1274,7 @@
    "expected_ipa": "ɹɛd",
    "engine_ipa_for_text": "ɹɛd",
    "status": "ok (rendered from text)",
-   "ms": 528
+   "ms": 529
   },
   "run": {
    "graphemes": [
@@ -1329,7 +1329,7 @@
    "expected_ipa": "ɹam",
    "engine_ipa_for_text": "ɹam",
    "status": "ok (rendered from text)",
-   "ms": 583
+   "ms": 584
   },
   "rug": {
    "graphemes": [
@@ -1340,7 +1340,7 @@
    "expected_ipa": "ɹʊɡ",
    "engine_ipa_for_text": "ɹʊɡ",
    "status": "ok (rendered from text)",
-   "ms": 537
+   "ms": 539
   },
   "rub": {
    "graphemes": [
@@ -1373,7 +1373,7 @@
    "expected_ipa": "mʊd",
    "engine_ipa_for_text": "mʊd",
    "status": "ok (rendered from text)",
-   "ms": 491
+   "ms": 490
   },
   "mug": {
    "graphemes": [
@@ -1384,7 +1384,7 @@
    "expected_ipa": "mʊɡ",
    "engine_ipa_for_text": "mʊɡ",
    "status": "ok (rendered from text)",
-   "ms": 501
+   "ms": 500
   },
   "mum": {
    "graphemes": [
@@ -1406,7 +1406,7 @@
    "expected_ipa": "kʊp",
    "engine_ipa_for_text": "kʊp",
    "status": "ok (rendered from text)",
-   "ms": 431
+   "ms": 430
   },
   "pup": {
    "graphemes": [
@@ -1427,7 +1427,7 @@
    "expected_ipa": "ʊp",
    "engine_ipa_for_text": "ʊp",
    "status": "ok (rendered from text)",
-   "ms": 395
+   "ms": 394
   },
   "us": {
    "graphemes": [
@@ -1470,7 +1470,7 @@
    "expected_ipa": "ɡʊm",
    "engine_ipa_for_text": "ɡʊm",
    "status": "ok (rendered from text)",
-   "ms": 487
+   "ms": 488
   },
   "tug": {
    "graphemes": [
@@ -1481,7 +1481,7 @@
    "expected_ipa": "tʊɡ",
    "engine_ipa_for_text": "tʊɡ",
    "status": "ok (rendered from text)",
-   "ms": 426
+   "ms": 424
   },
   "dug": {
    "graphemes": [
@@ -1492,7 +1492,7 @@
    "expected_ipa": "dʊɡ",
    "engine_ipa_for_text": "dʊɡ",
    "status": "ok (rendered from text)",
-   "ms": 416
+   "ms": 415
   },
   "egg": {
    "graphemes": [
@@ -1502,7 +1502,7 @@
    "expected_ipa": "ɛɡ",
    "engine_ipa_for_text": "ɛɡ",
    "status": "ok (rendered from text)",
-   "ms": 393
+   "ms": 392
   },
   "hat": {
    "graphemes": [
@@ -1513,7 +1513,7 @@
    "expected_ipa": "hat",
    "engine_ipa_for_text": "hat",
    "status": "ok (rendered from text)",
-   "ms": 438
+   "ms": 437
   },
   "hot": {
    "graphemes": [
@@ -1535,7 +1535,7 @@
    "expected_ipa": "hɪt",
    "engine_ipa_for_text": "hɪt",
    "status": "ok (rendered from text)",
-   "ms": 397
+   "ms": 396
   },
   "hen": {
    "graphemes": [
@@ -1557,7 +1557,7 @@
    "expected_ipa": "hʊɡ",
    "engine_ipa_for_text": "hʊɡ",
    "status": "ok (rendered from text)",
-   "ms": 431
+   "ms": 432
   },
   "hut": {
    "graphemes": [
@@ -1568,7 +1568,7 @@
    "expected_ipa": "hʊt",
    "engine_ipa_for_text": "hʊt",
    "status": "ok (rendered from text)",
-   "ms": 404
+   "ms": 392
   },
   "bed": {
    "graphemes": [
@@ -1579,7 +1579,7 @@
    "expected_ipa": "bɛd",
    "engine_ipa_for_text": "bɛd",
    "status": "ok (rendered from text)",
-   "ms": 452
+   "ms": 464
   },
   "big": {
    "graphemes": [
@@ -1656,7 +1656,7 @@
    "expected_ipa": "bɪt",
    "engine_ipa_for_text": "bɪt",
    "status": "ok (rendered from text)",
-   "ms": 403
+   "ms": 404
   },
   "bib": {
    "graphemes": [
@@ -1689,7 +1689,7 @@
    "expected_ipa": "fʊn",
    "engine_ipa_for_text": "fʊn",
    "status": "ok (rendered from text)",
-   "ms": 529
+   "ms": 528
   },
   "fit": {
    "graphemes": [
@@ -1711,7 +1711,7 @@
    "expected_ipa": "fɒɡ",
    "engine_ipa_for_text": "fɒɡ",
    "status": "ok (rendered from text)",
-   "ms": 509
+   "ms": 508
   },
   "off": {
    "graphemes": [
@@ -1721,7 +1721,7 @@
    "expected_ipa": "ɒf",
    "engine_ipa_for_text": "ɒf",
    "status": "ok (rendered from text)",
-   "ms": 410
+   "ms": 411
   },
   "puff": {
    "graphemes": [
@@ -1743,7 +1743,7 @@
    "expected_ipa": "hʊf",
    "engine_ipa_for_text": "hʊf",
    "status": "ok (rendered from text)",
-   "ms": 449
+   "ms": 450
   },
   "cuff": {
    "graphemes": [
@@ -1787,7 +1787,7 @@
    "expected_ipa": "bɛl",
    "engine_ipa_for_text": "bɛl",
    "status": "ok (rendered from text)",
-   "ms": 464
+   "ms": 463
   },
   "doll": {
    "graphemes": [
@@ -1809,7 +1809,7 @@
    "expected_ipa": "hɪl",
    "engine_ipa_for_text": "hɪl",
    "status": "ok (rendered from text)",
-   "ms": 478
+   "ms": 466
   },
   "pill": {
    "graphemes": [
@@ -1820,7 +1820,7 @@
    "expected_ipa": "pɪl",
    "engine_ipa_for_text": "pɪl",
    "status": "ok (rendered from text)",
-   "ms": 435
+   "ms": 436
   },
   "mill": {
    "graphemes": [
@@ -1842,7 +1842,7 @@
    "expected_ipa": "tɛl",
    "engine_ipa_for_text": "tɛl",
    "status": "ok (rendered from text)",
-   "ms": 435
+   "ms": 433
   },
   "sell": {
    "graphemes": [
@@ -1864,7 +1864,7 @@
    "expected_ipa": "bɪl",
    "engine_ipa_for_text": "bɪl",
    "status": "ok (rendered from text)",
-   "ms": 484
+   "ms": 485
   },
   "lip": {
    "graphemes": [
@@ -1875,7 +1875,7 @@
    "expected_ipa": "lɪp",
    "engine_ipa_for_text": "lɪp",
    "status": "ok (rendered from text)",
-   "ms": 491
+   "ms": 492
   },
   "lap": {
    "graphemes": [
@@ -1919,7 +1919,7 @@
    "expected_ipa": "lɛt",
    "engine_ipa_for_text": "lɛt",
    "status": "ok (rendered from text)",
-   "ms": 456
+   "ms": 457
   },
   "lid": {
    "graphemes": [
@@ -1963,7 +1963,7 @@
    "expected_ipa": "mɪs",
    "engine_ipa_for_text": "mɪs",
    "status": "ok (rendered from text)",
-   "ms": 496
+   "ms": 495
   },
   "kiss": {
    "graphemes": [
@@ -1974,7 +1974,7 @@
    "expected_ipa": "kɪs",
    "engine_ipa_for_text": "kɪs",
    "status": "ok (rendered from text)",
-   "ms": 437
+   "ms": 436
   },
   "hiss": {
    "graphemes": [
@@ -1985,7 +1985,7 @@
    "expected_ipa": "hɪs",
    "engine_ipa_for_text": "hɪs",
    "status": "ok (rendered from text)",
-   "ms": 440
+   "ms": 439
   },
   "moss": {
    "graphemes": [
@@ -1996,7 +1996,7 @@
    "expected_ipa": "mɒs",
    "engine_ipa_for_text": "mɒs",
    "status": "ok (rendered from text)",
-   "ms": 518
+   "ms": 519
   },
   "boss": {
    "graphemes": [
@@ -2018,7 +2018,7 @@
    "expected_ipa": "fʊs",
    "engine_ipa_for_text": "fʊs",
    "status": "ok (rendered from text)",
-   "ms": 503
+   "ms": 504
   },
   "less": {
    "graphemes": [
@@ -2029,7 +2029,7 @@
    "expected_ipa": "lɛs",
    "engine_ipa_for_text": "lɛs",
    "status": "ok (rendered from text)",
-   "ms": 499
+   "ms": 500
   },
   "pass": {
    "graphemes": [
@@ -2040,7 +2040,7 @@
    "expected_ipa": "pas",
    "engine_ipa_for_text": "pas",
    "status": "ok (rendered from text)",
-   "ms": 441
+   "ms": 442
   },
   "mass": {
    "graphemes": [
@@ -2051,7 +2051,7 @@
    "expected_ipa": "mas",
    "engine_ipa_for_text": "mas",
    "status": "ok (rendered from text)",
-   "ms": 516
+   "ms": 515
   }
  },
  "phrases": {
@@ -2069,7 +2069,7 @@
   },
   "next": {
    "text": "Next",
-   "ms": 553
+   "ms": 554
   },
   "goodnight": {
    "text": "Goodnight",
@@ -2097,7 +2097,7 @@
   },
   "listen_robot": {
    "text": "Listen to the robot.",
-   "ms": 1360
+   "ms": 1359
   },
   "which_rhymes": {
    "text": "Which one rhymes?",
@@ -2105,15 +2105,31 @@
   },
   "tap_sounds": {
    "text": "Tap each sound, in order.",
-   "ms": 2018
+   "ms": 2019
   },
   "blend_it": {
    "text": "Now blend them. Which word is it?",
-   "ms": 2682
+   "ms": 2681
   },
   "again": {
    "text": "Let's tap the sounds again.",
-   "ms": 2037
+   "ms": 2038
+  },
+  "drum_prompt": {
+   "text": "Beat the drum once for each sound.",
+   "ms": 2572
+  },
+  "safari_prompt": {
+   "text": "Find things that start with the sound.",
+   "ms": 2628
+  },
+  "kitchen_prompt": {
+   "text": "Build the word.",
+   "ms": 1116
+  },
+  "trace_prompt": {
+   "text": "Trace the letter. Start at the green dot.",
+   "ms": 3049
   },
   "pick_egg": {
    "text": "Pick an egg.",
@@ -2121,9 +2137,102 @@
   },
   "show_grownup": {
    "text": "Show a grown-up",
-   "ms": 1088
+   "ms": 1087
   }
  },
  "problems": [],
+ "safari": {
+  "sun": "ok",
+  "sock": "ok",
+  "snake": "ok",
+  "star": "ok",
+  "soap": "ok",
+  "ant": "ok",
+  "apple": "ok",
+  "alligator": "ok",
+  "axe": "ok",
+  "tap": "ok",
+  "tiger": "ok",
+  "tent": "ok",
+  "turtle": "ok",
+  "tooth": "ok",
+  "train": "ok",
+  "pig": "ok",
+  "pen": "ok",
+  "pizza": "ok",
+  "panda": "ok",
+  "parrot": "ok",
+  "pear": "ok",
+  "insect": "ok",
+  "ink": "ok",
+  "iguana": "ok",
+  "nut": "ok",
+  "net": "ok",
+  "nest": "ok",
+  "nose": "ok",
+  "nail": "ok",
+  "mouse": "ok",
+  "map": "ok",
+  "moon": "ok",
+  "mug": "ok",
+  "monkey": "ok",
+  "milk": "ok",
+  "dog": "ok",
+  "drum": "ok",
+  "duck": "ok",
+  "door": "ok",
+  "dolphin": "ok",
+  "goat": "ok",
+  "grapes": "ok",
+  "gift": "ok",
+  "guitar": "ok",
+  "gorilla": "ok",
+  "octopus": "ok",
+  "orange": "ok",
+  "otter": "ok",
+  "ox": "ok",
+  "cat": "ok",
+  "cup": "ok",
+  "cow": "ok",
+  "kite": "ok",
+  "key": "ok",
+  "camel": "ok",
+  "car": "ok",
+  "cake": "ok",
+  "egg": "ok",
+  "elephant": "ok",
+  "envelope": "ok",
+  "umbrella": "ok",
+  "up": "ok",
+  "rabbit": "ok",
+  "rainbow": "ok",
+  "robot": "ok",
+  "rocket": "ok",
+  "ring": "ok",
+  "rose": "ok",
+  "hat": "ok",
+  "hen": "ok",
+  "horse": "ok",
+  "house": "ok",
+  "hippo": "ok",
+  "heart": "ok",
+  "bus": "ok",
+  "ball": "ok",
+  "bat": "ok",
+  "bee": "ok",
+  "banana": "ok",
+  "bed": "ok",
+  "fish": "ok",
+  "fox": "ok",
+  "frog": "ok",
+  "flower": "ok",
+  "feather": "ok",
+  "fire": "ok",
+  "lion": "ok",
+  "leaf": "ok",
+  "lemon": "ok",
+  "log": "ok",
+  "lollipop": "ok"
+ },
  "removed_words": []
 }

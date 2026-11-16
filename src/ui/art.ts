@@ -166,3 +166,21 @@ export const dinoMouthPct = (kind: string): { x: number; y: number } => {
   const hy = dinoDef(kind).hy;
   return { x: 50, y: ((hy + 27 + 26) / 238) * 100 };
 };
+
+export const drumSVG = (): string => `<svg class="drum-art" viewBox="0 0 200 170" role="img" aria-hidden="true" focusable="false">
+  <ellipse cx="100" cy="160" rx="72" ry="8" fill="#0000001f"/>
+  <path d="M28 70 L28 130 Q28 152 100 152 Q172 152 172 130 L172 70Z" fill="#ef476f"/>
+  <path d="M28 70 L28 130 Q28 152 100 152 Q172 152 172 130 L172 70Z" fill="none" stroke="#c2284f" stroke-width="4"/>
+  <path d="M40 74 L60 148 M70 78 L90 152 M100 80 L100 152 M130 78 L110 152 M160 74 L140 148" stroke="#ffd166" stroke-width="5" stroke-linecap="round" opacity=".9"/>
+  <ellipse class="skin" cx="100" cy="70" rx="72" ry="26" fill="#fff5e0" stroke="#e0cfa8" stroke-width="5"/>
+  <ellipse cx="100" cy="70" rx="72" ry="26" fill="none" stroke="#ffd166" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round" transform="translate(0 6)"/>
+</svg>`;
+
+export const potSVG = (): string => `<svg class="pot-art" viewBox="0 0 160 150" role="img" aria-hidden="true" focusable="false">
+  <ellipse cx="80" cy="142" rx="56" ry="8" fill="#0000001f"/>
+  <path class="steam" d="M60 30 q-8 -12 0 -22 M82 26 q-8 -12 0 -22 M104 30 q-8 -12 0 -22" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none" opacity="0"/>
+  <path d="M22 62 Q22 138 80 138 Q138 138 138 62Z" fill="#6b7a99"/><path d="M22 62 Q22 138 80 138 Q138 138 138 62Z" fill="none" stroke="#4a5876" stroke-width="4"/>
+  <path d="M34 80 Q38 124 62 130" stroke="#fff" stroke-width="5" fill="none" opacity=".25" stroke-linecap="round"/>
+  <rect x="8" y="56" width="144" height="14" rx="7" fill="#8693b3" stroke="#4a5876" stroke-width="4"/>
+  <path class="lid" d="M30 56 Q30 30 80 30 Q130 30 130 56Z" fill="#8693b3" stroke="#4a5876" stroke-width="4"/><circle class="lid" cx="80" cy="26" r="7" fill="#ffc933" stroke="#c98f00" stroke-width="3"/>
+</svg>`;

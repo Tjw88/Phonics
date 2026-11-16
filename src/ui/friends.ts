@@ -1,0 +1,136 @@
+// The sound-friends: one original character per sound (spec: original mnemonics, must not copy any programme's
+// artwork; each character's shape or action evokes its letter). Hand-drawn inline SVG, same style as the companion:
+// big eyes, soft round shapes, nothing scary. viewBox is 0 0 120 120 for all of them.
+
+const eyes = (x1: number, x2: number, y: number, r = 7): string =>
+  `<g class="eyes"><circle cx="${x1}" cy="${y}" r="${r}" fill="#fff"/><circle cx="${x2}" cy="${y}" r="${r}" fill="#fff"/>` +
+  `<circle cx="${x1 + r * 0.15}" cy="${y + r * 0.1}" r="${r * 0.55}" fill="#26303f"/><circle cx="${x2 + r * 0.15}" cy="${y + r * 0.1}" r="${r * 0.55}" fill="#26303f"/>` +
+  `<circle cx="${x1 + r * 0.35}" cy="${y - r * 0.25}" r="${r * 0.2}" fill="#fff"/><circle cx="${x2 + r * 0.35}" cy="${y - r * 0.25}" r="${r * 0.2}" fill="#fff"/></g>`;
+const smile = (cx: number, y: number, w = 12): string =>
+  `<path d="M${cx - w} ${y} Q${cx} ${y + w * 0.9} ${cx + w} ${y}" fill="none" stroke="#3b2030" stroke-width="3.2" stroke-linecap="round"/>`;
+const cheeks = (x1: number, x2: number, y: number, r = 5): string =>
+  `<circle cx="${x1}" cy="${y}" r="${r}" fill="#ff8fa3" opacity=".5"/><circle cx="${x2}" cy="${y}" r="${r}" fill="#ff8fa3" opacity=".5"/>`;
+const face = (cx: number, cy: number, s = 1): string =>
+  eyes(cx - 10 * s, cx + 10 * s, cy, 6.5 * s) + cheeks(cx - 17 * s, cx + 17 * s, cy + 9 * s, 4.5 * s) + smile(cx, cy + 10 * s, 8 * s);
+
+const BODY: Record<string, string> = {
+  // s: Sid the snake, bent like the letter
+  s: `<path d="M84 28 C44 14 30 46 58 56 C86 66 78 96 36 104" fill="none" stroke="#3c9a4b" stroke-width="28" stroke-linecap="round"/>
+      <path d="M84 28 C44 14 30 46 58 56 C86 66 78 96 36 104" fill="none" stroke="#6fd37e" stroke-width="20" stroke-linecap="round"/>
+      <path d="M62 60 q8 6 14 14 M44 40 q-6 -6 -12 -4" stroke="#3c9a4b" stroke-width="3" fill="none" stroke-linecap="round" opacity=".6"/>
+      <circle cx="88" cy="26" r="17" fill="#6fd37e"/><path d="M99 33 l13 3 M105 35 l7 -5 M105 35 l7 7" stroke="#ef476f" stroke-width="3" stroke-linecap="round" fill="none"/>${eyes(82, 94, 22, 5.5)}${smile(88, 32, 6)}`,
+  // a: Annie the ant
+  a: `<g stroke="#6b2d1d" stroke-width="4" stroke-linecap="round" fill="none"><path d="M54 84 l-10 22 M62 86 l0 24 M70 84 l12 22 M82 90 l-4 20 M88 88 l14 16 M38 80 l-14 14"/><path d="M28 56 q-8 -16 -18 -14 M36 54 q-2 -18 -12 -22"/></g>
+     <circle cx="88" cy="74" r="22" fill="#d9644a"/><circle cx="60" cy="74" r="14" fill="#c4553b"/><circle cx="38" cy="66" r="19" fill="#d9644a"/>${face(38, 64, 0.95)}
+     <circle cx="82" cy="68" r="5" fill="#fff" opacity=".35"/>`,
+  // t: Tessa the tap (a T shape) with a drip
+  t: `<rect x="50" y="10" width="20" height="26" rx="6" fill="#ef476f"/><rect x="30" y="8" width="60" height="12" rx="6" fill="#ef476f"/>
+     <rect x="44" y="30" width="32" height="22" fill="#8fb3d9"/><rect x="14" y="48" width="76" height="30" rx="15" fill="#8fb3d9"/><rect x="14" y="48" width="76" height="9" rx="4" fill="#fff" opacity=".35"/>
+     <rect x="68" y="72" width="22" height="16" rx="5" fill="#6f95c0"/><path d="M79 94 q-9 14 0 20 q9 -6 0 -20z" fill="#4cc3d9"/>${face(48, 63, 0.8)}`,
+  // p: Pip the penguin
+  p: `<ellipse cx="34" cy="64" rx="9" ry="22" fill="#26364f" transform="rotate(14 34 64)"/><ellipse cx="86" cy="64" rx="9" ry="22" fill="#26364f" transform="rotate(-14 86 64)"/>
+     <ellipse cx="60" cy="72" rx="30" ry="38" fill="#26364f"/><ellipse cx="60" cy="80" rx="20" ry="28" fill="#fff"/>
+     <ellipse cx="46" cy="112" rx="12" ry="6" fill="#ff9f1c"/><ellipse cx="74" cy="112" rx="12" ry="6" fill="#ff9f1c"/>
+     <circle cx="60" cy="36" r="24" fill="#26364f"/><ellipse cx="60" cy="42" rx="16" ry="14" fill="#fff"/>${eyes(51, 69, 34, 5.5)}<path d="M52 44 L68 44 L60 54Z" fill="#ff9f1c"/>${cheeks(44, 76, 44, 4)}`,
+  // i: Iggy the inchworm; the head is the dot of the i
+  i: `<circle cx="60" cy="104" r="13" fill="#5cc26b"/><circle cx="60" cy="86" r="14" fill="#8ee27a"/><circle cx="60" cy="68" r="14" fill="#5cc26b"/><circle cx="60" cy="50" r="14" fill="#8ee27a"/>
+     <circle cx="60" cy="26" r="19" fill="#8ee27a"/><path d="M50 10 q-6 -10 -14 -8 M70 10 q6 -10 14 -8" stroke="#3c9a4b" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="36" cy="2" r="3.5" fill="#ef476f"/><circle cx="84" cy="2" r="3.5" fill="#ef476f"/>${face(60, 24, 0.95)}`,
+  // n: Nutmeg the nut
+  n: `<ellipse cx="60" cy="68" rx="36" ry="40" fill="#d19a5f"/><path d="M60 30 q-10 40 0 76" stroke="#a9763d" stroke-width="3" fill="none" opacity=".6"/>
+     <path d="M24 56 Q24 18 60 18 Q96 18 96 56Z" fill="#9a6633"/><path d="M34 40 q10 -14 26 -14" stroke="#fff" stroke-width="3" fill="none" opacity=".4" stroke-linecap="round"/>${face(60, 72, 1.05)}`,
+  // m: Mabel the mouse
+  m: `<path d="M92 96 q22 4 18 -22 q-2 -10 -10 -10" stroke="#e8a0b4" stroke-width="5" fill="none" stroke-linecap="round"/>
+     <ellipse cx="60" cy="88" rx="30" ry="26" fill="#bfc0d3"/><circle cx="34" cy="36" r="18" fill="#bfc0d3"/><circle cx="86" cy="36" r="18" fill="#bfc0d3"/><circle cx="34" cy="36" r="10" fill="#ffb3c6"/><circle cx="86" cy="36" r="10" fill="#ffb3c6"/>
+     <circle cx="60" cy="58" r="28" fill="#d3d4e6"/>${eyes(48, 72, 54, 6.5)}<ellipse cx="60" cy="66" rx="5" ry="4" fill="#ff7aa2"/><path d="M60 70 l0 4 M60 74 q-6 6 -10 2 M60 74 q6 6 10 2" stroke="#3b2030" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+     <path d="M30 64 l-14 -4 M30 70 l-14 4 M90 64 l14 -4 M90 70 l14 4" stroke="#8c8ea6" stroke-width="2" stroke-linecap="round"/>${cheeks(40, 80, 66, 4)}`,
+  // d: Dot the dino, with a drum
+  d: `<path d="M20 92 Q2 98 8 74 Q20 86 34 80Z" fill="#f2b705"/>
+     <ellipse cx="50" cy="86" rx="38" ry="28" fill="#ffd166"/><ellipse cx="48" cy="96" rx="24" ry="16" fill="#fff0c2"/>
+     <path d="M26 66 l8 -16 l8 14z M42 60 l8 -18 l8 16z M58 62 l8 -16 l8 14z" fill="#ff9f43"/>
+     <ellipse cx="34" cy="112" rx="12" ry="6" fill="#f2b705"/><ellipse cx="62" cy="112" rx="12" ry="6" fill="#f2b705"/>
+     <circle cx="84" cy="48" r="25" fill="#ffd166"/>${face(86, 46, 0.95)}<ellipse cx="94" cy="58" rx="2" ry="2.6" fill="#d98a00" opacity=".6"/>
+     <ellipse cx="96" cy="100" rx="20" ry="7" fill="#fff5e0"/><rect x="76" y="100" width="40" height="14" fill="#ef476f"/><ellipse cx="96" cy="114" rx="20" ry="7" fill="#d6335b"/><ellipse cx="96" cy="100" rx="20" ry="7" fill="none" stroke="#d6335b" stroke-width="3"/>
+     <path d="M70 84 L88 98 M104 80 L98 98" stroke="#a46a2c" stroke-width="3.5" stroke-linecap="round"/><circle cx="70" cy="83" r="3.5" fill="#a46a2c"/><circle cx="105" cy="79" r="3.5" fill="#a46a2c"/>`,
+  // g: Gus the goat
+  g: `<path d="M38 34 q-14 -22 4 -28 q-6 12 10 24z M82 34 q14 -22 -4 -28 q6 12 -10 24z" fill="#b9a68a"/>
+     <ellipse cx="26" cy="54" rx="14" ry="8" fill="#f1ece4" transform="rotate(20 26 54)"/><ellipse cx="94" cy="54" rx="14" ry="8" fill="#f1ece4" transform="rotate(-20 94 54)"/>
+     <ellipse cx="60" cy="62" rx="28" ry="32" fill="#f7f2ea"/><path d="M60 94 l-9 16 q9 8 18 0z" fill="#e4dccf"/>${eyes(48, 72, 54, 6.5)}<ellipse cx="60" cy="72" rx="9" ry="7" fill="#e8bdb0"/><circle cx="56" cy="72" r="1.6" fill="#3b2030"/><circle cx="64" cy="72" r="1.6" fill="#3b2030"/>${smile(60, 80, 6)}${cheeks(40, 80, 68, 4)}`,
+  // o: Ollie the octopus
+  o: `<g stroke="#9a5fc9" stroke-width="12" stroke-linecap="round" fill="none"><path d="M34 74 q-14 16 -4 32 M48 80 q-6 18 6 30 M72 80 q6 18 -6 30 M86 74 q14 16 4 32"/></g>
+     <circle cx="60" cy="52" r="36" fill="#b07ad9"/><circle cx="42" cy="34" r="6" fill="#fff" opacity=".3"/>${eyes(46, 74, 46, 8)}<ellipse cx="60" cy="68" rx="8" ry="10" fill="#6b2437"/>${cheeks(34, 86, 60, 5)}`,
+  // c: Cora the cat, tail curled like a c
+  c: `<path d="M92 98 C114 98 114 66 94 66" fill="none" stroke="#f4a259" stroke-width="11" stroke-linecap="round"/>
+     <path d="M30 40 L34 8 L56 28Z M90 40 L86 8 L64 28Z" fill="#f4a259"/><path d="M36 30 L38 16 L48 26Z M84 30 L82 16 L72 26Z" fill="#ffb3c6"/>
+     <ellipse cx="58" cy="94" rx="30" ry="22" fill="#f4a259"/><circle cx="60" cy="56" r="32" fill="#f7b072"/><path d="M60 26 v10 M48 28 l3 9 M72 28 l-3 9" stroke="#d97f2d" stroke-width="3.5" stroke-linecap="round"/>
+     ${eyes(47, 73, 52, 7)}<path d="M55 63 h10 l-5 6z" fill="#ff7aa2"/><path d="M60 69 q-6 7 -12 3 M60 69 q6 7 12 3" stroke="#3b2030" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+     <path d="M34 62 l-18 -4 M34 68 l-18 4 M86 62 l18 -4 M86 68 l18 4" stroke="#b86a22" stroke-width="2" stroke-linecap="round"/>${cheeks(38, 82, 66, 4)}`,
+  // k: Kit the kite
+  k: `<path d="M60 96 q-14 10 0 18 q14 8 0 16" stroke="#8d5a2b" stroke-width="2.5" fill="none" transform="translate(0 -14)"/>
+     <path d="M52 104 l-10 -8 l-2 12z M68 112 l10 -8 l2 12z" fill="#4cc3d9" transform="translate(0 -4)"/>
+     <path d="M60 6 L96 50 L60 94 L24 50Z" fill="#ef476f"/><path d="M60 6 L96 50 L60 50Z" fill="#ffd166"/><path d="M60 94 L24 50 L60 50Z" fill="#ffd166"/><path d="M60 6 V94 M24 50 H96" stroke="#fff" stroke-width="2.5" opacity=".7"/>
+     ${face(60, 50, 0.85)}`,
+  // ck: Rocky the rock
+  ck: `<path d="M14 100 Q10 60 36 42 Q56 26 84 40 Q112 58 106 100Z" fill="#9aa8b6"/><path d="M26 92 Q22 66 40 54" stroke="#fff" stroke-width="5" fill="none" opacity=".35" stroke-linecap="round"/>
+      <path d="M52 40 q-4 -14 6 -18 q2 8 8 4 q6 6 -2 14z" fill="#6fd37e"/>${face(60, 70, 1.05)}<path d="M82 88 l10 4 M30 100 l10 -2" stroke="#7d8a98" stroke-width="3" stroke-linecap="round"/>`,
+  // e: Ed the egg
+  e: `<ellipse cx="46" cy="112" rx="10" ry="5" fill="#ff9f1c"/><ellipse cx="74" cy="112" rx="10" ry="5" fill="#ff9f1c"/>
+     <path d="M60 8 C92 8 104 62 104 78 C104 102 84 112 60 112 C36 112 16 102 16 78 C16 62 28 8 60 8Z" fill="#fff3d6" stroke="#e0c48a" stroke-width="4"/>
+     <path d="M24 48 l10 -8 l10 10 l10 -10 l10 10 l10 -10 l10 10 l10 -10 l8 8" fill="none" stroke="#e0c48a" stroke-width="3" stroke-linejoin="round" opacity=".9"/>${face(60, 74, 1.05)}`,
+  // u: Uma the umbrella
+  u: `<path d="M60 52 V96 q0 12 -12 12 q-10 0 -10 -10" fill="none" stroke="#6a5bc0" stroke-width="6" stroke-linecap="round"/>
+     <path d="M8 56 Q8 8 60 8 Q112 8 112 56 Q100 46 90 56 Q80 46 70 56 Q60 46 50 56 Q40 46 30 56 Q20 46 8 56Z" fill="#9b8bf0"/>
+     <path d="M60 8 Q40 24 50 56 M60 8 Q80 24 70 56" fill="none" stroke="#7a69d6" stroke-width="3"/><path d="M20 30 q10 -14 26 -18" stroke="#fff" stroke-width="3.5" fill="none" opacity=".45" stroke-linecap="round"/>${face(60, 36, 0.95)}`,
+  // r: Rosie the rabbit
+  r: `<ellipse cx="42" cy="28" rx="11" ry="26" fill="#fff" stroke="#e6e0ee" stroke-width="2" transform="rotate(-8 42 28)"/><ellipse cx="78" cy="28" rx="11" ry="26" fill="#fff" stroke="#e6e0ee" stroke-width="2" transform="rotate(8 78 28)"/>
+     <ellipse cx="42" cy="30" rx="5.5" ry="18" fill="#ffb3c6" transform="rotate(-8 42 30)"/><ellipse cx="78" cy="30" rx="5.5" ry="18" fill="#ffb3c6" transform="rotate(8 78 30)"/>
+     <ellipse cx="60" cy="102" rx="26" ry="16" fill="#fff" stroke="#e6e0ee" stroke-width="2"/><circle cx="92" cy="104" r="8" fill="#fff" stroke="#e6e0ee" stroke-width="2"/>
+     <circle cx="60" cy="66" r="28" fill="#fff" stroke="#e6e0ee" stroke-width="2"/>${eyes(49, 71, 62, 6.5)}<path d="M55 71 h10 l-5 5z" fill="#ff7aa2"/><rect x="56" y="78" width="4" height="7" rx="1.5" fill="#fff" stroke="#d8d0e4" stroke-width="1.2"/><rect x="60.5" y="78" width="4" height="7" rx="1.5" fill="#fff" stroke="#d8d0e4" stroke-width="1.2"/>${cheeks(40, 80, 74, 4.5)}`,
+  // h: Hattie the hen
+  h: `<path d="M20 70 q-14 -8 -10 -26 q12 6 20 22z" fill="#c98f4a"/><ellipse cx="58" cy="78" rx="38" ry="32" fill="#ffd98a"/><path d="M46 72 q20 -10 40 4 q-6 22 -26 24 q-18 -6 -14 -28z" fill="#f0b95a"/>
+     <circle cx="82" cy="46" r="22" fill="#ffd98a"/><circle cx="76" cy="24" r="7" fill="#ef476f"/><circle cx="86" cy="22" r="8" fill="#ef476f"/><circle cx="94" cy="28" r="6" fill="#ef476f"/>
+     <path d="M100 46 l14 6 l-14 6z" fill="#ff9f1c"/><ellipse cx="98" cy="66" rx="5" ry="8" fill="#ef476f"/>${eyes(76, 90, 42, 5.5)}${cheeks(70, 92, 54, 3.5)}
+     <path d="M50 110 v8 M66 110 v8 M44 118 h12 M60 118 h12" stroke="#ff9f1c" stroke-width="3.5" stroke-linecap="round"/>`,
+  // b: Bo the bug (ladybird)
+  b: `<path d="M44 20 q-10 -14 -18 -10 M76 20 q10 -14 18 -10" stroke="#26303f" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+     <circle cx="60" cy="70" r="40" fill="#ef476f"/><path d="M60 30 V110" stroke="#26303f" stroke-width="4"/><circle cx="40" cy="62" r="8" fill="#26303f"/><circle cx="82" cy="58" r="7" fill="#26303f"/><circle cx="76" cy="90" r="8" fill="#26303f"/><circle cx="42" cy="92" r="6" fill="#26303f"/>
+     <path d="M26 44 Q60 -2 94 44 Q60 34 26 44Z" fill="#26303f"/>${eyes(48, 72, 32, 6)}<circle cx="30" cy="76" r="6" fill="#fff" opacity=".3"/>${smile(60, 40, 7)}`,
+  // f: Fenn the fox
+  f: `<path d="M92 104 q26 -6 20 -34 q-18 8 -26 26z" fill="#f08a3c"/><path d="M104 74 q8 -4 8 -4 q4 14 -4 24z" fill="#fff"/>
+     <path d="M26 54 L30 14 L56 34Z M94 54 L90 14 L64 34Z" fill="#f08a3c"/><path d="M32 38 L34 24 L46 34Z M88 38 L86 24 L74 34Z" fill="#26303f"/>
+     <ellipse cx="60" cy="100" rx="26" ry="16" fill="#f08a3c"/><path d="M28 62 Q30 36 60 36 Q90 36 92 62 Q92 94 60 96 Q28 94 28 62Z" fill="#f4a152"/>
+     <path d="M30 66 Q50 64 60 84 Q70 64 90 66 Q84 96 60 98 Q36 96 30 66Z" fill="#fff"/>${eyes(47, 73, 58, 6.5)}<ellipse cx="60" cy="76" rx="6" ry="4.5" fill="#26303f"/>${cheeks(38, 82, 70, 4)}`,
+  // ff: Fluffy the cloud
+  ff: `<g fill="#fff" stroke="#bcd7ee" stroke-width="3"><circle cx="34" cy="70" r="22"/><circle cx="60" cy="52" r="28"/><circle cx="88" cy="68" r="24"/><rect x="24" y="68" width="74" height="24" rx="12"/></g>
+      <g fill="#fff"><circle cx="34" cy="70" r="20"/><circle cx="60" cy="52" r="26"/><circle cx="88" cy="68" r="22"/><rect x="26" y="70" width="70" height="20" rx="10"/></g>
+      <path d="M96 100 q6 8 0 14 M24 100 q-6 8 0 14 M60 100 v14" stroke="#8fd0f0" stroke-width="3.5" stroke-linecap="round" fill="none"/>${face(60, 70, 1.05)}`,
+  // l: Lulu the lamb
+  l: `<ellipse cx="30" cy="72" rx="13" ry="8" fill="#4a4458" transform="rotate(30 30 72)"/><ellipse cx="90" cy="72" rx="13" ry="8" fill="#4a4458" transform="rotate(-30 90 72)"/>
+     <g fill="#fff" stroke="#e4e0f0" stroke-width="2"><circle cx="34" cy="50" r="17"/><circle cx="52" cy="34" r="17"/><circle cx="72" cy="34" r="17"/><circle cx="88" cy="50" r="17"/><circle cx="32" cy="76" r="16"/><circle cx="90" cy="76" r="16"/><circle cx="60" cy="90" r="18"/></g>
+     <g fill="#fff"><circle cx="34" cy="50" r="16"/><circle cx="52" cy="34" r="16"/><circle cx="72" cy="34" r="16"/><circle cx="88" cy="50" r="16"/><circle cx="32" cy="76" r="15"/><circle cx="90" cy="76" r="15"/><circle cx="60" cy="90" r="17"/></g>
+     <ellipse cx="60" cy="64" rx="22" ry="25" fill="#4a4458"/>${eyes(51, 69, 58, 6)}<ellipse cx="60" cy="72" rx="4" ry="3" fill="#ff9fb4"/>${smile(60, 74, 5)}<path d="M44 108 v8 M76 108 v8" stroke="#4a4458" stroke-width="6" stroke-linecap="round"/>`,
+  // ll: Bella the bell
+  ll: `<circle cx="60" cy="10" r="7" fill="none" stroke="#c98f00" stroke-width="4"/><path d="M60 14 C86 14 98 40 98 72 L108 94 H12 L22 72 C22 40 34 14 60 14Z" fill="#ffc933" stroke="#e0a100" stroke-width="3.5"/>
+      <path d="M32 40 q6 -16 24 -20" stroke="#fff" stroke-width="4.5" fill="none" opacity=".55" stroke-linecap="round"/><circle cx="60" cy="102" r="10" fill="#e0a100"/>${face(60, 62, 1.1)}
+      <path d="M112 60 q8 6 0 14 M8 60 q-8 6 0 14" stroke="#ffd166" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
+  // ss: Moss the hisser (a mossy, hissing fuzzball)
+  ss: `<g fill="#4fa971"><circle cx="30" cy="68" r="20"/><circle cx="52" cy="46" r="22"/><circle cx="78" cy="48" r="22"/><circle cx="92" cy="72" r="18"/><circle cx="56" cy="86" r="26"/></g>
+      <g fill="#7bd389"><circle cx="34" cy="64" r="14"/><circle cx="56" cy="44" r="16"/><circle cx="76" cy="46" r="16"/><circle cx="86" cy="68" r="12"/><circle cx="58" cy="84" r="20"/></g>
+      <path d="M20 40 q-8 -8 0 -14 M98 36 q8 -10 -2 -16" stroke="#3c9a4b" stroke-width="3.5" fill="none" stroke-linecap="round"/>${face(58, 70, 1.05)}
+      <path d="M8 96 q8 -10 14 0 q6 10 12 0 M86 100 q8 -10 14 0 q6 10 12 0" stroke="#4cc3d9" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
+};
+
+export const FRIEND_IDS = Object.keys(BODY);
+export const friendSVG = (id: string): string =>
+  BODY[id] ? `<svg class="friend" viewBox="0 -6 120 130" role="img" aria-hidden="true" focusable="false">${BODY[id]}</svg>` : '';
+export const hasFriend = (id: string): boolean => id in BODY;
+
+import { MNEMONICS } from '../engine/data';
+import { h } from './dom';
+
+/** A sound-friend as an element: the drawn character, or its emoji if there is no drawing. */
+export const friendEl = (id: string, cls = ''): HTMLElement => {
+  const el = h('span', { class: `friend-wrap ${cls}`, 'aria-hidden': 'true' });
+  if (hasFriend(id)) el.innerHTML = friendSVG(id);
+  else el.textContent = MNEMONICS[id]?.emoji ?? '⭐';
+  return el;
+};

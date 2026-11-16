@@ -1,4 +1,370 @@
 {
+ "safari": [
+  {
+   "word": "sun",
+   "p": "s"
+  },
+  {
+   "word": "sock",
+   "p": "s"
+  },
+  {
+   "word": "snake",
+   "p": "s"
+  },
+  {
+   "word": "star",
+   "p": "s"
+  },
+  {
+   "word": "soap",
+   "p": "s"
+  },
+  {
+   "word": "ant",
+   "p": "a"
+  },
+  {
+   "word": "apple",
+   "p": "a"
+  },
+  {
+   "word": "alligator",
+   "p": "a"
+  },
+  {
+   "word": "axe",
+   "p": "a"
+  },
+  {
+   "word": "tap",
+   "p": "t"
+  },
+  {
+   "word": "tiger",
+   "p": "t"
+  },
+  {
+   "word": "tent",
+   "p": "t"
+  },
+  {
+   "word": "turtle",
+   "p": "t"
+  },
+  {
+   "word": "tooth",
+   "p": "t"
+  },
+  {
+   "word": "train",
+   "p": "t"
+  },
+  {
+   "word": "pig",
+   "p": "p"
+  },
+  {
+   "word": "pen",
+   "p": "p"
+  },
+  {
+   "word": "pizza",
+   "p": "p"
+  },
+  {
+   "word": "panda",
+   "p": "p"
+  },
+  {
+   "word": "parrot",
+   "p": "p"
+  },
+  {
+   "word": "pear",
+   "p": "p"
+  },
+  {
+   "word": "insect",
+   "p": "i"
+  },
+  {
+   "word": "ink",
+   "p": "i"
+  },
+  {
+   "word": "iguana",
+   "p": "i"
+  },
+  {
+   "word": "nut",
+   "p": "n"
+  },
+  {
+   "word": "net",
+   "p": "n"
+  },
+  {
+   "word": "nest",
+   "p": "n"
+  },
+  {
+   "word": "nose",
+   "p": "n"
+  },
+  {
+   "word": "nail",
+   "p": "n"
+  },
+  {
+   "word": "mouse",
+   "p": "m"
+  },
+  {
+   "word": "map",
+   "p": "m"
+  },
+  {
+   "word": "moon",
+   "p": "m"
+  },
+  {
+   "word": "mug",
+   "p": "m"
+  },
+  {
+   "word": "monkey",
+   "p": "m"
+  },
+  {
+   "word": "milk",
+   "p": "m"
+  },
+  {
+   "word": "dog",
+   "p": "d"
+  },
+  {
+   "word": "drum",
+   "p": "d"
+  },
+  {
+   "word": "duck",
+   "p": "d"
+  },
+  {
+   "word": "door",
+   "p": "d"
+  },
+  {
+   "word": "dolphin",
+   "p": "d"
+  },
+  {
+   "word": "goat",
+   "p": "g"
+  },
+  {
+   "word": "grapes",
+   "p": "g"
+  },
+  {
+   "word": "gift",
+   "p": "g"
+  },
+  {
+   "word": "guitar",
+   "p": "g"
+  },
+  {
+   "word": "gorilla",
+   "p": "g"
+  },
+  {
+   "word": "octopus",
+   "p": "o"
+  },
+  {
+   "word": "orange",
+   "p": "o"
+  },
+  {
+   "word": "otter",
+   "p": "o"
+  },
+  {
+   "word": "ox",
+   "p": "o"
+  },
+  {
+   "word": "cat",
+   "p": "k"
+  },
+  {
+   "word": "cup",
+   "p": "k"
+  },
+  {
+   "word": "cow",
+   "p": "k"
+  },
+  {
+   "word": "kite",
+   "p": "k"
+  },
+  {
+   "word": "key",
+   "p": "k"
+  },
+  {
+   "word": "camel",
+   "p": "k"
+  },
+  {
+   "word": "car",
+   "p": "k"
+  },
+  {
+   "word": "cake",
+   "p": "k"
+  },
+  {
+   "word": "egg",
+   "p": "e"
+  },
+  {
+   "word": "elephant",
+   "p": "e"
+  },
+  {
+   "word": "envelope",
+   "p": "e"
+  },
+  {
+   "word": "umbrella",
+   "p": "u"
+  },
+  {
+   "word": "up",
+   "p": "u"
+  },
+  {
+   "word": "rabbit",
+   "p": "r"
+  },
+  {
+   "word": "rainbow",
+   "p": "r"
+  },
+  {
+   "word": "robot",
+   "p": "r"
+  },
+  {
+   "word": "rocket",
+   "p": "r"
+  },
+  {
+   "word": "ring",
+   "p": "r"
+  },
+  {
+   "word": "rose",
+   "p": "r"
+  },
+  {
+   "word": "hat",
+   "p": "h"
+  },
+  {
+   "word": "hen",
+   "p": "h"
+  },
+  {
+   "word": "horse",
+   "p": "h"
+  },
+  {
+   "word": "house",
+   "p": "h"
+  },
+  {
+   "word": "hippo",
+   "p": "h"
+  },
+  {
+   "word": "heart",
+   "p": "h"
+  },
+  {
+   "word": "bus",
+   "p": "b"
+  },
+  {
+   "word": "ball",
+   "p": "b"
+  },
+  {
+   "word": "bat",
+   "p": "b"
+  },
+  {
+   "word": "bee",
+   "p": "b"
+  },
+  {
+   "word": "banana",
+   "p": "b"
+  },
+  {
+   "word": "bed",
+   "p": "b"
+  },
+  {
+   "word": "fish",
+   "p": "f"
+  },
+  {
+   "word": "fox",
+   "p": "f"
+  },
+  {
+   "word": "frog",
+   "p": "f"
+  },
+  {
+   "word": "flower",
+   "p": "f"
+  },
+  {
+   "word": "feather",
+   "p": "f"
+  },
+  {
+   "word": "fire",
+   "p": "f"
+  },
+  {
+   "word": "lion",
+   "p": "l"
+  },
+  {
+   "word": "leaf",
+   "p": "l"
+  },
+  {
+   "word": "lemon",
+   "p": "l"
+  },
+  {
+   "word": "log",
+   "p": "l"
+  },
+  {
+   "word": "lollipop",
+   "p": "l"
+  }
+ ],
  "graphemes": [
   {
    "id": "s",

@@ -1,4 +1,4 @@
-import { GRAPHEMES, GRAPHEME_BY_ID, bankFor, graphemesInSet, type Grapheme, type Word } from './data';
+import { GRAPHEMES, GRAPHEME_BY_ID, bankFor, graphemesInSet, safariFor, type Grapheme, type SafariItem, type Word } from './data';
 import { shuffle, type Rng } from './dates';
 import { isDecodable } from './linter';
 import { pickReview } from './review';
@@ -7,8 +7,17 @@ import {
   type ChildState,
 } from './state';
 
+export type SecondGame = 'robot' | 'drum' | 'safari';
+export type ThirdGame = 'bridge' | 'kitchen' | 'rhyme';
 export interface Plan {
   day: string;
+  /** Practice is three games rising in difficulty: Feed the Creature, then one oral game, then one print (or rhyme) game. */
+  second: SecondGame;
+  third: ThirdGame;
+  /** Optional Trace Trail after the new-sound story (parent setting; only on days with a new sound). */
+  trace: boolean;
+  drumWords: Word[]; // pictured words to segment
+  kitchenWords: Word[]; // pictured, decodable words to spell
   newSound: Grapheme | null; // null on a consolidation day (nothing new is safe to add yet)
   review: Grapheme[];
   /** Printed blending (Bridge Builder, printed Make-it-real) opens when set 1 is (nearly) secure or placement skipped it. */
@@ -94,8 +103,19 @@ export const startAdventure = (s: ChildState, today: string, rng: Rng): Plan => 
     makeItReal = { word: robotWords[0], mode: 'oral' };
   }
 
+  // Variety without randomness: rotate by how many adventures have been completed (stable if a day is replayed).
+  const n = s.adventureDays.filter((d) => d !== today).length;
+  const safariOk = !!newSound && safariFor(s.accent).filter((i) => i.p === newSound.phoneme).length >= 2;
+  const seconds: SecondGame[] = safariOk ? ['safari', 'robot', 'drum'] : ['robot', 'drum'];
+  const second = seconds[n % seconds.length] as SecondGame;
+  const kitchenPool = pool.filter((w) => w.emoji && w.graphemes.length >= 2);
+  const third: ThirdGame = !printBlend ? 'rhyme' : kitchenPool.length && n % 2 === 1 ? 'kitchen' : 'bridge';
+  const drumPool = pictured.filter((w) => w.graphemes.length >= 2 && w.graphemes.length <= 4);
   return {
-    day: today, newSound, review, printBlend, makeItReal, robotWords, bridgeWords,
+    day: today, second, third, trace: s.tracing && !!newSound,
+    drumWords: pickWords(drumPool, s, newSound, 2, rng),
+    kitchenWords: pickWords(kitchenPool, s, newSound, 2, rng),
+    newSound, review, printBlend, makeItReal, robotWords, bridgeWords,
     mission: missionFor(newSound ?? review[0] ?? null),
     consolidation: !newSound,
   };
@@ -155,3 +175,39 @@ export const applyPlacement = (s: ChildState, startSet: number, today: string): 
 /** Trial indices (-> choices 1,2,3,3 / 2,3) per sound per adventure. Shared by the UI and the simulator. */
 export const NEW_SOUND_TRIALS = [0, 1, 2, 3] as const;
 export const REVIEW_SOUND_TRIALS = [1, 2] as const;
+
+
+// ---- Sound Safari / Word Kitchen builders ---------------------------------------------------------------------------
+/**
+ * A safari scene: up to `nTargets` things that START with the target sound, hidden among things that do not.
+ * Distractors prefer sounds the child has already met, so the hunt is fair.
+ */
+export const buildSafari = (s: ChildState, phoneme: string, rng: Rng, nTargets = 3, nTotal = 8): { targets: SafariItem[]; items: SafariItem[] } => {
+  const all = safariFor(s.accent);
+  const targets = shuffle(all.filter((i) => i.p === phoneme), rng).slice(0, nTargets);
+  const met = new Set([...introducedIds(s)].map(phonemeOf));
+  const others = all.filter((i) => i.p !== phoneme);
+  const familiar = shuffle(others.filter((i) => met.has(i.p)), rng);
+  const rest = shuffle(others.filter((i) => !met.has(i.p)), rng);
+  // one distractor per sound, so the scene never has two items that start with the same wrong sound crowding it
+  const seen = new Set<string>();
+  const distractors: SafariItem[] = [];
+  for (const it of [...familiar, ...rest]) {
+    if (distractors.length >= nTotal - targets.length) break;
+    if (seen.has(it.p)) continue;
+    seen.add(it.p);
+    distractors.push(it);
+  }
+  return { targets, items: shuffle([...targets, ...distractors], rng) };
+};
+
+/** Word Kitchen tray: the word's own letters plus up to two other letters the child has met, shuffled. */
+export const buildKitchenTiles = (s: ChildState, word: Word, rng: Rng, extra = 2): string[] => {
+  const intro = [...introducedIds(s)].filter((id) => !word.graphemes.includes(id));
+  // never offer a decoy that makes the answer ambiguous (c / k / ck all say /k/, ff = f, ll = l, ss = s)
+  const sounds = new Set(word.graphemes.map(phonemeOf));
+  const decoys = shuffle(intro.filter((id) => !sounds.has(phonemeOf(id))), rng).slice(0, extra);
+  return shuffle([...word.graphemes, ...decoys], rng);
+};
+/** One drum beat per sound in the word. */
+export const drumBeats = (word: Word): number => word.graphemes.length;

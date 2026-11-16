@@ -121,3 +121,30 @@ export const DEFAULT_ACCENT: AccentId = 'rp';
 /** Words dropped per accent. Must equal the generated audio's `removed_words` (a test enforces it). */
 export const ACCENT_EXCLUDE: Record<AccentId, readonly string[]> = { rp: ['pass'], north: [] };
 export const bankFor = (accent: AccentId): Word[] => BANK.filter((w) => !ACCENT_EXCLUDE[accent].includes(w.text));
+
+// ---- Sound Safari: things to hunt for by their FIRST sound (listening only; no letters) --------------------------
+export interface SafariItem { word: string; emoji: string; p: string } // p = initial phoneme key
+const sf = (p: string, items: [string, string][]): SafariItem[] => items.map(([word, emoji]) => ({ word, emoji, p }));
+export const SAFARI: SafariItem[] = [
+  ...sf('s', [['sun', '☀️'], ['sock', '🧦'], ['snake', '🐍'], ['star', '⭐'], ['soap', '🧼']]),
+  ...sf('a', [['ant', '🐜'], ['apple', '🍎'], ['alligator', '🐊'], ['axe', '🪓']]),
+  ...sf('t', [['tap', '🚰'], ['tiger', '🐯'], ['tent', '⛺'], ['turtle', '🐢'], ['tooth', '🦷'], ['train', '🚂']]),
+  ...sf('p', [['pig', '🐷'], ['pen', '🖊️'], ['pizza', '🍕'], ['panda', '🐼'], ['parrot', '🦜'], ['pear', '🍐']]),
+  ...sf('i', [['insect', '🐛'], ['ink', '🖋️'], ['iguana', '🦎']]),
+  ...sf('n', [['nut', '🥜'], ['net', '🥅'], ['nest', '🪺'], ['nose', '👃'], ['nail', '💅']]),
+  ...sf('m', [['mouse', '🐭'], ['map', '🗺️'], ['moon', '🌙'], ['mug', '☕'], ['monkey', '🐒'], ['milk', '🥛']]),
+  ...sf('d', [['dog', '🐶'], ['drum', '🥁'], ['duck', '🦆'], ['door', '🚪'], ['dolphin', '🐬']]),
+  ...sf('g', [['goat', '🐐'], ['grapes', '🍇'], ['gift', '🎁'], ['guitar', '🎸'], ['gorilla', '🦍']]),
+  ...sf('o', [['octopus', '🐙'], ['orange', '🍊'], ['otter', '🦦'], ['ox', '🐂']]),
+  ...sf('k', [['cat', '🐱'], ['cup', '🥤'], ['cow', '🐄'], ['kite', '🪁'], ['key', '🔑'], ['camel', '🐫'], ['car', '🚗'], ['cake', '🎂']]),
+  ...sf('e', [['egg', '🥚'], ['elephant', '🐘'], ['envelope', '✉️']]),
+  ...sf('u', [['umbrella', '☂️'], ['up', '⬆️']]),
+  ...sf('r', [['rabbit', '🐰'], ['rainbow', '🌈'], ['robot', '🤖'], ['rocket', '🚀'], ['ring', '💍'], ['rose', '🌹']]),
+  ...sf('h', [['hat', '🎩'], ['hen', '🐔'], ['horse', '🐴'], ['house', '🏠'], ['hippo', '🦛'], ['heart', '❤️']]),
+  ...sf('b', [['bus', '🚌'], ['ball', '⚽'], ['bat', '🦇'], ['bee', '🐝'], ['banana', '🍌'], ['bed', '🛏️']]),
+  ...sf('f', [['fish', '🐟'], ['fox', '🦊'], ['frog', '🐸'], ['flower', '🌸'], ['feather', '🪶'], ['fire', '🔥']]),
+  ...sf('l', [['lion', '🦁'], ['leaf', '🍃'], ['lemon', '🍋'], ['log', '🪵'], ['lollipop', '🍭']]),
+];
+/** Safari items dropped per accent when the audio audit found the engine says them with a different first sound. */
+export const SAFARI_EXCLUDE: Record<AccentId, readonly string[]> = { rp: [], north: [] };
+export const safariFor = (accent: AccentId): SafariItem[] => SAFARI.filter((i) => !SAFARI_EXCLUDE[accent].includes(i.word));

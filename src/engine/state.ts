@@ -32,6 +32,8 @@ export interface ChildState {
   nickname: string;
   band: 'B' | 'C';
   accent: AccentId; // audio pack and word list; progress is accent-independent
+  tracing: boolean; // optional Trace Trail step (spec: optional, schools teach different formations)
+  musicOn: boolean; // background music (spec: its own toggle in parent settings)
   companion: Companion | null;
   startSet: number; // placement result, 1 = from scratch
   sounds: Record<string, SoundRecord>;
@@ -50,6 +52,8 @@ export const newChild = (): ChildState => ({
   nickname: '',
   band: 'C',
   accent: DEFAULT_ACCENT,
+  tracing: false,
+  musicOn: true,
   companion: null,
   startSet: 1,
   sounds: {},

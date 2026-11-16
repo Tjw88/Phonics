@@ -2,19 +2,21 @@ import { ACCENTS, GRAPHEMES, MNEMONICS, bankFor, type AccentId, type Word } from
 import { seeded, shuffle } from '../engine/dates';
 import { strugglingSounds } from '../engine/review';
 import {
-  NEW_SOUND_TRIALS, REVIEW_SOUND_TRIALS, applyPlacement, buildFeedTrial, buildPlacement, decodableWords,
-  missionFor, phonemeOf, scorePlacement, slashed, startAdventure, type Plan,
+  NEW_SOUND_TRIALS, REVIEW_SOUND_TRIALS, applyPlacement, buildPlacement, decodableWords,
+  missionFor, phonemeOf, pickWords, printBlendOpen, scorePlacement, slashed, startAdventure, type Plan,
 } from '../engine/session';
 import { playDay } from '../engine/simulate';
 import {
-  newChild, recordTrial, recordWord, statusOf, unlockedSet, wordsRead, type ChildState,
+  newChild, statusOf, unlockedSet, wordsRead, type ChildState,
 } from '../engine/state';
-import { audioSource, blip, initAudio, praise, sayPhrase, setMuted, sfx, speak, tap, unlockAudio } from './audio';
+import { audioSource, blip, initAudio, praise, sayPhrase, setMuted, setMusicOn, sfx, speak, tap, unlockAudio } from './audio';
+import { friendEl } from './friends';
+import { GAME_LABEL, availableGames, roundBridge, roundDrum, roundFeed, roundKitchen, roundRhyme, roundRobot, roundSafari, roundTrace, type GameKind } from './rounds';
 import { DINOS, chestSVG, eggSVG, islandSVG, sceneSVG } from './art';
 import { burst, mount, setNight } from './fx';
 import { bigButton, h, sleep } from './dom';
 import {
-  bridgeBuilder, companionEl, feedCreature, placementTrial, rhymeRocket, rhymeSets, robotTalk, type Ctx, type TrialResult,
+  companionEl, placementTrial, rhymeRocket, rhymeSets, type Ctx,
 } from './games';
 import { clockDay, load, save, wipe } from './storage';
 
@@ -52,6 +54,7 @@ export class App {
     );
     document.addEventListener('pointerdown', unlockAudio, { once: true });
     void initAudio(this.s.accent);
+    setMusicOn(this.s.musicOn);
     setInterval(() => this.tick(), 1000);
   }
 
@@ -234,7 +237,7 @@ export class App {
     const island = h('div', { class: 'island', 'data-testid': 'island' },
       (() => { const a = h('div', { class: 'island-art' }); a.innerHTML = islandSVG(); return a; })(),
       ...s.collection.slice(0, SPOTS.length).map((id, i) =>
-        h('span', { class: 'prize', title: MNEMONICS[id]?.name ?? id, style: `left:${SPOTS[i]![0]}%;top:${SPOTS[i]![1]}%;animation-delay:${(i % 5) * 0.4}s` }, MNEMONICS[id]?.emoji ?? '⭐')),
+        h('span', { class: 'prize', title: MNEMONICS[id]?.name ?? id, style: `left:${SPOTS[i]![0]}%;top:${SPOTS[i]![1]}%;animation-delay:${(i % 5) * 0.4}s` }, friendEl(id))),
       h('div', { class: 'island-pet' }, companionEl(s, `big ${asleep ? 'sleepy' : ''}`, 'companion')),
       s.collection.length ? null : h('span', { class: 'hint-empty' }, 'Treasures will appear here.'),
     );
@@ -270,7 +273,6 @@ export class App {
     this.persist();
     const ctx = this.ctx();
     const name = s.companion?.name ?? 'Dino';
-    const graded = (id: string, r: TrialResult) => recordTrial(s, id, r, today);
 
     // 1. Hello
     const lastSound = [...Object.entries(s.sounds)].filter(([, r]) => r.introducedOn < today).sort((a, b) => b[1].introducedOn.localeCompare(a[1].introducedOn))[0];
@@ -282,79 +284,51 @@ export class App {
     // 2. Warm-up: earlier sounds the child found hardest
     for (const g of plan.review) {
       for (const idx of REVIEW_SOUND_TRIALS) {
-        const t = buildFeedTrial(s, g, idx, ctx.rng);
-        graded(g.id, await feedCreature(ctx, g, t.options));
+        await roundFeed(ctx, g, idx);
         this.persist();
       }
     }
     if (this.overLimit()) return this.goodnight(plan);
 
-    // 3. New sound story
+    // 3. New sound story (a sound-friend introduces the sound), then optional letter tracing
     if (plan.newSound) {
       const m = MNEMONICS[plan.newSound.id];
       blip(plan.newSound.phoneme);
       await this.interlude([
-        h('div', { class: 'story' }, h('span', { class: 'mn' }, m?.emoji ?? '⭐'), h('span', { class: 'letter-big', 'data-testid': 'newsound' }, plan.newSound.id)),
+        h('div', { class: 'story' }, h('span', { class: 'mn' }, friendEl(plan.newSound.id, 'story-friend')), h('span', { class: 'letter-big', 'data-testid': 'newsound' }, plan.newSound.id)),
         h('p', { class: 'caption' }, `${m?.name ?? ''}: ${m?.line ?? ''}`),
         h('button', { class: 'bubble-btn', 'aria-label': `Hear ${slashed(plan.newSound.id)}`, onClick: () => { tap(); blip(plan.newSound!.phoneme); } }, h('span', { class: 'speaker' }, '🔊'), h('span', { class: 'bubble-sound' }, slashed(plan.newSound.id))),
       ], '▶', 'story-next');
+      if (plan.trace) await roundTrace(ctx, plan.newSound);
     } else {
       await this.interlude([h('p', { class: 'caption' }, `No new sound today, ${s.nickname}. Let’s make our sounds strong!`)]);
     }
 
-    // 4. Practice: three games, rising in difficulty
+    // 4. Practice: three games, rising in difficulty (Feed the Creature, then one listening game, then one print/rhyme game)
     if (plan.newSound) {
-      for (const idx of NEW_SOUND_TRIALS) {
-        const t = buildFeedTrial(s, plan.newSound, idx, ctx.rng);
-        graded(plan.newSound.id, await feedCreature(ctx, plan.newSound, t.options));
-      }
+      for (const idx of NEW_SOUND_TRIALS) await roundFeed(ctx, plan.newSound, idx);
     } else {
-      for (const g of plan.review) {
-        for (const idx of [2, 3]) {
-          const t = buildFeedTrial(s, g, idx, ctx.rng);
-          graded(g.id, await feedCreature(ctx, g, t.options));
-        }
-      }
+      for (const g of plan.review) for (const idx of [2, 3]) await roundFeed(ctx, g, idx);
     }
     this.persist();
     if (this.overLimit()) return this.goodnight(plan);
 
-    const pictured = bankFor(this.s.accent).filter((w) => w.emoji);
-    for (const [i, w] of plan.robotWords.entries()) {
-      const others = shuffle(pictured.filter((x) => x.text !== w.text && x.graphemes[0] !== w.graphemes[0]), ctx.rng).slice(0, Math.min(3, i + 1));
-      await robotTalk(ctx, w, others);
-    }
+    if (plan.second === 'robot') for (const [i, w] of plan.robotWords.entries()) await roundRobot(ctx, w, i);
+    else if (plan.second === 'drum') for (const w of plan.drumWords) await roundDrum(ctx, w);
+    else if (plan.newSound) await roundSafari(ctx, plan.newSound);
+    this.persist();
     if (this.overLimit()) return this.goodnight(plan);
 
-    if (plan.printBlend) {
-      const pool = decodableWords(s);
-      for (const w of plan.bridgeWords) {
-        const others = shuffle(pool.filter((x) => x.text !== w.text), ctx.rng).slice(0, 2);
-        const r = await bridgeBuilder(ctx, w, others);
-        recordWord(s, w.text, r.firstTryCorrect, today);
-      }
-    } else {
-      const groups = shuffle(rhymeSets(this.s.accent), ctx.rng).slice(0, 2);
-      for (const grp of groups) {
-        const [a, b] = shuffle(grp, ctx.rng) as [Word, Word];
-        const others = shuffle(pictured.filter((x) => !grp.includes(x)), ctx.rng).slice(0, 2);
-        await rhymeRocket(ctx, a, b, others);
-      }
-    }
+    if (plan.third === 'bridge') for (const w of plan.bridgeWords) await roundBridge(ctx, w);
+    else if (plan.third === 'kitchen') for (const w of plan.kitchenWords) await roundKitchen(ctx, w);
+    else for (let i = 0; i < 2; i++) await roundRhyme(ctx);
     this.persist();
 
     // 5. Make it real: the decoded word comes alive
     if (plan.makeItReal) {
       const { word, mode } = plan.makeItReal;
-      if (mode === 'print') {
-        const pool = decodableWords(s);
-        const others = shuffle(pool.filter((x) => x.text !== word.text), ctx.rng).slice(0, 2);
-        const r = await bridgeBuilder(ctx, word, others);
-        recordWord(s, word.text, r.firstTryCorrect, today);
-      } else {
-        const others = shuffle(pictured.filter((x) => x.text !== word.text), ctx.rng).slice(0, 2);
-        await robotTalk(ctx, word, others);
-      }
+      if (mode === 'print') await roundBridge(ctx, word);
+      else await roundRobot(ctx, word, 1);
       const aliveEl = h('div', { class: 'alive-word', 'data-testid': 'alive' }, h('span', { class: 'alive-rays' }), h('span', { class: 'alive-pic' }, word.emoji ?? '✨'));
       setTimeout(() => { burst(aliveEl, 'confetti', 20); sfx.sparkle(); speak(word.text); }, 350);
       await this.interlude([
@@ -391,7 +365,7 @@ export class App {
     // The chest always holds the sound's own friend (known in advance, never random). It opens by itself, so there is nothing to miss.
     const chest = h('div', { class: 'chest' });
     chest.innerHTML = chestSVG();
-    const prizeEl = h('div', { class: 'treasure', 'data-testid': 'treasure' }, m?.emoji ?? '⭐');
+    const prizeEl = h('div', { class: 'treasure', 'data-testid': 'treasure' }, prize ? friendEl(prize) : '⭐');
     mount(this.stage,
       h('div', { class: 'scene' },
         h('p', { class: 'caption' }, 'You found a treasure!'),
@@ -408,21 +382,45 @@ export class App {
   // ----- free play (mastered sounds only, up to the parent-set limit) -----
   private async freePlay(): Promise<void> {
     this.inChild = true;
+    setNight(false); // free play is daytime, even when the adventure is done
     const s = this.s;
     const ctx = this.ctx();
-    const pool = GRAPHEMES.filter((g) => statusOf(s, g.id) !== 'not-started');
+    const learned = GRAPHEMES.filter((g) => statusOf(s, g.id) !== 'not-started');
     const back = h('button', { class: 'btn quiet', 'data-testid': 'freeplay-back' }, 'Back to my island');
     let leave = false;
-    back.addEventListener('click', () => (leave = true));
+    const backed = new Promise<null>((res) => back.addEventListener('click', () => { leave = true; res(null); }));
     this.root.querySelector('.top')?.append(back);
+    const race = <T,>(p: Promise<T>) => Promise.race([p, backed]);
+    const pictured = bankFor(s.accent).filter((w) => w.emoji);
+
+    const runRound = async (kind: GameKind) => {
+      const g = shuffle(learned, ctx.rng)[0]!;
+      const decodable = decodableWords(s);
+      if (kind === 'feed') await roundFeed(ctx, g, 2);
+      else if (kind === 'robot') await roundRobot(ctx, pickWords(pictured, s, g, 1, ctx.rng)[0]!, 1);
+      else if (kind === 'drum') await roundDrum(ctx, pickWords(pictured.filter((w) => w.graphemes.length >= 2 && w.graphemes.length <= 4), s, g, 1, ctx.rng)[0]!);
+      else if (kind === 'safari') await roundSafari(ctx, g);
+      else if (kind === 'kitchen') await roundKitchen(ctx, pickWords(decodable.filter((w) => w.emoji && w.graphemes.length >= 2), s, g, 1, ctx.rng)[0]!);
+      else if (kind === 'bridge') await roundBridge(ctx, pickWords(decodable, s, g, 1, ctx.rng)[0]!);
+      else if (kind === 'rhyme') await roundRhyme(ctx);
+      else await roundTrace(ctx, g);
+    };
+
     while (!leave && !this.overLimit()) {
-      const g = shuffle(pool, ctx.rng)[0];
-      if (!g) break;
-      const t = buildFeedTrial(s, g, 2, ctx.rng);
-      const run = feedCreature(ctx, g, t.options);
-      const r = await Promise.race([run, new Promise<null>((res) => back.addEventListener('click', () => res(null)))]);
-      if (r) recordTrial(s, g.id, r, this.today());
-      this.persist();
+      const games = availableGames(ctx, printBlendOpen(s), learned.length > 0);
+      const pick = await race(new Promise<GameKind>((resolve) => {
+        mount(this.stage, h('div', { class: 'scene' },
+          h('p', { class: 'caption' }, 'What shall we play?'),
+          h('div', { class: 'gamegrid', 'data-testid': 'gamegrid' }, games.map((k) =>
+            h('button', { class: 'gamebtn', 'data-testid': `fp-${k}`, 'aria-label': GAME_LABEL[k].name, onClick: () => { tap(); sfx.pop(); resolve(k); } },
+              h('span', { class: 'gicon' }, GAME_LABEL[k].icon), h('span', { class: 'gname' }, GAME_LABEL[k].name))))));
+      }));
+      if (!pick) break;
+      const rounds = Number(new URLSearchParams(location.search).get('fpRounds')) || 3; // (tests use 1)
+      for (let i = 0; i < rounds && !leave && !this.overLimit(); i++) {
+        await race(runRound(pick));
+        this.persist();
+      }
     }
     back.remove();
     this.inChild = false;
@@ -431,6 +429,7 @@ export class App {
   // ----- Sound Play: co-play listening game for 2-3 year olds (band B) -----
   private async soundPlay(): Promise<void> {
     this.inChild = true;
+    setNight(false);
     const ctx = this.ctx();
     await this.interlude([companionEl(this.s, 'big'), h('p', { class: 'caption', 'data-testid': 'coplay' }, 'Find a grown-up to play with you!')]);
     const pictured = bankFor(this.s.accent).filter((w) => w.emoji);
@@ -525,6 +524,8 @@ export class App {
         body.append(h('h2', {}, 'Settings'),
           h('label', {}, 'Daily limit ', sel), mute,
           h('label', {}, 'Accent ', accentSel),
+          h('label', { class: 'check' }, h('input', { type: 'checkbox', 'data-testid': 'tracing', checked: s.tracing, onChange: (e: Event) => { s.tracing = (e.target as HTMLInputElement).checked; this.persist(); } }), ' Letter tracing (Trace Trail) in the daily adventure'),
+          h('label', { class: 'check' }, h('input', { type: 'checkbox', 'data-testid': 'music', checked: s.musicOn, onChange: (e: Event) => { s.musicOn = (e.target as HTMLInputElement).checked; setMusicOn(s.musicOn); this.persist(); } }), ' Background music'),
           h('p', { class: 'muted', 'data-testid': 'accent-help' }, `${ACCENTS.find((a) => a.id === s.accent)?.note ?? ''} Choose the one that matches how you and your child’s school say the sounds. Your child’s progress is kept when you switch.`),
           h('p', { class: 'muted' }, 'Microphone: off (not implemented in this prototype). Reminders: off.'),
           h('h3', {}, 'Prototype tools'),

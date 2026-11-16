@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { ACCENTS, ACCENT_EXCLUDE, BANK, GRAPHEMES, bankFor, graphemesInSet } from './data';
+import { ACCENTS, ACCENT_EXCLUDE, BANK, GRAPHEMES, SAFARI_EXCLUDE, bankFor, graphemesInSet, safariFor } from './data';
 import { seeded } from './dates';
 import { idsUpToSet, isDecodable, lintBank, lintWord } from './linter';
 import { pickReview } from './review';
@@ -268,7 +268,7 @@ describe('generated audio stays in sync with the curriculum, per accent', () => 
   for (const accent of ACCENTS) {
     describe(accent.label, () => {
       const manifest = JSON.parse(readFileSync(new URL(`${accent.id}/manifest.json`, root), 'utf8')) as {
-        phonemes: Record<string, string[]>; words: Record<string, string>; removed_words: string[];
+        phonemes: Record<string, string[]>; words: Record<string, string>; removed_words: string[]; removed_safari: string[];
       };
       const audit = JSON.parse(readFileSync(new URL(`../../scripts/audio/audit-${accent.id}.json`, import.meta.url), 'utf8')) as { problems: string[] };
 
@@ -282,6 +282,10 @@ describe('generated audio stays in sync with the curriculum, per accent', () => 
           expect(manifest.words[w.text], `word "${w.text}"`).toBeTruthy();
           expect(existsSync(new URL(manifest.words[w.text] as string, root)), w.text).toBe(true);
         }
+      });
+      it('has a clip for every Sound Safari item, and the exclusions match the engine data', () => {
+        expect([...manifest.removed_safari].sort()).toEqual([...SAFARI_EXCLUDE[accent.id]].sort());
+        for (const i of safariFor(accent.id)) expect(manifest.words[i.word], `safari "${i.word}"`).toBeTruthy();
       });
       it('the audio audit reported no mechanical problems', () => {
         expect(audit.problems).toEqual([]);

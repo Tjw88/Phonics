@@ -5,12 +5,14 @@
    "voice": "en-GB-x-rp",
    "removed_words": [
     "pass"
-   ]
+   ],
+   "removed_safari": []
   },
   "north": {
    "label": "Northern English",
    "voice": "en-GB-x-gbclan",
-   "removed_words": []
+   "removed_words": [],
+   "removed_safari": []
   }
  }
 }

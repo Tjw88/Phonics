@@ -114,7 +114,7 @@ export const feedCreature = async (ctx: Ctx, target: Grapheme, options: Grapheme
       tap();
       sfx.pop();
       start = { x: e.clientX, y: e.clientY };
-      tile.setPointerCapture(e.pointerId);
+      try { tile.setPointerCapture(e.pointerId); } catch { /* the pointer already ended: carry on without capture */ }
       tile.classList.add('dragging');
       mouth.classList.add('hot');
     });
