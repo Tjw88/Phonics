@@ -8,7 +8,7 @@ The engine (`src/engine`) is plain TypeScript with no DOM, so its logic ports to
 ```bash
 npm install
 npm run dev          # play it (iPad-landscape-shaped, works on desktop and touch)
-npm test             # 60 tests (engine, accents, games, pictures, sound sweep, audio/curriculum sync)
+npm test             # 75 tests (engine, accents, games, digraphs, weekly summary, pictures, sound sweep, audio/curriculum sync)
 npm run lint:content # decodability / suitability linter over the word bank
 npm run sim          # pacing simulation (synthetic children through the real engine)
 npm run build && npx vite preview --port 4173 &  node scripts/e2e.cjs   # browser end-to-end test (needs Playwright; VP=390x844 for phone size)
@@ -20,7 +20,7 @@ node scripts/audit-monkey.cjs   # toddler-style random play in every game (needs
 ```
 
 First launch: parental gate (multiplication), nickname + age band, pick and name a dino, placement game, then the
-daily adventure. The parent area (⚙, gated) has Today, Sound map, Words read, Watch out for, Settings, and
+daily adventure. The parent area (⚙, gated) has Today, This week, Sound map, Words read, Watch out for, Settings, and
 **Prototype tools** to skip days or fast-forward simulated play, which is the only way to see the
 "three separate days" mastery gate without waiting three real days.
 
@@ -40,19 +40,19 @@ to share with known people, not something to publicise. The workflow triggers on
 
 | Spec item | Status |
 |---|---|
-| Sets 1-5 in spec order, one new sound per day; the next set opens when 3 of 4 sounds are secure and the 4th is carried forward | Built (changed from whole-set gating, see findings) |
+| Sets 1-5 in spec order, then set 6 (the digraphs sh, ch, th, ng), one new sound per day; the next set opens when 3 of 4 sounds are secure and the 4th is carried forward | Built (changed from whole-set gating, see findings) |
 | Mastery gate (3 separate days), errorless 1→2→3 choices, spaced review of hardest sounds | Built, with a stricter definition of "right" (≥2 correct and ≥60% that day) |
 | Look and feel: drawn original characters (4 baby dinos, robot, rocket, chest), living Dino Valley backdrop with night mode, chunky buttons, sparkle bursts, game sound effects | Built (see "Look and feel") |
 | Companion grows with progress (an accessory per set secured) | Built |
 | Accent option (setup step + parent Settings): Southern British (RP) or Northern English | Built; northern pack least verified (see Accents) |
 | Audio | Neural-voice generated (not recorded, not listened to), every instruction spoken; see "Audio" |
-| Placement game → starting set | Built (sets 1-3 only; never grants mastery) |
+| Placement game → starting set | Built for sets 1-6, two questions per set, **stops at the first miss**; never grants mastery |
 | 6-step daily adventure, goodnight, treasure, off-screen mission | Built |
 | All 8 MVP games: Feed the Creature, Robot Talk, Beat the Drum, Sound Safari, Word Kitchen, Bridge Builder, Rhyme Rocket, Trace Trail (optional, parent setting) | Built; Free Play is a menu of all of them |
-| Sound-friends: 23 original drawn characters, one per sound | Built |
+| Sound-friends: 27 original drawn characters, one per sound | Built |
 | Sound buttons (dot / bar), lower case, single-storey "a" typeface (Andika, bundled) | Built; confirmed in screenshots |
 | Sound Play for ages 2-3 (co-play, listening and rhythm only) | Built: copy the beat + find-it naming; needs real environmental sounds (see docs/AUDIT.md) |
-| Parent area behind gate, sound map, words read, watch-out flags, daily limit + 2-minute warning (a banner plus a generated voice) | Built |
+| Parent area behind gate: today, **this week** (days played, new and secured sounds, words, what to practise, an off-screen activity), sound map, words read, watch-out flags, daily limit + 2-minute warning (a banner plus a generated voice) | Built |
 | No accounts, no third-party requests, data on device only | Built; the e2e test asserts zero external requests |
 | Content linter (decodable at point of use, unsuitable words, duplicate pictures) | Built |
 | Banned patterns (streaks, guilt, timers, random rewards, upsell in child screens) | None present |
@@ -62,7 +62,7 @@ to share with known people, not something to publicise. The workflow triggers on
 ## Look and feel
 
 All art is original inline SVG (no images, no third-party code, works offline): four baby-dino companions with
-blinking eyes and moods, 23 sound-friends (Sid the snake is bent like an s, Ollie the octopus has a round "o" mouth,
+blinking eyes and moods, 27 sound-friends (Sid the snake is bent like an s, Ollie the octopus has a round "o" mouth,
 Iggy the inchworm's head is the dot of the i), a robot, rocket, drum, cooking pot, treasure chest, and a calm Dino
 Valley backdrop that turns to night when the island sleeps.
 
@@ -133,8 +133,15 @@ Full detail and numbers are in `docs/AUDIT.md`. In short:
   keep a small faded vowel because the Framework says they "cannot be heard clearly in isolation" without one.
 - **Lengths:** stops ~170 ms (were 70-110), hiss 480 ms, nasals/liquids 430 ms, vowels 520 ms. Sounds in a sequence use shorter takes so blending flows.
 - **Every instruction is spoken**, since the children cannot read, and a test fails the build if the code asks for an instruction with no audio.
+- **The four digraph sounds (set 6):** /sh/ and /th/ are hiss sounds extended the same way as /s/ and /f/; /ch/ is the voice's own burst plus
+  frication (about 180 ms, deliberately short, since a real /ch/ is short); /ng/ is a nasal looped like /m/ and /n/. The checks reject any take
+  that is not voiceless and bright (/sh/, /th/, /ch/) or not clearly voiced (/ng/). **The Northern voice cannot produce a voiceless /th/** (60 takes per
+  slot all came out as a voiced murmur), so the Northern pack's /th/ is taken from the RP voice: a hiss has no regional vowel in it, but it is a shortcut and the
+  manifest says so. In words, a speech recogniser heard several /sh/ and /ch/ words as each other and several /ng/ words as /m/ or /n/ words (e.g. Northern "ping" as "home");
+  that recogniser is biased against northern vowels (it understood only 15 of the 134 older words in the Northern pack, against 56% of all words in the RP pack), so treat these as
+  "listen to these first", not as proven faults.
 - **Known weak points to listen for:** whether /b d g/ carry too much "uh"; whether /p t k/ sound like themselves; whether the
-  sustained /m n l r/ are natural. Use `/audio-check.html`.
+  sustained /m n l r/ are natural; whether /ch/ and /sh/ are clearly different, and whether /th/ is not heard as /f/ (it is never offered next to /f/ or /t/ in a game for that reason). Use `/audio-check.html`.
 
 ## Accents
 
@@ -195,11 +202,13 @@ accuracy. Real children are not like that, so read these as relative comparisons
 6. **Whole-set gating was a stall risk** (one stubborn sound held back all new content). Now decided and built: the
    next set opens at 3 of 4 secure, and the 4th is carried forward (still reviewed, can still become secure). 2 of 4
    is not enough. Tested.
-7. **MVP content is short.** For a 90%-accurate daily player the last new sound arrives around day 30 and all 23
-   are secure around day 37; after that the daily adventure has nothing new until stage 4 ships. That is
-   over 4 sounds a week, above the spec's 2-4 target for steady daily play. The "10 CVC words within 6-8 weeks"
-   target is reached in about 3 weeks in simulation (about 6 weeks at 3 days a week), so it looks too easy to be an
-   informative threshold. That depends on my definition of "word read" (first-try correct on 2 different days).
+7. **Content runs out around day 42-47.** With set 6 (the digraphs) added there are 27 sounds. For a 90%-accurate daily
+   player in the simulator the last new sound arrives on day 42 and all 27 are secure on day 47 (95%: day 38 and 44).
+   That is about 4.5 new sounds a week, above the spec's 2-4 target for steady daily play. After that the daily
+   adventure has nothing new until the next stage (vowel digraphs, "long" vowels) is built. The "10 CVC words" target is
+   reached around day 17 in simulation, which is early enough that it may be too easy to be an informative threshold; that depends on my definition of
+   "word read" (first-try correct on 2 different days). A child playing 3 days a week had read 10 words by calendar day 36 and had not
+   secured all 27 sounds within 90 days. Simulated children are not real children.
 8. **c, k and ck share /k/.** Distractor sets never offer them together, otherwise there would be two right
    answers (tested over 200 random draws per sound).
 
@@ -208,12 +217,15 @@ accuracy. Real children are not like that, so read these as relative comparisons
 - A set opens the next when **all but one** of its sounds are secure (your decision); a new sound is introduced
   per day, once, even if the day is replayed.
 - "Word read" = first-try correct blending on 2 different days.
-- Placement can start a child at set 2-4 but seeds sounds as *learning*, never *secure*.
+- Placement can start a child at set 2-6 (two questions per set, stopping at the first miss) but seeds sounds as *learning*, never *secure*. It never asks for a double (ck, ff, ll, ss) or for c / k.
+- /th/ is the voiceless sound of "thin" only. The voiced sound of "this" and "the" is not taught and no such word is in the bank (a test enforces it), so one grapheme never has two sounds. Words with the BATH vowel, the foot vowel (bush, push) or a w are left out for the same reason.
+- Sounds that are easy to mix up by ear (s/sh, t/th, f/th, sh/ch, t/ch, n/ng, k/ng) are never offered together as answer and distractor in a listening game.
+- The weekly parent summary reports only counts and the app's own graded answers, with no streaks or comparisons, and flags a sound as "worth a little practice" only after at least 4 answers in the week with under half right first time. It says plainly that this is a nudge, not a test result.
 - Rewards are deterministic: today's new sound's character, or a review sound on revision days.
 - The unsuitable-word list in `data.ts` is a seed list and **needs human review**; the spec requires every word
   to be checked, and a short blacklist does not do that.
-- Pictures are emoji, so only some words have one (e.g. `dig`, `sit`, `sat` have none and are print-only);
-  Robot Talk and Rhyme Rocket only use words that have a picture. Real art is needed.
+- Only words with a drawing appear as pictures (e.g. `dig`, `sit`, `sat` have none and are print-only); Robot Talk and
+  Rhyme Rocket only use words that have a picture.
 
 ## Open questions this prototype cannot answer
 

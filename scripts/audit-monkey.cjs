@@ -24,7 +24,12 @@ async function gate(page) {
   await page.click('[data-testid=setup-next]');
   await page.click('[data-testid=hatch]');
   await page.click('[data-testid=next]'); await page.click('[data-testid=next]');
-  for (let i = 0; i < 6; i++) { await page.waitForSelector('[data-testid=tile]'); await page.locator('[data-testid=tile]').nth(rnd(2)).click(); await page.waitForTimeout(650); }
+  // placement stops at the first miss, so answer until the greeting appears
+  for (let i = 0; i < 12; i++) {
+    const which = await Promise.race([page.waitForSelector('[data-testid=tile]').then(() => 'tile'), page.waitForSelector('[data-testid=greeting]').then(() => 'greeting')]);
+    if (which === 'greeting') break;
+    await page.locator('[data-testid=tile]').nth(rnd(2)).click(); await page.waitForTimeout(650);
+  }
   await page.waitForSelector('[data-testid=greeting]');
   // give the child a lot of learned sounds so every game is available
   await page.click('[data-testid=parent-btn]'); await gate(page);

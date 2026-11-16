@@ -15,9 +15,12 @@ export const GRAPHEMES: Grapheme[] = [
   g('g', 3), g('o', 3), g('c', 3, 'k'), g('k', 3),
   g('ck', 4, 'k'), g('e', 4), g('u', 4), g('r', 4),
   g('h', 5), g('b', 5), g('f', 5), g('ff', 5, 'f'), g('l', 5), g('ll', 5, 'l'), g('ss', 5, 's'),
+  // set 6: the four consonant digraphs (two letters, ONE sound). th is the unvoiced /θ/ of "thin" only: the voiced /ð/ of
+  // "this" and "the" is deliberately not taught or used, so one grapheme never has two sounds.
+  g('sh', 6), g('ch', 6), g('th', 6), g('ng', 6),
 ];
 
-export const MAX_SET = 5;
+export const MAX_SET = 6;
 export const GRAPHEME_BY_ID = new Map(GRAPHEMES.map((x) => [x.id, x]));
 export const graphemesInSet = (set: number) => GRAPHEMES.filter((x) => x.set === set);
 
@@ -47,6 +50,10 @@ export const MNEMONICS: Record<string, Mnemonic> = {
   l: { name: 'Lulu the lamb', emoji: '🐑', line: 'Lulu licks lll.' },
   ll: { name: 'Bella the bell', emoji: '🔔', line: 'Bella rings ll at the end.' },
   ss: { name: 'Moss the hisser', emoji: '🌿', line: 'Moss hisses ss at the end.' },
+  sh: { name: 'Shelly the shell', emoji: '🐚', line: 'Shelly whispers shhh.' },
+  ch: { name: 'Choo-Choo the train', emoji: '🚂', line: 'Choo-Choo chugs ch, ch, ch.' },
+  th: { name: 'Theo the thumb', emoji: '👍', line: 'Theo sticks his tongue out: th, th, th.' },
+  ng: { name: 'Gong the gong', emoji: '🎶', line: 'Gong rings out: ng, ng, ng.' },
 };
 
 export interface Word {
@@ -89,6 +96,15 @@ const rows: Row[] = [
   ['l-i-p', '👄'], ['l-a-p'], ['l-e-g'], ['l-o-g', '🪵', 'd'], ['l-e-t'], ['l-i-d'], ['l-i-t'],
   ['m-e-ss'], ['m-i-ss'], ['k-i-ss'], ['h-i-ss'], ['m-o-ss', undefined, 'd'], ['b-o-ss'], ['f-u-ss'], ['l-e-ss'],
   ['p-a-ss'], ['m-a-ss'], // "pass": RP /pɑːs/ (BATH vowel) clashes with the taught /a/, so it is excluded per accent (ACCENT_EXCLUDE)
+  // set 6 (digraphs). Left out on purpose: bush/push (a different vowel from the taught /u/), bath/path/maths (BATH vowel), this/that/then/with (voiced th),
+  // wing/swing (no w yet).
+  ['sh-i-p', '🚢'], ['sh-o-p', '🏪'], ['sh-e-d', '🏚️'], ['sh-e-ll', '🐚'], ['sh-u-t'], ['sh-o-ck'], ['sh-i-n'], ['sh-a-ck'],
+  ['f-i-sh', '🐟'], ['d-i-sh', '🍽️'], ['c-a-sh'], ['d-a-sh'], ['r-u-sh'], ['b-a-sh'], ['m-a-sh'], ['h-u-sh'], ['g-u-sh'],
+  ['ch-i-p', '🍟'], ['ch-i-ck', '🐥'], ['ch-i-n'], ['ch-o-p'], ['ch-a-t'], ['ch-a-p'], ['ch-e-ss'], ['ch-e-ck'], ['ch-u-g'],
+  ['r-i-ch'], ['m-u-ch'], ['s-u-ch'],
+  ['th-i-n'], ['th-i-ck'], ['th-u-d'], ['th-u-m-p'], ['th-i-ng'], ['m-o-th', '🦋'],
+  ['r-i-ng', '💍'], ['k-i-ng', '🤴'], ['g-o-ng', '🛎️'], ['s-o-ng'], ['s-i-ng'], ['p-i-ng'], ['d-i-ng'], ['b-a-ng'], ['h-a-ng'], ['f-a-ng'],
+  ['g-a-ng'], ['h-u-ng'], ['l-u-ng'], ['r-u-ng'], ['s-u-ng'], ['l-o-ng'],
 ];
 
 export const BANK: Word[] = rows.map(([seg, emoji, flags = '']) => ({
@@ -102,6 +118,7 @@ export const BANK: Word[] = rows.map(([seg, emoji, flags = '']) => ({
 /** Seed list only: needs human review (spec: "unfortunate decodable combinations"). */
 export const UNSUITABLE = new Set([
   'ass', 'tit', 'tits', 'dick', 'cock', 'fag', 'sex', 'pee', 'poo', 'bum', 'god', 'cum', 'gun',
+  'shit', 'shag', 'chink', 'dong', 'gash',
 ]);
 
 // ---- Accents -------------------------------------------------------------------------------------------------
@@ -128,7 +145,7 @@ export const bankFor = (accent: AccentId): Word[] => BANK.filter((w) => !ACCENT_
  * key, never cat, even though cat also starts with the sound /k/): the child is learning that letter.
  */
 export interface SafariItem { word: string; emoji: string; p: string; g: string }
-const sf = (p: string, items: [string, string][]): SafariItem[] => items.map(([word, emoji]) => ({ word, emoji, p, g: word.charAt(0) }));
+const sf = (p: string, items: [string, string][], g?: string): SafariItem[] => items.map(([word, emoji]) => ({ word, emoji, p, g: g ?? word.charAt(0) }));
 export const SAFARI: SafariItem[] = [
   ...sf('s', [['sun', '☀️'], ['sock', '🧦'], ['snake', '🐍'], ['star', '⭐'], ['soap', '🧼']]),
   ...sf('a', [['ant', '🐜'], ['apple', '🍎'], ['alligator', '🐊'], ['axe', '🪓']]),
@@ -148,6 +165,11 @@ export const SAFARI: SafariItem[] = [
   ...sf('b', [['bus', '🚌'], ['ball', '⚽'], ['bat', '🦇'], ['bee', '🐝'], ['banana', '🍌'], ['bed', '🛏️']]),
   ...sf('f', [['fish', '🐟'], ['fox', '🦊'], ['frog', '🐸'], ['flower', '🌸'], ['feather', '🪶'], ['fire', '🔥']]),
   ...sf('l', [['lion', '🦁'], ['leaf', '🍃'], ['lemon', '🍋'], ['log', '🪵'], ['lollipop', '🍭']]),
+  // digraphs: the scene is built for the DIGRAPH (g = 'sh'), so "ship" is never a target in an s scene even though it starts with the letter s.
+  // ng never starts an English word, so it has no Safari scene.
+  ...sf('sh', [['ship', '🚢'], ['shell', '🐚'], ['sheep', '🐑'], ['shoe', '👟']], 'sh'),
+  ...sf('ch', [['chair', '🪑'], ['cheese', '🧀'], ['chick', '🐥']], 'ch'),
+  ...sf('th', [['thumb', '👍'], ['thread', '🧵'], ['thunder', '⛈️']], 'th'),
 ];
 /** Safari items dropped per accent when the audio audit found the engine says them with a different first sound. */
 export const SAFARI_EXCLUDE: Record<AccentId, readonly string[]> = { rp: [], north: [] };
@@ -157,8 +179,15 @@ export const safariFor = (accent: AccentId): SafariItem[] => SAFARI.filter((i) =
  * Pictures that a child could reasonably mix up (two drinking vessels, two cookware pieces, two big cats). The games never
  * show these together as the answer and a distractor, because the picture, not the child, would be at fault.
  */
-export const CONFUSABLE: readonly (readonly [string, string])[] = [['mug', 'cup'], ['pan', 'pot'], ['cat', 'tiger']];
+export const CONFUSABLE: readonly (readonly [string, string])[] = [['mug', 'cup'], ['pan', 'pot'], ['cat', 'tiger'], ['chick', 'duck'], ['sheep', 'ram']];
 export const isConfusable = (a: string, b: string): boolean => CONFUSABLE.some(([x, y]) => (a === x && b === y) || (a === y && b === x));
+
+/**
+ * Sounds that are easy to mistake for each other, in a child's ear and especially in a synthetic voice (/θ/ for /f/ is the classic
+ * one). They are never offered together as the answer and a distractor in a listen-and-choose game.
+ */
+export const CLOSE_SOUNDS: readonly (readonly [string, string])[] = [['s', 'sh'], ['t', 'th'], ['f', 'th'], ['sh', 'ch'], ['t', 'ch'], ['n', 'ng'], ['k', 'ng']];
+export const soundsClose = (a: string, b: string): boolean => CLOSE_SOUNDS.some(([x, y]) => (a === x && b === y) || (a === y && b === x));
 
 /** What a sound-friend SAYS when introduced. Written without letter names on purpose (a voice reading "t" would say "tee");
  *  the real sound is played right after the line. */
@@ -169,4 +198,5 @@ export const STORY_SAY: Record<string, string> = {
   ck: 'Rocky the rock clicks.', e: 'Ed the egg wobbles.', u: 'Uma the umbrella goes up.', r: 'Rosie the rabbit races.',
   h: 'Hattie the hen huffs.', b: 'Bo the bug bounces.', f: 'Fenn the fox flicks his tail.', ff: 'Fluffy the cloud puffs.',
   l: 'Lulu the lamb licks her lips.', ll: 'Bella the bell rings.', ss: 'Moss hisses.',
+  sh: 'Shelly the shell whispers.', ch: 'Choo-Choo the train chugs along.', th: 'Theo the thumb sticks his tongue out.', ng: 'Gong the gong rings out.',
 };

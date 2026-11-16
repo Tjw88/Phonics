@@ -22,7 +22,11 @@
   "ff": "Fluffy the cloud puffs.",
   "l": "Lulu the lamb licks her lips.",
   "ll": "Bella the bell rings.",
-  "ss": "Moss hisses."
+  "ss": "Moss hisses.",
+  "sh": "Shelly the shell whispers.",
+  "ch": "Choo-Choo the train chugs along.",
+  "th": "Theo the thumb sticks his tongue out.",
+  "ng": "Gong the gong rings out."
  },
  "safari": [
   {
@@ -376,6 +380,46 @@
   {
    "word": "lollipop",
    "p": "l"
+  },
+  {
+   "word": "ship",
+   "p": "sh"
+  },
+  {
+   "word": "shell",
+   "p": "sh"
+  },
+  {
+   "word": "sheep",
+   "p": "sh"
+  },
+  {
+   "word": "shoe",
+   "p": "sh"
+  },
+  {
+   "word": "chair",
+   "p": "ch"
+  },
+  {
+   "word": "cheese",
+   "p": "ch"
+  },
+  {
+   "word": "chick",
+   "p": "ch"
+  },
+  {
+   "word": "thumb",
+   "p": "th"
+  },
+  {
+   "word": "thread",
+   "p": "th"
+  },
+  {
+   "word": "thunder",
+   "p": "th"
   }
  ],
  "graphemes": [
@@ -493,6 +537,26 @@
    "id": "ss",
    "set": 5,
    "phoneme": "s"
+  },
+  {
+   "id": "sh",
+   "set": 6,
+   "phoneme": "sh"
+  },
+  {
+   "id": "ch",
+   "set": 6,
+   "phoneme": "ch"
+  },
+  {
+   "id": "th",
+   "set": 6,
+   "phoneme": "th"
+  },
+  {
+   "id": "ng",
+   "set": 6,
+   "phoneme": "ng"
   }
  ],
  "words": [
@@ -1688,6 +1752,466 @@
     "m",
     "a",
     "ss"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "ship",
+   "graphemes": [
+    "sh",
+    "i",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "shop",
+   "graphemes": [
+    "sh",
+    "o",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "shed",
+   "graphemes": [
+    "sh",
+    "e",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "shell",
+   "graphemes": [
+    "sh",
+    "e",
+    "ll"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "shut",
+   "graphemes": [
+    "sh",
+    "u",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "shock",
+   "graphemes": [
+    "sh",
+    "o",
+    "ck"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "shin",
+   "graphemes": [
+    "sh",
+    "i",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "shack",
+   "graphemes": [
+    "sh",
+    "a",
+    "ck"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fish",
+   "graphemes": [
+    "f",
+    "i",
+    "sh"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "dish",
+   "graphemes": [
+    "d",
+    "i",
+    "sh"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "cash",
+   "graphemes": [
+    "c",
+    "a",
+    "sh"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "dash",
+   "graphemes": [
+    "d",
+    "a",
+    "sh"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "rush",
+   "graphemes": [
+    "r",
+    "u",
+    "sh"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "bash",
+   "graphemes": [
+    "b",
+    "a",
+    "sh"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "mash",
+   "graphemes": [
+    "m",
+    "a",
+    "sh"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "hush",
+   "graphemes": [
+    "h",
+    "u",
+    "sh"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "gush",
+   "graphemes": [
+    "g",
+    "u",
+    "sh"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "chip",
+   "graphemes": [
+    "ch",
+    "i",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "chick",
+   "graphemes": [
+    "ch",
+    "i",
+    "ck"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "chin",
+   "graphemes": [
+    "ch",
+    "i",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "chop",
+   "graphemes": [
+    "ch",
+    "o",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "chat",
+   "graphemes": [
+    "ch",
+    "a",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "chap",
+   "graphemes": [
+    "ch",
+    "a",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "chess",
+   "graphemes": [
+    "ch",
+    "e",
+    "ss"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "check",
+   "graphemes": [
+    "ch",
+    "e",
+    "ck"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "chug",
+   "graphemes": [
+    "ch",
+    "u",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "rich",
+   "graphemes": [
+    "r",
+    "i",
+    "ch"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "much",
+   "graphemes": [
+    "m",
+    "u",
+    "ch"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "such",
+   "graphemes": [
+    "s",
+    "u",
+    "ch"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "thin",
+   "graphemes": [
+    "th",
+    "i",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "thick",
+   "graphemes": [
+    "th",
+    "i",
+    "ck"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "thud",
+   "graphemes": [
+    "th",
+    "u",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "thump",
+   "graphemes": [
+    "th",
+    "u",
+    "m",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "thing",
+   "graphemes": [
+    "th",
+    "i",
+    "ng"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "moth",
+   "graphemes": [
+    "m",
+    "o",
+    "th"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "ring",
+   "graphemes": [
+    "r",
+    "i",
+    "ng"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "king",
+   "graphemes": [
+    "k",
+    "i",
+    "ng"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "gong",
+   "graphemes": [
+    "g",
+    "o",
+    "ng"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "song",
+   "graphemes": [
+    "s",
+    "o",
+    "ng"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "sing",
+   "graphemes": [
+    "s",
+    "i",
+    "ng"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "ping",
+   "graphemes": [
+    "p",
+    "i",
+    "ng"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "ding",
+   "graphemes": [
+    "d",
+    "i",
+    "ng"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "bang",
+   "graphemes": [
+    "b",
+    "a",
+    "ng"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "hang",
+   "graphemes": [
+    "h",
+    "a",
+    "ng"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fang",
+   "graphemes": [
+    "f",
+    "a",
+    "ng"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "gang",
+   "graphemes": [
+    "g",
+    "a",
+    "ng"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "hung",
+   "graphemes": [
+    "h",
+    "u",
+    "ng"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "lung",
+   "graphemes": [
+    "l",
+    "u",
+    "ng"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "rung",
+   "graphemes": [
+    "r",
+    "u",
+    "ng"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "sung",
+   "graphemes": [
+    "s",
+    "u",
+    "ng"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "long",
+   "graphemes": [
+    "l",
+    "o",
+    "ng"
    ],
    "oralOnly": false
   }

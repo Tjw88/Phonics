@@ -8,3 +8,6 @@ CC BY-SA 4.0 (the northern voice) has a ShareAlike condition: whether generated 
 question that has NOT been checked. Review before any public release.
 
 Generated audio is a stand-in for recordings by trained voice talent. Nobody has yet listened to it for correctness.
+
+Note on the Northern English pack: its /th/ sound (the hiss of "thin") is taken from the Southern British voice above, because the
+Northern voice could not produce a voiceless /th/. See public/audio/north/manifest.json ("sources") for the exact files.

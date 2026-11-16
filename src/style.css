@@ -401,3 +401,11 @@ label.check input { width: 28px; height: 28px; }
 .word.merge .gcol:nth-child(1) { transform: translateX(14px); } .word.merge .gcol:nth-child(3) { transform: translateX(-14px); }
 .word.merge .glyph { color: #0b8a3e; text-shadow: 0 5px 0 #35f06a66; }
 .bridgescene .soundbutton { cursor: pointer; }
+
+/* parent area: This week */
+.weekbar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 10px 0 14px; max-width: 520px; }
+.weekday { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 2px; border-radius: 14px; background: #f1f6fb; color: #4a5a70; font-size: 13px; }
+.weekday .dot { width: 16px; height: 16px; border-radius: 50%; background: #d3dde8; }
+.weekday.played { background: #e6f6ea; color: #1f6a3a; }
+.weekday.played .dot { background: #3fae5f; }
+.weekday .dm { font-size: 11px; min-height: 14px; }

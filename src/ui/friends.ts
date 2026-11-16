@@ -117,6 +117,41 @@ const BODY: Record<string, string> = {
       <g fill="#7bd389"><circle cx="34" cy="64" r="14"/><circle cx="56" cy="44" r="16"/><circle cx="76" cy="46" r="16"/><circle cx="86" cy="68" r="12"/><circle cx="58" cy="84" r="20"/></g>
       <path d="M20 40 q-8 -8 0 -14 M98 36 q8 -10 -2 -16" stroke="#3c9a4b" stroke-width="3.5" fill="none" stroke-linecap="round"/>${face(58, 70, 1.05)}
       <path d="M8 96 q8 -10 14 0 q6 10 12 0 M86 100 q8 -10 14 0 q6 10 12 0" stroke="#4cc3d9" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
+  // sh: Shelly the shell, finger to her lips ("shh")
+  sh: `<ellipse cx="60" cy="112" rx="40" ry="6" fill="#f4dba8"/>
+      <path d="M60 110 L14 72 Q2 38 28 26 Q38 12 60 18 Q82 12 92 26 Q118 38 106 72Z" fill="#e8688a"/>
+      <path d="M60 108 L20 72 Q10 42 32 32 Q40 22 60 26 Q80 22 88 32 Q110 42 100 72Z" fill="#ffb3c6"/>
+      <path d="M60 108 L28 42 M60 108 L44 30 M60 108 L60 24 M60 108 L76 30 M60 108 L92 42" stroke="#f08aa8" stroke-width="3.5" fill="none" stroke-linecap="round" opacity=".7"/>
+      <path d="M44 108 L76 108 L70 118 L50 118Z" fill="#e8688a"/><path d="M34 46 q6 -14 18 -16" stroke="#fff" stroke-width="4" fill="none" opacity=".55" stroke-linecap="round"/>
+      ${eyes(46, 74, 56, 7.5)}${cheeks(34, 86, 70, 5)}
+      <path d="M96 120 q10 -14 -8 -28 q-8 -4 -14 -2" stroke="#d98a58" stroke-width="12" fill="none" stroke-linecap="round"/>
+      <rect x="52" y="58" width="16" height="42" rx="8" fill="#d98a58"/><rect x="51" y="56" width="16" height="42" rx="8" fill="#ffcfa4"/><ellipse cx="57" cy="62" rx="5" ry="4" fill="#fff" opacity=".85"/><path d="M52 80 h14" stroke="#e8a67a" stroke-width="2.4" stroke-linecap="round"/>
+      <ellipse cx="60" cy="100" rx="19" ry="13" fill="#d98a58"/><ellipse cx="58" cy="98" rx="19" ry="13" fill="#ffcfa4"/><path d="M46 94 q-6 4 -2 10 M70 93 q6 4 2 10" stroke="#e8a67a" stroke-width="2.6" fill="none" stroke-linecap="round"/>`,
+  // ch: Choo-Choo the little steam train, face on the boiler, puffing steam
+  ch: `<circle cx="84" cy="14" r="9" fill="#fff"/><circle cx="100" cy="4" r="7" fill="#fff" opacity=".9"/><circle cx="72" cy="2" r="5.5" fill="#fff" opacity=".85"/>
+      <rect x="10" y="108" width="100" height="5" rx="2.5" fill="#8896a5"/><path d="M20 113 h10 M45 113 h10 M70 113 h10 M95 113 h10" stroke="#7a4a1d" stroke-width="4" stroke-linecap="round"/>
+      <rect x="16" y="34" width="88" height="68" rx="12" fill="#ef476f"/><rect x="12" y="26" width="96" height="14" rx="7" fill="#c2284f"/>
+      <circle cx="28" cy="100" r="13" fill="#26303f"/><circle cx="92" cy="100" r="13" fill="#26303f"/><circle cx="28" cy="100" r="5" fill="#aab4bf"/><circle cx="92" cy="100" r="5" fill="#aab4bf"/>
+      <path d="M52 46 L55 26 H65 L68 46Z" fill="#26303f"/><path d="M46 12 H74 L68 26 H52Z" fill="#3d4a63"/><rect x="50" y="8" width="20" height="6" rx="3" fill="#26303f"/><rect x="53" y="32" width="14" height="4" fill="#ffd166"/>
+      <circle cx="60" cy="74" r="34" fill="#2b8fa3"/><circle cx="60" cy="74" r="31" fill="#4cc3d9"/><circle cx="60" cy="74" r="31" fill="none" stroke="#fff" stroke-width="3" opacity=".5" stroke-dasharray="2 8" stroke-linecap="round"/><path d="M38 54 q8 -10 20 -12" stroke="#fff" stroke-width="4" fill="none" opacity=".5" stroke-linecap="round"/>
+      ${face(60, 72, 1.2)}
+      <path d="M32 96 L88 96 L96 104 L24 104Z" fill="#ffd166"/>`,
+  // th: Theo the thumb: a round fist with a short, chubby thumb up, a face on the fist and his tongue out
+  th: `<rect x="26" y="98" width="68" height="18" rx="9" fill="#52b8a5"/><rect x="26" y="98" width="68" height="6" rx="3" fill="#fff" opacity=".35"/>
+      <ellipse cx="60" cy="78" rx="44" ry="36" fill="#e8a479"/><ellipse cx="60" cy="74" rx="44" ry="36" fill="#ffc59a"/>
+      <ellipse cx="38" cy="30" rx="17" ry="25" fill="#e8a479" transform="rotate(-12 38 30)"/><ellipse cx="38" cy="27" rx="17" ry="25" fill="#ffc59a" transform="rotate(-12 38 27)"/>
+      <ellipse cx="37" cy="14" rx="9" ry="6" fill="#ffe5d3" transform="rotate(-12 37 14)"/><ellipse cx="33" cy="12" rx="3.4" ry="2" fill="#fff" opacity=".8" transform="rotate(-12 33 12)"/>
+      <path d="M86 64 q10 6 10 16 M84 80 q8 5 8 14" stroke="#e8a479" stroke-width="3" fill="none" stroke-linecap="round"/>
+      ${eyes(48, 72, 66, 7)}${cheeks(36, 84, 80, 5)}
+      <path d="M50 84 Q60 92 70 84" fill="none" stroke="#3b2030" stroke-width="3.2" stroke-linecap="round"/><path d="M53 87 Q60 104 67 87Z" fill="#ff6f95"/><path d="M60 89 V96" stroke="#e0507a" stroke-width="2" stroke-linecap="round"/>`,
+  // ng: Gong the gong in his frame, a little mallet at his foot
+  ng: `<rect x="6" y="104" width="30" height="8" rx="4" fill="#6b3f1a"/><rect x="84" y="104" width="30" height="8" rx="4" fill="#6b3f1a"/>
+      <rect x="12" y="12" width="10" height="96" rx="4" fill="#a8703a"/><rect x="98" y="12" width="10" height="96" rx="4" fill="#a8703a"/><rect x="8" y="6" width="104" height="12" rx="6" fill="#7a4a1d"/><rect x="8" y="6" width="104" height="4" rx="2" fill="#d9a066" opacity=".7"/>
+      <path d="M48 18 L50 32 M72 18 L70 32" stroke="#7a4a1d" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <circle cx="60" cy="68" r="36" fill="#d68a14"/><circle cx="60" cy="68" r="32" fill="#ffc23d"/><circle cx="60" cy="68" r="26" fill="#ffd166"/><circle cx="60" cy="68" r="26" fill="none" stroke="#e8a21f" stroke-width="2.5"/>
+      <path d="M36 50 q8 -14 22 -16" stroke="#fff" stroke-width="4.5" fill="none" opacity=".6" stroke-linecap="round"/>
+      ${face(60, 66, 1.15)}
+      <rect x="62" y="102" width="30" height="6" rx="3" fill="#7a4a1d"/><circle cx="58" cy="105" r="7.5" fill="#ef476f"/><circle cx="55" cy="102" r="2.4" fill="#fff" opacity=".6"/>`,
 };
 
 export const FRIEND_IDS = Object.keys(BODY);

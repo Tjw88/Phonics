@@ -1,13 +1,13 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { ACCENTS, ACCENT_EXCLUDE, BANK, GRAPHEMES, SAFARI_EXCLUDE, bankFor, graphemesInSet, safariFor } from './data';
-import { seeded } from './dates';
+import { ACCENTS, ACCENT_EXCLUDE, BANK, GRAPHEMES, SAFARI_EXCLUDE, bankFor, graphemesInSet, safariFor, soundsClose } from './data';
+import { addDays, seeded } from './dates';
 import { idsUpToSet, isDecodable, lintBank, lintWord } from './linter';
 import { pickReview } from './review';
 import {
   applyPlacement, buildFeedTrial, buildPlacement, decodableWords, scorePlacement, startAdventure,
 } from './session';
-import { simulate } from './simulate';
+import { playDay, simulate } from './simulate';
 import {
   MASTERY_DAYS, carriedForward, choicesForTrial, introduce, isSecure, newChild, nextNewSound, recordTrial, recordWord,
   statusOf, unlockedSet, wordsRead,
@@ -20,16 +20,24 @@ const good = (s: ReturnType<typeof newChild>, id: string, day: string) => {
 const D = (n: number) => `2026-01-${String(n).padStart(2, '0')}`;
 
 describe('curriculum data', () => {
-  it('has the 23 MVP graphemes in the spec order', () => {
+  it('has the 23 MVP graphemes in the spec order, then the four set-6 digraphs', () => {
     expect(GRAPHEMES.map((g) => g.id).join(' ')).toBe(
-      's a t p i n m d g o c k ck e u r h b f ff l ll ss',
+      's a t p i n m d g o c k ck e u r h b f ff l ll ss sh ch th ng',
     );
     expect(graphemesInSet(1).map((g) => g.id)).toEqual(['s', 'a', 't', 'p']);
+    expect(graphemesInSet(6).map((g) => g.id)).toEqual(['sh', 'ch', 'th', 'ng']);
+    // a digraph is ONE sound: it must not share a key with the letters it is written with
+    for (const id of ['sh', 'ch', 'th', 'ng']) expect(['s', 'h', 'c', 't', 'n', 'g']).not.toContain(GRAPHEMES.find((g) => g.id === id)!.phoneme);
+  });
+  it('keeps out words whose digraph or vowel would teach the wrong sound', () => {
+    // voiced th (this/that/then/with), the BATH vowel (bath/path), the foot vowel (bush/push), and w-words (no w is taught)
+    const banned = ['this', 'that', 'then', 'them', 'with', 'the', 'bath', 'path', 'maths', 'bush', 'push', 'wing', 'swing', 'shit'];
+    for (const w of BANK) expect(banned, w.text).not.toContain(w.text);
   });
 });
 
 describe('content linter', () => {
-  it('passes the shipped bank at the end of set 5', () => {
+  it('passes the shipped bank at the end of set 6', () => {
     expect(lintBank()).toEqual([]);
   });
   it('flags the spec’s own "egg" example: the gg grapheme is not taught in sets 1-5', () => {
@@ -197,10 +205,32 @@ describe('feed trials', () => {
 describe('placement', () => {
   it('starts from scratch if the first set fails, and skips sets passed 2/2', () => {
     const items = buildPlacement(seeded(5));
-    expect(items).toHaveLength(6);
-    expect(scorePlacement(items, [false, true, true, true, true, true])).toBe(1);
-    expect(scorePlacement(items, [true, true, true, true, false, true])).toBe(3);
-    expect(scorePlacement(items, [true, true, true, true, true, true])).toBe(4);
+    expect(items).toHaveLength(12); // two per set, sets 1-6
+    expect([...new Set(items.map((i) => i.set))]).toEqual([1, 2, 3, 4, 5, 6]);
+    const yes = (n: number) => Array(n).fill(true) as boolean[];
+    expect(scorePlacement(items, [false, ...yes(11)])).toBe(1);
+    expect(scorePlacement(items, [...yes(4), false, true, ...yes(6)])).toBe(3);
+    expect(scorePlacement(items, yes(6))).toBe(4);
+    expect(scorePlacement(items, yes(10))).toBe(6); // 2/2 on sets 1-5 starts at set 6
+    expect(scorePlacement(items, yes(12))).toBe(6); // there is no set 7
+    // the UI stops at the first miss, so results can be shorter than the item list: a missing answer is a miss
+    expect(scorePlacement(items, [...yes(2), false])).toBe(2);
+  });
+  it('never asks for a double (ck ff ll ss) or a sound shared inside its set, and never offers a sound-alike', () => {
+    for (let seed = 0; seed < 60; seed++)
+      for (const it of buildPlacement(seeded(seed))) {
+        expect(['ck', 'ff', 'll', 'ss', 'c', 'k']).not.toContain(it.target.id);
+        for (const o of it.options) if (o !== it.target) expect(soundsClose(o.phoneme, it.target.phoneme), `${it.target.id} vs ${o.id}`).toBe(false);
+        expect(it.options.length).toBeGreaterThanOrEqual(2);
+      }
+  });
+  it('placing at set 6 introduces sets 1-5 as learning and leaves the digraphs for later', () => {
+    const s = newChild();
+    applyPlacement(s, 6, D(1));
+    expect(unlockedSet(s)).toBe(6);
+    expect(statusOf(s, 'ck')).toBe('learning');
+    expect(statusOf(s, 'sh')).toBe('not-started');
+    expect(nextNewSound(s)?.id).toBe('sh');
   });
   it('always has one right answer', () => {
     for (let seed = 0; seed < 50; seed++)
@@ -233,6 +263,37 @@ describe('pacing vs the spec’s success targets', () => {
     const firstWords = log.find((d) => d.wordsRead > 0);
     expect(firstWords).toBeDefined();
     expect(log.some((d) => d.consolidation)).toBe(true);
+  });
+});
+
+describe('set 6 (digraphs) in play', () => {
+  it('a daily 90%-accurate child reaches sh, ch, th and ng, and every day on the way has a playable plan', () => {
+    const rng = seeded(11);
+    const s = newChild();
+    const seen = new Set<string>();
+    for (let d = 0; d < 120 && !['sh', 'ch', 'th', 'ng'].every((g) => seen.has(g)); d++) {
+      const plan = playDay(s, addDays('2026-01-05', d), 0.9, rng);
+      if (plan.newSound) seen.add(plan.newSound.id);
+      expect(plan.robotWords.length, `day ${d} robot words`).toBe(3);
+      expect(plan.drumWords.length, `day ${d} drum words`).toBeGreaterThan(0);
+      if (plan.printBlend) expect(plan.bridgeWords.length, `day ${d} bridge words`).toBe(3);
+      if (plan.newSound?.set === 6) {
+        // a day that teaches a digraph has words that use it, spoken and printable from what has been taught
+        const withIt = decodableWords(s).filter((w) => w.graphemes.includes(plan.newSound!.id));
+        expect(withIt.length, `${plan.newSound.id} words`).toBeGreaterThanOrEqual(3);
+      }
+    }
+    expect([...seen].filter((g) => ['sh', 'ch', 'th', 'ng'].includes(g)).sort()).toEqual(['ch', 'ng', 'sh', 'th']);
+    expect(unlockedSet(s)).toBe(6);
+  });
+  it('every digraph has enough decodable words, with at least two that have a picture (except th, which has one)', () => {
+    const s = newChild();
+    for (const g of GRAPHEMES) introduce(s, g.id, D(1));
+    for (const g of ['sh', 'ch', 'th', 'ng']) {
+      const ws = decodableWords(s).filter((w) => w.graphemes.includes(g));
+      expect(ws.length, g).toBeGreaterThanOrEqual(6);
+      expect(ws.filter((w) => w.emoji).length, `${g} pictured`).toBeGreaterThanOrEqual(g === 'th' ? 1 : 2);
+    }
   });
 });
 
@@ -296,7 +357,11 @@ describe('generated audio stays in sync with the curriculum, per accent', () => 
 
 describe('sound sweep: every sound is long enough to hear, loud enough, and every spoken instruction exists', () => {
   const MIN = { fric: 400, sonor: 380, vowel: 450 } as const;
-  const kind = (k: string) => ('sfh'.includes(k) ? 'fric' : 'mnlr'.includes(k) ? 'sonor' : 'aioeu'.includes(k) ? 'vowel' : 'stop');
+  const KIND: Record<string, 'fric' | 'sonor' | 'vowel' | 'stop' | 'affr'> = {
+    s: 'fric', f: 'fric', h: 'fric', sh: 'fric', th: 'fric', ch: 'affr', m: 'sonor', n: 'sonor', l: 'sonor', r: 'sonor', ng: 'sonor',
+    a: 'vowel', i: 'vowel', o: 'vowel', e: 'vowel', u: 'vowel', p: 'stop', t: 'stop', k: 'stop', b: 'stop', d: 'stop', g: 'stop',
+  };
+  const kind = (k: string) => KIND[k] ?? 'stop';
   for (const accent of ACCENTS) {
     describe(accent.label, () => {
       const audit = JSON.parse(readFileSync(new URL(`../../scripts/audio/audit-${accent.id}.json`, import.meta.url), 'utf8')) as {
@@ -305,13 +370,15 @@ describe('sound sweep: every sound is long enough to hear, loud enough, and ever
       const manifest = JSON.parse(readFileSync(new URL(`../../public/audio/${accent.id}/manifest.json`, import.meta.url), 'utf8')) as {
         phrases: Record<string, string>; phonemes: Record<string, string[]>;
       };
-      it('all 18 sounds have three takes, each long and loud enough for its type', () => {
-        expect(Object.keys(audit.phonemes).length).toBe(18);
+      it('all 22 sounds have three takes, each long and loud enough for its type', () => {
+        expect(Object.keys(audit.phonemes).sort()).toEqual([...new Set(GRAPHEMES.map((g) => g.phoneme))].sort());
+        expect(Object.keys(audit.phonemes).length).toBe(22);
         for (const [k, v] of Object.entries(audit.phonemes)) {
           expect(v.files.length, k).toBe(3);
           for (const f of v.files) {
             const t = kind(k);
             if (t === 'stop') { expect(f.ms, `/${k}/`).toBeGreaterThanOrEqual(130); expect(f.ms, `/${k}/`).toBeLessThanOrEqual(320); }
+            else if (t === 'affr') { expect(f.ms, `/${k}/`).toBeGreaterThanOrEqual(150); expect(f.ms, `/${k}/`).toBeLessThanOrEqual(450); }
             else expect(f.ms, `/${k}/`).toBeGreaterThanOrEqual(MIN[t]);
             expect(f.rms, `/${k}/ too quiet`).toBeGreaterThan(0.04);
           }

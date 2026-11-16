@@ -17,7 +17,7 @@ How sounds are made
   * Checks: measurements on every clip, plus (optional) a speech recogniser listening to a carrier sentence. Nothing here
     replaces a human ear; the recogniser is biased on short vowels and is only used as a rough second opinion.
 """
-import json, os, sys, urllib.request
+import functools, json, os, sys, urllib.request
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -38,13 +38,16 @@ ACCENT_VOICES = {
 NORTH_MAP = {"ʌ": "ʊ", "æ": "a"}  # applied to Piper's own RP phonemisation of ordinary words (Safari words, phrases)
 VOWEL_SYMS = {"æ", "a", "ɪ", "ɒ", "ɛ", "ʌ", "ʊ"}
 LS_WORD, NS, NW = 1.25, 0.5, 0.6  # slower than normal speech for children; steady (low noise) delivery
-CLASS = {"s": "fric", "f": "fric", "h": "fric", "m": "sonor", "n": "sonor", "l": "sonor", "r": "sonor",
+CLASS = {"s": "fric", "f": "fric", "h": "fric", "sh": "fric", "th": "fric", "ch": "affr", "m": "sonor", "n": "sonor", "ng": "sonor", "l": "sonor", "r": "sonor",
          "p": "vstop0", "t": "vstop0", "k": "vstop0", "b": "vstop1", "d": "vstop1", "g": "vstop1"}
 TARGET_MS = {"fric": 480, "sonor": 430, "vowel": 520}
+NASALS = ("m", "n", "ng")
+BORROWED = {("north", "th"): "rp"}  # (accent, sound) -> accent whose voice supplies it
 STOP_TAIL_MS = 70  # how much of the following vowel a stop keeps (faded), so it is audible
 
 
-def fetch(name, base):
+@functools.lru_cache(maxsize=None)
+def fetch(name, base):  # cached: a freshly loaded voice repeats the same "random" output, so takes would be identical
     os.makedirs(VOICE_DIR, exist_ok=True)
     for ext in ("onnx", "onnx.json"):
         dst = os.path.join(VOICE_DIR, f"{name}.{ext}")
@@ -160,9 +163,14 @@ def sustain_voiced(x, target_ms, periods=4):
 
 
 # ---- isolated sounds -----------------------------------------------------------------------------------------------
+def syms(s):
+    """An IPA string as Piper symbols (an affricate such as tʃ is two symbols)."""
+    return list(s)
+
+
 def carrier(voice, c_sym, kind):
-    ls = {"fric": 3.0, "sonor": 3.5}.get(kind, 1.4)
-    return trim(speak_ids(voice, to_ids(voice, [c_sym, "ˈ", "ʌ"]), ls))
+    ls = {"fric": 3.0, "sonor": 3.5, "affr": 2.2}.get(kind, 1.4)
+    return trim(speak_ids(voice, to_ids(voice, [*syms(c_sym), "ˈ", "ʌ"]), ls))
 
 
 def lowfreq_ratio(a, hop, win_ms=20, cut_hz=700):
@@ -189,7 +197,7 @@ def render_consonant(voice, key, ipa_sym):
         clip = fade_out(fade_in(clip, 25), 70)
         info["method"] = f"cut {len(part) / SR * 1000:.0f} ms of hiss before the vowel, granular resynthesis to {TARGET_MS['fric']} ms"
     elif kind == "sonor":
-        if key in "mn":
+        if key in NASALS:
             lr = lowfreq_ratio(a, h)
             first = next((i for i in range(len(lr)) if lr[i] > 0.8), 0)  # nasal murmur: energy almost all below 700 Hz
             on = next((i for i in range(first + 2, len(lr)) if lr[i] < 0.6), first + 12)
@@ -200,6 +208,16 @@ def render_consonant(voice, key, ipa_sym):
         clip = sustain_voiced(part, TARGET_MS["sonor"])
         clip = fade_out(fade_in(clip, 30), 80)
         info["method"] = f"cut {len(part) / SR * 1000:.0f} ms before the vowel, pitch-synchronous loop to {TARGET_MS['sonor']} ms"
+    elif kind == "affr":
+        # /ch/ = a stop burst then hiss: keep the natural burst + frication up to the vowel and give the hiss a little more length
+        on = next((i for i in range(len(v)) if v[i] and i < len(env) and env[i] > 0.3 * peak), len(env) // 2)
+        part = a[: max(int(SR * 0.09), on * h - int(SR * 0.015))]
+        hiss = sustain_noise(part[int(len(part) * 0.45):], 140, seed=5)
+        xf = int(SR * 0.012)
+        head = part[: int(len(part) * 0.45)]
+        clip = np.concatenate([head[:-xf], head[-xf:] * np.linspace(1, 0, xf) + hiss[:xf] * np.linspace(0, 1, xf), hiss[xf:]])
+        clip = fade_out(clip, 60)
+        info["method"] = f"affricate: natural burst + {len(part) / SR * 1000:.0f} ms of the voice's own frication, hiss lengthened to ~{len(clip) / SR * 1000:.0f} ms"
     elif kind == "vstop0":
         # /p t k/ are unvoiced: PURE sounds are allowed. Burst + a breathy (voiceless) release, no voiced vowel.
         st = next((i for i in range(len(env)) if env[i] > 0.10 * peak), 0)
@@ -247,7 +265,11 @@ def checks_for(key, clip):
     if kind == "fric" and ms < 300: warn.append("short")
     if kind == "sonor" and (ms < 300 or vf < 0.5): warn.append("short or not clearly voiced")
     if kind == "fric" and key == "s" and out["centroid_hz"] < 4000: warn.append("/s/ should be bright (centroid >4 kHz)")
-    if kind == "sonor" and key in "mn" and out["centroid_hz"] > 1800: warn.append("nasal looks too bright")
+    if key == "sh" and not (2200 <= out["centroid_hz"] <= 5200): warn.append("/sh/ should sit lower than /s/ (centroid about 2.5-5 kHz)")
+    if kind in ("fric", "affr") and out["voiced_fraction"] > 0.2: warn.append("should be voiceless (this take has a voiced murmur)")
+    if key == "th" and out["centroid_hz"] < 3500: warn.append("/th/ should be a bright, flat hiss (centroid > 3.5 kHz)")
+    if kind == "affr" and not (150 <= ms <= 450): warn.append("affricate length odd")
+    if kind == "sonor" and key in NASALS and out["centroid_hz"] > 1800: warn.append("nasal looks too bright")
     if kind.startswith("vstop") and not (130 <= ms <= 320): warn.append("stop length odd")
     out["warnings"] = warn
     return out
@@ -261,7 +283,7 @@ def word_phonemes(graphemes, ipa):
         if s in VOWEL_SYMS and not done:
             syms.append("ˈ")
             done = True
-        syms.append(s)
+        syms.extend(list(s))
     return syms
 
 
@@ -294,6 +316,13 @@ def asr_available():
         return False
 
 
+MISSING = "--missing" in sys.argv  # only render what is not already on disk (keeps every existing take byte-for-byte)
+
+
+def have(rel):
+    return MISSING and os.path.exists(os.path.join(OUT, rel))
+
+
 def generate(accent, bank, shared_unused):
     name, base, credit = ACCENT_VOICES[accent]
     voice = fetch(name, base)
@@ -304,15 +333,31 @@ def generate(accent, bank, shared_unused):
     report = {"accent": accent, "label": cfg["label"], "voice": name, "credit": credit, "engine": "Piper neural TTS",
               "expected_ipa": ipa, "phonemes": {}, "words": {}, "phrases": {}, "safari": {}, "problems": [], "warnings": [], "asr": {}}
     manifest = {"accent": accent, "label": cfg["label"], "voice": name, "credit": credit, "phonemes": {}, "words": {}, "phrases": {}, "sources": {}}
+    if MISSING and os.path.exists(os.path.join(out, "manifest.json")):
+        old_m, old_r = json.load(open(os.path.join(out, "manifest.json"))), json.load(open(os.path.join(out, "audit.json")))
+        manifest.update({k: old_m[k] for k in ("phonemes", "words", "phrases", "sources")})
+        for k in ("phonemes", "words", "phrases", "safari", "asr"):
+            report[k] = old_r.get(k, {})
 
     # 1. isolated sounds: three variants each (slightly different settings) so repeats do not sound identical
     for key in G.MNEMONIC:
+        if have(f"{accent}/phonemes/{key}_2.wav"):
+            continue
+        manifest["phonemes"].pop(key, None)  # re-rendering a sound replaces its takes (it must not append to the old ones)
         sym = ipa[key]
         entry = {"expected_ipa": sym, "files": []}
         for v in range(3):
-            for attempt in range(6):  # the voice is stochastic: every take differs; re-take one that fails its own measurements
+            # the voice is stochastic: every take differs; re-take one that fails its own measurements. /th/ is a weak, flat hiss that
+            # the northern voice only occasionally produces without a voiced murmur, so it gets many more tries.
+            for attempt in range(60 if key == "th" else 6):
                 if key in G.VOWELS:
                     clip, info = render_vowel(voice, sym)
+                elif (accent, key) in BORROWED:
+                    # the northern voice cannot make a voiceless /th/ (60 takes each came out as a voiced murmur); a voiceless hiss carries no
+                    # regional vowel, so the RP voice's /th/ is used and the manifest says so
+                    src = BORROWED[(accent, key)]
+                    clip, info = render_consonant(fetch(*ACCENT_VOICES[src][:2]), key, {**G.BASE_IPA, **G.ACCENTS[src]["ipa"]}[key])
+                    info["method"] += f" [borrowed from the {src} voice: the {accent} voice cannot make a voiceless /{key}/]"
                 else:
                     clip, info = render_consonant(voice, key, sym)
                 chk = checks_for(key, clip)
@@ -321,9 +366,9 @@ def generate(accent, bank, shared_unused):
             info["takes_needed"] = attempt + 1
             rel = f"{accent}/phonemes/{key}_{v}.wav"
             write(rel, clip)
-            entry["files"].append({"file": rel, "source": f"piper:{name}", **info, **chk})
+            entry["files"].append({"file": rel, "source": f"piper:{ACCENT_VOICES[BORROWED[(accent, key)]][0] if (accent, key) in BORROWED else name}", **info, **chk})
             manifest["phonemes"].setdefault(key, []).append(rel)
-            manifest["sources"][key] = f"piper ({info['method'].split(',')[0]})"
+            manifest["sources"][key] = f"piper ({info['method'].split(',')[0]})" + (f" [borrowed from the {BORROWED[(accent, key)]} voice]" if (accent, key) in BORROWED else "")
             for w in chk["warnings"]:
                 # a clip that is nearly silent is a hard failure; the rest are measurement notes for the human listener
                 (report["problems"] if w == "very quiet" else report["warnings"]).append(f"[{accent}] /{key}/ v{v}: {w}")
@@ -337,9 +382,12 @@ def generate(accent, bank, shared_unused):
             removed.append(text)
             report["words"][text] = {"status": "excluded in this accent (BATH vowel)"}
             continue
+        rel = f"{accent}/words/{text}.wav"
+        if have(rel):
+            manifest["words"][text] = rel
+            continue
         ph = word_phonemes(gr, ipa)
         a = normalise(trim(speak_ids(voice, to_ids(voice, ph))), 0.1)
-        rel = f"{accent}/words/{text}.wav"
         write(rel, a)
         manifest["words"][text] = rel
         report["words"][text] = {"phonemes": "".join(ph), "ms": round(len(a) / SR * 1000)}
@@ -348,11 +396,15 @@ def generate(accent, bank, shared_unused):
     removed_safari = []
     for it in bank.get("safari", []):
         word, p = it["word"], it["p"]
+        if have(f"{accent}/words/{word}.wav") and word in report["safari"]:
+            if report["safari"][word] != "ok":
+                removed_safari.append(word)
+            continue
         phs = text_phonemes(voice, word, accent)
         flat = [x for x in phs[0] if x != "ˈ"] if phs else []
         exp = ipa[p]
-        if not flat or flat[0] != exp:
-            report["safari"][word] = f"excluded: starts with {flat[:1]}, expected {exp!r}"
+        if not flat or "".join(flat).startswith(exp) is False:
+            report["safari"][word] = f"excluded: starts with {flat[:len(exp)]}, expected {exp!r}"
             removed_safari.append(word)
             continue
         report["safari"][word] = "ok"
@@ -364,6 +416,8 @@ def generate(accent, bank, shared_unused):
 
     # 4. fixed phrases
     for k, t in G.PHRASES.items():
+        if have(f"{accent}/phrases/{k}.wav"):
+            continue
         a = normalise(trim(speak_sentences(voice, text_phonemes(voice, t, accent), 1.1)), 0.1)
         rel = f"{accent}/phrases/{k}.wav"
         write(rel, a)
@@ -372,6 +426,8 @@ def generate(accent, bank, shared_unused):
 
     # 4b. what each sound-friend says (no letter names: the real sound is played right after the line)
     for gid, text in bank.get("stories", {}).items():
+        if have(f"{accent}/phrases/story_{gid}.wav"):
+            continue
         a = normalise(trim(speak_sentences(voice, text_phonemes(voice, text, accent), 1.1)), 0.1)
         rel = f"{accent}/phrases/story_{gid}.wav"
         write(rel, a)
@@ -409,7 +465,7 @@ def main():
     import shutil
     bank = json.load(open(os.path.join(HERE, "bank.json")))
     only = [a for a in ACCENT_VOICES if f"--only={a}" in sys.argv] or list(ACCENT_VOICES)
-    if "--keep" not in sys.argv:
+    if "--keep" not in sys.argv and not MISSING:
         for a in only:
             shutil.rmtree(os.path.join(OUT, a), ignore_errors=True)
     index = {"accents": {}}
@@ -417,7 +473,7 @@ def main():
         manifest, report = generate(accent, bank, None)
         index["accents"][accent] = {"label": G.ACCENTS[accent]["label"], "voice": manifest["voice"], "credit": manifest["credit"],
                                     "removed_words": manifest["removed_words"], "removed_safari": manifest["removed_safari"]}
-        print(f"[{accent}] sounds {len(manifest['phonemes'])}/18 words {len(manifest['words'])} phrases {len(manifest['phrases'])} "
+        print(f"[{accent}] sounds {len(manifest['phonemes'])}/22 words {len(manifest['words'])} phrases {len(manifest['phrases'])} "
               f"excluded words {manifest['removed_words']} safari {manifest['removed_safari']}")
         for p in report["problems"]:
             print("   PROBLEM", p)
@@ -433,7 +489,9 @@ def main():
             credits.append(f"  {G.ACCENTS[a]['label']}: voice {n} - {c}")
         credits += ["", "CC BY-SA 4.0 (the northern voice) has a ShareAlike condition: whether generated audio counts as a derivative is a legal",
                     "question that has NOT been checked. Review before any public release.", "",
-                    "Generated audio is a stand-in for recordings by trained voice talent. Nobody has yet listened to it for correctness."]
+                    "Generated audio is a stand-in for recordings by trained voice talent. Nobody has yet listened to it for correctness.", "",
+                    "Note on the Northern English pack: its /th/ sound (the hiss of \"thin\") is taken from the Southern British voice above, because the",
+                    "Northern voice could not produce a voiceless /th/. See public/audio/north/manifest.json (\"sources\") for the exact files."]
         open(os.path.join(OUT, "CREDITS.txt"), "w").write("\n".join(credits) + "\n")
     return 0
 

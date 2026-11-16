@@ -220,15 +220,20 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
   await page.click('[data-testid=hatch]');
   await page.click('[data-testid=next]'); // hatched
   await page.click('[data-testid=next]'); // placement intro
-  // placement: answer the first set correctly, then fail the second (should start at set 2)
+  // placement: answer the first set correctly, then miss: it stops at the first miss (should start at set 2)
   let placed = 0;
-  for (let i = 0; i < 6; i++) {
-    await page.waitForSelector('[data-testid=tile]');
+  for (let i = 0; i < 12; i++) {
+    const which = await Promise.race([
+      page.waitForSelector('[data-testid=tile]').then(() => 'tile'),
+      page.waitForSelector('[data-testid=greeting]').then(() => 'greeting'),
+    ]);
+    if (which === 'greeting') break;
     const sel = i < 2 ? '[data-answer="1"]' : '[data-answer="0"]';
     await page.locator(`[data-testid=tile]${sel}`).first().click();
     placed++;
     await page.waitForTimeout(700);
   }
+  check(placed === 3, `placement stops at the first miss (asked ${placed} questions: 2 right on set 1, then one miss)`);
   await page.waitForSelector('[data-testid=greeting]');
   const st = await page.evaluate(() => JSON.parse(localStorage.getItem('soundling.proto.v1')));
   check(st.startSet === 2, `placement 2/2 on set 1 then misses -> starts at set 2 (got ${st.startSet})`);
@@ -292,10 +297,20 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
   await page.click('[data-testid=parent-btn]');
   await passGate(page);
   await page.click('[data-testid=tab-sounds]');
-  check((await page.locator('[data-testid=mapcell]').count()) === 23, 'sound map shows all 23 sounds');
+  check((await page.locator('[data-testid=mapcell]').count()) === 27, 'sound map shows all 27 sounds (sets 1-6)');
   const cell = await page.locator('[data-testid=mapcell][data-id=i]').getAttribute('data-status');
   check(cell === 'learning', 'new sound shows as learning (not secure after one day)');
   await page.screenshot({ path: `${shots}/parent-sounds.png` });
+  // the weekly summary (day 1 has been played: one day, the sound just learned, no streak language)
+  await page.click('[data-testid=tab-week]');
+  check((await page.locator('[data-testid=weekbar] .weekday').count()) === 7, 'This week: seven days shown');
+  check((await page.locator('[data-testid=weekbar] .weekday.played').count()) === 1, 'This week: exactly today is marked as played');
+  const wl = await page.textContent('[data-testid=week-lines]');
+  check(/Played on 1 day of the last 7/.test(wl), `This week: says how many days were played (${wl.slice(0, 60)}...)`);
+  check(/New this week: \/i\//.test(wl), 'This week: names the new sound after placement (i), not the sounds placement skipped');
+  check(!/streak|missed|behind/i.test(wl), 'This week: no streak or guilt wording');
+  check(/Sound hunt this week/.test(await page.textContent('[data-testid=week-activity]')), 'This week: an off-screen activity is suggested');
+  await page.screenshot({ path: `${shots}/parent-week.png` });
   await page.click('[data-testid=tab-settings]');
   const before = await page.evaluate(() => JSON.parse(localStorage.getItem('soundling.proto.v1')).sounds);
   await page.selectOption('[data-testid=accent]', 'rp');
@@ -333,11 +348,18 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
   await pageC.click('[data-testid=hatch]');
   await pageC.click('[data-testid=next]');
   await pageC.click('[data-testid=next]');
-  for (let i = 0; i < 6; i++) {
-    await pageC.waitForSelector('[data-testid=tile]');
+  let placedC = 0;
+  for (let i = 0; i < 12; i++) {
+    const which = await Promise.race([
+      pageC.waitForSelector('[data-testid=tile]').then(() => 'tile'),
+      pageC.waitForSelector('[data-testid=greeting]').then(() => 'greeting'),
+    ]);
+    if (which === 'greeting') break;
     await pageC.locator('[data-testid=tile][data-answer="0"]').first().click();
+    placedC++;
     await pageC.waitForTimeout(700);
   }
+  check(placedC === 1, `a first miss on set 1 ends placement at once (asked ${placedC})`);
   await pageC.waitForSelector('[data-testid=greeting]');
   await pageC.click('[data-testid=parent-btn]');
   await passGate(pageC);

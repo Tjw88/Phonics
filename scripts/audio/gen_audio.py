@@ -27,11 +27,13 @@ VARIANTS = [(50, 125), (54, 125), (46, 125)]  # (pitch, rate) - small variation 
 MNEMONIC = {
     "s": "s", "a": "a", "t": "t", "p": "p", "i": "I", "n": "n", "m": "m", "d": "d", "g": "g", "o": "0", "k": "k",
     "e": "E", "u": "V", "r": "r-", "h": "h", "b": "b", "f": "f", "l": "l",
+    "sh": "S", "ch": "tS", "th": "T", "ng": "N",
 }
 # What each accent SHOULD teach, as IPA. Anything not listed here is the RP value below.
 BASE_IPA = {
     "s": "s", "a": "æ", "t": "t", "p": "p", "i": "ɪ", "n": "n", "m": "m", "d": "d", "g": "ɡ", "o": "ɒ", "k": "k",
     "e": "ɛ", "u": "ʌ", "r": "ɹ", "h": "h", "b": "b", "f": "f", "l": "l",
+    "sh": "ʃ", "ch": "tʃ", "th": "θ", "ng": "ŋ",
 }
 ACCENTS = {
     "rp": {"label": "Southern British (RP)", "voice": "en-GB-x-rp", "ipa": {}},
@@ -48,7 +50,7 @@ ACCENTS = {
 GRAPHEME_KEY = {  # grapheme -> phoneme key (digraphs share the single sound)
     "s": "s", "a": "a", "t": "t", "p": "p", "i": "i", "n": "n", "m": "m", "d": "d", "g": "g", "o": "o", "c": "k",
     "k": "k", "ck": "k", "e": "e", "u": "u", "r": "r", "h": "h", "b": "b", "f": "f", "ff": "f", "l": "l", "ll": "l",
-    "ss": "s", "gg": "g",
+    "ss": "s", "gg": "g", "sh": "sh", "ch": "ch", "th": "th", "ng": "ng",
 }
 STOPS = {"p", "t", "k", "b", "d", "g"}
 VOICELESS_STOPS = {"p", "t", "k"}

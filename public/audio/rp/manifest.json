@@ -93,6 +93,26 @@
    "rp/phonemes/l_0.wav",
    "rp/phonemes/l_1.wav",
    "rp/phonemes/l_2.wav"
+  ],
+  "sh": [
+   "rp/phonemes/sh_0.wav",
+   "rp/phonemes/sh_1.wav",
+   "rp/phonemes/sh_2.wav"
+  ],
+  "ch": [
+   "rp/phonemes/ch_0.wav",
+   "rp/phonemes/ch_1.wav",
+   "rp/phonemes/ch_2.wav"
+  ],
+  "th": [
+   "rp/phonemes/th_0.wav",
+   "rp/phonemes/th_1.wav",
+   "rp/phonemes/th_2.wav"
+  ],
+  "ng": [
+   "rp/phonemes/ng_0.wav",
+   "rp/phonemes/ng_1.wav",
+   "rp/phonemes/ng_2.wav"
   ]
  },
  "words": {
@@ -296,7 +316,63 @@
   "lion": "rp/words/lion.wav",
   "leaf": "rp/words/leaf.wav",
   "lemon": "rp/words/lemon.wav",
-  "lollipop": "rp/words/lollipop.wav"
+  "lollipop": "rp/words/lollipop.wav",
+  "ship": "rp/words/ship.wav",
+  "shop": "rp/words/shop.wav",
+  "shed": "rp/words/shed.wav",
+  "shell": "rp/words/shell.wav",
+  "shut": "rp/words/shut.wav",
+  "shock": "rp/words/shock.wav",
+  "shin": "rp/words/shin.wav",
+  "shack": "rp/words/shack.wav",
+  "dish": "rp/words/dish.wav",
+  "cash": "rp/words/cash.wav",
+  "dash": "rp/words/dash.wav",
+  "rush": "rp/words/rush.wav",
+  "bash": "rp/words/bash.wav",
+  "mash": "rp/words/mash.wav",
+  "hush": "rp/words/hush.wav",
+  "gush": "rp/words/gush.wav",
+  "chip": "rp/words/chip.wav",
+  "chick": "rp/words/chick.wav",
+  "chin": "rp/words/chin.wav",
+  "chop": "rp/words/chop.wav",
+  "chat": "rp/words/chat.wav",
+  "chap": "rp/words/chap.wav",
+  "chess": "rp/words/chess.wav",
+  "check": "rp/words/check.wav",
+  "chug": "rp/words/chug.wav",
+  "rich": "rp/words/rich.wav",
+  "much": "rp/words/much.wav",
+  "such": "rp/words/such.wav",
+  "thin": "rp/words/thin.wav",
+  "thick": "rp/words/thick.wav",
+  "thud": "rp/words/thud.wav",
+  "thump": "rp/words/thump.wav",
+  "thing": "rp/words/thing.wav",
+  "moth": "rp/words/moth.wav",
+  "king": "rp/words/king.wav",
+  "gong": "rp/words/gong.wav",
+  "song": "rp/words/song.wav",
+  "sing": "rp/words/sing.wav",
+  "ping": "rp/words/ping.wav",
+  "ding": "rp/words/ding.wav",
+  "bang": "rp/words/bang.wav",
+  "hang": "rp/words/hang.wav",
+  "fang": "rp/words/fang.wav",
+  "gang": "rp/words/gang.wav",
+  "hung": "rp/words/hung.wav",
+  "lung": "rp/words/lung.wav",
+  "rung": "rp/words/rung.wav",
+  "sung": "rp/words/sung.wav",
+  "long": "rp/words/long.wav",
+  "sheep": "rp/words/sheep.wav",
+  "shoe": "rp/words/shoe.wav",
+  "chair": "rp/words/chair.wav",
+  "cheese": "rp/words/cheese.wav",
+  "thumb": "rp/words/thumb.wav",
+  "thread": "rp/words/thread.wav",
+  "thunder": "rp/words/thunder.wav"
  },
  "phrases": {
   "play": "rp/phrases/play.wav",
@@ -350,7 +426,11 @@
   "story_ff": "rp/phrases/story_ff.wav",
   "story_l": "rp/phrases/story_l.wav",
   "story_ll": "rp/phrases/story_ll.wav",
-  "story_ss": "rp/phrases/story_ss.wav"
+  "story_ss": "rp/phrases/story_ss.wav",
+  "story_sh": "rp/phrases/story_sh.wav",
+  "story_ch": "rp/phrases/story_ch.wav",
+  "story_th": "rp/phrases/story_th.wav",
+  "story_ng": "rp/phrases/story_ng.wav"
  },
  "sources": {
   "s": "piper (cut 145 ms of hiss before the vowel)",
@@ -370,7 +450,11 @@
   "h": "piper (cut 85 ms of hiss before the vowel)",
   "b": "piper (voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/))",
   "f": "piper (cut 80 ms of hiss before the vowel)",
-  "l": "piper (cut 148 ms before the vowel)"
+  "l": "piper (cut 148 ms before the vowel)",
+  "sh": "piper (cut 80 ms of hiss before the vowel)",
+  "ch": "piper (affricate: natural burst + 185 ms of the voice's own frication)",
+  "th": "piper (cut 80 ms of hiss before the vowel)",
+  "ng": "piper (cut 70 ms before the vowel)"
  },
  "removed_words": [
   "pass"

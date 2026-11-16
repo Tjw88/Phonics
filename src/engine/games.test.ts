@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { BANK, CONFUSABLE, GRAPHEMES, SAFARI, bankFor, isConfusable } from './data';
+import { BANK, CONFUSABLE, GRAPHEMES, SAFARI, bankFor, isConfusable, soundsClose } from './data';
 import { seeded } from './dates';
 import { GLYPHS, advanceTrace, glyphWidth, pathLength, samplePath, shiftPath, strokesFor, traceDone } from './glyphs';
-import { buildKitchenTiles, buildSafari, drumBeats, phonemeOf, pickDistractors, safariGraphemes, startAdventure } from './session';
+import { buildFeedTrial, buildKitchenTiles, buildSafari, drumBeats, phonemeOf, pickDistractors, safariGraphemes, startAdventure } from './session';
 import { playDay } from './simulate';
 import { introduce, newChild } from './state';
 
@@ -87,6 +87,26 @@ describe('Sound Safari', () => {
       expect(new Set(decoySounds).size).toBe(decoySounds.length);
     }
   });
+  it('digraph scenes: sh/ch/th have their own, ship is never a target in an s scene, and nothing in a scene sounds close to its target', () => {
+    const s = newChild();
+    for (const g of GRAPHEMES) introduce(s, g.id, '2026-01-01');
+    for (const id of ['sh', 'ch', 'th']) expect(safariGraphemes('rp'), id).toContain(id);
+    expect(safariGraphemes('rp')).not.toContain('ng'); // no English word starts with ng
+    const by = (id: string) => GRAPHEMES.find((g) => g.id === id)!;
+    for (let seed = 0; seed < 150; seed++) {
+      for (const [id, wrong] of [['s', ['ship', 'shell', 'sheep', 'shoe']], ['t', ['thumb', 'thread', 'thunder']], ['c', ['chair', 'cheese', 'chick']]] as [string, string[]][]) {
+        const sc = buildSafari(s, by(id), seeded(seed));
+        expect(sc.targets.every((i) => i.g === id), `${id} targets`).toBe(true);
+        expect(sc.targets.some((i) => wrong.includes(i.word)), `${id} scene target`).toBe(false);
+      }
+      for (const id of ['sh', 'ch', 'th']) {
+        const sc = buildSafari(s, by(id), seeded(seed));
+        expect(sc.targets.length, id).toBeGreaterThanOrEqual(2);
+        expect(sc.targets.every((i) => i.word.startsWith(id)), id).toBe(true);
+        for (const it of sc.items) if (!sc.targets.includes(it)) expect(soundsClose(it.p, by(id).phoneme), `${id} scene has ${it.word}`).toBe(false);
+      }
+    }
+  });
   it('letters that no word starts with (ck, ff, ll, ss) never get a Safari scene', () => {
     for (const id of ['ck', 'ff', 'll', 'ss']) expect(safariGraphemes('rp')).not.toContain(id);
   });
@@ -107,7 +127,33 @@ describe('Word Kitchen and Beat the Drum', () => {
       expect(decoys.length).toBeLessThanOrEqual(2);
     }
   });
+  it('a digraph is one tile, and its own letters are never offered as decoys (no loose s or h next to sh in "ship")', () => {
+    const s = newChild();
+    for (const g of GRAPHEMES) introduce(s, g.id, '2026-01-01');
+    for (const w of bankFor('rp').filter((x) => x.graphemes.some((g) => g.length === 2))) {
+      for (let seed = 0; seed < 20; seed++) {
+        const tiles = buildKitchenTiles(s, w, seeded(seed));
+        for (const g of w.graphemes) expect(tiles, w.text).toContain(g);
+        for (const d of tiles) {
+          if (w.graphemes.includes(d)) continue;
+          for (const g of w.graphemes) expect(g.includes(d) || d.includes(g), `${w.text}: decoy ${d} overlaps ${g}`).toBe(false);
+        }
+      }
+    }
+  });
+  it('the feed game never offers a sound-alike of the target (s / sh, t / th, f / th, sh / ch)', () => {
+    const s = newChild();
+    for (const g of GRAPHEMES) introduce(s, g.id, '2026-01-01');
+    for (let seed = 0; seed < 80; seed++)
+      for (const t of GRAPHEMES) {
+        const trial = buildFeedTrial(s, t, 3, seeded(seed));
+        for (const o of trial.options) if (o !== t) expect(soundsClose(o.phoneme, t.phoneme), `${t.id} offered with ${o.id}`).toBe(false);
+        expect(trial.options.filter((o) => o.phoneme === t.phoneme)).toEqual([t]);
+      }
+  });
   it('one beat per sound', () => {
+    expect(drumBeats(bankFor('rp').find((w) => w.text === 'ship')!)).toBe(3); // sh-i-p: the digraph is one sound
+    expect(drumBeats(bankFor('rp').find((w) => w.text === 'thump')!)).toBe(4);
     expect(drumBeats(bankFor('rp').find((w) => w.text === 'cat')!)).toBe(3);
     expect(drumBeats(bankFor('rp').find((w) => w.text === 'rock')!)).toBe(3); // r-o-ck: the digraph is one sound
     expect(drumBeats(bankFor('rp').find((w) => w.text === 'egg')!)).toBe(2);

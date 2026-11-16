@@ -1,4 +1,4 @@
-import { GRAPHEMES, GRAPHEME_BY_ID, bankFor, graphemesInSet, isConfusable, safariFor, type Grapheme, type SafariItem, type Word } from './data';
+import { GRAPHEMES, GRAPHEME_BY_ID, MAX_SET, bankFor, graphemesInSet, isConfusable, safariFor, soundsClose, type Grapheme, type SafariItem, type Word } from './data';
 import { shuffle, type Rng } from './dates';
 import { isDecodable } from './linter';
 import { pickReview } from './review';
@@ -125,12 +125,13 @@ export interface FeedTrial { target: Grapheme; options: Grapheme[]; choices: num
 
 /**
  * Build a "Feed the Creature" trial: the target letter plus distractors that are introduced, and do NOT share
- * the target's sound (so there is only one right answer: c, k and ck are never offered together).
+ * the target's sound (so there is only one right answer: c, k and ck are never offered together) and are not easily
+ * mistaken for it by ear (s/sh, t/th, f/th and similar are never offered together; see CLOSE_SOUNDS).
  */
 export const buildFeedTrial = (s: ChildState, target: Grapheme, indexInSession: number, rng: Rng): FeedTrial => {
   const wanted = choicesForTrial(indexInSession);
   const intro = introducedIds(s);
-  const pool = GRAPHEMES.filter((g) => intro.has(g.id) && g.phoneme !== target.phoneme);
+  const pool = GRAPHEMES.filter((g) => intro.has(g.id) && g.phoneme !== target.phoneme && !soundsClose(g.phoneme, target.phoneme));
   // Prefer distractors from the same set, then recently introduced, to make discrimination meaningful.
   const near = shuffle(pool.filter((g) => g.set === target.set), rng);
   const far = shuffle(pool.filter((g) => g.set !== target.set), rng);
@@ -139,17 +140,26 @@ export const buildFeedTrial = (s: ChildState, target: Grapheme, indexInSession: 
   return { target, options, choices: options.length };
 };
 
-/** Sounds the placement game draws from (sets 1-3 only, to stay conservative). */
-export const PLACEMENT_SETS = [1, 2, 3] as const;
+/** Sets the placement game draws from: every set, in order. It stops at the first miss, so a beginner only ever sees the first few. */
+export const PLACEMENT_SETS: readonly number[] = Array.from({ length: MAX_SET }, (_, i) => i + 1);
 export interface PlacementItem { set: number; target: Grapheme; options: Grapheme[] }
 
+const isDouble = (g: Grapheme): boolean => g.id.length === 2 && (g.id.charAt(0) === g.id.charAt(1) || g.id === 'ck');
+const placementTargetOk = (g: Grapheme, inSet: Grapheme[]): boolean =>
+  !isDouble(g) && !inSet.some((o) => o.id !== g.id && !isDouble(o) && o.phoneme === g.phoneme);
+
+/**
+ * Two items per set. Targets are never a grapheme that shares its sound with another one in the same set (c / k), and never a
+ * "word-end" double (ck, ff, ll, ss), which a child who knows the single letter would not necessarily recognise.
+ */
 export const buildPlacement = (rng: Rng): PlacementItem[] =>
   PLACEMENT_SETS.flatMap((set) => {
     const inSet = graphemesInSet(set);
-    // c and k share a sound, so neither is asked directly in placement.
-    const targets = shuffle(inSet.filter((g) => g.id !== 'c' && g.id !== 'k'), rng).slice(0, 2);
+    const targets = shuffle(inSet.filter((g) => placementTargetOk(g, inSet)), rng).slice(0, 2);
     return targets.map((target) => {
-      const distractors = shuffle(inSet.filter((g) => g.phoneme !== target.phoneme), rng).slice(0, 2);
+      // one right answer, and nothing that sounds close to it (sh / ch, say)
+      const pool = inSet.filter((g) => g.phoneme !== target.phoneme && !soundsClose(g.phoneme, target.phoneme));
+      const distractors = shuffle(pool, rng).slice(0, 2);
       return { set, target, options: shuffle([target, ...distractors], rng) };
     });
   });
@@ -162,7 +172,7 @@ export const scorePlacement = (items: PlacementItem[], results: boolean[]): numb
     if (idx.length && idx.every((i) => results[i] === true)) start = set + 1;
     else break;
   }
-  return start;
+  return Math.min(start, MAX_SET);
 };
 
 /** Seed the sounds in skipped sets as "learning" (introduced, not secure): placement never grants mastery. */
@@ -187,7 +197,7 @@ export const buildSafari = (s: ChildState, target: Grapheme, rng: Rng, nTargets 
   // targets start with the LETTER being taught; nothing else that starts with the same SOUND is ever shown (no "cat" in a k scene)
   const targets = shuffle(all.filter((i) => i.g === target.id), rng).slice(0, nTargets);
   const met = new Set([...introducedIds(s)].map(phonemeOf));
-  const others = all.filter((i) => i.p !== target.phoneme);
+  const others = all.filter((i) => i.p !== target.phoneme && !soundsClose(i.p, target.phoneme)); // nothing that sounds close (s / sh)
   const familiar = shuffle(others.filter((i) => met.has(i.p)), rng);
   const rest = shuffle(others.filter((i) => !met.has(i.p)), rng);
   // one distractor per sound, so the scene never has two items that start with the same wrong sound crowding it
@@ -212,7 +222,9 @@ export const buildKitchenTiles = (s: ChildState, word: Word, rng: Rng, extra = 2
   const intro = [...introducedIds(s)].filter((id) => !word.graphemes.includes(id));
   // never offer a decoy that makes the answer ambiguous (c / k / ck all say /k/, ff = f, ll = l, ss = s)
   const sounds = new Set(word.graphemes.map(phonemeOf));
-  const decoys = shuffle(intro.filter((id) => !sounds.has(phonemeOf(id))), rng).slice(0, extra);
+  // ...and no letter that is PART of one of the word's digraphs (s or h in "ship"), or a digraph that contains one of its letters
+  const overlaps = (d: string) => word.graphemes.some((g) => g !== d && (g.includes(d) || d.includes(g)));
+  const decoys = shuffle(intro.filter((id) => !sounds.has(phonemeOf(id)) && !overlaps(id)), rng).slice(0, extra);
   return shuffle([...word.graphemes, ...decoys], rng);
 };
 /** One drum beat per sound in the word. */

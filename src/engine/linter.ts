@@ -1,4 +1,4 @@
-import { BANK, GRAPHEME_BY_ID, UNSUITABLE, type Word } from './data';
+import { BANK, GRAPHEME_BY_ID, MAX_SET, UNSUITABLE, type Word } from './data';
 
 export interface LintIssue { word: string; kind: 'segmentation' | 'unknown-grapheme' | 'not-taught' | 'unsuitable' | 'duplicate-picture'; detail: string }
 
@@ -32,7 +32,7 @@ export const idsUpToSet = (set: number): Set<string> =>
   new Set([...GRAPHEME_BY_ID.values()].filter((g) => g.set <= set).map((g) => g.id));
 
 /** Lint the whole bank: every print-eligible word must be decodable by the end of set `maxSet`. */
-export const lintBank = (bank: readonly Word[] = BANK, maxSet = 5): LintIssue[] => {
+export const lintBank = (bank: readonly Word[] = BANK, maxSet = MAX_SET): LintIssue[] => {
   const taught = idsUpToSet(maxSet);
   const issues: LintIssue[] = [];
   const seen = new Set<string>();

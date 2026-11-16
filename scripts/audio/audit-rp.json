@@ -22,7 +22,11 @@
   "h": "h",
   "b": "b",
   "f": "f",
-  "l": "l"
+  "l": "l",
+  "sh": "ʃ",
+  "ch": "tʃ",
+  "th": "θ",
+  "ng": "ŋ"
  },
  "phonemes": {
   "s": {
@@ -708,6 +712,158 @@
      "warnings": []
     }
    ]
+  },
+  "sh": {
+   "expected_ipa": "ʃ",
+   "files": [
+    {
+     "file": "rp/phonemes/sh_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 185 ms of hiss before the vowel, granular resynthesis to 480 ms",
+     "takes_needed": 1,
+     "ms": 480,
+     "rms": 0.1,
+     "voiced_fraction": 0.01,
+     "centroid_hz": 3766,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/sh_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 80 ms of hiss before the vowel, granular resynthesis to 480 ms",
+     "takes_needed": 1,
+     "ms": 480,
+     "rms": 0.1,
+     "voiced_fraction": 0.0,
+     "centroid_hz": 4200,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/sh_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 80 ms of hiss before the vowel, granular resynthesis to 480 ms",
+     "takes_needed": 1,
+     "ms": 480,
+     "rms": 0.1,
+     "voiced_fraction": 0.0,
+     "centroid_hz": 4284,
+     "warnings": []
+    }
+   ]
+  },
+  "ch": {
+   "expected_ipa": "tʃ",
+   "files": [
+    {
+     "file": "rp/phonemes/ch_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "affricate: natural burst + 180 ms of the voice's own frication, hiss lengthened to ~209 ms",
+     "takes_needed": 1,
+     "ms": 209,
+     "rms": 0.13,
+     "voiced_fraction": 0.0,
+     "centroid_hz": 3093,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/ch_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "affricate: natural burst + 120 ms of the voice's own frication, hiss lengthened to ~182 ms",
+     "takes_needed": 1,
+     "ms": 182,
+     "rms": 0.13,
+     "voiced_fraction": 0.0,
+     "centroid_hz": 3402,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/ch_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "affricate: natural burst + 185 ms of the voice's own frication, hiss lengthened to ~211 ms",
+     "takes_needed": 1,
+     "ms": 211,
+     "rms": 0.13,
+     "voiced_fraction": 0.0,
+     "centroid_hz": 3342,
+     "warnings": []
+    }
+   ]
+  },
+  "th": {
+   "expected_ipa": "θ",
+   "files": [
+    {
+     "file": "rp/phonemes/th_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 145 ms of hiss before the vowel, granular resynthesis to 480 ms",
+     "takes_needed": 1,
+     "ms": 480,
+     "rms": 0.1,
+     "voiced_fraction": 0.0,
+     "centroid_hz": 6584,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/th_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 100 ms of hiss before the vowel, granular resynthesis to 480 ms",
+     "takes_needed": 2,
+     "ms": 480,
+     "rms": 0.1,
+     "voiced_fraction": 0.0,
+     "centroid_hz": 6545,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/th_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 80 ms of hiss before the vowel, granular resynthesis to 480 ms",
+     "takes_needed": 2,
+     "ms": 480,
+     "rms": 0.1,
+     "voiced_fraction": 0.0,
+     "centroid_hz": 5234,
+     "warnings": []
+    }
+   ]
+  },
+  "ng": {
+   "expected_ipa": "ŋ",
+   "files": [
+    {
+     "file": "rp/phonemes/ng_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 70 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 412,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/ng_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 70 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 294,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/ng_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 70 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
+     "voiced_fraction": 0.99,
+     "centroid_hz": 381,
+     "warnings": []
+    }
+   ]
   }
  },
  "words": {
@@ -1245,6 +1401,202 @@
   "mass": {
    "phonemes": "mˈæs",
    "ms": 553
+  },
+  "ship": {
+   "phonemes": "ʃˈɪp",
+   "ms": 346
+  },
+  "shop": {
+   "phonemes": "ʃˈɒp",
+   "ms": 401
+  },
+  "shed": {
+   "phonemes": "ʃˈɛd",
+   "ms": 421
+  },
+  "shell": {
+   "phonemes": "ʃˈɛl",
+   "ms": 483
+  },
+  "shut": {
+   "phonemes": "ʃˈʌt",
+   "ms": 400
+  },
+  "shock": {
+   "phonemes": "ʃˈɒk",
+   "ms": 390
+  },
+  "shin": {
+   "phonemes": "ʃˈɪn",
+   "ms": 404
+  },
+  "shack": {
+   "phonemes": "ʃˈæk",
+   "ms": 449
+  },
+  "dish": {
+   "phonemes": "dˈɪʃ",
+   "ms": 594
+  },
+  "cash": {
+   "phonemes": "kˈæʃ",
+   "ms": 573
+  },
+  "dash": {
+   "phonemes": "dˈæʃ",
+   "ms": 685
+  },
+  "rush": {
+   "phonemes": "ɹˈʌʃ",
+   "ms": 531
+  },
+  "bash": {
+   "phonemes": "bˈæʃ",
+   "ms": 502
+  },
+  "mash": {
+   "phonemes": "mˈæʃ",
+   "ms": 477
+  },
+  "hush": {
+   "phonemes": "hˈʌʃ",
+   "ms": 449
+  },
+  "gush": {
+   "phonemes": "ɡˈʌʃ",
+   "ms": 461
+  },
+  "chip": {
+   "phonemes": "tʃˈɪp",
+   "ms": 323
+  },
+  "chick": {
+   "phonemes": "tʃˈɪk",
+   "ms": 444
+  },
+  "chin": {
+   "phonemes": "tʃˈɪn",
+   "ms": 647
+  },
+  "chop": {
+   "phonemes": "tʃˈɒp",
+   "ms": 276
+  },
+  "chat": {
+   "phonemes": "tʃˈæt",
+   "ms": 529
+  },
+  "chap": {
+   "phonemes": "tʃˈæp",
+   "ms": 371
+  },
+  "chess": {
+   "phonemes": "tʃˈɛs",
+   "ms": 577
+  },
+  "check": {
+   "phonemes": "tʃˈɛk",
+   "ms": 448
+  },
+  "chug": {
+   "phonemes": "tʃˈʌɡ",
+   "ms": 348
+  },
+  "rich": {
+   "phonemes": "ɹˈɪtʃ",
+   "ms": 505
+  },
+  "much": {
+   "phonemes": "mˈʌtʃ",
+   "ms": 518
+  },
+  "such": {
+   "phonemes": "sˈʌtʃ",
+   "ms": 604
+  },
+  "thin": {
+   "phonemes": "θˈɪn",
+   "ms": 356
+  },
+  "thick": {
+   "phonemes": "θˈɪk",
+   "ms": 261
+  },
+  "thud": {
+   "phonemes": "θˈʌd",
+   "ms": 430
+  },
+  "thump": {
+   "phonemes": "θˈʌmp",
+   "ms": 422
+  },
+  "thing": {
+   "phonemes": "θˈɪŋ",
+   "ms": 258
+  },
+  "moth": {
+   "phonemes": "mˈɒθ",
+   "ms": 429
+  },
+  "king": {
+   "phonemes": "kˈɪŋ",
+   "ms": 336
+  },
+  "gong": {
+   "phonemes": "ɡˈɒŋ",
+   "ms": 272
+  },
+  "song": {
+   "phonemes": "sˈɒŋ",
+   "ms": 404
+  },
+  "sing": {
+   "phonemes": "sˈɪŋ",
+   "ms": 391
+  },
+  "ping": {
+   "phonemes": "pˈɪŋ",
+   "ms": 405
+  },
+  "ding": {
+   "phonemes": "dˈɪŋ",
+   "ms": 331
+  },
+  "bang": {
+   "phonemes": "bˈæŋ",
+   "ms": 403
+  },
+  "hang": {
+   "phonemes": "hˈæŋ",
+   "ms": 426
+  },
+  "fang": {
+   "phonemes": "fˈæŋ",
+   "ms": 397
+  },
+  "gang": {
+   "phonemes": "ɡˈæŋ",
+   "ms": 374
+  },
+  "hung": {
+   "phonemes": "hˈʌŋ",
+   "ms": 338
+  },
+  "lung": {
+   "phonemes": "lˈʌŋ",
+   "ms": 427
+  },
+  "rung": {
+   "phonemes": "ɹˈʌŋ",
+   "ms": 487
+  },
+  "sung": {
+   "phonemes": "sˈʌŋ",
+   "ms": 377
+  },
+  "long": {
+   "phonemes": "lˈɒŋ",
+   "ms": 434
   }
  },
  "phrases": {
@@ -1453,11 +1805,343 @@
   "leaf": "ok",
   "lemon": "ok",
   "log": "ok",
-  "lollipop": "ok"
+  "lollipop": "ok",
+  "ship": "ok",
+  "shell": "ok",
+  "sheep": "ok",
+  "shoe": "ok",
+  "chair": "ok",
+  "cheese": "ok",
+  "chick": "ok",
+  "thumb": "ok",
+  "thread": "ok",
+  "thunder": "ok"
  },
  "problems": [],
  "warnings": [],
- "asr": {},
+ "asr": {
+  "understood": 105,
+  "of": 184,
+  "missed": [
+   [
+    "an",
+    "and"
+   ],
+   [
+    "ad",
+    ", add"
+   ],
+   [
+    "sit",
+    ", is it"
+   ],
+   [
+    "tin",
+    ", 10"
+   ],
+   [
+    "pin",
+    ", pen"
+   ],
+   [
+    "pit",
+    ", pet"
+   ],
+   [
+    "mat",
+    ", matt"
+   ],
+   [
+    "dad",
+    "add"
+   ],
+   [
+    "did",
+    ", it"
+   ],
+   [
+    "nap",
+    "now"
+   ],
+   [
+    "tan",
+    "10"
+   ],
+   [
+    "dam",
+    "am"
+   ],
+   [
+    "dog",
+    "thock"
+   ],
+   [
+    "dig",
+    "egg"
+   ],
+   [
+    "dot",
+    ""
+   ],
+   [
+    "kid",
+    ", keep"
+   ],
+   [
+    "kit",
+    ", kids"
+   ],
+   [
+    "nod",
+    ", not"
+   ],
+   [
+    "pod",
+    ", pot"
+   ],
+   [
+    "peck",
+    ", pack"
+   ],
+   [
+    "deck",
+    "back"
+   ],
+   [
+    "ten",
+    "10"
+   ],
+   [
+    "men",
+    ", meh"
+   ],
+   [
+    "rid",
+    "red"
+   ],
+   [
+    "rug",
+    ", ruck"
+   ],
+   [
+    "rub",
+    "rob"
+   ],
+   [
+    "sun",
+    ", son"
+   ],
+   [
+    "mud",
+    ", not"
+   ],
+   [
+    "mug",
+    ", mark"
+   ],
+   [
+    "cup",
+    ", come"
+   ],
+   [
+    "pup",
+    ", but"
+   ],
+   [
+    "up",
+    "but"
+   ],
+   [
+    "nut",
+    ", not"
+   ],
+   [
+    "tug",
+    ", talk"
+   ],
+   [
+    "dug",
+    ", duck"
+   ],
+   [
+    "egg",
+    "the word he is back"
+   ],
+   [
+    "hat",
+    "at"
+   ],
+   [
+    "hug",
+    ", huck"
+   ],
+   [
+    "hut",
+    ", huh"
+   ],
+   [
+    "bed",
+    "bad"
+   ],
+   [
+    "bag",
+    ", back"
+   ],
+   [
+    "bus",
+    ", us"
+   ],
+   [
+    "bug",
+    "buck"
+   ],
+   [
+    "bat",
+    "that"
+   ],
+   [
+    "bib",
+    "8"
+   ],
+   [
+    "fit",
+    ", fate"
+   ],
+   [
+    "puff",
+    "pop"
+   ],
+   [
+    "huff",
+    "half"
+   ],
+   [
+    "fill",
+    ", fail"
+   ],
+   [
+    "doll",
+    "dull"
+   ],
+   [
+    "hill",
+    ", he'll"
+   ],
+   [
+    "sell",
+    ", cell"
+   ],
+   [
+    "leg",
+    "like"
+   ],
+   [
+    "log",
+    ", lock"
+   ],
+   [
+    "lid",
+    ", knit"
+   ],
+   [
+    "hiss",
+    ", his"
+   ],
+   [
+    "fuss",
+    ", fast"
+   ],
+   [
+    "shack",
+    ", shaq"
+   ],
+   [
+    "dish",
+    ", ish"
+   ],
+   [
+    "cash",
+    ", cache"
+   ],
+   [
+    "dash",
+    "that"
+   ],
+   [
+    "mash",
+    "nash"
+   ],
+   [
+    "gush",
+    "gosh"
+   ],
+   [
+    "chip",
+    ", ship"
+   ],
+   [
+    "chin",
+    ", shin"
+   ],
+   [
+    "chug",
+    ", chuck"
+   ],
+   [
+    "thin",
+    ", 10"
+   ],
+   [
+    "thick",
+    "egg"
+   ],
+   [
+    "thud",
+    "thought"
+   ],
+   [
+    "thing",
+    "ink"
+   ],
+   [
+    "ring",
+    ", ray"
+   ],
+   [
+    "gong",
+    "gone"
+   ],
+   [
+    "ping",
+    ", pink"
+   ],
+   [
+    "ding",
+    ", dink"
+   ],
+   [
+    "hang",
+    ", aang"
+   ],
+   [
+    "hung",
+    ", huh"
+   ],
+   [
+    "lung",
+    "love"
+   ],
+   [
+    "rung",
+    ", wrong"
+   ],
+   [
+    "sung",
+    ", song"
+   ]
+  ],
+  "note": "base.en recogniser on 'The word is X.'; biased on short vowels; misses mean 'listen to this one', not 'wrong'"
+ },
  "removed_words": [
   "pass"
  ]

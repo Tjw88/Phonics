@@ -2,7 +2,7 @@
 
 ## How this was done, and what it is not
 
-**Measured or tested (automated):** 60 unit tests; a browser end-to-end run (54 checks) that plays every game to completion with real
+**Measured or tested (automated):** 75 unit tests; a browser end-to-end run that plays every game to completion with real
 pointer drags (including wrong answers and retries); a "toddler" monkey test (random taps and drags for up to 15 s per game, plus the adventure screens, hunting
 crashes and tap targets under 64 px: `scripts/audit-monkey.cjs`); a sound sweep (every isolated sound's length and loudness in
 both accents, and a check that every spoken instruction exists as audio); spectrograms of every isolated sound; and an
@@ -32,7 +32,7 @@ You reported voices that sounded robotic and sounds too short to be useful. The 
 | Voice | espeak formant synth (robotic) | Piper neural voices: Cori (RP), northern English male |
 
 ### How it was checked, honestly
-- **Spectrograms** of all 18 sounds were read for structure: hiss spectra for /s f h/, steady harmonic bands for /m n l r/ and vowels,
+- **Spectrograms** of the original 18 sounds were read for structure: hiss spectra for /s f h/, steady harmonic bands for /m n l r/ and vowels,
   breathy noise with no voiced harmonics for /p t k/. This caught real defects: loop seams every ~100 ms in /m l r/ (would
   have sounded like a stutter), /n/ containing part of the vowel, and one /m/ take that came out only 70 ms (caught by the sweep test).
 - **A speech recogniser** (Whisper base.en, on "The word is X.") as a *calibrated* second opinion. On the same 28 words it understood
@@ -43,6 +43,18 @@ You reported voices that sounded robotic and sounds too short to be useful. The 
   verified** and needs a northern speaker's ear before anyone trusts it.
 - **Not checked by anyone's ears.** I cannot hear. Whether /b/ /d/ /g/ carry too much "uh", whether /p t k/ sound like /p t k/, and
   whether the sustained /m n l r/ sound natural are open questions for `public/audio-check.html`.
+
+### The four digraph sounds (set 6), added later
+/sh/ and /th/ are hiss sounds extended like /s/ and /f/ (480 ms); /ch/ is the voice's own burst plus frication, about 180 ms (a real /ch/ is
+short, so it is not stretched); /ng/ is a nasal looped like /m/ (430 ms). I read their spectrograms: /sh/ shows its energy band around 2-4 kHz
+(lower than /s/), /th/ a flat broadband hiss, /ch/ a burst then a 2-4 kHz band, /ng/ the harmonic bands of a voiced nasal. Every take must also pass
+measurements (voiceless and bright for /sh/ /th/ /ch/; clearly voiced for /ng/; /th/ centroid above 3.5 kHz).
+- **The Northern voice cannot make a voiceless /th/.** All 60 takes per slot came out as a voiced murmur (low-pitched, harmonic), so the Northern pack's /th/ is the
+  **RP voice's hiss** (the manifest says so). A hiss carries no regional vowel, but it is a shortcut, and the two voices were not matched.
+- **Speech-recogniser second opinion on the new words:** RP: 29 of 51 new words understood (57%, in line with the 56% for the older words). Northern: 14 of 51
+  (the recogniser understood only 15 of the 134 older Northern words, so it says very little about that pack). Specific things to listen for:
+  several /sh/ words heard as /ch/ words and the reverse (ship, chip, chin, shin), "thin" heard as "ten", and /ng/ words heard as /m/ or /n/ words in the Northern pack (ping, bang, hang, gang).
+  The recogniser is biased, so these are **listening priorities, not confirmed faults**. **Nobody has heard any of the new sounds.**
 
 ### Fluid sequences
 Sounds played in a row (robot, drum, sliding to blend) now use shorter takes of the same sound with a gap sized to each clip
@@ -76,8 +88,8 @@ condition that nobody has checked against generated audio (see `public/audio/CRE
 | **Word Kitchen** (spelling) | tray always contains the word's letters and only unambiguous decoys; duplicate letters; digraph tile; wrong letter returns, right stay | tiles were tap-only | drag onto the board; the child chooses the slot (nearest empty slot to the drop) | "Customer orders" spoken as a story would add meaning (open) |
 | **Bridge Builder** (blending) | order enforced; plank per sound; word choice; crossing | **after tapping all sounds you could not tap them again**; a wrong pick reset everything | sounds stay tappable in any order; wrong pick no longer resets; **slide your finger across the letters to blend** (gesture) | Fade the sound buttons for stronger readers (open) |
 | **Rhyme Rocket** | rhyme groups by shared ending spelling; distractors never rhyme | tap-only; rhymes are decided by spelling, which will give false rhymes as the word bank grows | drag the picture into the rocket | Move to pronunciation-based rhymes before adding words (open) |
-| **Trace Trail** | all 23 sounds have strokes; strokes only count in order from the start dot; tiny "i dot" | **crashed if you touched the board after finishing** | fixed + guarded | Stroke paths follow one common convention; school formation may differ; needs specialist review (open) |
-| **Placement** | 2 items per set; never grants mastery | none | unchanged | Only covers sets 1-3 |
+| **Trace Trail** | all 27 sounds have strokes (a digraph is traced as its two letters); strokes only count in order from the start dot; tiny "i dot" | **crashed if you touched the board after finishing** | fixed + guarded | Stroke paths follow one common convention; school formation may differ; needs specialist review (open) |
+| **Placement** | 2 items per set, sets 1-6; never grants mastery; never asks for a double (ck ff ll ss) or c/k, never offers a sound-alike | the list was built up front, so a beginner who missed the first question still sat through all of it | now **stops at the first miss**; extended from sets 1-3 to 1-6 | A child who knows digraphs but not (say) the exact letter shapes of set 4 will start earlier than ideal; it is a quick screen, not an assessment |
 | **Sound Play (age 2-3)** | tap only; no letters; nothing scored | **its only game was Rhyme Rocket**: rhyme awareness is a 3-4 skill, and it needed dragging | replaced by "copy the beat" (3 rounds, with a gentle replay if the child pauses) and "find the ..." naming (4 rounds) | Needs real animal/environment sounds (the spec's "tuning in"), which need audio assets (open) |
 | **Free Play** | menu of all 8; 3 rounds each; back button always visible; time limit | none | unchanged | |
 | **Adventure flow** | rotation without randomness; celebrations under 3 s and skippable; Reduce Motion | **instructions unspoken** (see above) | fixed | |
@@ -113,12 +125,15 @@ at Reception.
 *Expectations:* reads simple words, wants to feel "big", has school phonics running in parallel.
 - **Works:** Bridge Builder and Word Kitchen are real decoding and encoding; sound buttons mirror classroom practice; the mastery
   gate prevents racing ahead on lucky taps.
-- **Breaks / risks:** **the content stops short of the Reception goal.** The EYFS 2026 ELG expects "at least 10 digraphs"; our MVP
-  teaches 23 sounds with only four doubled-letter digraphs (ck ff ll ss) and none of sh ch th ng (stage 4 is not built).
-  A child already beyond set 3 gets only a 3-set placement. The sound buttons never fade, so strong readers are not
+- **Breaks / risks:** **the content is still short of the Reception goal.** The EYFS 2026 ELG expects "at least 10 digraphs". The app
+  now teaches 27 sounds, including four consonant digraphs (sh ch th ng) and four doubled letters (ck ff ll ss), which is eight
+  two-letter graphemes, but **no vowel digraphs** (ai ee oa oo and so on). The sound buttons never fade, so strong readers are not
   stretched. Trace Trail may clash with the formation the school teaches (hence optional).
-- **Open:** stage 4 digraphs; placement through set 5; a "no sound buttons" challenge level.
-
+- **New in set 6 (my judgement, not tested with children):** /th/ is the unvoiced sound of "thin" only (no "this", "the", "that"), so one letter
+  pair never has two sounds; words with the BATH vowel, the foot vowel (bush, push) or a w are left out. /th/ is never offered next to /f/ or /t/, nor
+  /sh/ next to /s/ or /ch/, nor /ng/ next to /n/ or /k/, because those pairs are the ones children and synthetic voices confuse. A Safari scene
+  for "s" never contains ship, and a "sh" scene never contains a thing that merely starts with the letter s.
+- **Open:** vowel digraphs and the next stage; a "no sound buttons" challenge level; hearing the new sounds (see section 1).
 ### 3.4 Boy and girl
 No separate review (see above). Checked instead: companions are creatures in four vivid colours, not gender-coded; the
 sound-friends are a mix of named male, female and neutral characters; the pictures showed a boy, a man and a doll in a pink dress, so
@@ -129,7 +144,7 @@ tracing) are both on offer. These are my observations about what is in the app, 
 - **Works:** no account or personal data; the daily limit; the sound map and words list; the accent explanation; the audition
   page for checking sounds; a gate that a young child is unlikely to pass.
 - **Breaks:** the off-screen mission is on the Today tab, but at goodnight it only appears behind a small lightbulb, so many parents
-  will miss it in the moment (it should be shown on the goodnight screen); there is no weekly summary ("what did my child learn?");
+  will miss it in the moment (it should be shown on the goodnight screen); **a "This week" tab now exists** (days played, new and secured sounds, words, a nudge on sounds that need practice, an off-screen activity, with no streak or comparison wording);
   **a "report a wrong sound" link now exists in the Sound map** (it opens a public GitHub issue, so it needs a parent's judgement about what to write); delete-all-progress uses a browser pop-up;
   parents may dislike a machine voice, which is why the credits say plainly that it is machine-generated and unreviewed.
 - **Trust risk:** the public GitHub Pages link is open to anyone who has the URL.
@@ -139,8 +154,8 @@ tracing) are both on offer. These are my observations about what is in the app, 
 ## 4. Prioritised backlog
 
 1. **A trained human voice** (or a phonics specialist's sign-off on every sound) for the sounds, and a northern speaker for that pack. *Biggest quality gap.*
-2. Stage 4 digraphs (sh ch th ng) and placement through set 5, to reach the Reception goal.
-3. Parent area: show the off-screen mission on the Today tab; weekly summary; "report a sound".
+2. Vowel digraphs (ai ee oa oo ...) and the next stage, to reach the Reception goal. *(Consonant digraphs sh ch th ng and placement through set 6 are done.)*
+3. Parent area: show the off-screen mission on the goodnight screen (it is on the Today and This week tabs). *(Weekly summary and "report a sound" are done.)*
 4. Age 3-4 listening-first mode; real environmental and animal sounds for age 2.
 5. Variety inside Feed the Creature; a physical replacement for the drum's tick; a foliage "hunt" for Safari.
 6. Pronunciation-based rhymes before growing the word bank; fade the sound buttons for confident readers.
@@ -176,3 +191,9 @@ check rather than proof for every screen.
 **Script note:** an earlier version of this script never reached Free Play (random play cannot finish an adventure) and clicked game
 buttons on the menu while it thought it was playing a game, so its first results covered only the adventure. It now marks the day's
 adventure done in saved state and stops random play when the menu reappears.
+
+**Re-run after set 6, the new placement and the weekly summary** (final build): all eight games and the adventure screens were exercised with random
+play, **no page errors**, nothing froze. The same three "small target" flags appeared (Feed tile 30 px, adventure tile 30 px, Rhyme Rocket picture 41 px this time), which
+are the mid-animation readings explained above, not the sizes at rest (115-132 px). The script's placement loop had to be fixed because placement now ends at the
+first miss. The end-to-end suite passes 62 checks. Neither run plays the digraph rounds with child-like input; I looked at one Word Kitchen round ("shop": one `sh`
+tile, a shop drawing, decoys g and th) in a screenshot, and the engine tests cover Safari, Feed and placement for the digraphs.

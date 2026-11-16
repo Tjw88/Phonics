@@ -1,13 +1,14 @@
-import { ACCENTS, GRAPHEMES, MNEMONICS, STORY_SAY, bankFor, type AccentId } from '../engine/data';
+import { ACCENTS, GRAPHEMES, MAX_SET, MNEMONICS, STORY_SAY, bankFor, type AccentId } from '../engine/data';
 import { seeded, shuffle } from '../engine/dates';
 import { strugglingSounds } from '../engine/review';
+import { weekActivity, weekLines, weeklySummary } from '../engine/summary';
 import {
   NEW_SOUND_TRIALS, REVIEW_SOUND_TRIALS, applyPlacement, buildPlacement, decodableWords,
   missionFor, phonemeOf, pickDistractors, pickWords, printBlendOpen, scorePlacement, slashed, startAdventure, type Plan,
 } from '../engine/session';
 import { playDay } from '../engine/simulate';
 import {
-  newChild, statusOf, unlockedSet, wordsRead, type ChildState,
+  MASTERY_DAYS, newChild, statusOf, unlockedSet, wordsRead, type ChildState,
 } from '../engine/state';
 import { audioSource, blip, initAudio, praise, sayPhrase, saySeq, setMuted, setMusicOn, sfx, speak, tap, unlockAudio } from './audio';
 import { friendEl } from './friends';
@@ -217,7 +218,12 @@ export class App {
       const results: boolean[] = [];
       await this.interlude([h('p', { class: 'caption' }, 'Let’s play a quick listening game so I know where to start.')]);
       const ctx = this.ctx();
-      for (const it of items) results.push(await placementTrial(ctx, it));
+      // stop at the first miss: scoring never looks past the first failed set, and a beginner should not sit through twelve questions
+      for (const it of items) {
+        const ok = await placementTrial(ctx, it);
+        results.push(ok);
+        if (!ok) break;
+      }
       const start = scorePlacement(items, results);
       applyPlacement(this.s, start, this.today());
     }
@@ -476,8 +482,8 @@ export class App {
     document.body.append(overlay);
     const draw = () => {
       const today = this.today();
-      const tabs = ['today', 'sounds', 'words', 'watch', 'settings'];
-      const label: Record<string, string> = { today: 'Today', sounds: 'Sound map', words: 'Words read', watch: 'Watch out for', settings: 'Settings' };
+      const tabs = ['today', 'week', 'sounds', 'words', 'watch', 'settings'];
+      const label: Record<string, string> = { today: 'Today', week: 'This week', sounds: 'Sound map', words: 'Words read', watch: 'Watch out for', settings: 'Settings' };
       const body = h('div', { class: 'pbody' });
       if (tab === 'today') {
         const intro = GRAPHEMES.find((g) => s.sounds[g.id]?.introducedOn === today);
@@ -486,7 +492,26 @@ export class App {
           h('h2', {}, 'Today in 30 seconds'),
           h('p', { 'data-testid': 'today-sound' }, done || intro ? `Sound: ${intro ? slashed(intro.id) : 'revision day'} · words read so far: ${wordsRead(s).length}` : 'No adventure played yet today.'),
           h('p', {}, missionFor(intro ?? null)),
-          h('p', { class: 'muted' }, `Sets unlocked: ${unlockedSet(s)} of 5 · minutes today: ${Math.round((s.playMs[today] ?? 0) / 60000)}`),
+          h('p', { class: 'muted' }, `Sets unlocked: ${unlockedSet(s)} of ${MAX_SET} · minutes today: ${Math.round((s.playMs[today] ?? 0) / 60000)}`),
+        );
+      } else if (tab === 'week') {
+        const w = weeklySummary(s, today);
+        const dayName = (d: string) => new Date(`${d}T12:00:00Z`).toLocaleDateString('en-GB', { weekday: 'short', timeZone: 'UTC' });
+        body.append(
+          h('h2', {}, 'This week'),
+          // played = a filled dot, not played = a faint one (no red, no counting of "missed" days)
+          h('div', { class: 'weekbar', 'data-testid': 'weekbar' }, w.perDay.map((d) => {
+            const played = d.adventure || (s.playMs[d.date] ?? 0) > 0;
+            return h('div', { class: `weekday${played ? ' played' : ''}`, 'data-played': played ? '1' : '0', title: played ? `${d.minutes} min` : 'no play' },
+              h('span', { class: 'dot' }), h('span', { class: 'dn' }, dayName(d.date)), h('span', { class: 'dm' }, played ? `${d.minutes} min` : ' '));
+          })),
+          h('div', { 'data-testid': 'week-lines' }, weekLines(w).map((l) => h('p', {}, l))),
+          h('div', {}, ...(w.practising.length
+            ? [h('h3', {}, 'Still being learned'), h('div', { class: 'wordlist', 'data-testid': 'week-practising' }, w.practising.map((x) => h('span', { class: 'pill' }, `${slashed(x.id)} · ${x.days} of ${MASTERY_DAYS} days`)))]
+            : [])),
+          h('h3', {}, 'Away from the screen'),
+          h('p', { 'data-testid': 'week-activity' }, weekActivity(w)),
+          h('p', { class: 'muted' }, 'These numbers come from the questions inside the app and stay on this device. They are a guide for you, not a test of your child.'),
         );
       } else if (tab === 'sounds') {
         body.append(h('h2', {}, 'Sound map'), h('p', { class: 'muted' }, 'Say the sound, not the letter name (“mmm”, not “muh”). Prototype note: these sounds are machine-generated, not recorded, so please listen to each one. The label under each sound says how it was made.'),
