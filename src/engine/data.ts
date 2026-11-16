@@ -88,7 +88,7 @@ const rows: Row[] = [
   ['t-e-ll'], ['s-e-ll'], ['b-i-ll'],
   ['l-i-p', '👄'], ['l-a-p'], ['l-e-g', '🦵'], ['l-o-g', '🪵', 'd'], ['l-e-t'], ['l-i-d'], ['l-i-t'],
   ['m-e-ss'], ['m-i-ss'], ['k-i-ss'], ['h-i-ss'], ['m-o-ss', '🌿', 'd'], ['b-o-ss'], ['f-u-ss'], ['l-e-ss'],
-  ['p-a-ss'], ['m-a-ss'],
+  ['m-a-ss'], // "pass" removed: southern British says /pɑːs/ (BATH vowel), which clashes with the taught /a/
 ];
 
 export const BANK: Word[] = rows.map(([seg, emoji, flags = '']) => ({

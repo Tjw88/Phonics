@@ -9,10 +9,10 @@ import { playDay } from '../engine/simulate';
 import {
   newChild, recordTrial, recordWord, statusOf, unlockedSet, wordsRead, type ChildState,
 } from '../engine/state';
-import { blip, praise, setMuted, speak, tap, unlockAudio } from './audio';
+import { audioSource, blip, initAudio, praise, sayPhrase, setMuted, speak, tap, unlockAudio } from './audio';
 import { bigButton, h, sleep } from './dom';
 import {
-  bridgeBuilder, feedCreature, placementTrial, rhymeRocket, rhymeSets, robotTalk, type Ctx, type TrialResult,
+  bridgeBuilder, companionEl, feedCreature, placementTrial, rhymeRocket, rhymeSets, robotTalk, type Ctx, type TrialResult,
 } from './games';
 import { clockDay, load, save, wipe } from './storage';
 
@@ -50,6 +50,7 @@ export class App {
       this.banner, this.hintCard, this.stage,
     );
     document.addEventListener('pointerdown', unlockAudio, { once: true });
+    void initAudio();
     setInterval(() => this.tick(), 1000);
   }
 
@@ -80,7 +81,7 @@ export class App {
       const name = this.s.companion?.name ?? 'Your friend';
       this.banner.textContent = `${name}: two more minutes, then it’s sleepy time.`;
       this.banner.hidden = false;
-      speak('Two more minutes, then sleepy time.');
+      sayPhrase('two_minutes', 'Two more minutes, then it’s sleepy time.');
       setTimeout(() => (this.banner.hidden = true), 6000);
     }
     if (this.s.playMs[day]! % 15_000 === 0) this.persist();
@@ -208,11 +209,11 @@ export class App {
     const playLabel = s.band === 'B' ? 'Play together' : done ? 'Play again' : 'Play';
     const play = bigButton(`▶ ${playLabel}`, 'play', 'go');
     play.el.setAttribute('aria-label', playLabel);
-    play.el.addEventListener('pointerdown', () => speak(playLabel));
+    play.el.addEventListener('pointerdown', () => sayPhrase(s.band === 'B' ? 'play_together' : done ? 'play_again' : 'play', playLabel));
     const free = bigButton('Free play', 'freeplay', 'quiet');
     this.stage.replaceChildren(
       h('div', { class: 'scene home' },
-        h('div', { class: `companion big ${asleep ? 'sleepy' : ''}`, 'data-testid': 'companion' }, s.companion?.kind ?? '🦖'),
+        companionEl(s, `big ${asleep ? 'sleepy' : ''}`, 'companion'),
         h('p', { class: 'caption', 'data-testid': 'greeting' },
           asleep
             ? `${name} is sleepy. See you tomorrow, ${s.nickname}!`
@@ -241,7 +242,7 @@ export class App {
     // 1. Hello
     const lastSound = [...Object.entries(s.sounds)].filter(([, r]) => r.introducedOn < today).sort((a, b) => b[1].introducedOn.localeCompare(a[1].introducedOn))[0];
     await this.interlude([
-      h('div', { class: 'companion big' }, s.companion?.kind ?? '🦖'),
+      companionEl(s, 'big'),
       h('p', { class: 'caption' }, `Hello ${s.nickname}! ${lastSound ? `Yesterday: ${slashed(lastSound[0])}.` : ''} Let’s play!`),
     ]);
 
@@ -361,7 +362,7 @@ export class App {
     );
     praise();
     await shown.pressed; // goodnight is a celebration, not a cut-off: the child chooses to close the day
-    await this.interlude([h('div', { class: 'companion big sleepy' }, s.companion?.kind ?? '🦖'), h('p', { class: 'caption' }, 'Zzz… the island is asleep.')], '🏝️', 'sleep-next');
+    await this.interlude([companionEl(s, 'big sleepy'), h('p', { class: 'caption' }, 'Zzz… the island is asleep.')], '🏝️', 'sleep-next');
   }
 
   // ----- free play (mastered sounds only, up to the parent-set limit) -----
@@ -391,7 +392,7 @@ export class App {
   private async soundPlay(): Promise<void> {
     this.inChild = true;
     const ctx = this.ctx();
-    await this.interlude([h('div', { class: 'companion big' }, this.s.companion?.kind ?? '🦖'), h('p', { class: 'caption', 'data-testid': 'coplay' }, 'Find a grown-up to play with you!')]);
+    await this.interlude([companionEl(this.s, 'big'), h('p', { class: 'caption', 'data-testid': 'coplay' }, 'Find a grown-up to play with you!')]);
     const pictured = BANK.filter((w) => w.emoji);
     for (const grp of shuffle(rhymeSets(), ctx.rng).slice(0, 3)) {
       const [a, b] = shuffle(grp, ctx.rng) as [Word, Word];
@@ -401,7 +402,7 @@ export class App {
     for (const p of prompts) await this.interlude([h('p', { class: 'caption' }, p), h('p', {}, '(Away from the screen, together!)')]);
     this.setHint(null);
     this.inChild = false;
-    await this.interlude([h('div', { class: 'companion big sleepy' }, this.s.companion?.kind ?? '🦖'), h('p', { class: 'caption' }, 'Goodnight! See you tomorrow.')], '🏝️');
+    await this.interlude([companionEl(this.s, 'big sleepy'), h('p', { class: 'caption' }, 'Goodnight! See you tomorrow.')], '🏝️');
   }
 
   // ----- parent area (behind a gate) -----
@@ -439,12 +440,14 @@ export class App {
           h('p', { class: 'muted' }, `Sets unlocked: ${unlockedSet(s)} of 5 · minutes today: ${Math.round((s.playMs[today] ?? 0) / 60000)}`),
         );
       } else if (tab === 'sounds') {
-        body.append(h('h2', {}, 'Sound map'), h('p', { class: 'muted' }, 'Say the sound, not the letter name (“mmm”, not “muh”). Prototype note: tones stand in for the recorded pure sounds.'),
+        body.append(h('h2', {}, 'Sound map'), h('p', { class: 'muted' }, 'Say the sound, not the letter name (“mmm”, not “muh”). Prototype note: these sounds are machine-generated, not recorded, so please listen to each one. The label under each sound says how it was made.'),
+          h('p', {}, h('a', { href: './audio-check.html', target: '_blank', 'data-testid': 'audition-link' }, 'Audition every sound and word (for whoever audits the audio)')),
           h('div', { class: 'map', 'data-testid': 'soundmap' }, GRAPHEMES.map((g) => {
             const st = statusOf(s, g.id);
             const icon = st === 'secure' ? '●' : st === 'learning' ? '◐' : '○';
             return h('div', { class: `mapcell ${st}`, 'data-testid': 'mapcell', 'data-status': st, 'data-id': g.id },
               h('span', { class: 'glyph' }, g.id), h('span', {}, `${icon} ${st === 'not-started' ? 'not started' : st}`),
+              h('span', { class: 'muted src', 'data-testid': 'audio-source' }, audioSource(phonemeOf(g.id))),
               h('button', { class: 'btn small', 'aria-label': `hear ${slashed(g.id)}`, onClick: () => blip(phonemeOf(g.id)) }, `🔊 ${slashed(g.id)}`));
           })));
       } else if (tab === 'words') {

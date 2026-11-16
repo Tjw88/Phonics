@@ -3,7 +3,7 @@ import { shuffle, type Rng } from './dates';
 import { isDecodable } from './linter';
 import { pickReview } from './review';
 import {
-  choicesForTrial, introduce, introducedIds, nextNewSound, setSecure, wordsRead,
+  choicesForTrial, introduce, introducedIds, nextNewSound, setOpensNext, wordsRead,
   type ChildState,
 } from './state';
 
@@ -11,7 +11,7 @@ export interface Plan {
   day: string;
   newSound: Grapheme | null; // null on a consolidation day (nothing new is safe to add yet)
   review: Grapheme[];
-  /** Printed blending (Bridge Builder, printed Make-it-real) opens when set 1 is secure or placement skipped it. */
+  /** Printed blending (Bridge Builder, printed Make-it-real) opens when set 1 is (nearly) secure or placement skipped it. */
   printBlend: boolean;
   makeItReal: { word: Word; mode: 'print' | 'oral' } | null;
   robotWords: Word[]; // oral blending targets (no letters shown)
@@ -24,7 +24,7 @@ export interface Plan {
 export const phonemeOf = (id: string): string => GRAPHEME_BY_ID.get(id)?.phoneme ?? id.charAt(0);
 export const slashed = (id: string): string => `/${phonemeOf(id)}/`;
 
-export const printBlendOpen = (s: ChildState): boolean => s.startSet > 1 || setSecure(s, 1);
+export const printBlendOpen = (s: ChildState): boolean => s.startSet > 1 || setOpensNext(s, 1);
 
 /** Print words decodable from what has been introduced so far, never oral-only or unsuitable. */
 export const decodableWords = (s: ChildState): Word[] => {

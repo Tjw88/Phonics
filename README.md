@@ -8,10 +8,14 @@ The engine (`src/engine`) is plain TypeScript with no DOM, so its logic ports to
 ```bash
 npm install
 npm run dev          # play it (iPad-landscape-shaped, works on desktop and touch)
-npm test             # 24 engine tests
+npm test             # 28 tests (engine + audio/curriculum sync)
 npm run lint:content # decodability / suitability linter over the word bank
 npm run sim          # pacing simulation (synthetic children through the real engine)
-npm run build && npx vite preview --port 4173 &  node scripts/e2e.cjs   # browser end-to-end test (needs Playwright)
+npm run build && npx vite preview --port 4173 &  node scripts/e2e.cjs   # browser end-to-end test (needs Playwright; VP=390x844 for phone size)
+
+# regenerate the audio (needs: pip install espeakng-loader numpy)
+npx tsx scripts/export-bank.ts && python3 scripts/audio/gen_audio.py
+# then open /audio-check.html to audition every sound, word and phrase
 ```
 
 First launch: parental gate (multiplication), nickname + age band, pick and name a dino, placement game, then the
@@ -23,8 +27,10 @@ daily adventure. The parent area (⚙, gated) has Today, Sound map, Words read, 
 
 | Spec item | Status |
 |---|---|
-| Sets 1-5 in spec order, one new sound per day, set unlocks when the whole set is secure | Built |
-| Mastery gate (3 separate days), errorless 1→2→3 choices, spaced review of hardest sounds | Built, with a changed definition of "right" (see findings) |
+| Sets 1-5 in spec order, one new sound per day; the next set opens when 3 of 4 sounds are secure and the 4th is carried forward | Built (changed from whole-set gating, see findings) |
+| Mastery gate (3 separate days), errorless 1→2→3 choices, spaced review of hardest sounds | Built, with a stricter definition of "right" (≥2 correct and ≥60% that day) |
+| Companion grows with progress (accessory per set), plank-by-plank Bridge Builder, glowing feed target | Built |
+| Audio | Generated, not recorded, see below |
 | Placement game → starting set | Built (sets 1-3 only; never grants mastery) |
 | 6-step daily adventure, goodnight, treasure, off-screen mission | Built |
 | Games: Robot Talk, Feed the Creature, Bridge Builder, Rhyme Rocket | Built (4 of the 8 MVP games) |
@@ -38,11 +44,30 @@ daily adventure. The parent area (⚙, gated) has Today, Sound map, Words read, 
 **Not built:** Beat the Drum, Sound Safari, Word Kitchen, Trace Trail, microphone, CloudKit sync, StoreKit,
 Rive/SpriteKit animation (CSS only), other worlds, Free Play is a simple loop, no iPhone-specific layouts.
 
-## Placeholder audio: the biggest gap
+## Audio: generated, never listened to
 
-The spec's most important rule is *pure sounds from trained voices; no text-to-speech for phonics*. This prototype
-cannot honour it: each sound is a **tone** with the sound printed on screen (`/s/`), and only whole words use
-browser speech. **Do not judge the teaching by how it sounds.** A child cannot learn /s/ from a beep.
+The spec requires recordings by trained voice talent and bans text-to-speech for phonics. You asked for generated
+audio instead, so this prototype generates it, but two things need saying plainly:
+
+- **I do not have a speech engine and cannot hear audio.** I drove an open-source synthesiser (espeak-ng, via
+  the `espeakng-loader` wheel, British RP voice) and checked the results with measurements. Nobody has listened
+  to these files yet.
+- **espeak-ng is not built to speak isolated sounds.** My first pass produced letter *names* ("ess", "eye", "gee")
+  and silence, and my first audit let both through. What it does now, and what is and isn't verified:
+
+| Sounds | How they are made | What was checked (no ear involved) |
+|---|---|---|
+| a i o e u, s f h, p t k | espeak-ng phoneme input | The engine's own phoneme trace must equal the taught sound (e.g. `a` → æ, `u` → ʌ); duration; voicing; not silent |
+| m n l r, b d g | My own small source-filter synthesiser (`scripts/audio/formant.py`), because espeak renders a lone /b d g/ as pure silence and /m n l r/ as ~40 ms | Formant estimate (LPC) lands within 20% of textbook values; burst energy in the expected band. **This confirms the code does what I told it, not that it sounds like /m/.** |
+| 133 words | espeak-ng text-to-speech, RP voice | The engine's phoneme trace for each word must equal the sounds the grapheme table teaches; 133/133 match. "pass" was dropped because RP says /pɑːs/, not the taught /a/ |
+| 17 fixed phrases | espeak-ng | Duration only |
+
+Known weak points to listen for: stops are clipped bursts (~70-110 ms), so /p/ /t/ /k/ may sound faint or clicky;
+/b/ /d/ /g/ carry a short voiced release (a touch of "uh" is likely); the formant nasals and liquids are buzzy.
+**Open `/audio-check.html`** (also linked from the parent Sound map) to hear everything with its audit data and mark
+each item Good / Bad / Unsure, then export the marks as JSON. The spec's rule stands: *a wrong sound is the most
+damaging defect*, so nothing here should reach a child before a phonics specialist has heard every sound.
+The child's nickname cannot be pre-rendered, so it is never spoken; captions carry it.
 
 ## Findings: where the spec's own rules disagree or underperform
 
@@ -54,7 +79,7 @@ accuracy. Real children are not like that, so read these as relative comparisons
    counts, a child guessing at chance (33%) secured set 1 by a median of day 9, against day 6 for a 90% child.
    Prototype fix (`DAY_PASS` in `state.ts`, a decision to confirm): a day counts only with ≥2 graded first-try
    correct answers and ≥60% of that day's graded answers. After it, a 33% guesser never secures set 1 in 40 days;
-   45% takes ~26 days; 65% ~11; 90% ~6.
+   45% takes ~25 days; 65% ~11; 90% ~6.
 2. **Spaced review and the 3-day gate pull against each other.** My first scheduler (expanding Leitner intervals)
    pushed learned-but-not-yet-secure sounds out of review for days, so set 1 took ~22 days even for a 95%
    child. Fix: sounds not yet secure are always eligible for review; the schedule only binds once secure.
@@ -66,21 +91,21 @@ accuracy. Real children are not like that, so read these as relative comparisons
    as two /g/ sounds, which is the kind of error the linter is there to catch.
 5. **Day-1 sound cannot earn a mastery day on day 1**, because with only one letter known there is nothing to
    choose between, and one-choice trials are not graded.
-6. **Whole-set gating is a stall risk.** One stubborn sound holds the entire set (and all new content) back.
-   The spec gives no escape hatch; I did not add one. It needs a decision (e.g. open the next set once 3 of 4
-   are secure, or carry a hard sound forward).
-7. **MVP content is short.** For a 90%-accurate daily player the last new sound arrives around day 34 and all 23
-   are secure around day 41; after that the daily adventure has nothing new until stage 4 ships. Their rate is
-   ~4 sounds a week, the top of the spec's 2-4 target. The "10 CVC words within 6-8 weeks" target is reached in
-   about 3-4 weeks in simulation (6 weeks at 3 days a week), so it looks too easy to be an informative
-   threshold. That depends on my definition of "word read" (first-try correct on 2 different days).
+6. **Whole-set gating was a stall risk** (one stubborn sound held back all new content). Now decided and built: the
+   next set opens at 3 of 4 secure, and the 4th is carried forward (still reviewed, can still become secure). 2 of 4
+   is not enough. Tested.
+7. **MVP content is short.** For a 90%-accurate daily player the last new sound arrives around day 30 and all 23
+   are secure around day 37; after that the daily adventure has nothing new until stage 4 ships. That is
+   over 4 sounds a week, above the spec's 2-4 target for steady daily play. The "10 CVC words within 6-8 weeks"
+   target is reached in about 3 weeks in simulation (about 6 weeks at 3 days a week), so it looks too easy to be an
+   informative threshold. That depends on my definition of "word read" (first-try correct on 2 different days).
 8. **c, k and ck share /k/.** Distractor sets never offer them together, otherwise there would be two right
    answers (tested over 200 random draws per sound).
 
 ## Decisions I made that the spec did not
 
-- A set unlocks when **every** sound in it is secure; a new sound is introduced per day, once, even if the day
-  is replayed.
+- A set opens the next when **all but one** of its sounds are secure (your decision); a new sound is introduced
+  per day, once, even if the day is replayed.
 - "Word read" = first-try correct blending on 2 different days.
 - Placement can start a child at set 2-4 but seeds sounds as *learning*, never *secure*.
 - Rewards are deterministic: today's new sound's character, or a review sound on revision days.

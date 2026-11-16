@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Soundling · audio audition</title>
+<style>
+  body { font: 16px/1.45 system-ui, sans-serif; margin: 0; padding: 16px; max-width: 980px; margin-inline: auto; color: #16324a; background: #f6fbf8; }
+  h1 { margin: 0 0 4px; } h2 { margin-top: 28px; border-bottom: 2px solid #cfe3d6; padding-bottom: 4px; }
+  .note { background: #fff3c4; border: 2px solid #ffd24a; border-radius: 12px; padding: 10px 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+  .card { background: #fff; border: 2px solid #cfe3d6; border-radius: 14px; padding: 10px; }
+  .card.bad { border-color: #b3261e; background: #fdeceb; } .card.good { border-color: #2f8f5b; background: #eaf8ef; } .card.unsure { border-color: #c79a00; background: #fff8dd; }
+  .sym { font-size: 2rem; font-weight: 700; } .meta { font-size: 0.8rem; opacity: 0.8; }
+  button, select { font: inherit; min-height: 44px; min-width: 44px; border-radius: 10px; border: 2px solid #1d6b42; background: #fff; cursor: pointer; padding: 4px 10px; }
+  button.play { background: #ffd24a; border-color: #c79a00; }
+  .row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: 6px; }
+  .flag { color: #b3261e; font-weight: 600; }
+  input[type=search] { font: inherit; padding: 8px 12px; border-radius: 10px; border: 2px solid #1d6b42; min-width: 240px; }
+</style>
+</head>
+<body>
+<h1>Audio audition</h1>
+<p class="note"><strong>Everything here is machine-generated and nobody has listened to it yet.</strong> (It was built by an AI model, which cannot hear audio; it was only checked with measurements.)
+Play each item, then mark it Good / Bad / Unsure. Pay most attention to: a vowel tacked onto a consonant (“puh”, “buh”, “mm-uh”), a wrong vowel, a sound that is too quiet or too short to hear, and anything marked
+<em>formant-synth</em>. Your marks stay in this browser; use <em>Export</em> to save them.</p>
+<div class="row"><button id="export">Export marks (JSON)</button><button id="clear">Clear marks</button><span id="count"></span></div>
+
+<h2>Isolated sounds</h2><div class="grid" id="sounds"></div>
+<h2>Words <input type="search" id="q" placeholder="filter words…" aria-label="filter words" /></h2><div class="grid" id="words"></div>
+<h2>Phrases</h2><div class="grid" id="phrases"></div>
+
+<script>
+const KEY = 'soundling.audit.marks.v1';
+let marks = {}; try { marks = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(marks)); } catch {} count(); };
+const el = (t, props = {}, ...kids) => { const e = document.createElement(t); Object.assign(e, props); kids.forEach(k => e.append(k)); return e; };
+const ctx = new (window.AudioContext || window.webkitAudioContext)();
+const play = async (rel) => {
+  await ctx.resume();
+  const buf = await ctx.decodeAudioData(await (await fetch('./audio/' + rel)).arrayBuffer());
+  const s = ctx.createBufferSource(); s.buffer = buf; s.connect(ctx.destination); s.start();
+};
+const count = () => { const v = Object.values(marks); document.getElementById('count').textContent =
+  `${v.filter(x => x.v === 'good').length} good · ${v.filter(x => x.v === 'bad').length} bad · ${v.filter(x => x.v === 'unsure').length} unsure`; };
+
+function card(id, symbol, files, meta, flag) {
+  const c = el('div', { className: 'card' + (marks[id] ? ' ' + marks[id].v : '') });
+  const sel = el('select', { ariaLabel: 'verdict for ' + id });
+  [['', 'not checked'], ['good', 'Good'], ['bad', 'Bad'], ['unsure', 'Unsure']].forEach(([v, t]) => sel.append(el('option', { value: v, textContent: t })));
+  sel.value = marks[id]?.v || '';
+  const note = el('input', { type: 'text', placeholder: 'note', value: marks[id]?.n || '', ariaLabel: 'note for ' + id, style: 'width:100%;margin-top:6px;padding:6px;border-radius:8px;border:1px solid #9ab' });
+  const update = () => { if (!sel.value && !note.value) delete marks[id]; else marks[id] = { v: sel.value || 'unsure', n: note.value }; c.className = 'card' + (marks[id] ? ' ' + marks[id].v : ''); save(); };
+  sel.onchange = update; note.oninput = update;
+  c.append(el('div', { className: 'sym', textContent: symbol }),
+    el('div', { className: 'row' }, ...files.map((f, i) => el('button', { className: 'play', textContent: '▶ ' + (files.length > 1 ? i + 1 : ''), ariaLabel: 'play ' + id, onclick: () => play(f) })), sel),
+    el('div', { className: 'meta', textContent: meta }));
+  if (flag) c.append(el('div', { className: 'meta flag', textContent: flag }));
+  c.append(note);
+  return c;
+}
+
+(async () => {
+  const [m, a] = await Promise.all([fetch('./audio/manifest.json').then(r => r.json()), fetch('./audio/audit.json').then(r => r.json())]);
+  const S = document.getElementById('sounds');
+  for (const [k, files] of Object.entries(m.phonemes)) {
+    const ph = a.phonemes[k], f0 = ph.files[0];
+    const synth = f0.source === 'formant-synth';
+    S.append(card('sound:' + k, '/' + k + '/', files,
+      `${f0.source} · ${f0.ms} ms · expected ${ph.expected_ipa} · engine said ${ph.engine_ipa}` + (f0.self_check ? ' · ' + f0.self_check : ''),
+      synth ? 'Hand-built synthesis: highest audit priority.' : ''));
+  }
+  const W = document.getElementById('words');
+  const words = Object.keys(m.words).sort();
+  const drawWords = (q = '') => { W.replaceChildren(...words.filter(w => w.includes(q)).map(w => {
+    const e = a.words[w];
+    return card('word:' + w, w, [m.words[w]], `${e.status} · expected ${e.expected_ipa}`, e.status.startsWith('ok (built') ? 'Built from phonemes, not from the spelling.' : '');
+  })); };
+  drawWords(); document.getElementById('q').oninput = (e) => drawWords(e.target.value.trim().toLowerCase());
+  const P = document.getElementById('phrases');
+  for (const [k, rel] of Object.entries(m.phrases)) P.append(card('phrase:' + k, k, [rel], a.phrases[k].text));
+  count();
+})();
+document.getElementById('export').onclick = () => {
+  const blob = new Blob([JSON.stringify(marks, null, 1)], { type: 'application/json' });
+  const l = el('a', { href: URL.createObjectURL(blob), download: 'soundling-audio-marks.json' }); l.click();
+};
+document.getElementById('clear').onclick = () => { if (confirm('Clear all marks in this browser?')) { marks = {}; save(); location.reload(); } };
+</script>
+</body>
+</html>

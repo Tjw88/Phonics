@@ -1,3 +1,4 @@
+import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { BANK, GRAPHEMES, graphemesInSet } from './data';
 import { seeded } from './dates';
@@ -8,7 +9,7 @@ import {
 } from './session';
 import { simulate } from './simulate';
 import {
-  MASTERY_DAYS, choicesForTrial, introduce, isSecure, newChild, nextNewSound, recordTrial, recordWord,
+  MASTERY_DAYS, carriedForward, choicesForTrial, introduce, isSecure, newChild, nextNewSound, recordTrial, recordWord,
   statusOf, unlockedSet, wordsRead,
 } from './state';
 
@@ -99,16 +100,28 @@ describe('mastery gate', () => {
 });
 
 describe('set unlocking', () => {
-  it('opens set 2 only when every set-1 sound is secure', () => {
+  it('opens set 2 when 3 of the 4 set-1 sounds are secure, and carries the 4th forward', () => {
     const s = newChild();
     for (const id of ['s', 'a', 't', 'p']) introduce(s, id, D(1));
     expect(unlockedSet(s)).toBe(1);
-    expect(nextNewSound(s)).toBeNull(); // consolidation: nothing new until set 1 is secure
-    for (const id of ['s', 'a', 't']) for (const d of [1, 2, 3]) { good(s, id, D(d)); }
-    expect(unlockedSet(s)).toBe(1); // p is still learning
-    for (const d of [1, 2, 3]) good(s, 'p', D(d));
-    expect(unlockedSet(s)).toBe(2);
+    expect(nextNewSound(s)).toBeNull(); // nothing new until enough of set 1 is secure
+    for (const id of ['s', 'a']) for (const d of [1, 2, 3]) good(s, id, D(d));
+    expect(unlockedSet(s)).toBe(1); // 2 of 4
+    for (const d of [1, 2, 3]) good(s, 't', D(d));
+    expect(unlockedSet(s)).toBe(2); // 3 of 4
     expect(nextNewSound(s)?.id).toBe('i');
+    expect(carriedForward(s)).toEqual(['p']);
+    // the carried-forward sound is still reviewed even though a new set is open
+    expect(pickReview(s, D(9)).map((g) => g.id)).toContain('p');
+    // and it can still become secure later
+    for (const d of [4, 5, 6]) good(s, 'p', D(d));
+    expect(carriedForward(s)).toEqual([]);
+  });
+  it('2 of 4 is not enough: a child who knows half of a set does not move on', () => {
+    const s = newChild();
+    for (const id of ['s', 'a', 't', 'p']) introduce(s, id, D(1));
+    for (const id of ['s', 'a']) for (const d of [1, 2, 3]) good(s, id, D(d));
+    expect(unlockedSet(s)).toBe(1);
   });
 });
 
@@ -220,5 +233,24 @@ describe('pacing vs the spec’s success targets', () => {
     const firstWords = log.find((d) => d.wordsRead > 0);
     expect(firstWords).toBeDefined();
     expect(log.some((d) => d.consolidation)).toBe(true);
+  });
+});
+
+describe('generated audio stays in sync with the curriculum', () => {
+  const root = new URL('../../public/audio/', import.meta.url);
+  const manifest = JSON.parse(readFileSync(new URL('manifest.json', root), 'utf8')) as {
+    phonemes: Record<string, string[]>; words: Record<string, string>; sources: Record<string, string>;
+  };
+  const audit = JSON.parse(readFileSync(new URL('../../scripts/audio/audit.json', import.meta.url), 'utf8')) as { problems: string[] };
+
+  it('has a clip for every sound in the curriculum, and every file exists', () => {
+    for (const g of GRAPHEMES) expect(manifest.phonemes[g.phoneme], `phoneme /${g.phoneme}/`).toBeTruthy();
+    for (const files of Object.values(manifest.phonemes)) for (const f of files) expect(existsSync(new URL(f, root)), f).toBe(true);
+  });
+  it('has a clip for every word in the bank', () => {
+    for (const w of BANK) expect(manifest.words[w.text], `word "${w.text}"`).toBeTruthy();
+  });
+  it('the audio audit reported no mechanical problems', () => {
+    expect(audit.problems).toEqual([]);
   });
 });

@@ -2,7 +2,7 @@ import { type Grapheme, type Word } from '../engine/data';
 import { shuffle, type Rng } from '../engine/dates';
 import { BANK } from '../engine/data';
 import { phonemeOf, slashed, type PlacementItem } from '../engine/session';
-import { type ChildState } from '../engine/state';
+import { setOpensNext, type ChildState } from '../engine/state';
 import { blip, playSequence, praise, soft, speak, tap } from './audio';
 import { h, sleep } from './dom';
 
@@ -17,8 +17,18 @@ export interface Ctx {
 
 export interface TrialResult { firstTryCorrect: boolean; choices: number }
 
-const companion = (ctx: Ctx, extra = ''): HTMLElement =>
-  h('div', { class: `companion ${extra}`, 'aria-hidden': 'true' }, ctx.s.companion?.kind ?? '🦖');
+/** The companion grows: a new accessory for each set the child has (nearly) secured. Progress lives in the character. */
+const ACCESSORIES = ['', '🎀', '🧢', '🕶️', '👑'];
+export const growthLevel = (s: ChildState): number => {
+  let n = 0;
+  for (let set = 1; set <= 5 && setOpensNext(s, set); set++) n++;
+  return Math.min(n, ACCESSORIES.length - 1);
+};
+export const companionEl = (s: ChildState, extra = '', testid?: string): HTMLElement =>
+  h('div', { class: `companion ${extra}`, 'aria-hidden': 'true', 'data-testid': testid, 'data-growth': growthLevel(s) },
+    s.companion?.kind ?? '🦖',
+    growthLevel(s) ? h('span', { class: 'acc' }, ACCESSORIES[growthLevel(s)]) : null);
+const companion = (ctx: Ctx, extra = ''): HTMLElement => companionEl(ctx.s, extra);
 
 const caption = (text: string): HTMLElement => h('p', { class: 'caption', 'data-testid': 'caption' }, text);
 
@@ -31,7 +41,7 @@ const wait = (ms: number) => sleep(ms);
 export const feedCreature = async (ctx: Ctx, target: Grapheme, options: Grapheme[]): Promise<TrialResult> => {
   const choices = options.length;
   ctx.hint(`Ask: "What else starts with ${slashed(target.id)}?" Say the sound, not the letter name.`);
-  const mouth = h('div', { class: 'mouth', 'data-testid': 'mouth', 'aria-hidden': 'true' }, '👄');
+  const mouth = h('div', { class: 'mouth', 'data-testid': 'mouth', 'aria-hidden': 'true' }, '😮');
   const say = () => blip(phonemeOf(target.id));
   const prompt = h('button', {
     class: 'btn soundbtn', 'data-testid': 'replay', 'aria-label': `Hear the sound ${slashed(target.id)} again`,
@@ -47,6 +57,7 @@ export const feedCreature = async (ctx: Ctx, target: Grapheme, options: Grapheme
     if (g.id === target.id) {
       tile.dataset.busy = '1';
       tile.classList.add('eaten');
+      mouth.classList.add('chomp');
       praise();
       await wait(650);
       resolve({ firstTryCorrect: firstTry, choices });
@@ -72,6 +83,7 @@ export const feedCreature = async (ctx: Ctx, target: Grapheme, options: Grapheme
       start = { x: e.clientX, y: e.clientY };
       tile.setPointerCapture(e.pointerId);
       tile.classList.add('dragging');
+      mouth.classList.add('hot');
     });
     tile.addEventListener('pointermove', (e) => {
       if (!start) return;
@@ -82,6 +94,7 @@ export const feedCreature = async (ctx: Ctx, target: Grapheme, options: Grapheme
       const moved = Math.hypot(e.clientX - start.x, e.clientY - start.y);
       start = null;
       tile.classList.remove('dragging');
+      mouth.classList.remove('hot');
       tile.style.transform = '';
       const m = mouth.getBoundingClientRect();
       const overMouth = e.clientX >= m.left - 30 && e.clientX <= m.right + 30 && e.clientY >= m.top - 30 && e.clientY <= m.bottom + 30;
@@ -105,7 +118,7 @@ export const feedCreature = async (ctx: Ctx, target: Grapheme, options: Grapheme
   ctx.stage.replaceChildren(
     h('div', { class: 'scene feed' },
       caption(`I’m hungry for ${slashed(target.id)}!`),
-      h('div', { class: 'row creature-row' }, companion(ctx, 'big'), mouth),
+      h('div', { class: 'row creature-row' }, mouth, companion(ctx, 'big')),
       prompt,
       h('div', { class: 'row tiles', 'data-testid': 'tiles' }, tiles),
     ),
@@ -247,6 +260,9 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
   const done = new Promise<TrialResult>((r) => (resolve = r));
   const choicesBox = h('div', { class: 'row tiles words', 'data-testid': 'wordchoices' });
   const options = shuffle([word, ...distractors], ctx.rng);
+  const slots = word.graphemes.map(() => h('span', { class: 'slot', 'aria-hidden': 'true' }));
+  const walker = companionEl(ctx.s, 'walker');
+  const bridge = h('div', { class: 'bridge', 'data-testid': 'bridge' }, walker, h('div', { class: 'planks' }, slots), h('span', { class: 'far', 'aria-hidden': 'true' }, '🏝️'));
 
   const showChoices = () => {
     choicesBox.replaceChildren(
@@ -260,7 +276,7 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
             praise();
             speak(word.text);
             bridge.classList.add('built');
-            await wait(1000);
+            await wait(1400);
             resolve({ firstTryCorrect: firstTry, choices: options.length });
           } else {
             firstTry = false;
@@ -269,6 +285,7 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
             soft();
             next = 0; // gently start the sound buttons again
             buttons.forEach((x) => x.classList.remove('hit'));
+            slots.forEach((x) => x.classList.remove('filled'));
             choicesBox.replaceChildren();
             caps.textContent = 'Let’s tap the sounds again.';
           }
@@ -295,6 +312,7 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
       }
       blip(phonemeOf(g));
       b.classList.add('hit');
+      slots[i]?.classList.add('filled');
       next++;
       if (next === word.graphemes.length) setTimeout(showChoices, 500);
     });
@@ -303,9 +321,8 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
   const letters = word.graphemes.map((g, i) =>
     h('div', { class: 'gcol' }, h('span', { class: 'glyph' }, g), buttons[i]),
   );
-  const bridge = h('div', { class: 'bridge' }, h('span', { class: 'plank' }, '🪵'), '🌉');
   ctx.stage.replaceChildren(
-    h('div', { class: 'scene' }, caps, h('div', { class: 'row word', 'data-testid': 'word' }, letters), choicesBox, bridge),
+    h('div', { class: 'scene' }, caps, h('div', { class: 'row word', 'data-testid': 'word' }, letters), bridge, choicesBox),
   );
   return done;
 };

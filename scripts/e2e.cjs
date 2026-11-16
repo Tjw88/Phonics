@@ -4,7 +4,10 @@ const { chromium } = require('playwright');
 const url = process.argv[2] || 'http://localhost:4173/';
 const shots = process.argv[3] || '/tmp';
 const log = (...a) => console.log(...a);
+const [VW, VH] = (process.env.VP || '1180x820').split('x').map(Number);
+const MOBILE = VW < 600;
 let failures = 0;
+const errors = [];
 const check = (cond, msg) => { if (cond) log('  ✓', msg); else { failures++; log('  ✗', msg); } };
 
 async function passGate(page) {
@@ -50,9 +53,9 @@ async function playAdventure(page, { wrongFirst = false, shot } = {}) {
       if (shot && !seen.has('bridge')) { seen.add('bridge'); await page.screenshot({ path: `${shots}/${shot}-bridge.png` }); }
       const n = await page.locator('[data-testid=soundbutton]').count();
       for (let i = 0; i < n; i++) { await page.locator('[data-testid=soundbutton]').nth(i).click(); await page.waitForTimeout(80); }
-      await page.waitForSelector('[data-testid=wordchoice]');
+      await page.waitForSelector('[data-testid=wordchoice]', { timeout: 6000 }).catch(async (e) => { await page.screenshot({ path: `${shots}/DEBUG-bridge.png` }); console.log((await page.innerHTML('#stage')).slice(0, 1500)); throw e; });
       await page.locator('[data-testid=wordchoice][data-answer="1"]').click();
-      await page.waitForTimeout(1200);
+      await page.waitForSelector('[data-testid=wordchoice]', { state: 'detached', timeout: 8000 }); // wait for the scene to change, not a fixed sleep
     } else {
       for (const id of ['story-next', 'alive-next', 'goodnight', 'sleep-next', 'next']) {
         if (await has(id)) {
@@ -69,9 +72,8 @@ async function playAdventure(page, { wrongFirst = false, shot } = {}) {
 
 (async () => {
   const browser = await chromium.launch();
-  const ctx = await browser.newContext({ viewport: { width: 1180, height: 820 }, deviceScaleFactor: 1 });
+  const ctx = await browser.newContext({ viewport: { width: VW, height: VH }, deviceScaleFactor: 1, hasTouch: MOBILE, isMobile: MOBILE });
   const page = await ctx.newPage();
-  const errors = [];
   page.on('pageerror', (e) => errors.push(String(e)));
   page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
   const externalRequests = [];
@@ -144,7 +146,7 @@ async function playAdventure(page, { wrongFirst = false, shot } = {}) {
   await page.screenshot({ path: `${shots}/parent-sounds-day9.png` });
 
   log('FROM SCRATCH (fails placement, day 1 is oral only: no print)');
-  const pageC = await (await browser.newContext({ viewport: { width: 1180, height: 820 } })).newPage();
+  const pageC = await (await browser.newContext({ viewport: { width: VW, height: VH }, hasTouch: MOBILE, isMobile: MOBILE })).newPage();
   const errC = [];
   pageC.on('pageerror', (e) => errC.push(String(e)));
   await pageC.goto(url);
@@ -167,7 +169,7 @@ async function playAdventure(page, { wrongFirst = false, shot } = {}) {
   check(errC.length === 0, 'no page errors on the from-scratch path');
 
   log('BAND B (ages 2-3, Sound Play, co-play only)');
-  const pageB = await (await browser.newContext({ viewport: { width: 1180, height: 820 } })).newPage();
+  const pageB = await (await browser.newContext({ viewport: { width: VW, height: VH }, hasTouch: MOBILE, isMobile: MOBILE })).newPage();
   await pageB.goto(url);
   await passGate(pageB);
   await pageB.fill('[data-testid=nick]', 'Wee');
@@ -195,4 +197,4 @@ async function playAdventure(page, { wrongFirst = false, shot } = {}) {
   await browser.close();
   log(failures ? `\n${failures} FAILED` : '\nALL PASSED');
   process.exit(failures ? 1 : 0);
-})().catch((e) => { console.error(e); process.exit(1); });
+})().catch((e) => { console.error(e); if (errors.length) console.error('PAGE ERRORS:', errors); process.exit(1); });

@@ -1,0 +1,1307 @@
+{
+ "graphemes": [
+  {
+   "id": "s",
+   "set": 1,
+   "phoneme": "s"
+  },
+  {
+   "id": "a",
+   "set": 1,
+   "phoneme": "a"
+  },
+  {
+   "id": "t",
+   "set": 1,
+   "phoneme": "t"
+  },
+  {
+   "id": "p",
+   "set": 1,
+   "phoneme": "p"
+  },
+  {
+   "id": "i",
+   "set": 2,
+   "phoneme": "i"
+  },
+  {
+   "id": "n",
+   "set": 2,
+   "phoneme": "n"
+  },
+  {
+   "id": "m",
+   "set": 2,
+   "phoneme": "m"
+  },
+  {
+   "id": "d",
+   "set": 2,
+   "phoneme": "d"
+  },
+  {
+   "id": "g",
+   "set": 3,
+   "phoneme": "g"
+  },
+  {
+   "id": "o",
+   "set": 3,
+   "phoneme": "o"
+  },
+  {
+   "id": "c",
+   "set": 3,
+   "phoneme": "k"
+  },
+  {
+   "id": "k",
+   "set": 3,
+   "phoneme": "k"
+  },
+  {
+   "id": "ck",
+   "set": 4,
+   "phoneme": "k"
+  },
+  {
+   "id": "e",
+   "set": 4,
+   "phoneme": "e"
+  },
+  {
+   "id": "u",
+   "set": 4,
+   "phoneme": "u"
+  },
+  {
+   "id": "r",
+   "set": 4,
+   "phoneme": "r"
+  },
+  {
+   "id": "h",
+   "set": 5,
+   "phoneme": "h"
+  },
+  {
+   "id": "b",
+   "set": 5,
+   "phoneme": "b"
+  },
+  {
+   "id": "f",
+   "set": 5,
+   "phoneme": "f"
+  },
+  {
+   "id": "ff",
+   "set": 5,
+   "phoneme": "f"
+  },
+  {
+   "id": "l",
+   "set": 5,
+   "phoneme": "l"
+  },
+  {
+   "id": "ll",
+   "set": 5,
+   "phoneme": "l"
+  },
+  {
+   "id": "ss",
+   "set": 5,
+   "phoneme": "s"
+  }
+ ],
+ "words": [
+  {
+   "text": "at",
+   "graphemes": [
+    "a",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "sat",
+   "graphemes": [
+    "s",
+    "a",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "pat",
+   "graphemes": [
+    "p",
+    "a",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "tap",
+   "graphemes": [
+    "t",
+    "a",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "sap",
+   "graphemes": [
+    "s",
+    "a",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "in",
+   "graphemes": [
+    "i",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "it",
+   "graphemes": [
+    "i",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "an",
+   "graphemes": [
+    "a",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "am",
+   "graphemes": [
+    "a",
+    "m"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "ad",
+   "graphemes": [
+    "a",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "sit",
+   "graphemes": [
+    "s",
+    "i",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "sip",
+   "graphemes": [
+    "s",
+    "i",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "tip",
+   "graphemes": [
+    "t",
+    "i",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "tin",
+   "graphemes": [
+    "t",
+    "i",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "pin",
+   "graphemes": [
+    "p",
+    "i",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "pit",
+   "graphemes": [
+    "p",
+    "i",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "pan",
+   "graphemes": [
+    "p",
+    "a",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "man",
+   "graphemes": [
+    "m",
+    "a",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "map",
+   "graphemes": [
+    "m",
+    "a",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "mat",
+   "graphemes": [
+    "m",
+    "a",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "mad",
+   "graphemes": [
+    "m",
+    "a",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "sad",
+   "graphemes": [
+    "s",
+    "a",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "dad",
+   "graphemes": [
+    "d",
+    "a",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "did",
+   "graphemes": [
+    "d",
+    "i",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "dip",
+   "graphemes": [
+    "d",
+    "i",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "nap",
+   "graphemes": [
+    "n",
+    "a",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "nip",
+   "graphemes": [
+    "n",
+    "i",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "tan",
+   "graphemes": [
+    "t",
+    "a",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "pad",
+   "graphemes": [
+    "p",
+    "a",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "dam",
+   "graphemes": [
+    "d",
+    "a",
+    "m"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "dog",
+   "graphemes": [
+    "d",
+    "o",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "dig",
+   "graphemes": [
+    "d",
+    "i",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "dot",
+   "graphemes": [
+    "d",
+    "o",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "got",
+   "graphemes": [
+    "g",
+    "o",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "gap",
+   "graphemes": [
+    "g",
+    "a",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "cat",
+   "graphemes": [
+    "c",
+    "a",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "cap",
+   "graphemes": [
+    "c",
+    "a",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "can",
+   "graphemes": [
+    "c",
+    "a",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "cot",
+   "graphemes": [
+    "c",
+    "o",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "kid",
+   "graphemes": [
+    "k",
+    "i",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "kit",
+   "graphemes": [
+    "k",
+    "i",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "pig",
+   "graphemes": [
+    "p",
+    "i",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "pot",
+   "graphemes": [
+    "p",
+    "o",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "pop",
+   "graphemes": [
+    "p",
+    "o",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "top",
+   "graphemes": [
+    "t",
+    "o",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "mop",
+   "graphemes": [
+    "m",
+    "o",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "not",
+   "graphemes": [
+    "n",
+    "o",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "nod",
+   "graphemes": [
+    "n",
+    "o",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "pod",
+   "graphemes": [
+    "p",
+    "o",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "on",
+   "graphemes": [
+    "o",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "rock",
+   "graphemes": [
+    "r",
+    "o",
+    "ck"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "sock",
+   "graphemes": [
+    "s",
+    "o",
+    "ck"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "pack",
+   "graphemes": [
+    "p",
+    "a",
+    "ck"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "tack",
+   "graphemes": [
+    "t",
+    "a",
+    "ck"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "neck",
+   "graphemes": [
+    "n",
+    "e",
+    "ck"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "peck",
+   "graphemes": [
+    "p",
+    "e",
+    "ck"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "deck",
+   "graphemes": [
+    "d",
+    "e",
+    "ck"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "pen",
+   "graphemes": [
+    "p",
+    "e",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "ten",
+   "graphemes": [
+    "t",
+    "e",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "net",
+   "graphemes": [
+    "n",
+    "e",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "pet",
+   "graphemes": [
+    "p",
+    "e",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "men",
+   "graphemes": [
+    "m",
+    "e",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "red",
+   "graphemes": [
+    "r",
+    "e",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "run",
+   "graphemes": [
+    "r",
+    "u",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "rat",
+   "graphemes": [
+    "r",
+    "a",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "rip",
+   "graphemes": [
+    "r",
+    "i",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "rid",
+   "graphemes": [
+    "r",
+    "i",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "ram",
+   "graphemes": [
+    "r",
+    "a",
+    "m"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "rug",
+   "graphemes": [
+    "r",
+    "u",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "rub",
+   "graphemes": [
+    "r",
+    "u",
+    "b"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "sun",
+   "graphemes": [
+    "s",
+    "u",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "mud",
+   "graphemes": [
+    "m",
+    "u",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "mug",
+   "graphemes": [
+    "m",
+    "u",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "mum",
+   "graphemes": [
+    "m",
+    "u",
+    "m"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "cup",
+   "graphemes": [
+    "c",
+    "u",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "pup",
+   "graphemes": [
+    "p",
+    "u",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "up",
+   "graphemes": [
+    "u",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "us",
+   "graphemes": [
+    "u",
+    "s"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "cut",
+   "graphemes": [
+    "c",
+    "u",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "nut",
+   "graphemes": [
+    "n",
+    "u",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "gum",
+   "graphemes": [
+    "g",
+    "u",
+    "m"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "tug",
+   "graphemes": [
+    "t",
+    "u",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "dug",
+   "graphemes": [
+    "d",
+    "u",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "egg",
+   "graphemes": [
+    "e",
+    "gg"
+   ],
+   "oralOnly": true
+  },
+  {
+   "text": "hat",
+   "graphemes": [
+    "h",
+    "a",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "hot",
+   "graphemes": [
+    "h",
+    "o",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "hit",
+   "graphemes": [
+    "h",
+    "i",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "hen",
+   "graphemes": [
+    "h",
+    "e",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "hug",
+   "graphemes": [
+    "h",
+    "u",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "hut",
+   "graphemes": [
+    "h",
+    "u",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "bed",
+   "graphemes": [
+    "b",
+    "e",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "big",
+   "graphemes": [
+    "b",
+    "i",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "bag",
+   "graphemes": [
+    "b",
+    "a",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "bus",
+   "graphemes": [
+    "b",
+    "u",
+    "s"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "bug",
+   "graphemes": [
+    "b",
+    "u",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "bun",
+   "graphemes": [
+    "b",
+    "u",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "bat",
+   "graphemes": [
+    "b",
+    "a",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "bit",
+   "graphemes": [
+    "b",
+    "i",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "bib",
+   "graphemes": [
+    "b",
+    "i",
+    "b"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fan",
+   "graphemes": [
+    "f",
+    "a",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fun",
+   "graphemes": [
+    "f",
+    "u",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fit",
+   "graphemes": [
+    "f",
+    "i",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fog",
+   "graphemes": [
+    "f",
+    "o",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "off",
+   "graphemes": [
+    "o",
+    "ff"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "puff",
+   "graphemes": [
+    "p",
+    "u",
+    "ff"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "huff",
+   "graphemes": [
+    "h",
+    "u",
+    "ff"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "cuff",
+   "graphemes": [
+    "c",
+    "u",
+    "ff"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fill",
+   "graphemes": [
+    "f",
+    "i",
+    "ll"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fell",
+   "graphemes": [
+    "f",
+    "e",
+    "ll"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "bell",
+   "graphemes": [
+    "b",
+    "e",
+    "ll"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "doll",
+   "graphemes": [
+    "d",
+    "o",
+    "ll"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "hill",
+   "graphemes": [
+    "h",
+    "i",
+    "ll"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "pill",
+   "graphemes": [
+    "p",
+    "i",
+    "ll"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "mill",
+   "graphemes": [
+    "m",
+    "i",
+    "ll"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "tell",
+   "graphemes": [
+    "t",
+    "e",
+    "ll"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "sell",
+   "graphemes": [
+    "s",
+    "e",
+    "ll"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "bill",
+   "graphemes": [
+    "b",
+    "i",
+    "ll"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "lip",
+   "graphemes": [
+    "l",
+    "i",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "lap",
+   "graphemes": [
+    "l",
+    "a",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "leg",
+   "graphemes": [
+    "l",
+    "e",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "log",
+   "graphemes": [
+    "l",
+    "o",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "let",
+   "graphemes": [
+    "l",
+    "e",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "lid",
+   "graphemes": [
+    "l",
+    "i",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "lit",
+   "graphemes": [
+    "l",
+    "i",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "mess",
+   "graphemes": [
+    "m",
+    "e",
+    "ss"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "miss",
+   "graphemes": [
+    "m",
+    "i",
+    "ss"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "kiss",
+   "graphemes": [
+    "k",
+    "i",
+    "ss"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "hiss",
+   "graphemes": [
+    "h",
+    "i",
+    "ss"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "moss",
+   "graphemes": [
+    "m",
+    "o",
+    "ss"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "boss",
+   "graphemes": [
+    "b",
+    "o",
+    "ss"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fuss",
+   "graphemes": [
+    "f",
+    "u",
+    "ss"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "less",
+   "graphemes": [
+    "l",
+    "e",
+    "ss"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "mass",
+   "graphemes": [
+    "m",
+    "a",
+    "ss"
+   ],
+   "oralOnly": false
+  }
+ ]
+}

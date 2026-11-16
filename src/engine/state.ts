@@ -75,12 +75,29 @@ export const setSecure = (s: ChildState, set: number): boolean =>
   graphemesInSet(set).every((g) => isSecure(s, g.id));
 
 /**
- * Highest unlocked set. Placement can open later sets directly; otherwise set N+1 opens only when
- * every sound in set N is secure (spec: "a sound unlocks the next set" - read here as the whole set).
+ * A set "opens the next one" when all but one of its sounds are secure (3 of 4). The one that is not yet
+ * secure is carried forward: it stays introduced, is always eligible for review, and can still earn its three days.
+ * Strict whole-set gating let one stubborn sound hold back all new content.
+ */
+export const setOpensNext = (s: ChildState, set: number): boolean => {
+  const ids = graphemesInSet(set).map((g) => g.id);
+  const secure = ids.filter((id) => isSecure(s, id)).length;
+  return secure >= Math.max(1, ids.length - 1);
+};
+
+/** Sounds introduced and not yet secure that sit in an earlier set than the highest unlocked one. */
+export const carriedForward = (s: ChildState): string[] => {
+  const open = unlockedSet(s);
+  return GRAPHEMES.filter((g) => g.set < open && s.sounds[g.id] && !isSecure(s, g.id)).map((g) => g.id);
+};
+
+/**
+ * Highest unlocked set. Placement can open later sets directly; otherwise set N+1 opens when set N
+ * has all but one sound secure (see setOpensNext).
  */
 export const unlockedSet = (s: ChildState): number => {
   let n = Math.max(1, s.startSet);
-  while (n < MAX_SET && setSecure(s, n)) n++;
+  while (n < MAX_SET && setOpensNext(s, n)) n++;
   return n;
 };
 
