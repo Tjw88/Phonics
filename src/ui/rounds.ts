@@ -1,8 +1,8 @@
 // One "round" of each game: builds the trial from the child's state, runs the game, and records the result.
 // The adventure and Free Play both use these, so a game behaves identically wherever it is played.
-import { bankFor, type Grapheme, type Word } from '../engine/data';
+import { bankFor, isConfusable, type Grapheme, type Word } from '../engine/data';
 import { shuffle } from '../engine/dates';
-import { buildFeedTrial, buildKitchenTiles, buildSafari, decodableWords, phonemeOf } from '../engine/session';
+import { buildFeedTrial, buildKitchenTiles, buildSafari, decodableWords, phonemeOf, pickDistractors } from '../engine/session';
 import { recordTrial, recordWord } from '../engine/state';
 import { bridgeBuilder, feedCreature, rhymeRocket, rhymeSets, robotTalk, type Ctx, type TrialResult } from './games';
 import { beatDrum, soundSafari, traceTrail, wordKitchen } from './games2';
@@ -29,8 +29,7 @@ export const roundFeed = async (ctx: Ctx, g: Grapheme, trialIndex: number): Prom
 };
 
 export const roundRobot = (ctx: Ctx, w: Word, i: number): Promise<TrialResult> => {
-  const others = shuffle(pictured(ctx).filter((x) => x.text !== w.text && x.graphemes[0] !== w.graphemes[0]), ctx.rng).slice(0, Math.min(3, i + 1));
-  return robotTalk(ctx, w, others);
+  return robotTalk(ctx, w, pickDistractors(pictured(ctx), w, Math.min(3, i + 1), ctx.rng));
 };
 
 export const roundDrum = (ctx: Ctx, w: Word): Promise<TrialResult> => beatDrum(ctx, w);
@@ -51,7 +50,7 @@ export const roundBridge = async (ctx: Ctx, w: Word): Promise<TrialResult> => {
 export const roundRhyme = (ctx: Ctx): Promise<TrialResult> => {
   const [grp] = shuffle(rhymeSets(ctx.s.accent), ctx.rng);
   const [a, b] = shuffle(grp as Word[], ctx.rng) as [Word, Word];
-  const others = shuffle(pictured(ctx).filter((x) => !(grp as Word[]).includes(x)), ctx.rng).slice(0, 2);
+  const others = shuffle(pictured(ctx).filter((x) => !(grp as Word[]).includes(x) && !(grp as Word[]).some((g) => isConfusable(g.text, x.text))), ctx.rng).slice(0, 2);
   return rhymeRocket(ctx, a, b, others);
 };
 

@@ -11,6 +11,7 @@ import {
 } from '../engine/state';
 import { audioSource, blip, initAudio, praise, sayPhrase, setMuted, setMusicOn, sfx, speak, tap, unlockAudio } from './audio';
 import { friendEl } from './friends';
+import { pictureEl } from './pictures';
 import { GAME_LABEL, availableGames, roundBridge, roundDrum, roundFeed, roundKitchen, roundRhyme, roundRobot, roundSafari, roundTrace, type GameKind } from './rounds';
 import { DINOS, chestSVG, eggSVG, islandSVG, sceneSVG } from './art';
 import { burst, mount, setNight } from './fx';
@@ -329,7 +330,7 @@ export class App {
       const { word, mode } = plan.makeItReal;
       if (mode === 'print') await roundBridge(ctx, word);
       else await roundRobot(ctx, word, 1);
-      const aliveEl = h('div', { class: 'alive-word', 'data-testid': 'alive' }, h('span', { class: 'alive-rays' }), h('span', { class: 'alive-pic' }, word.emoji ?? '✨'));
+      const aliveEl = h('div', { class: 'alive-word', 'data-testid': 'alive' }, h('span', { class: 'alive-rays' }), h('span', { class: 'alive-pic' }, pictureEl(word.text, word.emoji ?? '✨')));
       setTimeout(() => { burst(aliveEl, 'confetti', 20); sfx.sparkle(); speak(word.text); }, 350);
       await this.interlude([
         aliveEl,

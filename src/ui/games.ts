@@ -3,6 +3,7 @@ import { shuffle, type Rng } from '../engine/dates';
 import { phonemeOf, slashed, type PlacementItem } from '../engine/session';
 import { setOpensNext, type ChildState } from '../engine/state';
 import { dinoMouthPct, robotSVG, rocketSVG, dinoSVG } from './art';
+import { pictureEl } from './pictures';
 import { blip, playSequence, praise, sfx, soft, speak, tap } from './audio';
 import { h, sleep } from './dom';
 import { burst, mount, skippableWait } from './fx';
@@ -204,7 +205,7 @@ export const robotTalk = async (ctx: Ctx, word: Word, distractors: Word[]): Prom
     const b = h('button', {
       class: `tile pic card${i % 3}`, 'data-testid': 'pic', 'data-answer': w === word ? '1' : '0', 'aria-label': 'picture choice',
       style: `animation-delay:${i * 110}ms`,
-    }, h('span', { class: 'emoji' }, w.emoji ?? '❔'));
+    }, pictureEl(w.text, w.emoji));
     b.addEventListener('click', async () => {
       tap();
       sfx.pop();
@@ -268,7 +269,7 @@ export const rhymeRocket = async (ctx: Ctx, target: Word, answer: Word, distract
     const b = h('button', {
       class: `tile pic card${i % 3}`, 'data-testid': 'pic', 'data-answer': w === answer ? '1' : '0', 'aria-label': 'picture choice',
       style: `animation-delay:${i * 110}ms`,
-    }, h('span', { class: 'emoji' }, w.emoji ?? '❔'));
+    }, pictureEl(w.text, w.emoji));
     b.addEventListener('click', async () => {
       tap();
       sfx.pop();
@@ -300,7 +301,7 @@ export const rhymeRocket = async (ctx: Ctx, target: Word, answer: Word, distract
       caption('Which one rhymes? Fuel the rocket!'),
       h('div', { class: 'skypanel' },
         h('button', { class: 'tile pic target', 'data-testid': 'rhyme-target', onClick: () => { tap(); speak(target.text); }, 'aria-label': 'hear the word' },
-          h('span', { class: 'emoji' }, target.emoji ?? '❔')),
+          pictureEl(target.text, target.emoji)),
         rocket, fuel),
       h('div', { class: 'row tiles', 'data-testid': 'pics' }, pics),
     ),

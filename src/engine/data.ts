@@ -69,7 +69,7 @@ const rows: Row[] = [
   ['d-a-d'], ['d-i-d'], ['d-i-p'], ['n-a-p'], ['n-i-p'], ['t-a-n'], ['p-a-d'], ['d-a-m'],
   // set 3
   ['d-o-g', '🐶', 'd'], ['d-i-g', undefined, 'd'], ['d-o-t'], ['g-o-t'], ['g-a-p'],
-  ['c-a-t', '🐱'], ['c-a-p', '🧢'], ['c-a-n'], ['c-o-t'], ['k-i-d', '🧒'], ['k-i-t'],
+  ['c-a-t', '🐱'], ['c-a-p'], ['c-a-n'], ['c-o-t'], ['k-i-d', '🧒'], ['k-i-t'],
   ['p-i-g', '🐷'], ['p-o-t', '🍲'], ['p-o-p'], ['t-o-p'], ['m-o-p', '🧹'], ['n-o-t'], ['n-o-d'], ['p-o-d'],
   ['o-n'],
   // set 4
@@ -80,14 +80,14 @@ const rows: Row[] = [
   ['u-p'], ['u-s'], ['c-u-t'], ['n-u-t', '🥜'], ['g-u-m'], ['t-u-g'], ['d-u-g', undefined, 'd'],
   ['e-gg', '🥚', 'od'], // spec lists "egg" as decodable; "gg" is not in sets 1-5, so oral-only
   // set 5
-  ['h-a-t', '🎩'], ['h-o-t', '🌋', 'd'], ['h-i-t'], ['h-e-n', '🐔'], ['h-u-g'], ['h-u-t'],
-  ['b-e-d', '🛏️'], ['b-i-g', undefined, 'd'], ['b-a-g', '👜'], ['b-u-s', '🚌'], ['b-u-g', '🐞'],
+  ['h-a-t', '🎩'], ['h-o-t', undefined, 'd'], ['h-i-t'], ['h-e-n', '🐔'], ['h-u-g'], ['h-u-t'],
+  ['b-e-d', '🛏️'], ['b-i-g', undefined, 'd'], ['b-a-g', '👜'], ['b-u-s', '🚌'], ['b-u-g'],
   ['b-u-n'], ['b-a-t', '🦇'], ['b-i-t'], ['b-i-b'],
-  ['f-a-n'], ['f-u-n'], ['f-i-t'], ['f-o-g', '🌫️', 'd'], ['o-ff'], ['p-u-ff'], ['h-u-ff'], ['c-u-ff'],
+  ['f-a-n'], ['f-u-n'], ['f-i-t'], ['f-o-g', undefined, 'd'], ['o-ff'], ['p-u-ff'], ['h-u-ff'], ['c-u-ff'],
   ['f-i-ll'], ['f-e-ll'], ['b-e-ll', '🔔'], ['d-o-ll', '🪆'], ['h-i-ll', '⛰️', 'd'], ['p-i-ll'], ['m-i-ll'],
   ['t-e-ll'], ['s-e-ll'], ['b-i-ll'],
-  ['l-i-p', '👄'], ['l-a-p'], ['l-e-g', '🦵'], ['l-o-g', '🪵', 'd'], ['l-e-t'], ['l-i-d'], ['l-i-t'],
-  ['m-e-ss'], ['m-i-ss'], ['k-i-ss'], ['h-i-ss'], ['m-o-ss', '🌿', 'd'], ['b-o-ss'], ['f-u-ss'], ['l-e-ss'],
+  ['l-i-p', '👄'], ['l-a-p'], ['l-e-g'], ['l-o-g', '🪵', 'd'], ['l-e-t'], ['l-i-d'], ['l-i-t'],
+  ['m-e-ss'], ['m-i-ss'], ['k-i-ss'], ['h-i-ss'], ['m-o-ss', undefined, 'd'], ['b-o-ss'], ['f-u-ss'], ['l-e-ss'],
   ['p-a-ss'], ['m-a-ss'], // "pass": RP /pɑːs/ (BATH vowel) clashes with the taught /a/, so it is excluded per accent (ACCENT_EXCLUDE)
 ];
 
@@ -130,16 +130,16 @@ export const SAFARI: SafariItem[] = [
   ...sf('a', [['ant', '🐜'], ['apple', '🍎'], ['alligator', '🐊'], ['axe', '🪓']]),
   ...sf('t', [['tap', '🚰'], ['tiger', '🐯'], ['tent', '⛺'], ['turtle', '🐢'], ['tooth', '🦷'], ['train', '🚂']]),
   ...sf('p', [['pig', '🐷'], ['pen', '🖊️'], ['pizza', '🍕'], ['panda', '🐼'], ['parrot', '🦜'], ['pear', '🍐']]),
-  ...sf('i', [['insect', '🐛'], ['ink', '🖋️'], ['iguana', '🦎']]),
+  ...sf('i', [['igloo', '🛖'], ['ink', '🖋️']]), // (insect and iguana dropped: a picture of "a small creature" cannot say which word)
   ...sf('n', [['nut', '🥜'], ['net', '🥅'], ['nest', '🪺'], ['nose', '👃'], ['nail', '💅']]),
   ...sf('m', [['mouse', '🐭'], ['map', '🗺️'], ['moon', '🌙'], ['mug', '☕'], ['monkey', '🐒'], ['milk', '🥛']]),
   ...sf('d', [['dog', '🐶'], ['drum', '🥁'], ['duck', '🦆'], ['door', '🚪'], ['dolphin', '🐬']]),
-  ...sf('g', [['goat', '🐐'], ['grapes', '🍇'], ['gift', '🎁'], ['guitar', '🎸'], ['gorilla', '🦍']]),
-  ...sf('o', [['octopus', '🐙'], ['orange', '🍊'], ['otter', '🦦'], ['ox', '🐂']]),
+  ...sf('g', [['goat', '🐐'], ['grapes', '🍇'], ['gift', '🎁'], ['guitar', '🎸']]), // gorilla dropped: reads as "monkey"
+  ...sf('o', [['octopus', '🐙'], ['orange', '🍊']]), // ox (reads as cow) and otter (unfamiliar) dropped
   ...sf('k', [['cat', '🐱'], ['cup', '🥤'], ['cow', '🐄'], ['kite', '🪁'], ['key', '🔑'], ['camel', '🐫'], ['car', '🚗'], ['cake', '🎂']]),
   ...sf('e', [['egg', '🥚'], ['elephant', '🐘'], ['envelope', '✉️']]),
   ...sf('u', [['umbrella', '☂️'], ['up', '⬆️']]),
-  ...sf('r', [['rabbit', '🐰'], ['rainbow', '🌈'], ['robot', '🤖'], ['rocket', '🚀'], ['ring', '💍'], ['rose', '🌹']]),
+  ...sf('r', [['rabbit', '🐰'], ['rainbow', '🌈'], ['robot', '🤖'], ['rocket', '🚀'], ['ring', '💍']]), // rose dropped: reads as "flower"
   ...sf('h', [['hat', '🎩'], ['hen', '🐔'], ['horse', '🐴'], ['house', '🏠'], ['hippo', '🦛'], ['heart', '❤️']]),
   ...sf('b', [['bus', '🚌'], ['ball', '⚽'], ['bat', '🦇'], ['bee', '🐝'], ['banana', '🍌'], ['bed', '🛏️']]),
   ...sf('f', [['fish', '🐟'], ['fox', '🦊'], ['frog', '🐸'], ['flower', '🌸'], ['feather', '🪶'], ['fire', '🔥']]),
@@ -148,3 +148,10 @@ export const SAFARI: SafariItem[] = [
 /** Safari items dropped per accent when the audio audit found the engine says them with a different first sound. */
 export const SAFARI_EXCLUDE: Record<AccentId, readonly string[]> = { rp: [], north: [] };
 export const safariFor = (accent: AccentId): SafariItem[] => SAFARI.filter((i) => !SAFARI_EXCLUDE[accent].includes(i.word));
+
+/**
+ * Pictures that a child could reasonably mix up (two drinking vessels, two cookware pieces, two big cats). The games never
+ * show these together as the answer and a distractor, because the picture, not the child, would be at fault.
+ */
+export const CONFUSABLE: readonly (readonly [string, string])[] = [['mug', 'cup'], ['pan', 'pot'], ['cat', 'tiger']];
+export const isConfusable = (a: string, b: string): boolean => CONFUSABLE.some(([x, y]) => (a === x && b === y) || (a === y && b === x));

@@ -1,4 +1,4 @@
-import { GRAPHEMES, GRAPHEME_BY_ID, bankFor, graphemesInSet, safariFor, type Grapheme, type SafariItem, type Word } from './data';
+import { GRAPHEMES, GRAPHEME_BY_ID, bankFor, graphemesInSet, isConfusable, safariFor, type Grapheme, type SafariItem, type Word } from './data';
 import { shuffle, type Rng } from './dates';
 import { isDecodable } from './linter';
 import { pickReview } from './review';
@@ -195,6 +195,7 @@ export const buildSafari = (s: ChildState, phoneme: string, rng: Rng, nTargets =
   for (const it of [...familiar, ...rest]) {
     if (distractors.length >= nTotal - targets.length) break;
     if (seen.has(it.p)) continue;
+    if (targets.some((t) => isConfusable(t.word, it.word))) continue; // never a look-alike of an answer
     seen.add(it.p);
     distractors.push(it);
   }
@@ -211,3 +212,7 @@ export const buildKitchenTiles = (s: ChildState, word: Word, rng: Rng, extra = 2
 };
 /** One drum beat per sound in the word. */
 export const drumBeats = (word: Word): number => word.graphemes.length;
+
+/** Distractor pictures for an oral game: different first sound, and never a look-alike of the answer. */
+export const pickDistractors = (pool: Word[], target: Word, n: number, rng: Rng): Word[] =>
+  shuffle(pool.filter((x) => x.text !== target.text && x.graphemes[0] !== target.graphemes[0] && !isConfusable(x.text, target.text)), rng).slice(0, n);

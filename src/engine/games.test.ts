@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { GRAPHEMES, SAFARI, bankFor } from './data';
+import { BANK, CONFUSABLE, GRAPHEMES, SAFARI, bankFor, isConfusable } from './data';
 import { seeded } from './dates';
 import { GLYPHS, advanceTrace, glyphWidth, pathLength, samplePath, shiftPath, strokesFor, traceDone } from './glyphs';
-import { buildKitchenTiles, buildSafari, drumBeats, phonemeOf, startAdventure } from './session';
+import { buildKitchenTiles, buildSafari, drumBeats, phonemeOf, pickDistractors, startAdventure } from './session';
 import { playDay } from './simulate';
 import { introduce, newChild } from './state';
 
@@ -125,5 +125,50 @@ describe('the day plan rotates games without randomness', () => {
     expect(startAdventure(s, '2026-03-01', seeded(1)).trace).toBe(false);
     s.tracing = true;
     expect(startAdventure(s, '2026-03-01', seeded(1)).trace).toBe(true); // day 1 introduces /s/
+  });
+});
+
+describe('picture cards are original art', () => {
+  it('every word that is shown as a picture has a drawing, and no drawing is orphaned', async () => {
+    const { PICTURES } = await import('../ui/pictures');
+    const used = new Set([...BANK.filter((w) => w.emoji).map((w) => w.text), ...SAFARI.map((i) => i.word)]);
+    for (const w of used) expect(PICTURES[w], `no drawing for "${w}"`).toBeTruthy();
+    for (const k of Object.keys(PICTURES)) expect(used.has(k), `orphan drawing "${k}"`).toBe(true);
+  });
+  it('drawings are well-formed (no stray undefined/NaN from the builders, balanced svg)', async () => {
+    const { PICTURES } = await import('../ui/pictures');
+    for (const [k, body] of Object.entries(PICTURES)) {
+      expect(body, k).not.toMatch(/undefined|NaN/);
+      expect(body.length, k).toBeGreaterThan(80);
+    }
+  });
+  it('no two words that can appear together share a drawing', async () => {
+    const { PICTURES } = await import('../ui/pictures');
+    const seen = new Map<string, string>();
+    for (const [k, body] of Object.entries(PICTURES)) {
+      expect(seen.get(body), `${k} and ${seen.get(body)} are the same drawing`).toBeUndefined();
+      seen.set(body, k);
+    }
+  });
+});
+
+describe('look-alike pictures are never an answer and a distractor together', () => {
+  it('confusable pairs refer to real words with drawings', () => {
+    const known = new Set([...BANK.filter((w) => w.emoji).map((w) => w.text), ...SAFARI.map((i) => i.word)]);
+    for (const [a, b] of CONFUSABLE) { expect(known.has(a), a).toBe(true); expect(known.has(b), b).toBe(true); }
+  });
+  it('Robot Talk distractors never include a look-alike of the answer', () => {
+    const pool = bankFor('rp').filter((w) => w.emoji);
+    for (let seed = 0; seed < 200; seed++)
+      for (const w of pool) for (const d of pickDistractors(pool, w, 3, seeded(seed))) expect(isConfusable(w.text, d.text), `${w.text} vs ${d.text}`).toBe(false);
+  });
+  it('Sound Safari scenes never hide a look-alike of a target', () => {
+    const s = newChild();
+    for (const g of GRAPHEMES) introduce(s, g.id, '2026-01-01');
+    for (let seed = 0; seed < 100; seed++)
+      for (const p of new Set(GRAPHEMES.map((g) => g.phoneme))) {
+        const { targets, items } = buildSafari(s, p, seeded(seed));
+        for (const t of targets) for (const it of items) expect(isConfusable(t.word, it.word), `${t.word} vs ${it.word}`).toBe(false);
+      }
   });
 });

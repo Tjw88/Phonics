@@ -8,7 +8,7 @@ The engine (`src/engine`) is plain TypeScript with no DOM, so its logic ports to
 ```bash
 npm install
 npm run dev          # play it (iPad-landscape-shaped, works on desktop and touch)
-npm test             # 48 tests (engine, accents, games, audio/curriculum sync)
+npm test             # 54 tests (engine, accents, games, pictures, audio/curriculum sync)
 npm run lint:content # decodability / suitability linter over the word bank
 npm run sim          # pacing simulation (synthetic children through the real engine)
 npm run build && npx vite preview --port 4173 &  node scripts/e2e.cjs   # browser end-to-end test (needs Playwright; VP=390x844 for phone size)
@@ -71,9 +71,27 @@ Other rules kept: celebrations are under 3 seconds and end on any tap, sparkles 
 Reduce Motion (tested), the treasure chest always holds the sound's own friend (never random).
 
 What this is **not**: I can only judge how it looks in screenshots and that it behaves correctly; **whether it is
-fun is for you and real children to say**. Still emoji: the picture cards (so they look different per device). Not
+fun is for you and real children to say**. Not
 measured: performance on a real iPad. Letter-formation paths follow a common convention and need a phonics
 specialist's review.
+
+## Picture cards
+
+All 101 pictures the games show (Robot Talk, Rhyme Rocket, Beat the Drum, Sound Safari, Word Kitchen, the
+"word comes alive" moment) are original flat-style SVG illustrations in `src/ui/pictures.ts`, replacing the emoji.
+Animals have simple eyes; objects have none (faces belong to the sound-friends). Tests check that every pictured
+word has a drawing, that none is orphaned, and that no two words share one.
+
+**A picture must say exactly one word**, so I removed pictures that couldn't, rather than drawing them anyway.
+The words stay in the app for print; they just have no picture:
+
+- bank: *bug* (ladybird? beetle?), *cap* (next to *hat*), *leg*, *hot*, *fog*, *moss*
+- Safari: *insect* and *iguana* ("a small creature"), *ox* (reads as cow), *gorilla* (reads as monkey),
+  *otter* (unfamiliar), *rose* (reads as flower). *igloo* was added for /i/.
+
+Look-alikes that remain are listed in `CONFUSABLE` (*mug/cup*, *pan/pot*, *cat/tiger*): the games never show a
+look-alike of the answer as a distractor (tested over hundreds of random draws). *rat* and *mouse* never meet
+because only one is in each game's word list. Drawings were checked by eye on contact sheets, not by children.
 
 ## Sound effects and music
 
@@ -101,7 +119,7 @@ audio instead, so this prototype generates it, but two things need saying plainl
 | a i o e u, s f h, p t k | espeak-ng phoneme input | The engine's own phoneme trace must equal the taught sound (e.g. `a` → æ, `u` → ʌ); duration; voicing; not silent |
 | m n l r, b d g | My own small source-filter synthesiser (`scripts/audio/formant.py`), because espeak renders a lone /b d g/ as pure silence and /m n l r/ as ~40 ms | Formant estimate (LPC) lands within 20% of textbook values; burst energy in the expected band. **This confirms the code does what I told it, not that it sounds like /m/.** |
 | 133 words | espeak-ng text-to-speech, RP voice | The engine's phoneme trace for each word must equal the sounds the grapheme table teaches; 133/133 match. "pass" was dropped because RP says /pɑːs/, not the taught /a/ |
-| 71 Sound Safari words | espeak-ng text-to-speech | The engine's phoneme trace must START with the right first sound in that accent (71/71 in both packs) |
+| 66 extra Sound Safari words | espeak-ng text-to-speech | The engine's phoneme trace must START with the right first sound in that accent (all pass in both packs) |
 | 21 fixed phrases | espeak-ng | Duration only |
 
 Known weak points to listen for: stops are clipped bursts (~70-110 ms), so /p/ /t/ /k/ may sound faint or clicky;

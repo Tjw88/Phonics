@@ -323,7 +323,7 @@ body.night .hint-empty { color: #fff; }
 
 /* ---------- Word Kitchen ---------- */
 .kitchen-row { gap: 22px; align-items: flex-end; }
-.pot-wrap { position: relative; width: clamp(130px, 26vw, 190px); }
+.pot-wrap { position: relative; width: clamp(130px, 26vw, 190px); margin-top: 40px; }
 .pot { line-height: 0; }
 .pot svg { width: 100%; height: auto; overflow: visible; }
 .pot.cooking svg { animation: wobble 0.25s ease-in-out infinite; }
@@ -332,7 +332,7 @@ body.night .hint-empty { color: #fff; }
 @keyframes steam { from { transform: translateY(8px); opacity: 0.9; } to { transform: translateY(-14px); opacity: 0; } }
 @keyframes lidhop { to { transform: translateY(-6px); } }
 .dish { position: absolute; left: 50%; top: 20%; font-size: clamp(3.6rem, 10vw, 5.5rem); line-height: 1; transform: translate(-50%, 0) scale(0); opacity: 0; transition: transform 0.7s cubic-bezier(0.2, 1.7, 0.4, 1), opacity 0.2s; }
-.dish.out { transform: translate(-50%, -85%) scale(1); opacity: 1; z-index: 3; }
+.dish.out { transform: translate(-50%, -58%) scale(1); opacity: 1; z-index: 3; }
 .board { gap: 10px; padding: 14px 18px; border-radius: 24px; background: #e7c590; box-shadow: inset 0 0 0 4px #c89a58, 0 6px 0 #a77a3a55; min-height: 100px; }
 .kslot { width: 84px; height: 84px; border-radius: 22px; border: 4px dashed #a77a3a; background: #f5e2bd; font: inherit; font-size: 3.2rem; color: var(--ink); cursor: pointer; display: grid; place-items: center; transition: transform 0.15s; }
 .kslot.filled { border-style: solid; background: #fff; box-shadow: 0 4px 0 #a77a3a66; }
@@ -370,3 +370,15 @@ label.check input { width: 28px; height: 28px; }
   .kslot { width: 68px; height: 68px; font-size: 2.6rem; } .ktile { min-width: 80px; min-height: 80px; font-size: 3rem; }
   .kitchen-row { flex-direction: column; align-items: center; }
 }
+
+/* ---------- picture cards (original art) ---------- */
+.pic-wrap { display: block; line-height: 0; }
+.pic-art { width: 100%; height: auto; display: block; overflow: visible; }
+.tile.pic { padding: 0 10px; }
+.tile.pic .pic-wrap { width: 108px; }
+.tile.pic.target .pic-wrap { width: 90px; }
+.safari-item .pic-wrap { width: 76%; animation: bob 3.2s ease-in-out infinite; animation-delay: var(--bob, 0s); }
+.slot-found .pic-wrap { width: 82%; }
+.dish .pic-wrap { width: clamp(80px, 18vw, 110px); }
+.alive-pic .pic-wrap { width: clamp(180px, 36vw, 280px); }
+@media (max-width: 600px) { .tile.pic .pic-wrap { width: 82px; } .tile.pic.target .pic-wrap { width: 70px; } }

@@ -2056,7 +2056,7 @@
  "phrases": {
   "play": {
    "text": "Play",
-   "ms": 466
+   "ms": 467
   },
   "play_again": {
    "text": "Play again",
@@ -2076,7 +2076,7 @@
   },
   "hello": {
    "text": "Hello!",
-   "ms": 548
+   "ms": 547
   },
   "two_minutes": {
    "text": "Two more minutes, then it's sleepy time.",
@@ -2112,7 +2112,7 @@
   },
   "again": {
    "text": "Let's tap the sounds again.",
-   "ms": 1955
+   "ms": 1947
   },
   "drum_prompt": {
    "text": "Beat the drum once for each sound.",
@@ -2120,7 +2120,7 @@
   },
   "safari_prompt": {
    "text": "Find things that start with the sound.",
-   "ms": 2494
+   "ms": 2506
   },
   "kitchen_prompt": {
    "text": "Build the word.",
@@ -2128,15 +2128,15 @@
   },
   "trace_prompt": {
    "text": "Trace the letter. Start at the green dot.",
-   "ms": 2927
+   "ms": 2928
   },
   "pick_egg": {
    "text": "Pick an egg.",
-   "ms": 754
+   "ms": 745
   },
   "show_grownup": {
    "text": "Show a grown-up",
-   "ms": 1062
+   "ms": 1063
   }
  },
  "problems": [],
@@ -2162,9 +2162,8 @@
   "panda": "ok",
   "parrot": "ok",
   "pear": "ok",
-  "insect": "ok",
+  "igloo": "ok",
   "ink": "ok",
-  "iguana": "ok",
   "nut": "ok",
   "net": "ok",
   "nest": "ok",
@@ -2185,11 +2184,8 @@
   "grapes": "ok",
   "gift": "ok",
   "guitar": "ok",
-  "gorilla": "ok",
   "octopus": "ok",
   "orange": "ok",
-  "otter": "ok",
-  "ox": "ok",
   "cat": "ok",
   "cup": "ok",
   "cow": "ok",
@@ -2208,7 +2204,6 @@
   "robot": "ok",
   "rocket": "ok",
   "ring": "ok",
-  "rose": "ok",
   "hat": "ok",
   "hen": "ok",
   "horse": "ok",

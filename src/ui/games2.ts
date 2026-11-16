@@ -4,6 +4,7 @@ import type { Grapheme, SafariItem, Word } from '../engine/data';
 import { advanceTrace, glyphWidth, samplePath, strokesFor, traceDone, type Pt } from '../engine/glyphs';
 import { drumBeats, phonemeOf, slashed } from '../engine/session';
 import { drumSVG, potSVG } from './art';
+import { pictureEl } from './pictures';
 import { blip, playSequence, praise, sfx, soft, speak, tap } from './audio';
 import { h, sleep } from './dom';
 import { burst, mount, skippableWait } from './fx';
@@ -34,7 +35,7 @@ export const beatDrum = async (ctx: Ctx, word: Word): Promise<TrialResult> => {
   let busy = false;
 
   const picture = h('button', { class: 'tile pic target', 'data-testid': 'drum-picture', 'aria-label': 'hear the word', onClick: () => { tap(); speak(word.text); } },
-    h('span', { class: 'emoji' }, word.emoji ?? '❔'));
+    pictureEl(word.text, word.emoji));
   const drum = h('button', { class: 'drum', 'data-testid': 'drum', 'data-n': n, 'aria-label': 'drum' });
   drum.innerHTML = drumSVG();
   const beads = h('div', { class: 'row beads', 'data-testid': 'taps' });
@@ -108,14 +109,14 @@ export const soundSafari = async (ctx: Ctx, target: Grapheme, scene: { targets: 
     const b = h('button', {
       class: 'safari-item', 'data-testid': 'safari-item', 'data-answer': isTarget ? '1' : '0', 'aria-label': 'thing to find',
       style: `animation-delay:${i * 70}ms;--bob:${(i % 4) * 0.35}s`,
-    }, h('span', { class: 'emoji' }, it.emoji));
+    }, pictureEl(it.word, it.emoji));
     b.addEventListener('click', async () => {
       tap();
       if (b.dataset.busy) return;
       if (isTarget) {
         b.dataset.busy = '1';
         b.classList.add('found');
-        slots[found]!.textContent = it.emoji;
+        slots[found]!.replaceChildren(pictureEl(it.word, it.emoji));
         slots[found]!.classList.add('filled');
         found++;
         sfx.ding();
@@ -161,10 +162,10 @@ export const wordKitchen = async (ctx: Ctx, word: Word, tiles: string[]): Promis
   let busy = false;
 
   const picture = h('button', { class: 'tile pic target', 'data-testid': 'kitchen-picture', 'aria-label': 'hear the word', onClick: () => { tap(); speak(word.text); } },
-    h('span', { class: 'emoji' }, word.emoji ?? '❔'));
+    pictureEl(word.text, word.emoji));
   const pot = h('div', { class: 'pot', 'aria-hidden': 'true' });
   pot.innerHTML = potSVG();
-  const dish = h('div', { class: 'dish' }, h('span', { class: 'emoji' }, word.emoji ?? '❔'));
+  const dish = h('div', { class: 'dish' }, pictureEl(word.text, word.emoji));
   const potWrap = h('div', { class: 'pot-wrap' }, pot, dish);
   const slotEls = word.graphemes.map((_, i) => h('button', { class: 'kslot', 'data-testid': 'slot', 'aria-label': `place ${i + 1}`, onClick: () => unplace(i) }));
   const tileEls = tiles.map((g, i) => h('button', { class: `tile ktile tone${i % 4}`, 'data-testid': 'ktile', 'data-letter': g, 'aria-label': `letter ${g}`, onClick: () => place(i) }, g));
