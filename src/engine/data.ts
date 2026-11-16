@@ -76,7 +76,7 @@ const rows: Row[] = [
   ['r-o-ck', '🪨', 'd'], ['s-o-ck', '🧦'], ['p-a-ck'], ['t-a-ck'], ['n-e-ck'], ['p-e-ck'], ['d-e-ck'],
   ['p-e-n', '🖊️'], ['t-e-n'], ['n-e-t', '🥅'], ['p-e-t'], ['m-e-n'], ['r-e-d'], ['r-u-n'],
   ['r-a-t', '🐀'], ['r-i-p'], ['r-i-d'], ['r-a-m', '🐏'], ['r-u-g'], ['r-u-b'],
-  ['s-u-n', '☀️'], ['m-u-d', undefined, 'd'], ['m-u-g', '☕'], ['m-u-m'], ['c-u-p', '🥤'], ['p-u-p'],
+  ['s-u-n', '☀️'], ['m-u-d', undefined, 'd'], ['m-u-g', '☕'], ['m-u-m', '👩'], ['c-u-p', '🥤'], ['p-u-p'],
   ['u-p'], ['u-s'], ['c-u-t'], ['n-u-t', '🥜'], ['g-u-m'], ['t-u-g'], ['d-u-g', undefined, 'd'],
   ['e-gg', '🥚', 'od'], // spec lists "egg" as decodable; "gg" is not in sets 1-5, so oral-only
   // set 5
@@ -123,8 +123,12 @@ export const ACCENT_EXCLUDE: Record<AccentId, readonly string[]> = { rp: ['pass'
 export const bankFor = (accent: AccentId): Word[] => BANK.filter((w) => !ACCENT_EXCLUDE[accent].includes(w.text));
 
 // ---- Sound Safari: things to hunt for by their FIRST sound (listening only; no letters) --------------------------
-export interface SafariItem { word: string; emoji: string; p: string } // p = initial phoneme key
-const sf = (p: string, items: [string, string][]): SafariItem[] => items.map(([word, emoji]) => ({ word, emoji, p }));
+/**
+ * p = initial phoneme key, g = the LETTER the word starts with. A scene is built for a letter (so a "k" scene shows kite and
+ * key, never cat, even though cat also starts with the sound /k/): the child is learning that letter.
+ */
+export interface SafariItem { word: string; emoji: string; p: string; g: string }
+const sf = (p: string, items: [string, string][]): SafariItem[] => items.map(([word, emoji]) => ({ word, emoji, p, g: word.charAt(0) }));
 export const SAFARI: SafariItem[] = [
   ...sf('s', [['sun', '☀️'], ['sock', '🧦'], ['snake', '🐍'], ['star', '⭐'], ['soap', '🧼']]),
   ...sf('a', [['ant', '🐜'], ['apple', '🍎'], ['alligator', '🐊'], ['axe', '🪓']]),
@@ -136,7 +140,7 @@ export const SAFARI: SafariItem[] = [
   ...sf('d', [['dog', '🐶'], ['drum', '🥁'], ['duck', '🦆'], ['door', '🚪'], ['dolphin', '🐬']]),
   ...sf('g', [['goat', '🐐'], ['grapes', '🍇'], ['gift', '🎁'], ['guitar', '🎸']]), // gorilla dropped: reads as "monkey"
   ...sf('o', [['octopus', '🐙'], ['orange', '🍊']]), // ox (reads as cow) and otter (unfamiliar) dropped
-  ...sf('k', [['cat', '🐱'], ['cup', '🥤'], ['cow', '🐄'], ['kite', '🪁'], ['key', '🔑'], ['camel', '🐫'], ['car', '🚗'], ['cake', '🎂']]),
+  ...sf('k', [['cat', '🐱'], ['cup', '🥤'], ['cow', '🐄'], ['camel', '🐫'], ['car', '🚗'], ['cake', '🎂'], ['kite', '🪁'], ['key', '🔑'], ['kiwi', '🥝'], ['kangaroo', '🦘']]),
   ...sf('e', [['egg', '🥚'], ['elephant', '🐘'], ['envelope', '✉️']]),
   ...sf('u', [['umbrella', '☂️'], ['up', '⬆️']]),
   ...sf('r', [['rabbit', '🐰'], ['rainbow', '🌈'], ['robot', '🤖'], ['rocket', '🚀'], ['ring', '💍']]), // rose dropped: reads as "flower"
@@ -155,3 +159,14 @@ export const safariFor = (accent: AccentId): SafariItem[] => SAFARI.filter((i) =
  */
 export const CONFUSABLE: readonly (readonly [string, string])[] = [['mug', 'cup'], ['pan', 'pot'], ['cat', 'tiger']];
 export const isConfusable = (a: string, b: string): boolean => CONFUSABLE.some(([x, y]) => (a === x && b === y) || (a === y && b === x));
+
+/** What a sound-friend SAYS when introduced. Written without letter names on purpose (a voice reading "t" would say "tee");
+ *  the real sound is played right after the line. */
+export const STORY_SAY: Record<string, string> = {
+  s: 'Sid the snake hisses.', a: 'Annie the ant climbs up.', t: 'Tessa the tap drips.', p: 'Pip the penguin pops up.',
+  i: 'Iggy the inchworm wriggles.', n: 'Nutmeg the nut hums.', m: 'Mabel the mouse munches.', d: 'Dot the dino beats her drum.',
+  g: 'Gus the goat gulps.', o: 'Ollie the octopus opens wide.', c: 'Cora the cat coughs.', k: 'Kit the kite kicks up high.',
+  ck: 'Rocky the rock clicks.', e: 'Ed the egg wobbles.', u: 'Uma the umbrella goes up.', r: 'Rosie the rabbit races.',
+  h: 'Hattie the hen huffs.', b: 'Bo the bug bounces.', f: 'Fenn the fox flicks his tail.', ff: 'Fluffy the cloud puffs.',
+  l: 'Lulu the lamb licks her lips.', ll: 'Bella the bell rings.', ss: 'Moss hisses.',
+};

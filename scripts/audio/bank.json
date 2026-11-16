@@ -1,4 +1,29 @@
 {
+ "stories": {
+  "s": "Sid the snake hisses.",
+  "a": "Annie the ant climbs up.",
+  "t": "Tessa the tap drips.",
+  "p": "Pip the penguin pops up.",
+  "i": "Iggy the inchworm wriggles.",
+  "n": "Nutmeg the nut hums.",
+  "m": "Mabel the mouse munches.",
+  "d": "Dot the dino beats her drum.",
+  "g": "Gus the goat gulps.",
+  "o": "Ollie the octopus opens wide.",
+  "c": "Cora the cat coughs.",
+  "k": "Kit the kite kicks up high.",
+  "ck": "Rocky the rock clicks.",
+  "e": "Ed the egg wobbles.",
+  "u": "Uma the umbrella goes up.",
+  "r": "Rosie the rabbit races.",
+  "h": "Hattie the hen huffs.",
+  "b": "Bo the bug bounces.",
+  "f": "Fenn the fox flicks his tail.",
+  "ff": "Fluffy the cloud puffs.",
+  "l": "Lulu the lamb licks her lips.",
+  "ll": "Bella the bell rings.",
+  "ss": "Moss hisses."
+ },
  "safari": [
   {
    "word": "sun",
@@ -193,14 +218,6 @@
    "p": "k"
   },
   {
-   "word": "kite",
-   "p": "k"
-  },
-  {
-   "word": "key",
-   "p": "k"
-  },
-  {
    "word": "camel",
    "p": "k"
   },
@@ -210,6 +227,22 @@
   },
   {
    "word": "cake",
+   "p": "k"
+  },
+  {
+   "word": "kite",
+   "p": "k"
+  },
+  {
+   "word": "key",
+   "p": "k"
+  },
+  {
+   "word": "kiwi",
+   "p": "k"
+  },
+  {
+   "word": "kangaroo",
    "p": "k"
   },
   {

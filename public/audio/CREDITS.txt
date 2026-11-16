@@ -1,0 +1,10 @@
+Soundling audio credits
+
+Spoken audio is generated with the Piper neural text-to-speech engine (https://github.com/rhasspy/piper).
+  Southern British (RP): voice en_GB-cori-medium - Cori Samuel (LibriVox / Hi-Fi TTS), CC BY 4.0
+  Northern English: voice en_GB-northern_english_male-medium - Northern English male (OpenSLR 83), CC BY-SA 4.0
+
+CC BY-SA 4.0 (the northern voice) has a ShareAlike condition: whether generated audio counts as a derivative is a legal
+question that has NOT been checked. Review before any public release.
+
+Generated audio is a stand-in for recordings by trained voice talent. Nobody has yet listened to it for correctness.

@@ -6,10 +6,11 @@ export type DinoKind = 'rexy' | 'longneck' | 'trike' | 'stego';
 interface DinoDef { id: DinoKind; label: string; main: string; dark: string; belly: string; accent: string; hy: number }
 
 export const DINOS: DinoDef[] = [
-  { id: 'rexy', label: 'green egg', main: '#52b788', dark: '#2d8a60', belly: '#d8f3dc', accent: '#f4a261', hy: 84 },
-  { id: 'longneck', label: 'orange egg', main: '#f4a65a', dark: '#d9822b', belly: '#ffe8c2', accent: '#e76f51', hy: 74 },
-  { id: 'trike', label: 'purple egg', main: '#9b8bf0', dark: '#6f5fd0', belly: '#ece7ff', accent: '#ffd166', hy: 84 },
-  { id: 'stego', label: 'blue egg', main: '#4cc3d9', dark: '#2a95ad', belly: '#d6f4fa', accent: '#ff8fab', hy: 84 },
+  // vivid, saturated primaries for the companions (a child picks "the red one"); shapes differ too, so colour is never the only cue
+  { id: 'rexy', label: 'red egg', main: '#ff2a3d', dark: '#c4001f', belly: '#ffd9de', accent: '#ffd400', hy: 84 },
+  { id: 'longneck', label: 'blue egg', main: '#1f7bff', dark: '#0a49c9', belly: '#d4e6ff', accent: '#ffe14d', hy: 74 },
+  { id: 'trike', label: 'neon green egg', main: '#2dff5a', dark: '#00b52e', belly: '#e6ffe9', accent: '#ff3df0', hy: 84 },
+  { id: 'stego', label: 'yellow egg', main: '#ffd400', dark: '#e09b00', belly: '#fff6b8', accent: '#ff3d7f', hy: 84 },
 ];
 export const dinoDef = (k: string): DinoDef => DINOS.find((d) => d.id === k) ?? (DINOS[0] as DinoDef);
 
@@ -88,14 +89,23 @@ export const dinoSVG = (kind: string, growth = 0): string => {
 </svg>`;
 };
 
-/** A speckled egg in the dino's colour, used for choosing a companion. */
+const mixHex = (hex: string, withHex: string, t: number): string => {
+  const f = (h: string, i: number) => parseInt(h.slice(1 + i * 2, 3 + i * 2), 16);
+  const m = (i: number) => Math.round(f(hex, i) * (1 - t) + f(withHex, i) * t).toString(16).padStart(2, '0');
+  return `#${m(0)}${m(1)}${m(2)}`;
+};
+
+/** A glossy, vivid egg in the dino's colour, used for choosing a companion. */
 export const eggSVG = (kind: string): string => {
   const d = dinoDef(kind);
+  const light = mixHex(d.main, '#ffffff', 0.55);
   return `<svg class="egg-art" viewBox="0 0 120 150" role="img" aria-hidden="true" focusable="false">
-  <ellipse cx="60" cy="142" rx="38" ry="7" fill="#0000001f"/>
-  <path d="M60 6 C100 6 112 78 112 98 C112 128 90 142 60 142 C30 142 8 128 8 98 C8 78 20 6 60 6Z" fill="${d.belly}" stroke="${d.main}" stroke-width="5"/>
-  <circle cx="40" cy="60" r="9" fill="${d.main}"/><circle cx="78" cy="48" r="7" fill="${d.accent}"/><circle cx="82" cy="92" r="11" fill="${d.main}"/>
-  <circle cx="44" cy="108" r="8" fill="${d.accent}"/><circle cx="64" cy="76" r="5" fill="${d.dark}" opacity=".6"/>
+  <defs><radialGradient id="eg-${d.id}" cx="34%" cy="26%" r="85%"><stop offset="0" stop-color="${light}"/><stop offset="0.5" stop-color="${d.main}"/><stop offset="1" stop-color="${d.dark}"/></radialGradient></defs>
+  <ellipse cx="60" cy="142" rx="38" ry="7" fill="#0000002b"/>
+  <path d="M60 6 C100 6 112 78 112 98 C112 128 90 142 60 142 C30 142 8 128 8 98 C8 78 20 6 60 6Z" fill="url(#eg-${d.id})"/>
+  <circle cx="38" cy="66" r="9" fill="${d.accent}" opacity=".95"/><circle cx="80" cy="52" r="7" fill="#ffffffcc"/><circle cx="84" cy="94" r="11" fill="${d.accent}" opacity=".95"/>
+  <circle cx="44" cy="110" r="8" fill="#ffffffcc"/><circle cx="66" cy="80" r="5" fill="${d.dark}" opacity=".55"/>
+  <ellipse cx="38" cy="38" rx="13" ry="22" fill="#ffffff" opacity=".55" transform="rotate(24 38 38)"/><ellipse cx="30" cy="56" rx="4" ry="6" fill="#ffffff" opacity=".7"/>
 </svg>`;
 };
 

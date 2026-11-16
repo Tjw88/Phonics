@@ -2,7 +2,8 @@
  "accents": {
   "rp": {
    "label": "Southern British (RP)",
-   "voice": "en-GB-x-rp",
+   "voice": "en_GB-cori-medium",
+   "credit": "Cori Samuel (LibriVox / Hi-Fi TTS), CC BY 4.0",
    "removed_words": [
     "pass"
    ],
@@ -10,7 +11,8 @@
   },
   "north": {
    "label": "Northern English",
-   "voice": "en-GB-x-gbclan",
+   "voice": "en_GB-northern_english_male-medium",
+   "credit": "Northern English male (OpenSLR 83), CC BY-SA 4.0",
    "removed_words": [],
    "removed_safari": []
   }

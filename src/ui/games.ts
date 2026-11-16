@@ -4,9 +4,10 @@ import { phonemeOf, slashed, type PlacementItem } from '../engine/session';
 import { setOpensNext, type ChildState } from '../engine/state';
 import { dinoMouthPct, robotSVG, rocketSVG, dinoSVG } from './art';
 import { pictureEl } from './pictures';
-import { blip, playSequence, praise, sfx, soft, speak, tap } from './audio';
+import { blip, playSequence, praise, sayPhrase, saySeq, sfx, soft, speak, tap } from './audio';
 import { h, sleep } from './dom';
 import { burst, mount, skippableWait } from './fx';
+import { ghostDrag, makeAssist, makeDraggable, springBack } from './gesture';
 
 export interface Ctx {
   s: ChildState;
@@ -32,11 +33,49 @@ export const growthLevel = (s: ChildState): number => {
   for (let set = 1; set <= 5 && setOpensNext(s, set); set++) n++;
   return Math.min(n, 4);
 };
+/** Point the dino's pupils at a screen position (null = look straight ahead). */
+export const lookAt = (el: Element, x: number | null, y: number | null): void => {
+  el.querySelectorAll<SVGElement>('.pupil').forEach((p) => {
+    p.style.transition = 'transform 0.12s';
+    if (x === null || y === null) { p.style.transform = ''; return; }
+    const r = p.getBoundingClientRect();
+    const dx = x - (r.left + r.width / 2), dy = y - (r.top + r.height / 2);
+    const d = Math.hypot(dx, dy) || 1;
+    const k = Math.min(4, d / 28);
+    p.style.transform = `translate(${(dx / d) * k}px, ${(dy / d) * k}px)`;
+  });
+};
+/** Occasional curious glances around, so the companion never looks frozen. */
+const idleLook = (el: HTMLElement): void => {
+  const tick = () => {
+    if (!el.isConnected) return;
+    const mood = el.querySelector('svg')?.getAttribute('class') ?? '';
+    if (mood.includes('idle') && !el.classList.contains('looking')) {
+      const r = el.getBoundingClientRect();
+      const ang = Math.random() * Math.PI * 2;
+      lookAt(el, r.left + r.width / 2 + Math.cos(ang) * 240, r.top + r.height / 2 + Math.sin(ang) * 140);
+      setTimeout(() => el.isConnected && !el.classList.contains('looking') && lookAt(el, null, null), 800 + Math.random() * 600);
+    }
+    setTimeout(tick, 2600 + Math.random() * 3200);
+  };
+  setTimeout(tick, 1500 + Math.random() * 2000);
+};
 export const companionEl = (s: ChildState, extra = '', testid?: string): HTMLElement => {
   const el = h('div', { class: `companion ${extra}`, 'aria-hidden': 'true', 'data-testid': testid, 'data-growth': growthLevel(s) });
   el.innerHTML = dinoSVG(s.companion?.kind ?? 'rexy', growthLevel(s));
   if (/sleepy/.test(extra)) setMood(el, 'sleepy');
+  else idleLook(el);
   return el;
+};
+
+/** Chewing: the mouth works open and shut a few times (a gulp feels earned, not instant). */
+const chew = async (dino: HTMLElement, times = 3): Promise<void> => {
+  for (let i = 0; i < times; i++) {
+    setMood(dino, 'oops');
+    await wait(110);
+    setMood(dino, 'open');
+    await wait(110);
+  }
 };
 const companion = (ctx: Ctx, extra = ''): HTMLElement => companionEl(ctx.s, extra);
 
@@ -49,13 +88,14 @@ const play = (el: Element, cls: string, ms = 700): void => {
 };
 
 /**
- * Feed the Creature (sound to letter). Drag a letter into the dino's mouth, or just tap it.
- * The dino opens wide as a letter nears, gulps it with a squash, and sparkles. Wrong answers are never punished:
- * a soft sound, the dino says "oh", then models the sound again and the child tries again.
+ * Feed the Creature (sound to letter). DRAG a letter into the dino's mouth: its eyes follow your finger, it opens wide as the
+ * letter nears, chews, gulps and jumps for joy. Dropping it elsewhere makes it spring back (no penalty). A wrong letter makes
+ * the dino say "oh" and model the sound again. A ghost hand shows the drag if nothing has happened for a few seconds; tapping
+ * a letter makes it hop towards the mouth, and after three taps (or with the parent setting) a tap places it directly.
  */
 export const feedCreature = async (ctx: Ctx, target: Grapheme, options: Grapheme[]): Promise<TrialResult> => {
   const choices = options.length;
-  ctx.hint(`Ask: "What else starts with ${slashed(target.id)}?" Say the sound, not the letter name.`);
+  ctx.hint(`Ask: "What else starts with ${slashed(target.id)}?" Say the sound, not the letter name. Drag the letter to the dino.`);
   const dino = companion(ctx, 'feed-dino-art');
   const pos = dinoMouthPct(ctx.s.companion?.kind ?? 'rexy');
   const mouth = h('div', { class: 'mouthzone', 'data-testid': 'mouth', 'aria-hidden': 'true', style: `left:${pos.x}%;top:${pos.y}%` });
@@ -64,29 +104,37 @@ export const feedCreature = async (ctx: Ctx, target: Grapheme, options: Grapheme
   const bubble = h('button', {
     class: 'bubble-btn', 'data-testid': 'replay', 'aria-label': `Hear the sound ${slashed(target.id)} again`, onClick: () => { tap(); say(); },
   }, h('span', { class: 'speaker' }, '🔊'), h('span', { class: 'bubble-sound' }, slashed(target.id)));
+  const assist = makeAssist(ctx.s.easyTap);
   let firstTry = true;
   let resolve!: (r: TrialResult) => void;
   const done = new Promise<TrialResult>((r) => (resolve = r));
   const dead = new Set<string>();
+  let stopGhost: () => void = () => undefined;
 
-  const attempt = async (tile: HTMLElement, g: Grapheme, cur: { x: number; y: number }) => {
+  const attempt = async (tile: HTMLElement, g: Grapheme, from: { x: number; y: number }) => {
     if (dead.has(g.id) || tile.dataset.busy) return;
+    stopGhost();
     if (g.id === target.id) {
       tile.dataset.busy = '1';
+      dino.classList.add('looking');
       setMood(dino, 'open');
       const t = tile.getBoundingClientRect();
       const m = mouth.getBoundingClientRect();
-      const dx = m.left + m.width / 2 - (t.left + t.width / 2) + cur.x;
-      const dy = m.top + m.height / 2 - (t.top + t.height / 2) + cur.y;
+      const dx = m.left + m.width / 2 - (t.left + t.width / 2) + from.x;
+      const dy = m.top + m.height / 2 - (t.top + t.height / 2) + from.y;
+      lookAt(dino, m.left + m.width / 2, m.top + m.height / 2);
       tile.classList.add('fly');
       tile.style.transform = `translate(${dx}px, ${dy}px) scale(0.2) rotate(18deg)`;
       sfx.whoosh();
       await wait(430);
       play(dino, 'gulp', 650);
-      setMood(dino, 'happy');
       sfx.chomp();
-      setTimeout(() => { sfx.sparkle(); praise(); }, 160);
-      burst(mouth, 'confetti', 16);
+      await chew(dino, 3);
+      setMood(dino, 'happy');
+      lookAt(dino, null, null);
+      play(wrap, 'jump', 800);
+      setTimeout(() => { sfx.sparkle(); praise(); }, 120);
+      burst(mouth, 'confetti', 18);
       await skippableWait(1100);
       resolve({ firstTryCorrect: firstTry, choices });
     } else {
@@ -109,69 +157,50 @@ export const feedCreature = async (ctx: Ctx, target: Grapheme, options: Grapheme
       class: `tile letter tone${i % 4}${choices === 1 ? ' glow' : ''}`, 'data-testid': 'tile', 'data-letter': g.id,
       'data-answer': g.id === target.id ? '1' : '0', 'aria-label': `letter ${g.id}`, style: `animation-delay:${i * 90}ms`,
     }, g.id);
-    const cur = { x: 0, y: 0 };
-    let start: { x: number; y: number } | null = null;
-    tile.addEventListener('pointerdown', (e) => {
-      tap();
-      sfx.pop();
-      start = { x: e.clientX, y: e.clientY };
-      try { tile.setPointerCapture(e.pointerId); } catch { /* the pointer already ended: carry on without capture */ }
-      tile.classList.add('dragging');
-      mouth.classList.add('hot');
-    });
-    tile.addEventListener('pointermove', (e) => {
-      if (!start) return;
-      cur.x = e.clientX - start.x;
-      cur.y = e.clientY - start.y;
-      tile.style.transform = `translate(${cur.x}px, ${cur.y}px) scale(0.82) rotate(${Math.max(-12, Math.min(12, cur.x / 12))}deg)`; // smaller while carried, so the dino's face stays visible
-      const m = mouth.getBoundingClientRect();
-      const near = Math.hypot(e.clientX - (m.left + m.width / 2), e.clientY - (m.top + m.height / 2)) < 130;
-      setMood(dino, near ? 'open' : 'idle');
-    });
-    const end = (e: PointerEvent) => {
-      if (!start) return;
-      const moved = Math.hypot(e.clientX - start.x, e.clientY - start.y);
-      start = null;
-      tile.classList.remove('dragging');
-      mouth.classList.remove('hot');
-      const m = mouth.getBoundingClientRect();
-      const overMouth = e.clientX >= m.left - 40 && e.clientX <= m.right + 40 && e.clientY >= m.top - 40 && e.clientY <= m.bottom + 40;
-      if (moved < 12 || overMouth) {
-        void attempt(tile, g, moved < 12 ? { x: 0, y: 0 } : { ...cur });
-      } else {
-        // dropped elsewhere: spring back, no penalty
-        tile.style.transform = '';
-        setMood(dino, 'idle');
-        cur.x = cur.y = 0;
-      }
-      if (moved < 12) tile.style.transform = tile.dataset.busy ? tile.style.transform : '';
-    };
-    tile.addEventListener('pointerup', end);
-    tile.addEventListener('pointercancel', () => {
-      start = null;
-      tile.classList.remove('dragging');
-      tile.style.transform = '';
-      mouth.classList.remove('hot');
-      setMood(dino, 'idle');
+    tile.addEventListener('pointerdown', () => { tap(); sfx.pop(); });
+    makeDraggable(tile, {
+      target: () => mouth.getBoundingClientRect(),
+      slop: 45,
+      nearScale: 0.5,
+      onPickUp: () => { mouth.classList.add('hot'); stopGhost(); dino.classList.add('looking'); },
+      onMove: (x, y, near) => { setMood(dino, near ? 'open' : 'idle'); lookAt(dino, x, y); },
+      onDrop: async (hit, cur) => {
+        mouth.classList.remove('hot');
+        if (hit) await attempt(tile, g, cur);
+        else {
+          springBack(tile, cur);
+          setMood(dino, 'idle');
+          lookAt(dino, null, null);
+        }
+        if (!tile.dataset.busy) dino.classList.remove('looking');
+      },
+      onTap: () => {
+        if (assist.allow) return void attempt(tile, g, { x: 0, y: 0 });
+        assist.miss(); // not yet: the letter hops toward the mouth to show where it wants to go
+        const t = tile.getBoundingClientRect(), m = mouth.getBoundingClientRect();
+        const dx = (m.left + m.width / 2 - (t.left + t.width / 2)) * 0.3, dy = (m.top + m.height / 2 - (t.top + t.height / 2)) * 0.3;
+        tile.animate([{ transform: 'translate(0,0)' }, { transform: `translate(${dx}px, ${dy - 18}px) scale(1.05)`, offset: 0.5 }, { transform: 'translate(0,0)' }], { duration: 480, easing: 'ease-out' });
+        sfx.boing();
+        stopGhost();
+        stopGhost = ghostDrag(sceneEl, choices === 1 ? tile : tilesRow, mouth);
+        if (assist.allow) tile.classList.add('glow');
+      },
     });
     tile.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        void attempt(tile, g, { x: 0, y: 0 });
-      }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); void attempt(tile, g, { x: 0, y: 0 }); }
     });
     return tile;
   });
-
-  mount(ctx.stage,
-    h('div', { class: 'scene feed' },
-      caption(`I’m hungry for ${slashed(target.id)}!`),
-      h('div', { class: 'row creature-row' }, wrap, bubble),
-      h('div', { class: 'row tiles', 'data-testid': 'tiles' }, tiles),
-    ),
+  const tilesRow = h('div', { class: 'row tiles', 'data-testid': 'tiles' }, tiles);
+  const sceneEl = h('div', { class: 'scene feed' },
+    caption(`I’m hungry for ${slashed(target.id)}!`),
+    h('div', { class: 'row creature-row' }, wrap, bubble),
+    tilesRow,
   );
+  mount(ctx.stage, sceneEl);
+  stopGhost = ghostDrag(sceneEl, choices === 1 ? tiles[0]! : tilesRow, mouth);
   await wait(250);
-  say();
+  saySeq([{ phrase: 'hungry_for', text: 'I’m hungry for' }, { sound: phonemeOf(target.id) }]);
   return done;
 };
 
@@ -241,7 +270,7 @@ export const robotTalk = async (ctx: Ctx, word: Word, distractors: Word[]): Prom
     ),
   );
   await wait(250);
-  void robotSays();
+  void (async () => { await sayPhrase('listen_robot', 'Listen to the robot.'); await robotSays(); })();
   return done;
 };
 
@@ -258,65 +287,97 @@ export const rhymeSets = (accent: AccentId): Word[][] => {
 
 export const rhymeRocket = async (ctx: Ctx, target: Word, answer: Word, distractors: Word[]): Promise<TrialResult> => {
   const options = shuffle([answer, ...distractors], ctx.rng);
-  ctx.hint(`Ask: "What else rhymes with ${target.text}?" Clap the words together.`);
+  ctx.hint(`Ask: "What else rhymes with ${target.text}?" Clap the words together. Drag the rhyming picture into the rocket.`);
+  const assist = makeAssist(ctx.s.easyTap);
   let firstTry = true;
   let resolve!: (r: TrialResult) => void;
   const done = new Promise<TrialResult>((r) => (resolve = r));
   const rocket = h('div', { class: 'rocket' });
   rocket.innerHTML = rocketSVG();
   const fuel = h('div', { class: 'fuel', 'aria-hidden': 'true' }, h('div', { class: 'fuel-fill' }));
+  let stopGhost: () => void = () => undefined;
+
+  const attempt = async (b: HTMLElement, w: Word, from: { x: number; y: number }) => {
+    if (b.dataset.busy) return;
+    stopGhost();
+    if (w === answer) {
+      b.dataset.busy = '1';
+      const t = b.getBoundingClientRect(), m = rocket.getBoundingClientRect();
+      b.classList.add('fly');
+      b.style.transform = `translate(${m.left + m.width / 2 - (t.left + t.width / 2) + from.x}px, ${m.top + m.height / 2 - (t.top + t.height / 2) + from.y}px) scale(0.2)`;
+      sfx.whoosh();
+      await wait(430);
+      fuel.classList.add('full');
+      rocket.classList.add('shake');
+      praise();
+      speak(`${target.text}, ${answer.text}`);
+      await wait(900);
+      sfx.launch();
+      rocket.classList.remove('shake');
+      rocket.classList.add('launch');
+      burst(rocket, 'stars', 16);
+      await skippableWait(1500);
+      resolve({ firstTryCorrect: firstTry, choices: options.length });
+    } else {
+      firstTry = false;
+      b.style.transform = '';
+      b.classList.add('dim');
+      b.setAttribute('disabled', '');
+      soft();
+      speak(w.text);
+    }
+  };
+
   const pics = options.map((w, i) => {
     const b = h('button', {
       class: `tile pic card${i % 3}`, 'data-testid': 'pic', 'data-answer': w === answer ? '1' : '0', 'aria-label': 'picture choice',
       style: `animation-delay:${i * 110}ms`,
     }, pictureEl(w.text, w.emoji));
-    b.addEventListener('click', async () => {
-      tap();
-      sfx.pop();
-      if (b.dataset.busy) return;
-      if (w === answer) {
-        b.dataset.busy = '1';
-        b.classList.add('alive');
-        fuel.classList.add('full');
-        praise();
-        speak(`${target.text}, ${answer.text}`);
-        await wait(700);
-        sfx.launch();
-        rocket.classList.add('launch');
-        burst(rocket, 'stars', 14);
-        await skippableWait(1500);
-        resolve({ firstTryCorrect: firstTry, choices: options.length });
-      } else {
-        firstTry = false;
-        b.classList.add('dim');
-        b.setAttribute('disabled', '');
-        soft();
-        speak(w.text);
-      }
+    b.addEventListener('pointerdown', () => { tap(); sfx.pop(); });
+    makeDraggable(b, {
+      target: () => rocket.getBoundingClientRect(),
+      slop: 50,
+      onPickUp: () => { rocket.classList.add('hot'); stopGhost(); },
+      onMove: (_x, _y, near) => rocket.classList.toggle('near', near),
+      onDrop: async (hit, cur) => {
+        rocket.classList.remove('hot', 'near');
+        if (hit) await attempt(b, w, cur);
+        else springBack(b, cur);
+      },
+      onTap: () => {
+        if (assist.allow) return void attempt(b, w, { x: 0, y: 0 });
+        assist.miss();
+        sfx.boing();
+        b.animate([{ transform: 'translate(0,0)' }, { transform: 'translateY(-20px) scale(1.06)', offset: 0.5 }, { transform: 'translate(0,0)' }], { duration: 480, easing: 'ease-out' });
+        stopGhost();
+        stopGhost = ghostDrag(sceneEl, picsRow, rocket);
+      },
     });
     return b;
   });
-  mount(ctx.stage,
-    h('div', { class: 'scene rocketscene' },
-      caption('Which one rhymes? Fuel the rocket!'),
-      h('div', { class: 'skypanel' },
-        h('button', { class: 'tile pic target', 'data-testid': 'rhyme-target', onClick: () => { tap(); speak(target.text); }, 'aria-label': 'hear the word' },
-          pictureEl(target.text, target.emoji)),
-        rocket, fuel),
-      h('div', { class: 'row tiles', 'data-testid': 'pics' }, pics),
-    ),
+  const picsRow = h('div', { class: 'row tiles', 'data-testid': 'pics' }, pics);
+  const sceneEl = h('div', { class: 'scene rocketscene' },
+    caption('Which one rhymes? Put it in the rocket!'),
+    h('div', { class: 'skypanel' },
+      h('button', { class: 'tile pic target', 'data-testid': 'rhyme-target', onClick: () => { tap(); speak(target.text); }, 'aria-label': 'hear the word' },
+        pictureEl(target.text, target.emoji)),
+      rocket, fuel),
+    picsRow,
   );
+  mount(ctx.stage, sceneEl);
+  stopGhost = ghostDrag(sceneEl, picsRow, rocket);
   await wait(250);
-  speak(target.text);
+  saySeq([{ phrase: 'which_rhymes', text: 'Which one rhymes?' }, { word: target.text }]);
   return done;
 };
 
 /**
- * Bridge Builder (blending printed words). Tap the sound buttons in order (dot = one letter, bar = digraph): each
- * one drops a plank. Then pick the word you blended and the dino walks across the bridge.
+ * Bridge Builder (blending printed words). Tap the sound buttons in order (dot = one letter, bar = digraph): each one drops
+ * a plank. Once every sound has been tapped the sounds STAY tappable (hear any of them again, in any order, as often as you
+ * like) and you can SLIDE a finger across the letters to blend them. Then pick the word and the dino walks across.
  */
 export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): Promise<TrialResult> => {
-  ctx.hint(`Ask: "Can you push the sounds together to read it?" Tap each button, then say it fast.`);
+  ctx.hint(`Ask: "Can you push the sounds together to read it?" Tap each button, then slide your finger across the word to blend it.`);
   let next = 0;
   let firstTry = true;
   let resolve!: (r: TrialResult) => void;
@@ -329,8 +390,37 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
   const far = h('span', { class: 'far', 'aria-hidden': 'true' }, '🚩');
   const bridge = h('div', { class: 'bridge', 'data-testid': 'bridge' },
     hopper, h('div', { class: 'planks' }, slots), far, h('div', { class: 'river', 'aria-hidden': 'true' }));
+  const allTapped = () => next >= word.graphemes.length;
+  const phs = word.graphemes.map(phonemeOf);
 
   const caps = caption('Tap each sound button, in order.');
+  const slideHint = h('div', { class: 'slide-hint', 'aria-hidden': 'true', hidden: true }, '👉');
+
+  // slide a finger across the letters left to right to blend them (a gesture, not a button)
+  let visited: number[] = [];
+  const colAt = (x: number, y: number): number => {
+    const el = document.elementFromPoint(x, y)?.closest('.gcol') as HTMLElement | null;
+    return el ? Number(el.dataset.i) : -1;
+  };
+  const wordRow = h('div', { class: 'row word', 'data-testid': 'word' });
+  wordRow.style.touchAction = 'none';
+  wordRow.addEventListener('pointerdown', (e) => { if (allTapped()) { visited = []; slideHint.hidden = true; const c = colAt(e.clientX, e.clientY); if (c >= 0) { visited.push(c); } } });
+  wordRow.addEventListener('pointermove', (e) => {
+    if (!allTapped() || e.buttons === 0) return;
+    const c = colAt(e.clientX, e.clientY);
+    if (c >= 0 && visited[visited.length - 1] !== c) {
+      visited.push(c);
+      blip(phs[c] as string, { maxMs: 260 });
+      play(glyphs[c] as HTMLElement, 'bounce', 400);
+      if (visited.length >= word.graphemes.length && visited.every((v, k) => v === k)) {
+        visited = [];
+        wordRow.classList.add('merge');
+        setTimeout(() => { speak(word.text); }, 250);
+        setTimeout(() => wordRow.classList.remove('merge'), 1400);
+      }
+    }
+  });
+
   const showChoices = () => {
     choicesBox.replaceChildren(
       ...options.map((w, i) => {
@@ -362,17 +452,16 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
             b.classList.add('dim');
             b.setAttribute('disabled', '');
             soft();
-            next = 0; // gently start the sound buttons again
-            buttons.forEach((x) => x.classList.remove('hit'));
-            slots.forEach((x) => x.classList.remove('filled'));
-            choicesBox.replaceChildren();
-            caps.textContent = 'Let’s tap the sounds again.';
+            // a wrong pick is not a reset: the sounds are still there to tap and listen to again
+            caps.textContent = 'Not quite. Tap the sounds again, then slide across to blend!';
           }
         });
         return b;
       }),
     );
-    caps.textContent = 'Now blend them. Which word is it?';
+    caps.textContent = 'Slide your finger across the word to blend it. Which word is it?';
+    slideHint.hidden = false;
+    saySeq([{ phrase: 'slide_blend', text: 'Slide your finger across to blend.' }, { phrase: 'blend_it', text: 'Which word is it?' }]);
   };
 
   const buttons = word.graphemes.map((g, i) => {
@@ -381,25 +470,33 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
       class: `soundbutton ${digraph ? 'bar' : 'dot'} tone${i % 4}`, 'data-testid': 'soundbutton', 'aria-label': `sound ${slashed(g)}`,
     });
     b.addEventListener('click', () => {
+      if (i < next || allTapped()) {
+        // already done (or the sequence is complete): just hear it again, any time, any order
+        blip(phs[i] as string);
+        play(glyphs[i] as HTMLElement, 'bounce', 500);
+        play(b, 'bounce', 400);
+        return;
+      }
       if (i !== next) {
         soft();
         buttons[next]?.classList.add('nudge');
         setTimeout(() => buttons[next]?.classList.remove('nudge'), 600);
         return;
       }
-      blip(phonemeOf(g));
+      blip(phs[i] as string);
       b.classList.add('hit');
       play(glyphs[i] as HTMLElement, 'bounce', 500);
       slots[i]?.classList.add('filled');
       setTimeout(() => sfx.thud(), 120);
       next++;
-      if (next === word.graphemes.length) setTimeout(showChoices, 600);
+      if (allTapped()) setTimeout(showChoices, 600);
     });
     return b;
   });
   const glyphs = word.graphemes.map((g) => h('span', { class: 'glyph' }, g));
-  const letters = word.graphemes.map((_, i) => h('div', { class: 'gcol' }, glyphs[i], buttons[i]));
-  mount(ctx.stage, h('div', { class: 'scene' }, caps, h('div', { class: 'row word', 'data-testid': 'word' }, letters), bridge, choicesBox));
+  word.graphemes.forEach((_, i) => wordRow.append(h('div', { class: 'gcol', 'data-i': i }, glyphs[i], buttons[i])));
+  mount(ctx.stage, h('div', { class: 'scene bridgescene' }, caps, wordRow, slideHint, bridge, choicesBox));
+  saySeq([{ phrase: 'tap_sounds', text: 'Tap each sound, in order.' }]);
   return done;
 };
 
@@ -433,6 +530,6 @@ export const placementTrial = async (ctx: Ctx, item: PlacementItem): Promise<boo
     ),
   );
   await wait(250);
-  blip(phonemeOf(item.target.id));
+  saySeq([{ phrase: 'which_letter', text: 'Which letter says' }, { sound: phonemeOf(item.target.id) }]);
   return done;
 };

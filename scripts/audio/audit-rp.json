@@ -1,8 +1,9 @@
 {
  "accent": "rp",
  "label": "Southern British (RP)",
- "voice": "en-GB-x-rp",
- "engine": "espeak-ng (formant synthesis)",
+ "voice": "en_GB-cori-medium",
+ "credit": "Cori Samuel (LibriVox / Hi-Fi TTS), CC BY 4.0",
+ "engine": "Piper neural TTS",
  "expected_ipa": {
   "s": "s",
   "a": "æ",
@@ -25,2121 +26,1345 @@
  },
  "phonemes": {
   "s": {
-   "mnemonic": "s:",
    "expected_ipa": "s",
-   "engine_ipa": "s",
-   "ipa_match": true,
    "files": [
     {
      "file": "rp/phonemes/s_0.wav",
-     "source": "espeak-ng",
-     "ms": 280,
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 170 ms of hiss before the vowel, granular resynthesis to 480 ms",
+     "takes_needed": 1,
+     "ms": 480,
+     "rms": 0.1,
      "voiced_fraction": 0.0,
-     "peak": 11430
+     "centroid_hz": 7426,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/s_1.wav",
-     "source": "espeak-ng",
-     "ms": 280,
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 209 ms of hiss before the vowel, granular resynthesis to 480 ms",
+     "takes_needed": 1,
+     "ms": 480,
+     "rms": 0.1,
      "voiced_fraction": 0.0,
-     "peak": 11430
+     "centroid_hz": 7319,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/s_2.wav",
-     "source": "espeak-ng",
-     "ms": 280,
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 145 ms of hiss before the vowel, granular resynthesis to 480 ms",
+     "takes_needed": 1,
+     "ms": 480,
+     "rms": 0.1,
      "voiced_fraction": 0.0,
-     "peak": 11430
+     "centroid_hz": 7274,
+     "warnings": []
     }
    ]
   },
   "a": {
-   "mnemonic": "a",
    "expected_ipa": "æ",
-   "engine_ipa": "æ",
-   "ipa_match": true,
    "files": [
     {
      "file": "rp/phonemes/a_0.wav",
-     "source": "espeak-ng",
-     "ms": 332,
-     "voiced_fraction": 0.76,
-     "peak": 12212
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.34,
+     "centroid_hz": 575,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/a_1.wav",
-     "source": "espeak-ng",
-     "ms": 330,
-     "voiced_fraction": 0.89,
-     "peak": 12277
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 699,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/a_2.wav",
-     "source": "espeak-ng",
-     "ms": 324,
-     "voiced_fraction": 0.68,
-     "peak": 12008
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 716,
+     "warnings": []
     }
    ]
   },
   "t": {
-   "mnemonic": "t",
    "expected_ipa": "t",
-   "engine_ipa": "t",
-   "ipa_match": true,
    "files": [
     {
      "file": "rp/phonemes/t_0.wav",
-     "source": "espeak-ng",
-     "ms": 71,
+     "source": "piper:en_GB-cori-medium",
+     "method": "unvoiced stop: burst + breathy release (no voiced vowel), ~170 ms",
+     "takes_needed": 1,
+     "ms": 160,
+     "rms": 0.13,
      "voiced_fraction": 0.0,
-     "peak": 9990
+     "centroid_hz": 2137,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/t_1.wav",
-     "source": "espeak-ng",
-     "ms": 71,
+     "source": "piper:en_GB-cori-medium",
+     "method": "unvoiced stop: burst + breathy release (no voiced vowel), ~170 ms",
+     "takes_needed": 1,
+     "ms": 165,
+     "rms": 0.13,
      "voiced_fraction": 0.0,
-     "peak": 9990
+     "centroid_hz": 2286,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/t_2.wav",
-     "source": "espeak-ng",
-     "ms": 71,
+     "source": "piper:en_GB-cori-medium",
+     "method": "unvoiced stop: burst + breathy release (no voiced vowel), ~170 ms",
+     "takes_needed": 1,
+     "ms": 160,
+     "rms": 0.13,
      "voiced_fraction": 0.0,
-     "peak": 9990
+     "centroid_hz": 2557,
+     "warnings": []
     }
    ]
   },
   "p": {
-   "mnemonic": "p",
    "expected_ipa": "p",
-   "engine_ipa": "p",
-   "ipa_match": true,
    "files": [
     {
      "file": "rp/phonemes/p_0.wav",
-     "source": "espeak-ng",
-     "ms": 109,
+     "source": "piper:en_GB-cori-medium",
+     "method": "unvoiced stop: burst + breathy release (no voiced vowel), ~170 ms",
+     "takes_needed": 1,
+     "ms": 166,
+     "rms": 0.13,
      "voiced_fraction": 0.0,
-     "peak": 12911
+     "centroid_hz": 1049,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/p_1.wav",
-     "source": "espeak-ng",
-     "ms": 109,
+     "source": "piper:en_GB-cori-medium",
+     "method": "unvoiced stop: burst + breathy release (no voiced vowel), ~170 ms",
+     "takes_needed": 1,
+     "ms": 166,
+     "rms": 0.13,
      "voiced_fraction": 0.0,
-     "peak": 12911
+     "centroid_hz": 541,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/p_2.wav",
-     "source": "espeak-ng",
-     "ms": 109,
-     "voiced_fraction": 0.0,
-     "peak": 12911
+     "source": "piper:en_GB-cori-medium",
+     "method": "unvoiced stop: burst + breathy release (no voiced vowel), ~170 ms",
+     "takes_needed": 1,
+     "ms": 166,
+     "rms": 0.13,
+     "voiced_fraction": 0.45,
+     "centroid_hz": 1137,
+     "warnings": []
     }
    ]
   },
   "i": {
-   "mnemonic": "I",
    "expected_ipa": "ɪ",
-   "engine_ipa": "ɪ",
-   "ipa_match": true,
    "files": [
     {
      "file": "rp/phonemes/i_0.wav",
-     "source": "espeak-ng",
-     "ms": 270,
-     "voiced_fraction": 0.9,
-     "peak": 11119
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.97,
+     "centroid_hz": 463,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/i_1.wav",
-     "source": "espeak-ng",
-     "ms": 280,
-     "voiced_fraction": 0.94,
-     "peak": 10690
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.31,
+     "centroid_hz": 381,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/i_2.wav",
-     "source": "espeak-ng",
-     "ms": 271,
-     "voiced_fraction": 0.84,
-     "peak": 10818
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 441,
+     "warnings": []
     }
    ]
   },
   "n": {
-   "mnemonic": "n",
    "expected_ipa": "n",
-   "engine_ipa": "n/a (formant synth)",
-   "ipa_match": true,
    "files": [
     {
-     "file": "shared/phonemes/n_0.wav",
-     "source": "formant-synth",
-     "self_check": "LPC F1 241 Hz vs target 270 Hz (formants [241])",
-     "self_check_ok": true,
-     "ms": 380,
+     "file": "rp/phonemes/n_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 83 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
      "voiced_fraction": 1.0,
-     "peak": 4512
+     "centroid_hz": 325,
+     "warnings": []
     },
     {
-     "file": "shared/phonemes/n_1.wav",
-     "source": "formant-synth",
-     "self_check": "LPC F1 254 Hz vs target 270 Hz (formants [254])",
-     "self_check_ok": true,
-     "ms": 380,
+     "file": "rp/phonemes/n_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 118 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
      "voiced_fraction": 1.0,
-     "peak": 4607
+     "centroid_hz": 284,
+     "warnings": []
     },
     {
-     "file": "shared/phonemes/n_2.wav",
-     "source": "formant-synth",
-     "self_check": "LPC F1 241 Hz vs target 270 Hz (formants [241])",
-     "self_check_ok": true,
-     "ms": 380,
+     "file": "rp/phonemes/n_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 143 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
      "voiced_fraction": 1.0,
-     "peak": 4337
+     "centroid_hz": 298,
+     "warnings": []
     }
    ]
   },
   "m": {
-   "mnemonic": "m",
    "expected_ipa": "m",
-   "engine_ipa": "n/a (formant synth)",
-   "ipa_match": true,
    "files": [
     {
-     "file": "shared/phonemes/m_0.wav",
-     "source": "formant-synth",
-     "self_check": "LPC F1 239 Hz vs target 270 Hz (formants [239])",
-     "self_check_ok": true,
-     "ms": 380,
+     "file": "rp/phonemes/m_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 118 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
      "voiced_fraction": 1.0,
-     "peak": 4484
+     "centroid_hz": 253,
+     "warnings": []
     },
     {
-     "file": "shared/phonemes/m_1.wav",
-     "source": "formant-synth",
-     "self_check": "LPC F1 251 Hz vs target 270 Hz (formants [251])",
-     "self_check_ok": true,
-     "ms": 380,
+     "file": "rp/phonemes/m_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 70 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
      "voiced_fraction": 1.0,
-     "peak": 4603
+     "centroid_hz": 281,
+     "warnings": []
     },
     {
-     "file": "shared/phonemes/m_2.wav",
-     "source": "formant-synth",
-     "self_check": "LPC F1 236 Hz vs target 270 Hz (formants [236, 2243])",
-     "self_check_ok": true,
-     "ms": 380,
+     "file": "rp/phonemes/m_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 70 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
      "voiced_fraction": 1.0,
-     "peak": 4307
+     "centroid_hz": 412,
+     "warnings": []
     }
    ]
   },
   "d": {
-   "mnemonic": "d",
    "expected_ipa": "d",
-   "engine_ipa": "n/a (formant synth)",
-   "ipa_match": true,
    "files": [
     {
-     "file": "shared/phonemes/d_0.wav",
-     "source": "formant-synth",
-     "self_check": "23% of energy in the 3200-6500 Hz burst band",
-     "self_check_ok": true,
-     "ms": 83,
-     "voiced_fraction": 0.58,
-     "peak": 12814
+     "file": "rp/phonemes/d_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 0.9,
+     "centroid_hz": 558,
+     "warnings": []
     },
     {
-     "file": "shared/phonemes/d_1.wav",
-     "source": "formant-synth",
-     "self_check": "23% of energy in the 3200-6500 Hz burst band",
-     "self_check_ok": true,
-     "ms": 83,
-     "voiced_fraction": 0.58,
-     "peak": 12813
+     "file": "rp/phonemes/d_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 0.9,
+     "centroid_hz": 834,
+     "warnings": []
     },
     {
-     "file": "shared/phonemes/d_2.wav",
-     "source": "formant-synth",
-     "self_check": "24% of energy in the 3200-6500 Hz burst band",
-     "self_check_ok": true,
-     "ms": 83,
-     "voiced_fraction": 0.58,
-     "peak": 12918
+     "file": "rp/phonemes/d_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 725,
+     "warnings": []
     }
    ]
   },
   "g": {
-   "mnemonic": "g",
    "expected_ipa": "ɡ",
-   "engine_ipa": "n/a (formant synth)",
-   "ipa_match": true,
    "files": [
     {
-     "file": "shared/phonemes/g_0.wav",
-     "source": "formant-synth",
-     "self_check": "21% of energy in the 1500-3200 Hz burst band",
-     "self_check_ok": true,
-     "ms": 85,
-     "voiced_fraction": 0.62,
-     "peak": 13649
+     "file": "rp/phonemes/g_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 825,
+     "warnings": []
     },
     {
-     "file": "shared/phonemes/g_1.wav",
-     "source": "formant-synth",
-     "self_check": "21% of energy in the 1500-3200 Hz burst band",
-     "self_check_ok": true,
-     "ms": 85,
-     "voiced_fraction": 0.62,
-     "peak": 13341
+     "file": "rp/phonemes/g_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 863,
+     "warnings": []
     },
     {
-     "file": "shared/phonemes/g_2.wav",
-     "source": "formant-synth",
-     "self_check": "22% of energy in the 1500-3200 Hz burst band",
-     "self_check_ok": true,
-     "ms": 85,
-     "voiced_fraction": 0.62,
-     "peak": 13800
+     "file": "rp/phonemes/g_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 775,
+     "warnings": []
     }
    ]
   },
   "o": {
-   "mnemonic": "0",
    "expected_ipa": "ɒ",
-   "engine_ipa": "ɒ",
-   "ipa_match": true,
    "files": [
     {
      "file": "rp/phonemes/o_0.wav",
-     "source": "espeak-ng",
-     "ms": 270,
-     "voiced_fraction": 0.9,
-     "peak": 9540
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 690,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/o_1.wav",
-     "source": "espeak-ng",
-     "ms": 270,
-     "voiced_fraction": 0.96,
-     "peak": 9498
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.98,
+     "centroid_hz": 631,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/o_2.wav",
-     "source": "espeak-ng",
-     "ms": 270,
-     "voiced_fraction": 0.68,
-     "peak": 10318
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 560,
+     "warnings": []
     }
    ]
   },
   "k": {
-   "mnemonic": "k",
    "expected_ipa": "k",
-   "engine_ipa": "k",
-   "ipa_match": true,
    "files": [
     {
      "file": "rp/phonemes/k_0.wav",
-     "source": "espeak-ng",
-     "ms": 71,
-     "voiced_fraction": 0.0,
-     "peak": 24592
+     "source": "piper:en_GB-cori-medium",
+     "method": "unvoiced stop: burst + breathy release (no voiced vowel), ~170 ms",
+     "takes_needed": 1,
+     "ms": 166,
+     "rms": 0.13,
+     "voiced_fraction": 0.9,
+     "centroid_hz": 573,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/k_1.wav",
-     "source": "espeak-ng",
-     "ms": 71,
+     "source": "piper:en_GB-cori-medium",
+     "method": "unvoiced stop: burst + breathy release (no voiced vowel), ~170 ms",
+     "takes_needed": 1,
+     "ms": 165,
+     "rms": 0.102,
      "voiced_fraction": 0.0,
-     "peak": 24592
+     "centroid_hz": 1868,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/k_2.wav",
-     "source": "espeak-ng",
-     "ms": 71,
-     "voiced_fraction": 0.0,
-     "peak": 24592
+     "source": "piper:en_GB-cori-medium",
+     "method": "unvoiced stop: burst + breathy release (no voiced vowel), ~170 ms",
+     "takes_needed": 1,
+     "ms": 166,
+     "rms": 0.13,
+     "voiced_fraction": 0.28,
+     "centroid_hz": 565,
+     "warnings": []
     }
    ]
   },
   "e": {
-   "mnemonic": "E",
    "expected_ipa": "ɛ",
-   "engine_ipa": "ɛ",
-   "ipa_match": true,
    "files": [
     {
      "file": "rp/phonemes/e_0.wav",
-     "source": "espeak-ng",
-     "ms": 280,
-     "voiced_fraction": 0.56,
-     "peak": 11982
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.44,
+     "centroid_hz": 488,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/e_1.wav",
-     "source": "espeak-ng",
-     "ms": 271,
-     "voiced_fraction": 0.8,
-     "peak": 11744
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.94,
+     "centroid_hz": 540,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/e_2.wav",
-     "source": "espeak-ng",
-     "ms": 281,
-     "voiced_fraction": 0.6,
-     "peak": 12230
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.94,
+     "centroid_hz": 421,
+     "warnings": []
     }
    ]
   },
   "u": {
-   "mnemonic": "V",
    "expected_ipa": "ʌ",
-   "engine_ipa": "ʌ",
-   "ipa_match": true,
    "files": [
     {
      "file": "rp/phonemes/u_0.wav",
-     "source": "espeak-ng",
-     "ms": 270,
-     "voiced_fraction": 0.7,
-     "peak": 12694
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.99,
+     "centroid_hz": 742,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/u_1.wav",
-     "source": "espeak-ng",
-     "ms": 271,
-     "voiced_fraction": 0.88,
-     "peak": 12444
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.93,
+     "centroid_hz": 730,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/u_2.wav",
-     "source": "espeak-ng",
-     "ms": 280,
-     "voiced_fraction": 0.6,
-     "peak": 13122
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.72,
+     "centroid_hz": 448,
+     "warnings": []
     }
    ]
   },
   "r": {
-   "mnemonic": "r-",
    "expected_ipa": "ɹ",
-   "engine_ipa": "n/a (formant synth)",
-   "ipa_match": true,
    "files": [
     {
-     "file": "shared/phonemes/r_0.wav",
-     "source": "formant-synth",
-     "self_check": "LPC F1 416 Hz vs target 400 Hz (formants [416, 1332])",
-     "self_check_ok": true,
-     "ms": 380,
+     "file": "rp/phonemes/r_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 168 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
      "voiced_fraction": 1.0,
-     "peak": 5731
+     "centroid_hz": 309,
+     "warnings": []
     },
     {
-     "file": "shared/phonemes/r_1.wav",
-     "source": "formant-synth",
-     "self_check": "LPC F1 393 Hz vs target 400 Hz (formants [393, 1316])",
-     "self_check_ok": true,
-     "ms": 380,
+     "file": "rp/phonemes/r_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 158 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
      "voiced_fraction": 1.0,
-     "peak": 6133
+     "centroid_hz": 226,
+     "warnings": []
     },
     {
-     "file": "shared/phonemes/r_2.wav",
-     "source": "formant-synth",
-     "self_check": "LPC F1 428 Hz vs target 400 Hz (formants [428, 1324])",
-     "self_check_ok": true,
-     "ms": 380,
+     "file": "rp/phonemes/r_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 193 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
      "voiced_fraction": 1.0,
-     "peak": 5192
+     "centroid_hz": 224,
+     "warnings": []
     }
    ]
   },
   "h": {
-   "mnemonic": "h:",
    "expected_ipa": "h",
-   "engine_ipa": "h",
-   "ipa_match": true,
    "files": [
     {
      "file": "rp/phonemes/h_0.wav",
-     "source": "espeak-ng",
-     "ms": 180,
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 120 ms of hiss before the vowel, granular resynthesis to 480 ms",
+     "takes_needed": 1,
+     "ms": 480,
+     "rms": 0.1,
      "voiced_fraction": 0.0,
-     "peak": 9405
+     "centroid_hz": 2492,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/h_1.wav",
-     "source": "espeak-ng",
-     "ms": 180,
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 80 ms of hiss before the vowel, granular resynthesis to 480 ms",
+     "takes_needed": 1,
+     "ms": 480,
+     "rms": 0.1,
      "voiced_fraction": 0.0,
-     "peak": 9405
+     "centroid_hz": 2291,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/h_2.wav",
-     "source": "espeak-ng",
-     "ms": 180,
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 85 ms of hiss before the vowel, granular resynthesis to 480 ms",
+     "takes_needed": 1,
+     "ms": 480,
+     "rms": 0.1,
      "voiced_fraction": 0.0,
-     "peak": 9405
+     "centroid_hz": 2457,
+     "warnings": []
     }
    ]
   },
   "b": {
-   "mnemonic": "b",
    "expected_ipa": "b",
-   "engine_ipa": "n/a (formant synth)",
-   "ipa_match": true,
    "files": [
     {
-     "file": "shared/phonemes/b_0.wav",
-     "source": "formant-synth",
-     "self_check": "81% of energy in the 200-1500 Hz burst band",
-     "self_check_ok": true,
-     "ms": 83,
-     "voiced_fraction": 0.58,
-     "peak": 13573
+     "file": "rp/phonemes/b_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 729,
+     "warnings": []
     },
     {
-     "file": "shared/phonemes/b_1.wav",
-     "source": "formant-synth",
-     "self_check": "72% of energy in the 200-1500 Hz burst band",
-     "self_check_ok": true,
-     "ms": 83,
-     "voiced_fraction": 0.58,
-     "peak": 13750
+     "file": "rp/phonemes/b_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 0.97,
+     "centroid_hz": 788,
+     "warnings": []
     },
     {
-     "file": "shared/phonemes/b_2.wav",
-     "source": "formant-synth",
-     "self_check": "88% of energy in the 200-1500 Hz burst band",
-     "self_check_ok": true,
-     "ms": 83,
-     "voiced_fraction": 0.58,
-     "peak": 13743
+     "file": "rp/phonemes/b_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 756,
+     "warnings": []
     }
    ]
   },
   "f": {
-   "mnemonic": "f:",
    "expected_ipa": "f",
-   "engine_ipa": "f",
-   "ipa_match": true,
    "files": [
     {
      "file": "rp/phonemes/f_0.wav",
-     "source": "espeak-ng",
-     "ms": 283,
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 115 ms of hiss before the vowel, granular resynthesis to 480 ms",
+     "takes_needed": 1,
+     "ms": 480,
+     "rms": 0.1,
      "voiced_fraction": 0.0,
-     "peak": 10905
+     "centroid_hz": 7127,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/f_1.wav",
-     "source": "espeak-ng",
-     "ms": 283,
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 85 ms of hiss before the vowel, granular resynthesis to 480 ms",
+     "takes_needed": 1,
+     "ms": 480,
+     "rms": 0.1,
      "voiced_fraction": 0.0,
-     "peak": 10905
+     "centroid_hz": 8891,
+     "warnings": []
     },
     {
      "file": "rp/phonemes/f_2.wav",
-     "source": "espeak-ng",
-     "ms": 283,
-     "voiced_fraction": 0.0,
-     "peak": 10905
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 80 ms of hiss before the vowel, granular resynthesis to 480 ms",
+     "takes_needed": 1,
+     "ms": 480,
+     "rms": 0.1,
+     "voiced_fraction": 0.84,
+     "centroid_hz": 712,
+     "warnings": []
     }
    ]
   },
   "l": {
-   "mnemonic": "l",
    "expected_ipa": "l",
-   "engine_ipa": "n/a (formant synth)",
-   "ipa_match": true,
    "files": [
     {
-     "file": "shared/phonemes/l_0.wav",
-     "source": "formant-synth",
-     "self_check": "LPC F1 382 Hz vs target 360 Hz (formants [382, 1234])",
-     "self_check_ok": true,
-     "ms": 380,
-     "voiced_fraction": 1.0,
-     "peak": 5071
+     "file": "rp/phonemes/l_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 138 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
+     "voiced_fraction": 0.99,
+     "centroid_hz": 326,
+     "warnings": []
     },
     {
-     "file": "shared/phonemes/l_1.wav",
-     "source": "formant-synth",
-     "self_check": "LPC F1 374 Hz vs target 360 Hz (formants [374, 1273])",
-     "self_check_ok": true,
-     "ms": 380,
+     "file": "rp/phonemes/l_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 128 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
      "voiced_fraction": 1.0,
-     "peak": 5186
+     "centroid_hz": 268,
+     "warnings": []
     },
     {
-     "file": "shared/phonemes/l_2.wav",
-     "source": "formant-synth",
-     "self_check": "LPC F1 380 Hz vs target 360 Hz (formants [380, 1243])",
-     "self_check_ok": true,
-     "ms": 380,
+     "file": "rp/phonemes/l_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 148 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
      "voiced_fraction": 1.0,
-     "peak": 5112
+     "centroid_hz": 256,
+     "warnings": []
     }
    ]
   }
  },
  "words": {
   "at": {
-   "graphemes": [
-    "a",
-    "t"
-   ],
-   "expected_ipa": "æt",
-   "engine_ipa_for_text": "æt",
-   "status": "ok (rendered from text)",
-   "ms": 376
+   "phonemes": "ˈæt",
+   "ms": 324
   },
   "sat": {
-   "graphemes": [
-    "s",
-    "a",
-    "t"
-   ],
-   "expected_ipa": "sæt",
-   "engine_ipa_for_text": "sæt",
-   "status": "ok (rendered from text)",
-   "ms": 492
+   "phonemes": "sˈæt",
+   "ms": 449
   },
   "pat": {
-   "graphemes": [
-    "p",
-    "a",
-    "t"
-   ],
-   "expected_ipa": "pæt",
-   "engine_ipa_for_text": "pæt",
-   "status": "ok (rendered from text)",
-   "ms": 419
+   "phonemes": "pˈæt",
+   "ms": 504
   },
   "tap": {
-   "graphemes": [
-    "t",
-    "a",
-    "p"
-   ],
-   "expected_ipa": "tæp",
-   "engine_ipa_for_text": "tæp",
-   "status": "ok (rendered from text)",
-   "ms": 467
-  },
-  "sap": {
-   "graphemes": [
-    "s",
-    "a",
-    "p"
-   ],
-   "expected_ipa": "sæp",
-   "engine_ipa_for_text": "sæp",
-   "status": "ok (rendered from text)",
-   "ms": 530
-  },
-  "in": {
-   "graphemes": [
-    "i",
-    "n"
-   ],
-   "expected_ipa": "ɪn",
-   "engine_ipa_for_text": "ɪn",
-   "status": "ok (rendered from text)",
-   "ms": 392
-  },
-  "it": {
-   "graphemes": [
-    "i",
-    "t"
-   ],
-   "expected_ipa": "ɪt",
-   "engine_ipa_for_text": "ɪt",
-   "status": "ok (rendered from text)",
-   "ms": 327
-  },
-  "an": {
-   "graphemes": [
-    "a",
-    "n"
-   ],
-   "expected_ipa": "æn",
-   "engine_ipa_for_text": "æn",
-   "status": "ok (rendered from text)",
-   "ms": 461
-  },
-  "am": {
-   "graphemes": [
-    "a",
-    "m"
-   ],
-   "expected_ipa": "æm",
-   "engine_ipa_for_text": "æm",
-   "status": "ok (rendered from text)",
-   "ms": 480
-  },
-  "ad": {
-   "graphemes": [
-    "a",
-    "d"
-   ],
-   "expected_ipa": "æd",
-   "engine_ipa_for_text": "æd",
-   "status": "ok (rendered from text)",
-   "ms": 415
-  },
-  "sit": {
-   "graphemes": [
-    "s",
-    "i",
-    "t"
-   ],
-   "expected_ipa": "sɪt",
-   "engine_ipa_for_text": "sɪt",
-   "status": "ok (rendered from text)",
-   "ms": 428
-  },
-  "sip": {
-   "graphemes": [
-    "s",
-    "i",
-    "p"
-   ],
-   "expected_ipa": "sɪp",
-   "engine_ipa_for_text": "sɪp",
-   "status": "ok (rendered from text)",
-   "ms": 465
-  },
-  "tip": {
-   "graphemes": [
-    "t",
-    "i",
-    "p"
-   ],
-   "expected_ipa": "tɪp",
-   "engine_ipa_for_text": "tɪp",
-   "status": "ok (rendered from text)",
-   "ms": 403
-  },
-  "tin": {
-   "graphemes": [
-    "t",
-    "i",
-    "n"
-   ],
-   "expected_ipa": "tɪn",
-   "engine_ipa_for_text": "tɪn",
-   "status": "ok (rendered from text)",
-   "ms": 434
-  },
-  "pin": {
-   "graphemes": [
-    "p",
-    "i",
-    "n"
-   ],
-   "expected_ipa": "pɪn",
-   "engine_ipa_for_text": "pɪn",
-   "status": "ok (rendered from text)",
-   "ms": 425
-  },
-  "pit": {
-   "graphemes": [
-    "p",
-    "i",
-    "t"
-   ],
-   "expected_ipa": "pɪt",
-   "engine_ipa_for_text": "pɪt",
-   "status": "ok (rendered from text)",
-   "ms": 355
-  },
-  "pan": {
-   "graphemes": [
-    "p",
-    "a",
-    "n"
-   ],
-   "expected_ipa": "pæn",
-   "engine_ipa_for_text": "pæn",
-   "status": "ok (rendered from text)",
-   "ms": 488
-  },
-  "man": {
-   "graphemes": [
-    "m",
-    "a",
-    "n"
-   ],
-   "expected_ipa": "mæn",
-   "engine_ipa_for_text": "mæn",
-   "status": "ok (rendered from text)",
-   "ms": 585
-  },
-  "map": {
-   "graphemes": [
-    "m",
-    "a",
-    "p"
-   ],
-   "expected_ipa": "mæp",
-   "engine_ipa_for_text": "mæp",
-   "status": "ok (rendered from text)",
-   "ms": 535
-  },
-  "mat": {
-   "graphemes": [
-    "m",
-    "a",
-    "t"
-   ],
-   "expected_ipa": "mæt",
-   "engine_ipa_for_text": "mæt",
-   "status": "ok (rendered from text)",
-   "ms": 496
-  },
-  "mad": {
-   "graphemes": [
-    "m",
-    "a",
-    "d"
-   ],
-   "expected_ipa": "mæd",
-   "engine_ipa_for_text": "mæd",
-   "status": "ok (rendered from text)",
-   "ms": 541
-  },
-  "sad": {
-   "graphemes": [
-    "s",
-    "a",
-    "d"
-   ],
-   "expected_ipa": "sæd",
-   "engine_ipa_for_text": "sæd",
-   "status": "ok (rendered from text)",
-   "ms": 520
-  },
-  "dad": {
-   "graphemes": [
-    "d",
-    "a",
-    "d"
-   ],
-   "expected_ipa": "dæd",
-   "engine_ipa_for_text": "dæd",
-   "status": "ok (rendered from text)",
-   "ms": 448
-  },
-  "did": {
-   "graphemes": [
-    "d",
-    "i",
-    "d"
-   ],
-   "expected_ipa": "dɪd",
-   "engine_ipa_for_text": "dɪd",
-   "status": "ok (rendered from text)",
-   "ms": 362
-  },
-  "dip": {
-   "graphemes": [
-    "d",
-    "i",
-    "p"
-   ],
-   "expected_ipa": "dɪp",
-   "engine_ipa_for_text": "dɪp",
-   "status": "ok (rendered from text)",
-   "ms": 383
-  },
-  "nap": {
-   "graphemes": [
-    "n",
-    "a",
-    "p"
-   ],
-   "expected_ipa": "næp",
-   "engine_ipa_for_text": "næp",
-   "status": "ok (rendered from text)",
-   "ms": 544
-  },
-  "nip": {
-   "graphemes": [
-    "n",
-    "i",
-    "p"
-   ],
-   "expected_ipa": "nɪp",
-   "engine_ipa_for_text": "nɪp",
-   "status": "ok (rendered from text)",
-   "ms": 480
-  },
-  "tan": {
-   "graphemes": [
-    "t",
-    "a",
-    "n"
-   ],
-   "expected_ipa": "tæn",
-   "engine_ipa_for_text": "tæn",
-   "status": "ok (rendered from text)",
-   "ms": 498
-  },
-  "pad": {
-   "graphemes": [
-    "p",
-    "a",
-    "d"
-   ],
-   "expected_ipa": "pæd",
-   "engine_ipa_for_text": "pæd",
-   "status": "ok (rendered from text)",
-   "ms": 447
-  },
-  "dam": {
-   "graphemes": [
-    "d",
-    "a",
-    "m"
-   ],
-   "expected_ipa": "dæm",
-   "engine_ipa_for_text": "dæm",
-   "status": "ok (rendered from text)",
-   "ms": 510
-  },
-  "dog": {
-   "graphemes": [
-    "d",
-    "o",
-    "g"
-   ],
-   "expected_ipa": "dɒɡ",
-   "engine_ipa_for_text": "dɒɡ",
-   "status": "ok (rendered from text)",
-   "ms": 394
-  },
-  "dig": {
-   "graphemes": [
-    "d",
-    "i",
-    "g"
-   ],
-   "expected_ipa": "dɪɡ",
-   "engine_ipa_for_text": "dɪɡ",
-   "status": "ok (rendered from text)",
-   "ms": 372
-  },
-  "dot": {
-   "graphemes": [
-    "d",
-    "o",
-    "t"
-   ],
-   "expected_ipa": "dɒt",
-   "engine_ipa_for_text": "dɒt",
-   "status": "ok (rendered from text)",
-   "ms": 367
-  },
-  "got": {
-   "graphemes": [
-    "g",
-    "o",
-    "t"
-   ],
-   "expected_ipa": "ɡɒt",
-   "engine_ipa_for_text": "ɡɒt",
-   "status": "ok (rendered from text)",
-   "ms": 377
-  },
-  "gap": {
-   "graphemes": [
-    "g",
-    "a",
-    "p"
-   ],
-   "expected_ipa": "ɡæp",
-   "engine_ipa_for_text": "ɡæp",
-   "status": "ok (rendered from text)",
-   "ms": 458
-  },
-  "cat": {
-   "graphemes": [
-    "c",
-    "a",
-    "t"
-   ],
-   "expected_ipa": "kæt",
-   "engine_ipa_for_text": "kæt",
-   "status": "ok (rendered from text)",
-   "ms": 436
-  },
-  "cap": {
-   "graphemes": [
-    "c",
-    "a",
-    "p"
-   ],
-   "expected_ipa": "kæp",
-   "engine_ipa_for_text": "kæp",
-   "status": "ok (rendered from text)",
-   "ms": 474
-  },
-  "can": {
-   "graphemes": [
-    "c",
-    "a",
-    "n"
-   ],
-   "expected_ipa": "kæn",
-   "engine_ipa_for_text": "kæn",
-   "status": "ok (rendered from text)",
-   "ms": 505
-  },
-  "cot": {
-   "graphemes": [
-    "c",
-    "o",
-    "t"
-   ],
-   "expected_ipa": "kɒt",
-   "engine_ipa_for_text": "kɒt",
-   "status": "ok (rendered from text)",
-   "ms": 394
-  },
-  "kid": {
-   "graphemes": [
-    "k",
-    "i",
-    "d"
-   ],
-   "expected_ipa": "kɪd",
-   "engine_ipa_for_text": "kɪd",
-   "status": "ok (rendered from text)",
-   "ms": 401
-  },
-  "kit": {
-   "graphemes": [
-    "k",
-    "i",
-    "t"
-   ],
-   "expected_ipa": "kɪt",
-   "engine_ipa_for_text": "kɪt",
-   "status": "ok (rendered from text)",
-   "ms": 382
-  },
-  "pig": {
-   "graphemes": [
-    "p",
-    "i",
-    "g"
-   ],
-   "expected_ipa": "pɪɡ",
-   "engine_ipa_for_text": "pɪɡ",
-   "status": "ok (rendered from text)",
-   "ms": 384
-  },
-  "pot": {
-   "graphemes": [
-    "p",
-    "o",
-    "t"
-   ],
-   "expected_ipa": "pɒt",
-   "engine_ipa_for_text": "pɒt",
-   "status": "ok (rendered from text)",
-   "ms": 377
-  },
-  "pop": {
-   "graphemes": [
-    "p",
-    "o",
-    "p"
-   ],
-   "expected_ipa": "pɒp",
-   "engine_ipa_for_text": "pɒp",
-   "status": "ok (rendered from text)",
-   "ms": 416
-  },
-  "top": {
-   "graphemes": [
-    "t",
-    "o",
-    "p"
-   ],
-   "expected_ipa": "tɒp",
-   "engine_ipa_for_text": "tɒp",
-   "status": "ok (rendered from text)",
-   "ms": 425
-  },
-  "mop": {
-   "graphemes": [
-    "m",
-    "o",
-    "p"
-   ],
-   "expected_ipa": "mɒp",
-   "engine_ipa_for_text": "mɒp",
-   "status": "ok (rendered from text)",
-   "ms": 484
-  },
-  "not": {
-   "graphemes": [
-    "n",
-    "o",
-    "t"
-   ],
-   "expected_ipa": "nɒt",
-   "engine_ipa_for_text": "nɒt",
-   "status": "ok (rendered from text)",
-   "ms": 455
-  },
-  "nod": {
-   "graphemes": [
-    "n",
-    "o",
-    "d"
-   ],
-   "expected_ipa": "nɒd",
-   "engine_ipa_for_text": "nɒd",
-   "status": "ok (rendered from text)",
-   "ms": 499
-  },
-  "pod": {
-   "graphemes": [
-    "p",
-    "o",
-    "d"
-   ],
-   "expected_ipa": "pɒd",
-   "engine_ipa_for_text": "pɒd",
-   "status": "ok (rendered from text)",
-   "ms": 382
-  },
-  "on": {
-   "graphemes": [
-    "o",
-    "n"
-   ],
-   "expected_ipa": "ɒn",
-   "engine_ipa_for_text": "ɒn",
-   "status": "ok (rendered from text)",
-   "ms": 415
-  },
-  "rock": {
-   "graphemes": [
-    "r",
-    "o",
-    "ck"
-   ],
-   "expected_ipa": "ɹɒk",
-   "engine_ipa_for_text": "ɹɒk",
-   "status": "ok (rendered from text)",
-   "ms": 452
-  },
-  "sock": {
-   "graphemes": [
-    "s",
-    "o",
-    "ck"
-   ],
-   "expected_ipa": "sɒk",
-   "engine_ipa_for_text": "sɒk",
-   "status": "ok (rendered from text)",
-   "ms": 450
-  },
-  "pack": {
-   "graphemes": [
-    "p",
-    "a",
-    "ck"
-   ],
-   "expected_ipa": "pæk",
-   "engine_ipa_for_text": "pæk",
-   "status": "ok (rendered from text)",
-   "ms": 419
-  },
-  "tack": {
-   "graphemes": [
-    "t",
-    "a",
-    "ck"
-   ],
-   "expected_ipa": "tæk",
-   "engine_ipa_for_text": "tæk",
-   "status": "ok (rendered from text)",
-   "ms": 428
-  },
-  "neck": {
-   "graphemes": [
-    "n",
-    "e",
-    "ck"
-   ],
-   "expected_ipa": "nɛk",
-   "engine_ipa_for_text": "nɛk",
-   "status": "ok (rendered from text)",
-   "ms": 463
-  },
-  "peck": {
-   "graphemes": [
-    "p",
-    "e",
-    "ck"
-   ],
-   "expected_ipa": "pɛk",
-   "engine_ipa_for_text": "pɛk",
-   "status": "ok (rendered from text)",
-   "ms": 364
-  },
-  "deck": {
-   "graphemes": [
-    "d",
-    "e",
-    "ck"
-   ],
-   "expected_ipa": "dɛk",
-   "engine_ipa_for_text": "dɛk",
-   "status": "ok (rendered from text)",
-   "ms": 366
-  },
-  "pen": {
-   "graphemes": [
-    "p",
-    "e",
-    "n"
-   ],
-   "expected_ipa": "pɛn",
-   "engine_ipa_for_text": "pɛn",
-   "status": "ok (rendered from text)",
-   "ms": 447
-  },
-  "ten": {
-   "graphemes": [
-    "t",
-    "e",
-    "n"
-   ],
-   "expected_ipa": "tɛn",
-   "engine_ipa_for_text": "tɛn",
-   "status": "ok (rendered from text)",
-   "ms": 457
-  },
-  "net": {
-   "graphemes": [
-    "n",
-    "e",
-    "t"
-   ],
-   "expected_ipa": "nɛt",
-   "engine_ipa_for_text": "nɛt",
-   "status": "ok (rendered from text)",
-   "ms": 463
-  },
-  "pet": {
-   "graphemes": [
-    "p",
-    "e",
-    "t"
-   ],
-   "expected_ipa": "pɛt",
-   "engine_ipa_for_text": "pɛt",
-   "status": "ok (rendered from text)",
-   "ms": 365
-  },
-  "men": {
-   "graphemes": [
-    "m",
-    "e",
-    "n"
-   ],
-   "expected_ipa": "mɛn",
-   "engine_ipa_for_text": "mɛn",
-   "status": "ok (rendered from text)",
-   "ms": 542
-  },
-  "red": {
-   "graphemes": [
-    "r",
-    "e",
-    "d"
-   ],
-   "expected_ipa": "ɹɛd",
-   "engine_ipa_for_text": "ɹɛd",
-   "status": "ok (rendered from text)",
-   "ms": 488
-  },
-  "run": {
-   "graphemes": [
-    "r",
-    "u",
-    "n"
-   ],
-   "expected_ipa": "ɹʌn",
-   "engine_ipa_for_text": "ɹʌn",
-   "status": "ok (rendered from text)",
-   "ms": 542
-  },
-  "rat": {
-   "graphemes": [
-    "r",
-    "a",
-    "t"
-   ],
-   "expected_ipa": "ɹæt",
-   "engine_ipa_for_text": "ɹæt",
-   "status": "ok (rendered from text)",
-   "ms": 496
-  },
-  "rip": {
-   "graphemes": [
-    "r",
-    "i",
-    "p"
-   ],
-   "expected_ipa": "ɹɪp",
-   "engine_ipa_for_text": "ɹɪp",
-   "status": "ok (rendered from text)",
-   "ms": 491
-  },
-  "rid": {
-   "graphemes": [
-    "r",
-    "i",
-    "d"
-   ],
-   "expected_ipa": "ɹɪd",
-   "engine_ipa_for_text": "ɹɪd",
-   "status": "ok (rendered from text)",
-   "ms": 488
-  },
-  "ram": {
-   "graphemes": [
-    "r",
-    "a",
-    "m"
-   ],
-   "expected_ipa": "ɹæm",
-   "engine_ipa_for_text": "ɹæm",
-   "status": "ok (rendered from text)",
-   "ms": 607
-  },
-  "rug": {
-   "graphemes": [
-    "r",
-    "u",
-    "g"
-   ],
-   "expected_ipa": "ɹʌɡ",
-   "engine_ipa_for_text": "ɹʌɡ",
-   "status": "ok (rendered from text)",
-   "ms": 498
-  },
-  "rub": {
-   "graphemes": [
-    "r",
-    "u",
-    "b"
-   ],
-   "expected_ipa": "ɹʌb",
-   "engine_ipa_for_text": "ɹʌb",
-   "status": "ok (rendered from text)",
-   "ms": 488
-  },
-  "sun": {
-   "graphemes": [
-    "s",
-    "u",
-    "n"
-   ],
-   "expected_ipa": "sʌn",
-   "engine_ipa_for_text": "sʌn",
-   "status": "ok (rendered from text)",
-   "ms": 519
-  },
-  "mud": {
-   "graphemes": [
-    "m",
-    "u",
-    "d"
-   ],
-   "expected_ipa": "mʌd",
-   "engine_ipa_for_text": "mʌd",
-   "status": "ok (rendered from text)",
-   "ms": 487
-  },
-  "mug": {
-   "graphemes": [
-    "m",
-    "u",
-    "g"
-   ],
-   "expected_ipa": "mʌɡ",
-   "engine_ipa_for_text": "mʌɡ",
-   "status": "ok (rendered from text)",
-   "ms": 497
-  },
-  "mum": {
-   "graphemes": [
-    "m",
-    "u",
-    "m"
-   ],
-   "expected_ipa": "mʌm",
-   "engine_ipa_for_text": "mʌm",
-   "status": "ok (rendered from text)",
-   "ms": 564
-  },
-  "cup": {
-   "graphemes": [
-    "c",
-    "u",
-    "p"
-   ],
-   "expected_ipa": "kʌp",
-   "engine_ipa_for_text": "kʌp",
-   "status": "ok (rendered from text)",
-   "ms": 420
-  },
-  "pup": {
-   "graphemes": [
-    "p",
-    "u",
-    "p"
-   ],
-   "expected_ipa": "pʌp",
-   "engine_ipa_for_text": "pʌp",
-   "status": "ok (rendered from text)",
-   "ms": 403
-  },
-  "up": {
-   "graphemes": [
-    "u",
-    "p"
-   ],
-   "expected_ipa": "ʌp",
-   "engine_ipa_for_text": "ʌp",
-   "status": "ok (rendered from text)",
-   "ms": 371
-  },
-  "us": {
-   "graphemes": [
-    "u",
-    "s"
-   ],
-   "expected_ipa": "ʌs",
-   "engine_ipa_for_text": "ʌs",
-   "status": "ok (rendered from text)",
-   "ms": 380
-  },
-  "cut": {
-   "graphemes": [
-    "c",
-    "u",
-    "t"
-   ],
-   "expected_ipa": "kʌt",
-   "engine_ipa_for_text": "kʌt",
-   "status": "ok (rendered from text)",
-   "ms": 382
-  },
-  "nut": {
-   "graphemes": [
-    "n",
-    "u",
-    "t"
-   ],
-   "expected_ipa": "nʌt",
-   "engine_ipa_for_text": "nʌt",
-   "status": "ok (rendered from text)",
-   "ms": 464
-  },
-  "gum": {
-   "graphemes": [
-    "g",
-    "u",
-    "m"
-   ],
-   "expected_ipa": "ɡʌm",
-   "engine_ipa_for_text": "ɡʌm",
-   "status": "ok (rendered from text)",
-   "ms": 466
-  },
-  "tug": {
-   "graphemes": [
-    "t",
-    "u",
-    "g"
-   ],
-   "expected_ipa": "tʌɡ",
-   "engine_ipa_for_text": "tʌɡ",
-   "status": "ok (rendered from text)",
-   "ms": 402
-  },
-  "dug": {
-   "graphemes": [
-    "d",
-    "u",
-    "g"
-   ],
-   "expected_ipa": "dʌɡ",
-   "engine_ipa_for_text": "dʌɡ",
-   "status": "ok (rendered from text)",
-   "ms": 394
-  },
-  "egg": {
-   "graphemes": [
-    "e",
-    "gg"
-   ],
-   "expected_ipa": "ɛɡ",
-   "engine_ipa_for_text": "ɛɡ",
-   "status": "ok (rendered from text)",
-   "ms": 361
-  },
-  "hat": {
-   "graphemes": [
-    "h",
-    "a",
-    "t"
-   ],
-   "expected_ipa": "hæt",
-   "engine_ipa_for_text": "hæt",
-   "status": "ok (rendered from text)",
-   "ms": 469
-  },
-  "hot": {
-   "graphemes": [
-    "h",
-    "o",
-    "t"
-   ],
-   "expected_ipa": "hɒt",
-   "engine_ipa_for_text": "hɒt",
-   "status": "ok (rendered from text)",
-   "ms": 423
-  },
-  "hit": {
-   "graphemes": [
-    "h",
-    "i",
-    "t"
-   ],
-   "expected_ipa": "hɪt",
-   "engine_ipa_for_text": "hɪt",
-   "status": "ok (rendered from text)",
-   "ms": 386
-  },
-  "hen": {
-   "graphemes": [
-    "h",
-    "e",
-    "n"
-   ],
-   "expected_ipa": "hɛn",
-   "engine_ipa_for_text": "hɛn",
-   "status": "ok (rendered from text)",
-   "ms": 506
-  },
-  "hug": {
-   "graphemes": [
-    "h",
-    "u",
-    "g"
-   ],
-   "expected_ipa": "hʌɡ",
-   "engine_ipa_for_text": "hʌɡ",
-   "status": "ok (rendered from text)",
-   "ms": 442
-  },
-  "hut": {
-   "graphemes": [
-    "h",
-    "u",
-    "t"
-   ],
-   "expected_ipa": "hʌt",
-   "engine_ipa_for_text": "hʌt",
-   "status": "ok (rendered from text)",
-   "ms": 415
-  },
-  "bed": {
-   "graphemes": [
-    "b",
-    "e",
-    "d"
-   ],
-   "expected_ipa": "bɛd",
-   "engine_ipa_for_text": "bɛd",
-   "status": "ok (rendered from text)",
-   "ms": 422
-  },
-  "big": {
-   "graphemes": [
-    "b",
-    "i",
-    "g"
-   ],
-   "expected_ipa": "bɪɡ",
-   "engine_ipa_for_text": "bɪɡ",
-   "status": "ok (rendered from text)",
-   "ms": 431
-  },
-  "bag": {
-   "graphemes": [
-    "b",
-    "a",
-    "g"
-   ],
-   "expected_ipa": "bæɡ",
-   "engine_ipa_for_text": "bæɡ",
-   "status": "ok (rendered from text)",
-   "ms": 496
-  },
-  "bus": {
-   "graphemes": [
-    "b",
-    "u",
-    "s"
-   ],
-   "expected_ipa": "bʌs",
-   "engine_ipa_for_text": "bʌs",
-   "status": "ok (rendered from text)",
-   "ms": 449
-  },
-  "bug": {
-   "graphemes": [
-    "b",
-    "u",
-    "g"
-   ],
-   "expected_ipa": "bʌɡ",
-   "engine_ipa_for_text": "bʌɡ",
-   "status": "ok (rendered from text)",
-   "ms": 431
-  },
-  "bun": {
-   "graphemes": [
-    "b",
-    "u",
-    "n"
-   ],
-   "expected_ipa": "bʌn",
-   "engine_ipa_for_text": "bʌn",
-   "status": "ok (rendered from text)",
-   "ms": 473
-  },
-  "bat": {
-   "graphemes": [
-    "b",
-    "a",
-    "t"
-   ],
-   "expected_ipa": "bæt",
-   "engine_ipa_for_text": "bæt",
-   "status": "ok (rendered from text)",
-   "ms": 437
-  },
-  "bit": {
-   "graphemes": [
-    "b",
-    "i",
-    "t"
-   ],
-   "expected_ipa": "bɪt",
-   "engine_ipa_for_text": "bɪt",
-   "status": "ok (rendered from text)",
-   "ms": 394
-  },
-  "bib": {
-   "graphemes": [
-    "b",
-    "i",
-    "b"
-   ],
-   "expected_ipa": "bɪb",
-   "engine_ipa_for_text": "bɪb",
-   "status": "ok (rendered from text)",
-   "ms": 421
-  },
-  "fan": {
-   "graphemes": [
-    "f",
-    "a",
-    "n"
-   ],
-   "expected_ipa": "fæn",
-   "engine_ipa_for_text": "fæn",
-   "status": "ok (rendered from text)",
-   "ms": 564
-  },
-  "fun": {
-   "graphemes": [
-    "f",
-    "u",
-    "n"
-   ],
-   "expected_ipa": "fʌn",
-   "engine_ipa_for_text": "fʌn",
-   "status": "ok (rendered from text)",
-   "ms": 520
-  },
-  "fit": {
-   "graphemes": [
-    "f",
-    "i",
-    "t"
-   ],
-   "expected_ipa": "fɪt",
-   "engine_ipa_for_text": "fɪt",
-   "status": "ok (rendered from text)",
-   "ms": 427
-  },
-  "fog": {
-   "graphemes": [
-    "f",
-    "o",
-    "g"
-   ],
-   "expected_ipa": "fɒɡ",
-   "engine_ipa_for_text": "fɒɡ",
-   "status": "ok (rendered from text)",
-   "ms": 465
-  },
-  "off": {
-   "graphemes": [
-    "o",
-    "ff"
-   ],
-   "expected_ipa": "ɒf",
-   "engine_ipa_for_text": "ɒf",
-   "status": "ok (rendered from text)",
-   "ms": 378
-  },
-  "puff": {
-   "graphemes": [
-    "p",
-    "u",
-    "ff"
-   ],
-   "expected_ipa": "pʌf",
-   "engine_ipa_for_text": "pʌf",
-   "status": "ok (rendered from text)",
-   "ms": 411
-  },
-  "huff": {
-   "graphemes": [
-    "h",
-    "u",
-    "ff"
-   ],
-   "expected_ipa": "hʌf",
-   "engine_ipa_for_text": "hʌf",
-   "status": "ok (rendered from text)",
-   "ms": 460
-  },
-  "cuff": {
-   "graphemes": [
-    "c",
-    "u",
-    "ff"
-   ],
-   "expected_ipa": "kʌf",
-   "engine_ipa_for_text": "kʌf",
-   "status": "ok (rendered from text)",
-   "ms": 427
-  },
-  "fill": {
-   "graphemes": [
-    "f",
-    "i",
-    "ll"
-   ],
-   "expected_ipa": "fɪl",
-   "engine_ipa_for_text": "fɪl",
-   "status": "ok (rendered from text)",
-   "ms": 498
-  },
-  "fell": {
-   "graphemes": [
-    "f",
-    "e",
-    "ll"
-   ],
-   "expected_ipa": "fɛl",
-   "engine_ipa_for_text": "fɛl",
-   "status": "ok (rendered from text)",
-   "ms": 480
-  },
-  "bell": {
-   "graphemes": [
-    "b",
-    "e",
-    "ll"
-   ],
-   "expected_ipa": "bɛl",
-   "engine_ipa_for_text": "bɛl",
-   "status": "ok (rendered from text)",
+   "phonemes": "tˈæp",
    "ms": 433
   },
-  "doll": {
-   "graphemes": [
-    "d",
-    "o",
-    "ll"
-   ],
-   "expected_ipa": "dɒl",
-   "engine_ipa_for_text": "dɒl",
-   "status": "ok (rendered from text)",
+  "sap": {
+   "phonemes": "sˈæp",
    "ms": 383
   },
-  "hill": {
-   "graphemes": [
-    "h",
-    "i",
-    "ll"
-   ],
-   "expected_ipa": "hɪl",
-   "engine_ipa_for_text": "hɪl",
-   "status": "ok (rendered from text)",
-   "ms": 457
+  "in": {
+   "phonemes": "ˈɪn",
+   "ms": 201
   },
-  "pill": {
-   "graphemes": [
-    "p",
-    "i",
-    "ll"
-   ],
-   "expected_ipa": "pɪl",
-   "engine_ipa_for_text": "pɪl",
-   "status": "ok (rendered from text)",
-   "ms": 425
+  "it": {
+   "phonemes": "ˈɪt",
+   "ms": 271
   },
-  "mill": {
-   "graphemes": [
-    "m",
-    "i",
-    "ll"
-   ],
-   "expected_ipa": "mɪl",
-   "engine_ipa_for_text": "mɪl",
-   "status": "ok (rendered from text)",
-   "ms": 512
+  "an": {
+   "phonemes": "ˈæn",
+   "ms": 347
   },
-  "tell": {
-   "graphemes": [
-    "t",
-    "e",
-    "ll"
-   ],
-   "expected_ipa": "tɛl",
-   "engine_ipa_for_text": "tɛl",
-   "status": "ok (rendered from text)",
-   "ms": 413
+  "am": {
+   "phonemes": "ˈæm",
+   "ms": 308
   },
-  "sell": {
-   "graphemes": [
-    "s",
-    "e",
-    "ll"
-   ],
-   "expected_ipa": "sɛl",
-   "engine_ipa_for_text": "sɛl",
-   "status": "ok (rendered from text)",
-   "ms": 477
+  "ad": {
+   "phonemes": "ˈæd",
+   "ms": 366
   },
-  "bill": {
-   "graphemes": [
-    "b",
-    "i",
-    "ll"
-   ],
-   "expected_ipa": "bɪl",
-   "engine_ipa_for_text": "bɪl",
-   "status": "ok (rendered from text)",
-   "ms": 464
+  "sit": {
+   "phonemes": "sˈɪt",
+   "ms": 468
   },
-  "lip": {
-   "graphemes": [
-    "l",
-    "i",
-    "p"
-   ],
-   "expected_ipa": "lɪp",
-   "engine_ipa_for_text": "lɪp",
-   "status": "ok (rendered from text)",
-   "ms": 471
+  "sip": {
+   "phonemes": "sˈɪp",
+   "ms": 401
   },
-  "lap": {
-   "graphemes": [
-    "l",
-    "a",
-    "p"
-   ],
-   "expected_ipa": "læp",
-   "engine_ipa_for_text": "læp",
-   "status": "ok (rendered from text)",
-   "ms": 505
+  "tip": {
+   "phonemes": "tˈɪp",
+   "ms": 324
   },
-  "leg": {
-   "graphemes": [
-    "l",
-    "e",
-    "g"
-   ],
-   "expected_ipa": "lɛɡ",
-   "engine_ipa_for_text": "lɛɡ",
-   "status": "ok (rendered from text)",
-   "ms": 460
+  "tin": {
+   "phonemes": "tˈɪn",
+   "ms": 419
   },
-  "log": {
-   "graphemes": [
-    "l",
-    "o",
-    "g"
-   ],
-   "expected_ipa": "lɒɡ",
-   "engine_ipa_for_text": "lɒɡ",
-   "status": "ok (rendered from text)",
-   "ms": 508
+  "pin": {
+   "phonemes": "pˈɪn",
+   "ms": 403
   },
-  "let": {
-   "graphemes": [
-    "l",
-    "e",
-    "t"
-   ],
-   "expected_ipa": "lɛt",
-   "engine_ipa_for_text": "lɛt",
-   "status": "ok (rendered from text)",
-   "ms": 425
+  "pit": {
+   "phonemes": "pˈɪt",
+   "ms": 459
   },
-  "lid": {
-   "graphemes": [
-    "l",
-    "i",
-    "d"
-   ],
-   "expected_ipa": "lɪd",
-   "engine_ipa_for_text": "lɪd",
-   "status": "ok (rendered from text)",
-   "ms": 478
+  "pan": {
+   "phonemes": "pˈæn",
+   "ms": 436
   },
-  "lit": {
-   "graphemes": [
-    "l",
-    "i",
-    "t"
-   ],
-   "expected_ipa": "lɪt",
-   "engine_ipa_for_text": "lɪt",
-   "status": "ok (rendered from text)",
-   "ms": 432
+  "man": {
+   "phonemes": "mˈæn",
+   "ms": 495
   },
-  "mess": {
-   "graphemes": [
-    "m",
-    "e",
-    "ss"
-   ],
-   "expected_ipa": "mɛs",
-   "engine_ipa_for_text": "mɛs",
-   "status": "ok (rendered from text)",
-   "ms": 496
+  "map": {
+   "phonemes": "mˈæp",
+   "ms": 428
   },
-  "miss": {
-   "graphemes": [
-    "m",
-    "i",
-    "ss"
-   ],
-   "expected_ipa": "mɪs",
-   "engine_ipa_for_text": "mɪs",
-   "status": "ok (rendered from text)",
-   "ms": 487
+  "mat": {
+   "phonemes": "mˈæt",
+   "ms": 389
   },
-  "kiss": {
-   "graphemes": [
-    "k",
-    "i",
-    "ss"
-   ],
-   "expected_ipa": "kɪs",
-   "engine_ipa_for_text": "kɪs",
-   "status": "ok (rendered from text)",
-   "ms": 425
+  "mad": {
+   "phonemes": "mˈæd",
+   "ms": 493
   },
-  "hiss": {
-   "graphemes": [
-    "h",
-    "i",
-    "ss"
-   ],
-   "expected_ipa": "hɪs",
-   "engine_ipa_for_text": "hɪs",
-   "status": "ok (rendered from text)",
+  "sad": {
+   "phonemes": "sˈæd",
+   "ms": 453
+  },
+  "dad": {
+   "phonemes": "dˈæd",
+   "ms": 690
+  },
+  "did": {
+   "phonemes": "dˈɪd",
+   "ms": 334
+  },
+  "dip": {
+   "phonemes": "dˈɪp",
+   "ms": 381
+  },
+  "nap": {
+   "phonemes": "nˈæp",
+   "ms": 434
+  },
+  "nip": {
+   "phonemes": "nˈɪp",
+   "ms": 388
+  },
+  "tan": {
+   "phonemes": "tˈæn",
+   "ms": 491
+  },
+  "pad": {
+   "phonemes": "pˈæd",
+   "ms": 542
+  },
+  "dam": {
+   "phonemes": "dˈæm",
+   "ms": 426
+  },
+  "dog": {
+   "phonemes": "dˈɒɡ",
+   "ms": 331
+  },
+  "dig": {
+   "phonemes": "dˈɪɡ",
+   "ms": 447
+  },
+  "dot": {
+   "phonemes": "dˈɒt",
+   "ms": 427
+  },
+  "got": {
+   "phonemes": "ɡˈɒt",
+   "ms": 375
+  },
+  "gap": {
+   "phonemes": "ɡˈæp",
+   "ms": 370
+  },
+  "cat": {
+   "phonemes": "kˈæt",
+   "ms": 529
+  },
+  "cap": {
+   "phonemes": "kˈæp",
    "ms": 430
   },
+  "can": {
+   "phonemes": "kˈæn",
+   "ms": 452
+  },
+  "cot": {
+   "phonemes": "kˈɒt",
+   "ms": 441
+  },
+  "kid": {
+   "phonemes": "kˈɪd",
+   "ms": 441
+  },
+  "kit": {
+   "phonemes": "kˈɪt",
+   "ms": 421
+  },
+  "pig": {
+   "phonemes": "pˈɪɡ",
+   "ms": 350
+  },
+  "pot": {
+   "phonemes": "pˈɒt",
+   "ms": 455
+  },
+  "pop": {
+   "phonemes": "pˈɒp",
+   "ms": 334
+  },
+  "top": {
+   "phonemes": "tˈɒp",
+   "ms": 358
+  },
+  "mop": {
+   "phonemes": "mˈɒp",
+   "ms": 427
+  },
+  "not": {
+   "phonemes": "nˈɒt",
+   "ms": 504
+  },
+  "nod": {
+   "phonemes": "nˈɒd",
+   "ms": 480
+  },
+  "pod": {
+   "phonemes": "pˈɒd",
+   "ms": 399
+  },
+  "on": {
+   "phonemes": "ˈɒn",
+   "ms": 338
+  },
+  "rock": {
+   "phonemes": "ɹˈɒk",
+   "ms": 456
+  },
+  "sock": {
+   "phonemes": "sˈɒk",
+   "ms": 388
+  },
+  "pack": {
+   "phonemes": "pˈæk",
+   "ms": 406
+  },
+  "tack": {
+   "phonemes": "tˈæk",
+   "ms": 474
+  },
+  "neck": {
+   "phonemes": "nˈɛk",
+   "ms": 408
+  },
+  "peck": {
+   "phonemes": "pˈɛk",
+   "ms": 348
+  },
+  "deck": {
+   "phonemes": "dˈɛk",
+   "ms": 348
+  },
+  "pen": {
+   "phonemes": "pˈɛn",
+   "ms": 452
+  },
+  "ten": {
+   "phonemes": "tˈɛn",
+   "ms": 376
+  },
+  "net": {
+   "phonemes": "nˈɛt",
+   "ms": 423
+  },
+  "pet": {
+   "phonemes": "pˈɛt",
+   "ms": 470
+  },
+  "men": {
+   "phonemes": "mˈɛn",
+   "ms": 412
+  },
+  "red": {
+   "phonemes": "ɹˈɛd",
+   "ms": 456
+  },
+  "run": {
+   "phonemes": "ɹˈʌn",
+   "ms": 375
+  },
+  "rat": {
+   "phonemes": "ɹˈæt",
+   "ms": 596
+  },
+  "rip": {
+   "phonemes": "ɹˈɪp",
+   "ms": 464
+  },
+  "rid": {
+   "phonemes": "ɹˈɪd",
+   "ms": 395
+  },
+  "ram": {
+   "phonemes": "ɹˈæm",
+   "ms": 384
+  },
+  "rug": {
+   "phonemes": "ɹˈʌɡ",
+   "ms": 393
+  },
+  "rub": {
+   "phonemes": "ɹˈʌb",
+   "ms": 282
+  },
+  "sun": {
+   "phonemes": "sˈʌn",
+   "ms": 354
+  },
+  "mud": {
+   "phonemes": "mˈʌd",
+   "ms": 476
+  },
+  "mug": {
+   "phonemes": "mˈʌɡ",
+   "ms": 401
+  },
+  "mum": {
+   "phonemes": "mˈʌm",
+   "ms": 389
+  },
+  "cup": {
+   "phonemes": "kˈʌp",
+   "ms": 273
+  },
+  "pup": {
+   "phonemes": "pˈʌp",
+   "ms": 331
+  },
+  "up": {
+   "phonemes": "ˈʌp",
+   "ms": 202
+  },
+  "us": {
+   "phonemes": "ˈʌs",
+   "ms": 428
+  },
+  "cut": {
+   "phonemes": "kˈʌt",
+   "ms": 464
+  },
+  "nut": {
+   "phonemes": "nˈʌt",
+   "ms": 471
+  },
+  "gum": {
+   "phonemes": "ɡˈʌm",
+   "ms": 386
+  },
+  "tug": {
+   "phonemes": "tˈʌɡ",
+   "ms": 386
+  },
+  "dug": {
+   "phonemes": "dˈʌɡ",
+   "ms": 424
+  },
+  "egg": {
+   "phonemes": "ˈɛɡ",
+   "ms": 197
+  },
+  "hat": {
+   "phonemes": "hˈæt",
+   "ms": 440
+  },
+  "hot": {
+   "phonemes": "hˈɒt",
+   "ms": 187
+  },
+  "hit": {
+   "phonemes": "hˈɪt",
+   "ms": 320
+  },
+  "hen": {
+   "phonemes": "hˈɛn",
+   "ms": 440
+  },
+  "hug": {
+   "phonemes": "hˈʌɡ",
+   "ms": 364
+  },
+  "hut": {
+   "phonemes": "hˈʌt",
+   "ms": 351
+  },
+  "bed": {
+   "phonemes": "bˈɛd",
+   "ms": 282
+  },
+  "big": {
+   "phonemes": "bˈɪɡ",
+   "ms": 331
+  },
+  "bag": {
+   "phonemes": "bˈæɡ",
+   "ms": 392
+  },
+  "bus": {
+   "phonemes": "bˈʌs",
+   "ms": 493
+  },
+  "bug": {
+   "phonemes": "bˈʌɡ",
+   "ms": 326
+  },
+  "bun": {
+   "phonemes": "bˈʌn",
+   "ms": 385
+  },
+  "bat": {
+   "phonemes": "bˈæt",
+   "ms": 441
+  },
+  "bit": {
+   "phonemes": "bˈɪt",
+   "ms": 372
+  },
+  "bib": {
+   "phonemes": "bˈɪb",
+   "ms": 313
+  },
+  "fan": {
+   "phonemes": "fˈæn",
+   "ms": 496
+  },
+  "fun": {
+   "phonemes": "fˈʌn",
+   "ms": 504
+  },
+  "fit": {
+   "phonemes": "fˈɪt",
+   "ms": 403
+  },
+  "fog": {
+   "phonemes": "fˈɒɡ",
+   "ms": 403
+  },
+  "off": {
+   "phonemes": "ˈɒf",
+   "ms": 371
+  },
+  "puff": {
+   "phonemes": "pˈʌf",
+   "ms": 385
+  },
+  "huff": {
+   "phonemes": "hˈʌf",
+   "ms": 371
+  },
+  "cuff": {
+   "phonemes": "kˈʌf",
+   "ms": 380
+  },
+  "fill": {
+   "phonemes": "fˈɪl",
+   "ms": 460
+  },
+  "fell": {
+   "phonemes": "fˈɛl",
+   "ms": 412
+  },
+  "bell": {
+   "phonemes": "bˈɛl",
+   "ms": 365
+  },
+  "doll": {
+   "phonemes": "dˈɒl",
+   "ms": 357
+  },
+  "hill": {
+   "phonemes": "hˈɪl",
+   "ms": 437
+  },
+  "pill": {
+   "phonemes": "pˈɪl",
+   "ms": 473
+  },
+  "mill": {
+   "phonemes": "mˈɪl",
+   "ms": 451
+  },
+  "tell": {
+   "phonemes": "tˈɛl",
+   "ms": 412
+  },
+  "sell": {
+   "phonemes": "sˈɛl",
+   "ms": 400
+  },
+  "bill": {
+   "phonemes": "bˈɪl",
+   "ms": 399
+  },
+  "lip": {
+   "phonemes": "lˈɪp",
+   "ms": 430
+  },
+  "lap": {
+   "phonemes": "lˈæp",
+   "ms": 387
+  },
+  "leg": {
+   "phonemes": "lˈɛɡ",
+   "ms": 276
+  },
+  "log": {
+   "phonemes": "lˈɒɡ",
+   "ms": 435
+  },
+  "let": {
+   "phonemes": "lˈɛt",
+   "ms": 407
+  },
+  "lid": {
+   "phonemes": "lˈɪd",
+   "ms": 367
+  },
+  "lit": {
+   "phonemes": "lˈɪt",
+   "ms": 356
+  },
+  "mess": {
+   "phonemes": "mˈɛs",
+   "ms": 533
+  },
+  "miss": {
+   "phonemes": "mˈɪs",
+   "ms": 492
+  },
+  "kiss": {
+   "phonemes": "kˈɪs",
+   "ms": 384
+  },
+  "hiss": {
+   "phonemes": "hˈɪs",
+   "ms": 495
+  },
   "moss": {
-   "graphemes": [
-    "m",
-    "o",
-    "ss"
-   ],
-   "expected_ipa": "mɒs",
-   "engine_ipa_for_text": "mɒs",
-   "status": "ok (rendered from text)",
-   "ms": 477
+   "phonemes": "mˈɒs",
+   "ms": 582
   },
   "boss": {
-   "graphemes": [
-    "b",
-    "o",
-    "ss"
-   ],
-   "expected_ipa": "bɒs",
-   "engine_ipa_for_text": "bɒs",
-   "status": "ok (rendered from text)",
-   "ms": 449
+   "phonemes": "bˈɒs",
+   "ms": 526
   },
   "fuss": {
-   "graphemes": [
-    "f",
-    "u",
-    "ss"
-   ],
-   "expected_ipa": "fʌs",
-   "engine_ipa_for_text": "fʌs",
-   "status": "ok (rendered from text)",
-   "ms": 481
+   "phonemes": "fˈʌs",
+   "ms": 440
   },
   "less": {
-   "graphemes": [
-    "l",
-    "e",
-    "ss"
-   ],
-   "expected_ipa": "lɛs",
-   "engine_ipa_for_text": "lɛs",
-   "status": "ok (rendered from text)",
-   "ms": 467
+   "phonemes": "lˈɛs",
+   "ms": 569
   },
   "pass": {
-   "graphemes": [
-    "p",
-    "a",
-    "ss"
-   ],
-   "expected_ipa": "pæs",
-   "engine_ipa_for_text": "pɑːs",
-   "status": "excluded in this accent: engine says 'pɑːs', taught sounds give 'pæs'"
+   "status": "excluded in this accent (BATH vowel)"
   },
   "mass": {
-   "graphemes": [
-    "m",
-    "a",
-    "ss"
-   ],
-   "expected_ipa": "mæs",
-   "engine_ipa_for_text": "mæs",
-   "status": "ok (rendered from text)",
-   "ms": 538
+   "phonemes": "mˈæs",
+   "ms": 553
   }
  },
  "phrases": {
   "play": {
    "text": "Play",
-   "ms": 467
+   "ms": 364
   },
   "play_again": {
    "text": "Play again",
-   "ms": 804
+   "ms": 616
   },
   "play_together": {
    "text": "Play together",
-   "ms": 931
+   "ms": 755
   },
   "next": {
    "text": "Next",
-   "ms": 534
+   "ms": 514
   },
   "goodnight": {
    "text": "Goodnight",
-   "ms": 646
+   "ms": 720
   },
   "hello": {
    "text": "Hello!",
-   "ms": 547
+   "ms": 439
   },
   "two_minutes": {
    "text": "Two more minutes, then it's sleepy time.",
-   "ms": 2807
+   "ms": 2088
   },
   "find_grownup": {
    "text": "Find a grown-up to play with you!",
-   "ms": 2075
+   "ms": 1524
   },
   "treasure": {
    "text": "You found a treasure!",
-   "ms": 1290
+   "ms": 1029
   },
   "island_asleep": {
    "text": "Zzz. The island is asleep.",
-   "ms": 2801
+   "ms": 2324
   },
   "listen_robot": {
    "text": "Listen to the robot.",
-   "ms": 1339
+   "ms": 1052
   },
   "which_rhymes": {
    "text": "Which one rhymes?",
-   "ms": 1194
+   "ms": 1128
   },
   "tap_sounds": {
    "text": "Tap each sound, in order.",
-   "ms": 1992
+   "ms": 1874
   },
   "blend_it": {
    "text": "Now blend them. Which word is it?",
-   "ms": 2596
+   "ms": 2189
   },
   "again": {
    "text": "Let's tap the sounds again.",
-   "ms": 1947
+   "ms": 1575
+  },
+  "hungry_for": {
+   "text": "I'm hungry for",
+   "ms": 776
+  },
+  "find_the": {
+   "text": "Find the",
+   "ms": 608
+  },
+  "your_turn": {
+   "text": "Your turn!",
+   "ms": 676
+  },
+  "copy_me": {
+   "text": "Copy me!",
+   "ms": 539
+  },
+  "which_letter": {
+   "text": "Which letter says",
+   "ms": 1103
+  },
+  "well_done": {
+   "text": "Well done!",
+   "ms": 763
+  },
+  "slide_blend": {
+   "text": "Slide your finger across to blend.",
+   "ms": 1921
+  },
+  "hello_friend": {
+   "text": "Hello, friend!",
+   "ms": 745
   },
   "drum_prompt": {
    "text": "Beat the drum once for each sound.",
-   "ms": 2437
+   "ms": 1855
   },
   "safari_prompt": {
    "text": "Find things that start with the sound.",
-   "ms": 2506
+   "ms": 2141
   },
   "kitchen_prompt": {
    "text": "Build the word.",
-   "ms": 1033
+   "ms": 912
   },
   "trace_prompt": {
    "text": "Trace the letter. Start at the green dot.",
-   "ms": 2928
+   "ms": 2359
   },
   "pick_egg": {
    "text": "Pick an egg.",
-   "ms": 745
+   "ms": 682
   },
   "show_grownup": {
    "text": "Show a grown-up",
-   "ms": 1063
+   "ms": 870
   }
  },
- "problems": [],
  "safari": {
   "sun": "ok",
   "sock": "ok",
@@ -2189,11 +1414,13 @@
   "cat": "ok",
   "cup": "ok",
   "cow": "ok",
-  "kite": "ok",
-  "key": "ok",
   "camel": "ok",
   "car": "ok",
   "cake": "ok",
+  "kite": "ok",
+  "key": "ok",
+  "kiwi": "ok",
+  "kangaroo": "ok",
   "egg": "ok",
   "elephant": "ok",
   "envelope": "ok",
@@ -2228,6 +1455,9 @@
   "log": "ok",
   "lollipop": "ok"
  },
+ "problems": [],
+ "warnings": [],
+ "asr": {},
  "removed_words": [
   "pass"
  ]

@@ -67,7 +67,8 @@ PHRASES = {
     "find_grownup": "Find a grown-up to play with you!", "treasure": "You found a treasure!",
     "island_asleep": "Zzz. The island is asleep.", "listen_robot": "Listen to the robot.",
     "which_rhymes": "Which one rhymes?", "tap_sounds": "Tap each sound, in order.", "blend_it": "Now blend them. Which word is it?",
-    "again": "Let's tap the sounds again.",
+    "again": "Let's tap the sounds again.", "hungry_for": "I'm hungry for", "find_the": "Find the", "your_turn": "Your turn!", "copy_me": "Copy me!", "which_letter": "Which letter says", "well_done": "Well done!",
+    "slide_blend": "Slide your finger across to blend.", "hello_friend": "Hello, friend!",
     "drum_prompt": "Beat the drum once for each sound.", "safari_prompt": "Find things that start with the sound.",
     "kitchen_prompt": "Build the word.", "trace_prompt": "Trace the letter. Start at the green dot.", "pick_egg": "Pick an egg.", "show_grownup": "Show a grown-up",
 }

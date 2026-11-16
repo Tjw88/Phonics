@@ -1,8 +1,8 @@
 // One "round" of each game: builds the trial from the child's state, runs the game, and records the result.
 // The adventure and Free Play both use these, so a game behaves identically wherever it is played.
-import { bankFor, isConfusable, type Grapheme, type Word } from '../engine/data';
+import { GRAPHEMES, bankFor, isConfusable, type Grapheme, type Word } from '../engine/data';
 import { shuffle } from '../engine/dates';
-import { buildFeedTrial, buildKitchenTiles, buildSafari, decodableWords, phonemeOf, pickDistractors } from '../engine/session';
+import { buildFeedTrial, buildKitchenTiles, buildSafari, decodableWords, pickDistractors, safariGraphemes } from '../engine/session';
 import { recordTrial, recordWord } from '../engine/state';
 import { bridgeBuilder, feedCreature, rhymeRocket, rhymeSets, robotTalk, type Ctx, type TrialResult } from './games';
 import { beatDrum, soundSafari, traceTrail, wordKitchen } from './games2';
@@ -35,7 +35,7 @@ export const roundRobot = (ctx: Ctx, w: Word, i: number): Promise<TrialResult> =
 export const roundDrum = (ctx: Ctx, w: Word): Promise<TrialResult> => beatDrum(ctx, w);
 
 export const roundSafari = (ctx: Ctx, g: Grapheme): Promise<TrialResult> =>
-  soundSafari(ctx, g, buildSafari(ctx.s, phonemeOf(g.id), ctx.rng));
+  soundSafari(ctx, g, buildSafari(ctx.s, g, ctx.rng));
 
 export const roundKitchen = (ctx: Ctx, w: Word): Promise<TrialResult> =>
   wordKitchen(ctx, w, buildKitchenTiles(ctx.s, w, ctx.rng));
@@ -56,10 +56,17 @@ export const roundRhyme = (ctx: Ctx): Promise<TrialResult> => {
 
 export const roundTrace = (ctx: Ctx, g: Grapheme): Promise<TrialResult> => traceTrail(ctx, g);
 
+/** Learned letters that Sound Safari can be played with (it needs two things starting with the letter). */
+export const safariLearned = (ctx: Ctx): Grapheme[] => {
+  const ok = new Set(safariGraphemes(ctx.s.accent));
+  return GRAPHEMES.filter((g) => ctx.s.sounds[g.id] && ok.has(g.id));
+};
+
 /** Which games a child can play right now (Free Play menu): print games wait until printed blending is open. */
 export const availableGames = (ctx: Ctx, printBlend: boolean, hasSounds: boolean): GameKind[] => {
   const g: GameKind[] = ['robot', 'drum', 'rhyme'];
-  if (hasSounds) g.unshift('feed', 'safari');
+  if (hasSounds) g.unshift('feed');
+  if (safariLearned(ctx).length) g.unshift('safari');
   if (printBlend && decodableWords(ctx.s).some((w) => w.emoji && w.graphemes.length >= 2)) g.push('kitchen');
   if (printBlend) g.push('bridge');
   if (hasSounds) g.push('trace');

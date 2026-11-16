@@ -1,23 +1,24 @@
-import { ACCENTS, GRAPHEMES, MNEMONICS, bankFor, type AccentId, type Word } from '../engine/data';
+import { ACCENTS, GRAPHEMES, MNEMONICS, STORY_SAY, bankFor, type AccentId } from '../engine/data';
 import { seeded, shuffle } from '../engine/dates';
 import { strugglingSounds } from '../engine/review';
 import {
   NEW_SOUND_TRIALS, REVIEW_SOUND_TRIALS, applyPlacement, buildPlacement, decodableWords,
-  missionFor, phonemeOf, pickWords, printBlendOpen, scorePlacement, slashed, startAdventure, type Plan,
+  missionFor, phonemeOf, pickDistractors, pickWords, printBlendOpen, scorePlacement, slashed, startAdventure, type Plan,
 } from '../engine/session';
 import { playDay } from '../engine/simulate';
 import {
   newChild, statusOf, unlockedSet, wordsRead, type ChildState,
 } from '../engine/state';
-import { audioSource, blip, initAudio, praise, sayPhrase, setMuted, setMusicOn, sfx, speak, tap, unlockAudio } from './audio';
+import { audioSource, blip, initAudio, praise, sayPhrase, saySeq, setMuted, setMusicOn, sfx, speak, tap, unlockAudio } from './audio';
 import { friendEl } from './friends';
 import { pictureEl } from './pictures';
-import { GAME_LABEL, availableGames, roundBridge, roundDrum, roundFeed, roundKitchen, roundRhyme, roundRobot, roundSafari, roundTrace, type GameKind } from './rounds';
+import { copyBeat, findIt } from './games2';
+import { GAME_LABEL, availableGames, safariLearned, roundBridge, roundDrum, roundFeed, roundKitchen, roundRhyme, roundRobot, roundSafari, roundTrace, type GameKind } from './rounds';
 import { DINOS, chestSVG, eggSVG, islandSVG, sceneSVG } from './art';
 import { burst, mount, setNight } from './fx';
 import { bigButton, h, sleep } from './dom';
 import {
-  companionEl, placementTrial, rhymeRocket, rhymeSets, type Ctx,
+  companionEl, placementTrial, type Ctx,
 } from './games';
 import { clockDay, load, save, wipe } from './storage';
 
@@ -194,6 +195,7 @@ export class App {
     mount(this.stage,
       h('div', { class: 'scene setup' }, h('h1', {}, 'Pick an egg'), eggRow, names, hatch.el),
     );
+    void sayPhrase('pick_egg', 'Pick an egg.');
     await hatch.pressed;
     const kind = DINOS[chosen]!.id;
     this.s.companion = { kind, name: names.value.trim() || 'Dino' };
@@ -276,6 +278,7 @@ export class App {
     const name = s.companion?.name ?? 'Dino';
 
     // 1. Hello
+    void sayPhrase('hello', 'Hello!');
     const lastSound = [...Object.entries(s.sounds)].filter(([, r]) => r.introducedOn < today).sort((a, b) => b[1].introducedOn.localeCompare(a[1].introducedOn))[0];
     await this.interlude([
       companionEl(s, 'big'),
@@ -294,7 +297,7 @@ export class App {
     // 3. New sound story (a sound-friend introduces the sound), then optional letter tracing
     if (plan.newSound) {
       const m = MNEMONICS[plan.newSound.id];
-      blip(plan.newSound.phoneme);
+      saySeq([{ phrase: `story_${plan.newSound.id}`, text: STORY_SAY[plan.newSound.id] ?? '' }, { sound: plan.newSound.phoneme }]);
       await this.interlude([
         h('div', { class: 'story' }, h('span', { class: 'mn' }, friendEl(plan.newSound.id, 'story-friend')), h('span', { class: 'letter-big', 'data-testid': 'newsound' }, plan.newSound.id)),
         h('p', { class: 'caption' }, `${m?.name ?? ''}: ${m?.line ?? ''}`),
@@ -374,7 +377,8 @@ export class App {
         h('p', { class: 'treasure-name' }, m?.name ?? ''),
         h('div', { class: 'row' }, show, shown.el)),
     );
-    setTimeout(() => { chest.classList.add('open'); sfx.chest(); burst(prizeEl, 'stars', 16); praise(); }, 450);
+    void sayPhrase('treasure', 'You found a treasure!');
+    setTimeout(() => { chest.classList.add('open'); sfx.chest(); burst(prizeEl, 'stars', 16); praise(); }, 900);
     await shown.pressed; // goodnight is a celebration, not a cut-off: the child chooses to close the day
     setNight(true);
     await this.interlude([companionEl(s, 'big sleepy'), h('p', { class: 'caption' }, 'Zzz… the island is asleep.')], '🏝️', 'sleep-next');
@@ -400,7 +404,7 @@ export class App {
       if (kind === 'feed') await roundFeed(ctx, g, 2);
       else if (kind === 'robot') await roundRobot(ctx, pickWords(pictured, s, g, 1, ctx.rng)[0]!, 1);
       else if (kind === 'drum') await roundDrum(ctx, pickWords(pictured.filter((w) => w.graphemes.length >= 2 && w.graphemes.length <= 4), s, g, 1, ctx.rng)[0]!);
-      else if (kind === 'safari') await roundSafari(ctx, g);
+      else if (kind === 'safari') await roundSafari(ctx, shuffle(safariLearned(ctx), ctx.rng)[0] ?? g);
       else if (kind === 'kitchen') await roundKitchen(ctx, pickWords(decodable.filter((w) => w.emoji && w.graphemes.length >= 2), s, g, 1, ctx.rng)[0]!);
       else if (kind === 'bridge') await roundBridge(ctx, pickWords(decodable, s, g, 1, ctx.rng)[0]!);
       else if (kind === 'rhyme') await roundRhyme(ctx);
@@ -432,12 +436,16 @@ export class App {
     this.inChild = true;
     setNight(false);
     const ctx = this.ctx();
+    void sayPhrase('find_grownup', 'Find a grown-up to play with you!');
     await this.interlude([companionEl(this.s, 'big'), h('p', { class: 'caption', 'data-testid': 'coplay' }, 'Find a grown-up to play with you!')]);
-    const pictured = bankFor(this.s.accent).filter((w) => w.emoji);
-    for (const grp of shuffle(rhymeSets(this.s.accent), ctx.rng).slice(0, 3)) {
-      const [a, b] = shuffle(grp, ctx.rng) as [Word, Word];
-      await rhymeRocket(ctx, a, b, shuffle(pictured.filter((x) => !grp.includes(x)), ctx.rng).slice(0, 1));
-    }
+    // age 2-3: rhythm and naming (no letters, nothing scored); rhyme recognition is a later (3-4) skill
+    const pictured = bankFor(this.s.accent).filter((w) => w.emoji && w.graphemes.length >= 2);
+    const picks = shuffle(pictured, ctx.rng);
+    await copyBeat(ctx, 1);
+    for (const w of picks.slice(0, 2)) await findIt(ctx, w, pickDistractors(pictured, w, 2, ctx.rng));
+    await copyBeat(ctx, 2);
+    for (const w of picks.slice(2, 4)) await findIt(ctx, w, pickDistractors(pictured, w, 2, ctx.rng));
+    await copyBeat(ctx, 3);
     const prompts = ['Find something in your house that goes “mmm”.', 'Clap the sounds in your name.', 'Find something soft that starts with “sss”.'];
     for (const p of prompts) await this.interlude([h('p', { class: 'caption' }, p), h('p', {}, '(Away from the screen, together!)')]);
     this.setHint(null);
@@ -482,7 +490,7 @@ export class App {
         );
       } else if (tab === 'sounds') {
         body.append(h('h2', {}, 'Sound map'), h('p', { class: 'muted' }, 'Say the sound, not the letter name (“mmm”, not “muh”). Prototype note: these sounds are machine-generated, not recorded, so please listen to each one. The label under each sound says how it was made.'),
-          h('p', {}, h('a', { href: './audio-check.html', target: '_blank', 'data-testid': 'audition-link' }, 'Audition every sound and word (for whoever audits the audio)')),
+          h('p', {}, h('a', { href: './audio-check.html', target: '_blank', 'data-testid': 'audition-link' }, 'Audition every sound and word (for whoever audits the audio)'), ' · ', h('a', { href: 'https://github.com/Tjw88/Phonics/issues/new?title=Sound%20problem%3A%20', target: '_blank', rel: 'noopener', 'data-testid': 'report-sound' }, 'Report a wrong or unclear sound')),
           h('div', { class: 'map', 'data-testid': 'soundmap' }, GRAPHEMES.map((g) => {
             const st = statusOf(s, g.id);
             const icon = st === 'secure' ? '●' : st === 'learning' ? '◐' : '○';
@@ -529,6 +537,7 @@ export class App {
           h('label', { class: 'check' }, h('input', { type: 'checkbox', 'data-testid': 'music', checked: s.musicOn, onChange: (e: Event) => { s.musicOn = (e.target as HTMLInputElement).checked; setMusicOn(s.musicOn); this.persist(); } }), ' Background music'),
           h('p', { class: 'muted', 'data-testid': 'accent-help' }, `${ACCENTS.find((a) => a.id === s.accent)?.note ?? ''} Choose the one that matches how you and your child’s school say the sounds. Your child’s progress is kept when you switch.`),
           h('p', { class: 'muted' }, 'Microphone: off (not implemented in this prototype). Reminders: off.'),
+          h('p', { class: 'muted', 'data-testid': 'credits' }, 'Voices: Piper neural text-to-speech. Southern British: Cori Samuel (CC BY 4.0). Northern English: OpenSLR 83 speaker (CC BY-SA 4.0). Machine-generated stand-ins for recordings, not yet reviewed by a phonics specialist.'),
           h('h3', {}, 'Prototype tools'),
           h('p', { class: 'muted' }, 'These move the on-device clock so the three-separate-days mastery gate can be tried without waiting.'),
           h('div', { class: 'row' },

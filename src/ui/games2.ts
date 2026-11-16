@@ -5,9 +5,10 @@ import { advanceTrace, glyphWidth, samplePath, strokesFor, traceDone, type Pt } 
 import { drumBeats, phonemeOf, slashed } from '../engine/session';
 import { drumSVG, potSVG } from './art';
 import { pictureEl } from './pictures';
-import { blip, playSequence, praise, sfx, soft, speak, tap } from './audio';
+import { blip, playSequence, praise, sayPhrase, saySeq, sfx, soft, speak, tap } from './audio';
 import { h, sleep } from './dom';
 import { burst, mount, skippableWait } from './fx';
+import { ghostDrag, makeAssist, makeDraggable, springBack } from './gesture';
 import { companionEl, setMood, type Ctx, type TrialResult } from './games';
 
 const BEAD_COLOURS = ['#ff6b9a', '#ffd166', '#4cc3d9', '#8ee27a', '#9b8bf0'];
@@ -43,6 +44,7 @@ export const beatDrum = async (ctx: Ctx, word: Word): Promise<TrialResult> => {
   const status = caption('Beat the drum for each sound.');
 
   const addBead = (i: number) => beads.append(h('span', { class: 'bead on pop', style: `--c:${BEAD_COLOURS[i % BEAD_COLOURS.length]}` }));
+  let pause: ReturnType<typeof setTimeout> | null = null;
   drum.addEventListener('pointerdown', () => {
     if (busy) return;
     sfx.drum();
@@ -51,9 +53,13 @@ export const beatDrum = async (ctx: Ctx, word: Word): Promise<TrialResult> => {
     addBead(count);
     count++;
     tick.hidden = false;
+    // the drum checks itself when the child pauses (an idle pause, never a beat-the-clock timer); the tick still works
+    if (pause) clearTimeout(pause);
+    pause = setTimeout(() => void submit(), 2400);
   });
 
-  tick.addEventListener('click', async () => {
+  const submit = async () => {
+    if (pause) clearTimeout(pause);
     if (busy || count === 0) return;
     busy = true;
     if (count === n) {
@@ -78,11 +84,12 @@ export const beatDrum = async (ctx: Ctx, word: Word): Promise<TrialResult> => {
       status.textContent = 'Now you try! Beat the drum for each sound.';
       busy = false;
     }
-  });
+  };
+  tick.addEventListener('click', () => void submit());
 
   mount(ctx.stage, h('div', { class: 'scene drumscene' }, status, picture, drum, beads, tick));
   await sleep(300);
-  speak(word.text);
+  saySeq([{ phrase: 'drum_prompt', text: 'Beat the drum once for each sound.' }, { word: word.text }]);
   return done;
 };
 
@@ -144,7 +151,7 @@ export const soundSafari = async (ctx: Ctx, target: Grapheme, scene: { targets: 
     h('div', { class: 'row' }, bubble, tray),
     field));
   await sleep(300);
-  say();
+  saySeq([{ phrase: 'safari_prompt', text: 'Find things that start with the sound.' }, { sound: ph }]);
   return done;
 };
 
@@ -154,7 +161,7 @@ export const soundSafari = async (ctx: Ctx, target: Grapheme, scene: { targets: 
  */
 export const wordKitchen = async (ctx: Ctx, word: Word, tiles: string[]): Promise<TrialResult> => {
   const n = word.graphemes.length;
-  ctx.hint('Ask: "What is the first sound you hear? Which letter makes it?" Say the word slowly together, one sound at a time.');
+  ctx.hint('Ask: "What is the first sound you hear? Which letter makes it?" Say the word slowly together, one sound at a time. Drag each letter onto the board.');
   let firstTry = true;
   let resolve!: (r: TrialResult) => void;
   const done = new Promise<TrialResult>((r) => (resolve = r));
@@ -168,7 +175,40 @@ export const wordKitchen = async (ctx: Ctx, word: Word, tiles: string[]): Promis
   const dish = h('div', { class: 'dish' }, pictureEl(word.text, word.emoji));
   const potWrap = h('div', { class: 'pot-wrap' }, pot, dish);
   const slotEls = word.graphemes.map((_, i) => h('button', { class: 'kslot', 'data-testid': 'slot', 'aria-label': `place ${i + 1}`, onClick: () => unplace(i) }));
-  const tileEls = tiles.map((g, i) => h('button', { class: `tile ktile tone${i % 4}`, 'data-testid': 'ktile', 'data-letter': g, 'aria-label': `letter ${g}`, onClick: () => place(i) }, g));
+  const assist = makeAssist(ctx.s.easyTap);
+  let stopGhost: () => void = () => undefined;
+  const tileEls = tiles.map((g, i) => {
+    const t = h('button', { class: `tile ktile tone${i % 4}`, 'data-testid': 'ktile', 'data-letter': g, 'aria-label': `letter ${g}` }, g);
+    makeDraggable(t, {
+      target: () => board.getBoundingClientRect(),
+      slop: 34,
+      onPickUp: () => { stopGhost(); board.classList.add('hot'); },
+      onDrop: async (hit, cur, at) => {
+        board.classList.remove('hot');
+        if (!hit) return springBack(t, cur);
+        // the child chooses WHICH place: the empty slot nearest to where the tile was dropped
+        let best = -1, bestD = Infinity;
+        slotEls.forEach((sl, k) => {
+          if (placed[k] !== null) return;
+          const r = sl.getBoundingClientRect();
+          const d = Math.abs(at.x - (r.left + r.width / 2));
+          if (d < bestD) { bestD = d; best = k; }
+        });
+        t.style.transform = '';
+        if (best < 0) return springBack(t, cur);
+        await place(i, best);
+      },
+      onTap: () => {
+        if (assist.allow) return void place(i);
+        assist.miss();
+        sfx.boing();
+        t.animate([{ transform: 'translate(0,0)' }, { transform: 'translateY(-26px) scale(1.06)', offset: 0.5 }, { transform: 'translate(0,0)' }], { duration: 480, easing: 'ease-out' });
+        stopGhost();
+        stopGhost = ghostDrag(sceneEl, tray, board);
+      },
+    });
+    return t;
+  });
   const board = h('div', { class: 'row board', 'data-testid': 'board' }, slotEls);
   const tray = h('div', { class: 'row tiles', 'data-testid': 'ktiles' }, tileEls);
   const kitchen = h('div', { class: 'row kitchen-row', 'data-testid': 'kitchen', 'data-graphemes': word.graphemes.join(',') }, picture, potWrap);
@@ -185,10 +225,10 @@ export const wordKitchen = async (ctx: Ctx, word: Word, tiles: string[]): Promis
       (t as HTMLButtonElement).disabled = used;
     });
   };
-  const place = async (ti: number) => {
+  const place = async (ti: number, atSlot?: number) => {
     if (busy) return;
-    const slot = placed.indexOf(null);
-    if (slot < 0) return;
+    const slot = atSlot ?? placed.indexOf(null);
+    if (slot < 0 || placed[slot] !== null) return;
     placed[slot] = ti;
     tap();
     sfx.pop();
@@ -231,10 +271,12 @@ export const wordKitchen = async (ctx: Ctx, word: Word, tiles: string[]): Promis
     }
   };
 
-  mount(ctx.stage, h('div', { class: 'scene kitchenscene' }, caption('Build the word to cook it!'), kitchen, board, tray));
+  const sceneEl = h('div', { class: 'scene kitchenscene' }, caption('Drag the letters onto the board to build the word!'), kitchen, board, tray);
+  mount(ctx.stage, sceneEl);
+  stopGhost = ghostDrag(sceneEl, tray, board);
   render();
   await sleep(300);
-  speak(word.text);
+  saySeq([{ phrase: 'kitchen_prompt', text: 'Build the word.' }, { word: word.text }]);
   return done;
 };
 
@@ -363,7 +405,110 @@ export const traceTrail = async (ctx: Ctx, target: Grapheme): Promise<TrialResul
     h('div', { class: `trace-board ${theme}`, 'data-testid': 'trace-board' }, svg)));
   startStroke();
   await sleep(300);
-  say();
+  saySeq([{ phrase: 'trace_prompt', text: 'Trace the letter. Start at the green dot.' }, { sound: phonemeOf(target.id) }]);
   return done;
 };
 
+
+/**
+ * Copy the beat (age 2-3, listening and rhythm; no letters, no scoring). The dino drums 1-3 beats, then it is the child's turn
+ * to copy. Any attempt is welcomed; if the child pauses, the dino simply plays it again.
+ */
+export const copyBeat = async (ctx: Ctx, n: number): Promise<TrialResult> => {
+  ctx.hint('Clap or tap the beat together with your child. Say "boom, boom" as the drum goes.');
+  let resolve!: (r: TrialResult) => void;
+  const done = new Promise<TrialResult>((r) => (resolve = r));
+  const dino = companionEl(ctx.s, 'beat-dino');
+  const drum = h('button', { class: 'drum', 'data-testid': 'beat-drum', 'data-n': n, 'aria-label': 'drum' });
+  drum.innerHTML = drumSVG();
+  const beads = h('div', { class: 'row beads', 'data-testid': 'taps' });
+  const status = caption('Watch and listen…');
+  let phase: 'demo' | 'turn' | 'done' = 'demo';
+  let count = 0;
+  let idle: ReturnType<typeof setTimeout> | null = null;
+  const hit = () => { sfx.drum(); play(drum, 'hit', 220); };
+
+  const demo = async () => {
+    phase = 'demo';
+    count = 0;
+    beads.replaceChildren();
+    status.textContent = 'Watch and listen…';
+    setMood(dino, 'open');
+    await sleep(700);
+    for (let i = 0; i < n; i++) {
+      hit();
+      beads.append(h('span', { class: 'bead on pop', style: `--c:${BEAD_COLOURS[i % BEAD_COLOURS.length]}` }));
+      await sleep(650);
+    }
+    setMood(dino, 'idle');
+    beads.replaceChildren();
+    phase = 'turn';
+    status.textContent = 'Your turn!';
+    void sayPhrase('your_turn', 'Your turn!');
+    armIdle();
+  };
+  const armIdle = () => {
+    if (idle) clearTimeout(idle);
+    idle = setTimeout(() => { if (phase === 'turn') void demo(); }, 7000); // gently show it again; never a penalty
+  };
+  drum.addEventListener('pointerdown', async () => {
+    if (phase !== 'turn') return;
+    hit();
+    beads.append(h('span', { class: 'bead on pop', style: `--c:${BEAD_COLOURS[count % BEAD_COLOURS.length]}` }));
+    count++;
+    armIdle();
+    if (count >= n) {
+      phase = 'done';
+      if (idle) clearTimeout(idle);
+      setMood(dino, 'happy');
+      sfx.sparkle();
+      praise();
+      burst(drum, 'stars', 14);
+      await skippableWait(1300);
+      resolve({ firstTryCorrect: true, choices: 0 });
+    }
+  });
+
+  mount(ctx.stage, h('div', { class: 'scene drumscene' }, status, dino, drum, beads));
+  saySeq([{ phrase: 'copy_me', text: 'Copy me!' }]);
+  void demo();
+  return done;
+};
+
+/**
+ * Find it (age 2-3, vocabulary and listening): hear "Find the ..." and tap the picture. A wrong tap just says that word.
+ */
+export const findIt = async (ctx: Ctx, word: Word, others: Word[]): Promise<TrialResult> => {
+  ctx.hint(`Ask: "Where is the ${word.text}? Can you point to it?" Name each picture together.`);
+  let resolve!: (r: TrialResult) => void;
+  const done = new Promise<TrialResult>((r) => (resolve = r));
+  const options = [word, ...others].sort(() => ctx.rng() - 0.5);
+  let wrong = 0;
+  const pics = options.map((w, i) => {
+    const b = h('button', { class: `tile pic card${i % 3}`, 'data-testid': 'pic', 'data-answer': w === word ? '1' : '0', 'aria-label': 'picture', style: `animation-delay:${i * 110}ms` }, pictureEl(w.text, w.emoji));
+    b.addEventListener('click', async () => {
+      tap();
+      sfx.pop();
+      if (b.dataset.busy) return;
+      if (w === word) {
+        b.dataset.busy = '1';
+        b.classList.add('alive');
+        praise();
+        sfx.sparkle();
+        speak(word.text);
+        burst(b, 'stars', 12);
+        await skippableWait(1200);
+        resolve({ firstTryCorrect: wrong === 0, choices: options.length });
+      } else {
+        wrong++;
+        b.classList.add('dim');
+        soft();
+        speak(w.text); // name it; the child hears the difference
+      }
+    });
+    return b;
+  });
+  mount(ctx.stage, h('div', { class: 'scene' }, caption(`Find the ${word.text}!`), h('div', { class: 'row tiles', 'data-testid': 'pics' }, pics)));
+  saySeq([{ phrase: 'find_the', text: 'Find the' }, { word: word.text }]);
+  return done;
+};

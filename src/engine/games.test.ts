@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { BANK, CONFUSABLE, GRAPHEMES, SAFARI, bankFor, isConfusable } from './data';
 import { seeded } from './dates';
 import { GLYPHS, advanceTrace, glyphWidth, pathLength, samplePath, shiftPath, strokesFor, traceDone } from './glyphs';
-import { buildKitchenTiles, buildSafari, drumBeats, phonemeOf, pickDistractors, startAdventure } from './session';
+import { buildKitchenTiles, buildSafari, drumBeats, phonemeOf, pickDistractors, safariGraphemes, startAdventure } from './session';
 import { playDay } from './simulate';
 import { introduce, newChild } from './state';
 
@@ -60,20 +60,35 @@ describe('Sound Safari', () => {
     expect(new Set(SAFARI.map((i) => i.word)).size).toBe(SAFARI.length);
     expect(new Set(SAFARI.map((i) => i.emoji)).size).toBe(SAFARI.length);
   });
-  it('every sound has at least two things to find', () => {
-    for (const p of new Set(GRAPHEMES.map((g) => g.phoneme))) expect(SAFARI.filter((i) => i.p === p).length, p).toBeGreaterThanOrEqual(2);
+  it('every single-letter sound has at least two things that start with that letter', () => {
+    for (const g of GRAPHEMES.filter((x) => x.id.length === 1)) expect(SAFARI.filter((i) => i.g === g.id).length, g.id).toBeGreaterThanOrEqual(2);
+  });
+  it('a "k" scene never contains cat (or anything else spelled with c), and a "c" scene never contains kite', () => {
+    const s = newChild();
+    for (const g of GRAPHEMES) introduce(s, g.id, '2026-01-01');
+    for (let seed = 0; seed < 200; seed++) {
+      const k = buildSafari(s, GRAPHEMES.find((g) => g.id === 'k')!, seeded(seed));
+      expect(k.items.some((i) => i.g === 'c'), 'a c-word in a k scene').toBe(false);
+      expect(k.targets.every((i) => i.word[0] === 'k')).toBe(true);
+      const c = buildSafari(s, GRAPHEMES.find((g) => g.id === 'c')!, seeded(seed));
+      expect(c.items.some((i) => i.g === 'k'), 'a k-word in a c scene').toBe(false);
+      expect(c.targets.every((i) => i.word[0] === 'c')).toBe(true);
+    }
   });
   it('a scene hides only real targets among non-targets, one decoy per other sound', () => {
     const s = newChild();
     for (const g of GRAPHEMES.slice(0, 8)) introduce(s, g.id, '2026-01-01');
-    for (const p of new Set(GRAPHEMES.map((g) => g.phoneme))) {
-      const { targets, items } = buildSafari(s, p, seeded(7));
-      expect(targets.length).toBeGreaterThanOrEqual(2);
+    for (const g of GRAPHEMES.filter((x) => safariGraphemes('rp').includes(x.id))) {
+      const { targets, items } = buildSafari(s, g, seeded(7));
+      expect(targets.length, g.id).toBeGreaterThanOrEqual(2);
       expect(items.length).toBeLessThanOrEqual(8);
-      expect(items.filter((i) => i.p === p).length, p).toBe(targets.length); // nothing else sneaks in that starts with p
-      const decoySounds = items.filter((i) => i.p !== p).map((i) => i.p);
+      expect(items.filter((i) => i.p === g.phoneme).length, g.id).toBe(targets.length); // nothing else sneaks in that starts with the same sound
+      const decoySounds = items.filter((i) => i.p !== g.phoneme).map((i) => i.p);
       expect(new Set(decoySounds).size).toBe(decoySounds.length);
     }
+  });
+  it('letters that no word starts with (ck, ff, ll, ss) never get a Safari scene', () => {
+    for (const id of ['ck', 'ff', 'll', 'ss']) expect(safariGraphemes('rp')).not.toContain(id);
   });
 });
 
@@ -166,7 +181,7 @@ describe('look-alike pictures are never an answer and a distractor together', ()
     const s = newChild();
     for (const g of GRAPHEMES) introduce(s, g.id, '2026-01-01');
     for (let seed = 0; seed < 100; seed++)
-      for (const p of new Set(GRAPHEMES.map((g) => g.phoneme))) {
+      for (const p of GRAPHEMES.filter((x) => safariGraphemes('rp').includes(x.id))) {
         const { targets, items } = buildSafari(s, p, seeded(seed));
         for (const t of targets) for (const it of items) expect(isConfusable(t.word, it.word), `${t.word} vs ${it.word}`).toBe(false);
       }

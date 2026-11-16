@@ -23,8 +23,7 @@
 <h1>Audio audition</h1>
 <p class="row"><label>Accent <select id="accent"></select></label></p>
 <p class="note"><strong>Everything here is machine-generated and nobody has listened to it yet.</strong> (It was built by an AI model, which cannot hear audio; it was only checked with measurements.)
-Play each item, then mark it Good / Bad / Unsure. Pay most attention to: a vowel tacked onto a consonant (“puh”, “buh”, “mm-uh”), a wrong vowel, a sound that is too quiet or too short to hear, and anything marked
-<em>formant-synth</em>. Your marks stay in this browser; use <em>Export</em> to save them.</p>
+Play each item, then mark it Good / Bad / Unsure. Pay most attention to: a vowel tacked onto a consonant (“puh”, “buh”, “mm-uh”; a small faded vowel on /b d g/ is allowed by the DfE Reading Framework but /p t k/ should be pure), a wrong vowel, a sound that is too quiet or too short to hear, and anything with measurement notes. Your marks stay in this browser; use <em>Export</em> to save them.</p>
 <div class="row"><button id="export">Export marks (JSON)</button><button id="clear">Clear marks</button><span id="count"></span></div>
 
 <h2>Isolated sounds</h2><div class="grid" id="sounds"></div>
@@ -71,16 +70,16 @@ function card(id, symbol, files, meta, flag) {
   const S = document.getElementById('sounds');
   for (const [k, files] of Object.entries(m.phonemes)) {
     const ph = a.phonemes[k], f0 = ph.files[0];
-    const synth = f0.source === 'formant-synth';
+    const synth = false;
     S.append(card(ACCENT + ':sound:' + k, '/' + k + '/', files,
-      `${f0.source} · ${f0.ms} ms · expected ${ph.expected_ipa} · engine said ${ph.engine_ipa}` + (f0.self_check ? ' · ' + f0.self_check : ''),
-      synth ? 'Hand-built synthesis: highest audit priority.' : ''));
+      `${f0.source} · ${f0.ms} ms · expected ${ph.expected_ipa} · ${f0.method || ''}` + (f0.centroid_hz ? ` · centroid ${f0.centroid_hz} Hz` : ''),
+      (f0.warnings && f0.warnings.length) ? 'Measurement notes: ' + f0.warnings.join('; ') : ''));
   }
   const W = document.getElementById('words');
   const words = Object.keys(m.words).sort();
   const drawWords = (q = '') => { W.replaceChildren(...words.filter(w => w.includes(q)).map(w => {
     const e = a.words[w];
-    return card(ACCENT + ':word:' + w, w, [m.words[w]], `${e.status} · expected ${e.expected_ipa}`, e.status.startsWith('ok (built') ? 'Built from phonemes, not from the spelling.' : '');
+    return card(ACCENT + ':word:' + w, w, [m.words[w]], `${e.phonemes ? 'phonemes ' + e.phonemes : (e.status || '')}${e.ms ? ' · ' + e.ms + ' ms' : ''}`, '');
   })); };
   drawWords(); document.getElementById('q').oninput = (e) => drawWords(e.target.value.trim().toLowerCase());
   const P = document.getElementById('phrases');

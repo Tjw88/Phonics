@@ -8,14 +8,15 @@ The engine (`src/engine`) is plain TypeScript with no DOM, so its logic ports to
 ```bash
 npm install
 npm run dev          # play it (iPad-landscape-shaped, works on desktop and touch)
-npm test             # 54 tests (engine, accents, games, pictures, audio/curriculum sync)
+npm test             # 60 tests (engine, accents, games, pictures, sound sweep, audio/curriculum sync)
 npm run lint:content # decodability / suitability linter over the word bank
 npm run sim          # pacing simulation (synthetic children through the real engine)
 npm run build && npx vite preview --port 4173 &  node scripts/e2e.cjs   # browser end-to-end test (needs Playwright; VP=390x844 for phone size)
 
-# regenerate the audio (needs: pip install espeakng-loader numpy)
-npx tsx scripts/export-bank.ts && python3 scripts/audio/gen_audio.py
+# regenerate the audio (needs: pip install piper-tts soundfile numpy; optional: faster-whisper for the recogniser check)
+npx tsx scripts/export-bank.ts && python3 scripts/audio/gen_neural.py [--asr]
 # then open /audio-check.html (add ?accent=north) to audition every sound, word and phrase
+node scripts/audit-monkey.cjs   # toddler-style random play in every game (needs Playwright)
 ```
 
 First launch: parental gate (multiplication), nickname + age band, pick and name a dino, placement game, then the
@@ -43,15 +44,15 @@ to share with known people, not something to publicise. The workflow triggers on
 | Mastery gate (3 separate days), errorless 1→2→3 choices, spaced review of hardest sounds | Built, with a stricter definition of "right" (≥2 correct and ≥60% that day) |
 | Look and feel: drawn original characters (4 baby dinos, robot, rocket, chest), living Dino Valley backdrop with night mode, chunky buttons, sparkle bursts, game sound effects | Built (see "Look and feel") |
 | Companion grows with progress (an accessory per set secured) | Built |
-| Accent option (setup step + parent Settings): Southern British (RP) or Northern English | Built; Scottish held back (see Accents) |
-| Audio | Generated, not recorded, see below |
+| Accent option (setup step + parent Settings): Southern British (RP) or Northern English | Built; northern pack least verified (see Accents) |
+| Audio | Neural-voice generated (not recorded, not listened to), every instruction spoken; see "Audio" |
 | Placement game → starting set | Built (sets 1-3 only; never grants mastery) |
 | 6-step daily adventure, goodnight, treasure, off-screen mission | Built |
 | All 8 MVP games: Feed the Creature, Robot Talk, Beat the Drum, Sound Safari, Word Kitchen, Bridge Builder, Rhyme Rocket, Trace Trail (optional, parent setting) | Built; Free Play is a menu of all of them |
 | Sound-friends: 23 original drawn characters, one per sound | Built |
 | Sound buttons (dot / bar), lower case, single-storey "a" typeface (Andika, bundled) | Built; confirmed in screenshots |
-| Sound Play for ages 2-3 (co-play, listening only) | Minimal version |
-| Parent area behind gate, sound map, words read, watch-out flags, daily limit + 2-minute warning (banner plus browser speech, not a recorded voice) | Built |
+| Sound Play for ages 2-3 (co-play, listening and rhythm only) | Built: copy the beat + find-it naming; needs real environmental sounds (see docs/AUDIT.md) |
+| Parent area behind gate, sound map, words read, watch-out flags, daily limit + 2-minute warning (a banner plus a generated voice) | Built |
 | No accounts, no third-party requests, data on device only | Built; the e2e test asserts zero external requests |
 | Content linter (decodable at point of use, unsuitable words, duplicate pictures) | Built |
 | Banned patterns (streaks, guilt, timers, random rewards, upsell in child screens) | None present |
@@ -71,9 +72,9 @@ Valley backdrop that turns to night when the island sleeps.
 | Robot Talk | The robot says a word in sounds, lighting one bead per sound (no letters: oral stage); pick the picture |
 | Beat the Drum | Tap the drum once per sound in a picture's name; each beat plays the next sound. Wrong count: the sounds are modelled and the child retries |
 | Sound Safari | Hunt a scene for things that start with today's sound; a wrong tap just says that word |
-| Word Kitchen | Tap letter tiles in order to build the word and cook it; a wrong letter goes back, the right ones stay |
-| Bridge Builder | Each sound button drops a plank; the right word sends the dino across |
-| Rhyme Rocket | The right rhyme fuels the rocket, which launches |
+| Word Kitchen | **Drag** letter tiles onto the board (you choose the slot) to build the word and cook it; a wrong letter goes back, the right ones stay |
+| Bridge Builder | Tap each sound to drop a plank; sounds stay tappable; slide across the letters to blend; pick the word and the dino crosses |
+| Rhyme Rocket | **Drag** the rhyming picture into the rocket, which fuels and launches |
 | Trace Trail | Trace the letter from the green start dot; it only counts in order, so start and direction matter. **Off by default** (schools teach different formations); turn it on in the parent Settings |
 
 The adventure rotates the games without randomness: Feed the Creature, then Safari / Robot / Drum in turn, then
@@ -115,31 +116,25 @@ has its own switch in the parent Settings. **Nobody has listened to any of this 
 or distracts a child learning sounds is a real question for play-testing (it is on by default because the spec
 asks for it; switch it off if it gets in the way).
 
-## Audio: generated, never listened to
+## Audio: neural voices, still never listened to
 
-The spec requires recordings by trained voice talent and bans text-to-speech for phonics. You asked for generated
-audio instead, so this prototype generates it, but two things need saying plainly:
+Full detail and numbers are in `docs/AUDIT.md`. In short:
 
-- **I do not have a speech engine and cannot hear audio.** I drove an open-source synthesiser (espeak-ng, via
-  the `espeakng-loader` wheel, British RP voice) and checked the results with measurements. Nobody has listened
-  to these files yet.
-- **espeak-ng is not built to speak isolated sounds.** My first pass produced letter *names* ("ess", "eye", "gee")
-  and silence, and my first audit let both through. What it does now, and what is and isn't verified:
-
-| Sounds | How they are made | What was checked (no ear involved) |
-|---|---|---|
-| a i o e u, s f h, p t k | espeak-ng phoneme input | The engine's own phoneme trace must equal the taught sound (e.g. `a` → æ, `u` → ʌ); duration; voicing; not silent |
-| m n l r, b d g | My own small source-filter synthesiser (`scripts/audio/formant.py`), because espeak renders a lone /b d g/ as pure silence and /m n l r/ as ~40 ms | Formant estimate (LPC) lands within 20% of textbook values; burst energy in the expected band. **This confirms the code does what I told it, not that it sounds like /m/.** |
-| 133 words | espeak-ng text-to-speech, RP voice | The engine's phoneme trace for each word must equal the sounds the grapheme table teaches; 133/133 match. "pass" was dropped because RP says /pɑːs/, not the taught /a/ |
-| 66 extra Sound Safari words | espeak-ng text-to-speech | The engine's phoneme trace must START with the right first sound in that accent (all pass in both packs) |
-| 21 fixed phrases | espeak-ng | Duration only |
-
-Known weak points to listen for: stops are clipped bursts (~70-110 ms), so /p/ /t/ /k/ may sound faint or clicky;
-/b/ /d/ /g/ carry a short voiced release (a touch of "uh" is likely); the formant nasals and liquids are buzzy.
-**Open `/audio-check.html`** (also linked from the parent Sound map) to hear everything with its audit data and mark
-each item Good / Bad / Unsure, then export the marks as JSON. The spec's rule stands: *a wrong sound is the most
-damaging defect*, so nothing here should reach a child before a phonics specialist has heard every sound.
-The child's nickname cannot be pre-rendered, so it is never spoken; captions carry it.
+- **Voices:** Piper neural text-to-speech. Southern British = Cori (CC BY 4.0); Northern English = an OpenSLR 83 northern male
+  speaker (CC BY-SA 4.0; the ShareAlike condition is **not yet checked** against generated audio). Credits in
+  `public/audio/CREDITS.txt` and the parent Settings.
+- **I cannot hear.** Everything is checked by measurement, spectrograms and a speech recogniser (a rough, biased second opinion), not by
+  ear. The old espeak voice scored 8-14/28 words on the recogniser and the new RP voice 17/28, so it is clearly better, but it is
+  **still a stand-in for a trained human voice** (the research review found no evidence on synthetic voices for isolated phonemes).
+- **Words and phrases** are spoken from phoneme strings *we* supply per accent (so northern "cup" is k-ʊ-p), not the voice's own spelling rules.
+- **Isolated sounds** cannot come straight from a neural voice (it produces near-silence for a lone consonant), so each is cut from a
+  natural syllable and lengthened: hiss sounds by granular resynthesis, voiced sounds by pitch-synchronous looping of four
+  periods, stops kept short. Following the DfE Reading Framework, /p t k/ are burst + breathy release with no voiced vowel, and /b d g/
+  keep a small faded vowel because the Framework says they "cannot be heard clearly in isolation" without one.
+- **Lengths:** stops ~170 ms (were 70-110), hiss 480 ms, nasals/liquids 430 ms, vowels 520 ms. Sounds in a sequence use shorter takes so blending flows.
+- **Every instruction is spoken**, since the children cannot read, and a test fails the build if the code asks for an instruction with no audio.
+- **Known weak points to listen for:** whether /b d g/ carry too much "uh"; whether /p t k/ sound like themselves; whether the
+  sustained /m n l r/ are natural. Use `/audio-check.html`.
 
 ## Accents
 
@@ -148,26 +143,32 @@ gate and a child's progress are identical in every accent**, so switching keeps 
 
 | | Southern British (RP) | Northern English |
 |---|---|---|
-| Voice (espeak-ng) | `en-GB-x-rp` | `en-GB-x-gbclan` (Lancashire) |
+| Voice (Piper neural) | `en_GB-cori-medium` | `en_GB-northern_english_male-medium` |
 | `a` taught as | /æ/ | /a/ |
 | `u` taught as | /ʌ/ ("bus" and "put" differ) | /ʊ/ ("bus" and "put" share a vowel) |
 | Words usable | 133 ("pass" is left out: RP says /pɑːs/) | all 134 |
 
-Each accent's expected sounds are written down in `gen_audio.py` and **every clip and word is checked against them
-using the engine's own phoneme trace**; a pack with a mismatch fails the build rather than shipping. Which words
+Each accent's expected sounds are written down in `gen_audio.py` and the words are spoken from exactly those phonemes; a test fails if the
+manifest and the word list ever disagree. Which words
 an accent drops is kept in `ACCENT_EXCLUDE` (`data.ts`) and a test fails if it ever disagrees with the audio.
 
 What is **not** covered, honestly:
 
-- **There is no Yorkshire voice.** The only northern voice the engine has is Lancashire. It shares the two features
+- **There is no Yorkshire voice.** The only northern voice available is a northern English male speaker (region not stated). It shares the two features
   that matter most for phonics (bus/put, short a), but other Yorkshire features are not modelled.
 - **Scottish is built but switched off.** The engine renders a lone Scots /r/ as silence, and its isolated /i/ comes
   out as /e/ although the same voice says "kit" with /ɪ/. Without a human ear I can't resolve that, so it is held
   back (`python3 scripts/audio/gen_audio.py --all` retries it).
-- **West Midlands was rejected:** its voice drops /h/ ("hill" → /ɪl/), which would teach /h/ wrongly.
 - Other accent features (th-fronting, glottal /t/, h-dropping, vowel length rules) are not modelled, and every accent
   pack still needs a native-speaking phonics specialist to listen to it. The spec notes a regional pack is a
   "meaningful later option"; this is the mechanism for it, not a finished set of regional voices.
+
+## Evidence review and audit
+
+- `docs/RESEARCH.md`: a sourced evidence review (compiled by a research sub-agent; I have not independently re-read the sources) with what it changed in the app and where evidence is weak or absent.
+- `docs/AUDIT.md`: the full audit: sounds, a logic review of every game mechanic, and walkthroughs as a 2-, 4- and 5-year-old and as a parent (expert judgement; no child has played this), plus a prioritised backlog.
+- **Sound Play (age 2-3)** is now "copy the beat" and "find the ..." (tap only, nothing scored); the old rhyme game was a 3-4 skill and needed dragging.
+- **Colour:** vivid companions (brilliant red, electric blue, neon green, sunshine yellow) with glossy eggs. The research found **no solid evidence on saturation**, so this is a design choice; backgrounds stay calm.
 
 ## Findings: where the spec's own rules disagree or underperform
 

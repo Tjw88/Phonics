@@ -1,13 +1,13 @@
 :root {
   --ink: #1d3557;
-  --leaf: #2f9e5f;
-  --leaf-dark: #1f7a47;
-  --sun: #ffd166;
-  --pink: #ff6b9a;
-  --sky: #4cc3d9;
-  --lime: #8ee27a;
-  --violet: #9b8bf0;
-  --orange: #ff9f43;
+  --leaf: #14c25a;
+  --leaf-dark: #0b8a3e;
+  --sun: #ffd400;
+  --pink: #ff2d78;
+  --sky: #14b8ff;
+  --lime: #35f06a;
+  --violet: #8b5cff;
+  --orange: #ff8a1f;
   --card: #ffffff;
   font-family: 'Andika', 'Atkinson Hyperlegible', 'Comic Sans MS', system-ui, sans-serif;
   color: var(--ink);
@@ -74,8 +74,8 @@ body.night .home .caption { color: #fff; }
   transition: transform 0.08s, box-shadow 0.08s;
 }
 .btn:active { transform: translateY(5px); box-shadow: 0 1px 0 #1d355733, inset 0 0 0 3px #1d355722; }
-.btn.go { background: linear-gradient(#52d68a, #2f9e5f); color: #fff; font-size: 2rem; min-width: 150px; min-height: 92px; box-shadow: 0 8px 0 #1b6d41, 0 14px 24px #1b6d4155; text-shadow: 0 2px 0 #0003; }
-.btn.go:active { box-shadow: 0 2px 0 #1b6d41; }
+.btn.go { background: linear-gradient(#3df57e, #0fb34a); color: #fff; font-size: 2rem; min-width: 150px; min-height: 92px; box-shadow: 0 8px 0 #0a7d38, 0 14px 24px #0a7d3855; text-shadow: 0 2px 0 #0003; }
+.btn.go:active { box-shadow: 0 2px 0 #0a7d38; }
 .btn.quiet { background: #ffffffc8; }
 .btn.choice.on, .btn.on { background: var(--leaf); color: #fff; }
 .btn.small { min-height: 64px; font-size: 1.05rem; padding: 10px 18px; }
@@ -123,14 +123,14 @@ body.night .home .caption { color: #fff; }
   background: var(--card); border: 0; border-radius: 32px; cursor: grab; touch-action: none; animation: drop-in 0.5s cubic-bezier(0.2, 1.5, 0.4, 1) backwards;
   box-shadow: 0 8px 0 var(--edge, #1d355744), inset 0 0 0 5px var(--rim, #1d355722); transition: transform 0.15s, opacity 0.2s;
 }
-.tile.tone0 { --rim: var(--pink); --edge: #c24a73; } .tile.tone1 { --rim: var(--sky); --edge: #2b8fa3; }
-.tile.tone2 { --rim: var(--orange); --edge: #c0701f; } .tile.tone3 { --rim: var(--violet); --edge: #6a5bc0; }
+.tile.tone0 { --rim: var(--pink); --edge: #b3154f; } .tile.tone1 { --rim: var(--sky); --edge: #0a82b8; }
+.tile.tone2 { --rim: var(--orange); --edge: #b35a00; } .tile.tone3 { --rim: var(--violet); --edge: #5a34c9; }
 .tile.card0 { --rim: var(--pink); --edge: #c24a73; } .tile.card1 { --rim: var(--sky); --edge: #2b8fa3; } .tile.card2 { --rim: var(--lime); --edge: #4fa13e; }
 .tile.pic { min-width: 132px; min-height: 132px; cursor: pointer; touch-action: manipulation; }
 .tile.pic .emoji { font-size: 4.6rem; display: inline-block; }
 .tile.wordtile { font-size: 2.8rem; cursor: pointer; touch-action: manipulation; }
 .tile.egg { padding: 8px 14px; cursor: pointer; touch-action: manipulation; --rim: #1d355722; }
-.tile.egg svg { width: 84px; height: 104px; display: block; }
+.tile.egg svg { width: 104px; height: 130px; display: block; }
 .tile.egg.on { --rim: var(--sun); background: #fff8dd; transform: translateY(-6px); }
 .tile.glow { animation: drop-in 0.5s cubic-bezier(0.2, 1.5, 0.4, 1) backwards, glow 1.4s 0.5s ease-in-out infinite; }
 .tile.dragging { cursor: grabbing; z-index: 8; transition: none; opacity: 0.92; }
@@ -243,7 +243,7 @@ body.night .hint-empty { color: #fff; }
 
 /* ---------- celebration particles (short, skippable, none under Reduce Motion) ---------- */
 #fx { position: fixed; inset: 0; z-index: 90; pointer-events: none; overflow: hidden; }
-.particle { position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; animation: burst 1.05s cubic-bezier(0.1, 0.8, 0.3, 1) forwards; }
+.particle { position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; }
 .particle.p-dot { border-radius: 50%; background: var(--c); } .particle.p-bit { background: var(--c); border-radius: 3px; width: 8px; height: 14px; }
 .particle.p-star { width: 22px; height: 22px; margin: -11px 0 0 -11px; }
 @keyframes burst { 0% { transform: translate(0, 0) scale(0.3) rotate(0); opacity: 1; } 70% { opacity: 1; } 100% { transform: translate(var(--dx), calc(var(--dy) + 60px)) scale(1) rotate(var(--rot)); opacity: 0; } }
@@ -382,3 +382,22 @@ label.check input { width: 28px; height: 28px; }
 .dish .pic-wrap { width: clamp(80px, 18vw, 110px); }
 .alive-pic .pic-wrap { width: clamp(180px, 36vw, 280px); }
 @media (max-width: 600px) { .tile.pic .pic-wrap { width: 82px; } .tile.pic.target .pic-wrap { width: 70px; } }
+
+/* ---------- gestures: ghost hand, drop targets, jump, slide-to-blend ---------- */
+.scene { position: relative; }
+.ghost-hand { position: absolute; left: 0; top: 0; font-size: 3.2rem; line-height: 1; pointer-events: none; z-index: 9; opacity: 0; margin: -14px 0 0 -14px; filter: drop-shadow(0 4px 4px #0003); }
+.tile.dragging { box-shadow: 0 18px 26px #0004, 0 8px 0 var(--edge, #1d355744), inset 0 0 0 5px var(--rim, #1d355722); }
+.mouthzone.hot { border-color: #fff; background: #ffd40066; }
+.feed-dino.jump { animation: jump 0.8s cubic-bezier(0.3, 0.7, 0.4, 1); }
+@keyframes jump { 0% { transform: scale(1, 1); } 14% { transform: scale(1.08, 0.88) translateY(4px); } 40% { transform: scale(0.94, 1.1) translateY(-34px); } 68% { transform: scale(1.06, 0.92) translateY(0); } 82% { transform: scale(0.98, 1.03); } 100% { transform: scale(1, 1); } }
+.rocket.hot { filter: drop-shadow(0 0 12px #ffd400); } .rocket.near { transform: scale(1.12); filter: drop-shadow(0 0 22px #ffd400); animation: none; }
+.rocket.shake { animation: rshake 0.12s linear infinite; }
+@keyframes rshake { 25% { transform: translate(-3px, 1px); } 75% { transform: translate(3px, -1px); } }
+.board.hot { box-shadow: inset 0 0 0 4px #ffd400, 0 0 0 6px #ffd40066; }
+.tile.pic.fly, .tile.letter.fly { pointer-events: none; }
+.slide-hint { font-size: 2.6rem; line-height: 1; animation: slide-hint 1.8s ease-in-out infinite; }
+@keyframes slide-hint { 0% { transform: translateX(-90px); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateX(90px); opacity: 0; } }
+.word.merge .gcol { transition: transform 0.5s cubic-bezier(0.3, 1.4, 0.5, 1); }
+.word.merge .gcol:nth-child(1) { transform: translateX(14px); } .word.merge .gcol:nth-child(3) { transform: translateX(-14px); }
+.word.merge .glyph { color: #0b8a3e; text-shadow: 0 5px 0 #35f06a66; }
+.bridgescene .soundbutton { cursor: pointer; }

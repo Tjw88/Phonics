@@ -113,7 +113,7 @@ export const setMuted = (m: boolean): void => {
 };
 
 
-const play = (buf: AudioBuffer, gain = 1, exclusive = false): Promise<void> =>
+const play = (buf: AudioBuffer, gain = 1, exclusive = false, maxMs?: number): Promise<void> =>
   new Promise((resolve) => {
     const a = ac();
     if (!a || muted || !master) return resolve();
@@ -127,8 +127,16 @@ const play = (buf: AudioBuffer, gain = 1, exclusive = false): Promise<void> =>
     src.connect(g).connect(master);
     src.onended = () => resolve();
     if (exclusive) currentVoice = src;
-    duck(buf.duration * 1000 + 250); // music steps back while anyone is speaking
-    src.start();
+    const dur = maxMs ? Math.min(buf.duration * 1000, maxMs) : buf.duration * 1000;
+    duck(dur + 250); // music steps back while anyone is speaking
+    const t0 = a.currentTime;
+    src.start(t0);
+    if (maxMs && buf.duration * 1000 > maxMs) {
+      // a shorter take of the same sound for blending: stop early with a quick fade so it never clicks
+      g.gain.setValueAtTime(gain, t0 + Math.max(0, maxMs / 1000 - 0.07));
+      g.gain.linearRampToValueAtTime(0.0001, t0 + maxMs / 1000);
+      src.stop(t0 + maxMs / 1000 + 0.01); // (stop() must come AFTER start(): browsers throw otherwise)
+    }
   });
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -256,25 +264,33 @@ export const sfx = {
 };
 
 /** Play an isolated sound (a phoneme key such as "s", "k", "a"). */
-export const blip = (phoneme: string): void => {
+export const blip = (phoneme: string, opts: { maxMs?: number } = {}): number => {
   const files = manifest?.phonemes[phoneme];
   const buf = files ? buffers.get(files[Math.floor(Math.random() * files.length)] as string) : undefined;
-  if (buf) void play(buf, 1.0);
-  else {
+  if (buf) {
+    void play(buf, 1.0, false, opts.maxMs);
+    return Math.min(buf.duration * 1000, opts.maxMs ?? Infinity);
+  } else {
     // fallback tone: one steady pitch per sound
     let hash = 0;
     for (const ch of phoneme) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
     note({ f: hz(261.6, [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24, 26][hash % 12] as number), t: 0, dur: 0.32, gain: 0.2, type: 'triangle' });
     duck(500);
+    return 320;
   }
 };
 
-/** Play a sequence of sounds; `onStep(i)` fires as each starts. */
-export const playSequence = async (phonemes: string[], onStep?: (i: number) => void, gapMs = 620): Promise<void> => {
+/**
+ * Play a run of sounds so they FLOW (blending practice): each sound is a short take (stops stay as they are, long sounds
+ * are cut to ~300 ms with a fade) and the next starts a beat after this one ends, sized to the clip, instead of a fixed slow beat.
+ */
+export const playSequence = async (phonemes: string[], onStep?: (i: number) => void, opts: { maxMs?: number; gapMs?: number } = {}): Promise<void> => {
+  const maxMs = opts.maxMs ?? 300;
+  const gap = opts.gapMs ?? 70;
   for (let i = 0; i < phonemes.length; i++) {
     onStep?.(i);
-    blip(phonemes[i] as string);
-    await new Promise((r) => setTimeout(r, gapMs));
+    const played = blip(phonemes[i] as string, { maxMs });
+    await new Promise((r) => setTimeout(r, played + gap));
   }
   onStep?.(-1);
 };
@@ -360,12 +376,12 @@ const browserSpeech = (text: string): void => {
   }
 };
 
-/** Say a word, or a short list ("cat, hat"). Uses a generated clip when one exists, browser speech otherwise. */
-export const speak = (text: string): void => {
+/** Say a word, or a short list ("cat, hat"). Uses a generated clip when one exists, browser speech otherwise. Resolves when done. */
+export const speak = (text: string): Promise<void> => {
   const parts = text.split(/,\s*/);
   const clips = parts.map((p) => manifest?.words[p.toLowerCase()]);
   if (clips.every(Boolean)) {
-    void (async () => {
+    return (async () => {
       for (const rel of clips as string[]) {
         const buf = await loadBuffer(rel);
         if (!buf) return browserSpeech(text);
@@ -373,12 +389,36 @@ export const speak = (text: string): void => {
         await new Promise((r) => setTimeout(r, 120));
       }
     })();
-  } else browserSpeech(text);
+  }
+  browserSpeech(text);
+  return Promise.resolve();
 };
 
-/** A fixed phrase from the manifest (e.g. "play", "two_minutes"). */
-export const sayPhrase = (key: string, fallbackText: string): void => {
+/** A fixed phrase from the manifest (e.g. "play", "two_minutes"); resolves when it has finished. */
+export const sayPhrase = (key: string, fallbackText: string): Promise<void> => {
   const rel = manifest?.phrases[key];
-  if (!rel) return browserSpeech(fallbackText);
-  void loadBuffer(rel).then((buf) => (buf ? play(buf, 1.0, true) : browserSpeech(fallbackText)));
+  if (!rel) {
+    browserSpeech(fallbackText);
+    return new Promise((r) => setTimeout(r, Math.min(3000, fallbackText.length * 70)));
+  }
+  return loadBuffer(rel).then((buf) => (buf ? play(buf, 1.0, true) : (browserSpeech(fallbackText), undefined)));
 };
+
+type Part = { phrase: string; text: string } | { sound: string } | { word: string };
+let seqToken = 0;
+/**
+ * Speak a scene's instruction as a sequence (e.g. "I'm hungry for" then the sound itself). A newer sequence cancels an older
+ * one, so instructions never pile up when a child moves quickly. Instructions are spoken because the children cannot read them.
+ */
+export const saySeq = (parts: Part[]): void => {
+  const mine = ++seqToken;
+  void (async () => {
+    for (const p of parts) {
+      if (mine !== seqToken) return;
+      if ('phrase' in p) await sayPhrase(p.phrase, p.text);
+      else if ('sound' in p) await new Promise((r) => setTimeout(r, blip(p.sound) + 150));
+      else await speak(p.word);
+    }
+  })();
+};
+export const cancelSpeech = (): void => { seqToken++; };

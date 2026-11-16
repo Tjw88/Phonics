@@ -105,7 +105,7 @@ export const startAdventure = (s: ChildState, today: string, rng: Rng): Plan => 
 
   // Variety without randomness: rotate by how many adventures have been completed (stable if a day is replayed).
   const n = s.adventureDays.filter((d) => d !== today).length;
-  const safariOk = !!newSound && safariFor(s.accent).filter((i) => i.p === newSound.phoneme).length >= 2;
+  const safariOk = !!newSound && safariGraphemes(s.accent).includes(newSound.id);
   const seconds: SecondGame[] = safariOk ? ['safari', 'robot', 'drum'] : ['robot', 'drum'];
   const second = seconds[n % seconds.length] as SecondGame;
   const kitchenPool = pool.filter((w) => w.emoji && w.graphemes.length >= 2);
@@ -182,11 +182,12 @@ export const REVIEW_SOUND_TRIALS = [1, 2] as const;
  * A safari scene: up to `nTargets` things that START with the target sound, hidden among things that do not.
  * Distractors prefer sounds the child has already met, so the hunt is fair.
  */
-export const buildSafari = (s: ChildState, phoneme: string, rng: Rng, nTargets = 3, nTotal = 8): { targets: SafariItem[]; items: SafariItem[] } => {
+export const buildSafari = (s: ChildState, target: Grapheme, rng: Rng, nTargets = 3, nTotal = 8): { targets: SafariItem[]; items: SafariItem[] } => {
   const all = safariFor(s.accent);
-  const targets = shuffle(all.filter((i) => i.p === phoneme), rng).slice(0, nTargets);
+  // targets start with the LETTER being taught; nothing else that starts with the same SOUND is ever shown (no "cat" in a k scene)
+  const targets = shuffle(all.filter((i) => i.g === target.id), rng).slice(0, nTargets);
   const met = new Set([...introducedIds(s)].map(phonemeOf));
-  const others = all.filter((i) => i.p !== phoneme);
+  const others = all.filter((i) => i.p !== target.phoneme);
   const familiar = shuffle(others.filter((i) => met.has(i.p)), rng);
   const rest = shuffle(others.filter((i) => !met.has(i.p)), rng);
   // one distractor per sound, so the scene never has two items that start with the same wrong sound crowding it
@@ -195,12 +196,16 @@ export const buildSafari = (s: ChildState, phoneme: string, rng: Rng, nTargets =
   for (const it of [...familiar, ...rest]) {
     if (distractors.length >= nTotal - targets.length) break;
     if (seen.has(it.p)) continue;
-    if (targets.some((t) => isConfusable(t.word, it.word))) continue; // never a look-alike of an answer
     seen.add(it.p);
+    if (targets.some((t) => isConfusable(t.word, it.word))) continue; // never a look-alike of an answer
     distractors.push(it);
   }
   return { targets, items: shuffle([...targets, ...distractors], rng) };
 };
+
+/** Letters (graphemes) that have at least two Safari items starting with them in this accent. */
+export const safariGraphemes = (accent: ChildState['accent']): string[] =>
+  GRAPHEMES.map((g) => g.id).filter((id) => safariFor(accent).filter((i) => i.g === id).length >= 2);
 
 /** Word Kitchen tray: the word's own letters plus up to two other letters the child has met, shuffled. */
 export const buildKitchenTiles = (s: ChildState, word: Word, rng: Rng, extra = 2): string[] => {

@@ -293,3 +293,37 @@ describe('generated audio stays in sync with the curriculum, per accent', () => 
     });
   }
 });
+
+describe('sound sweep: every sound is long enough to hear, loud enough, and every spoken instruction exists', () => {
+  const MIN = { fric: 400, sonor: 380, vowel: 450 } as const;
+  const kind = (k: string) => ('sfh'.includes(k) ? 'fric' : 'mnlr'.includes(k) ? 'sonor' : 'aioeu'.includes(k) ? 'vowel' : 'stop');
+  for (const accent of ACCENTS) {
+    describe(accent.label, () => {
+      const audit = JSON.parse(readFileSync(new URL(`../../scripts/audio/audit-${accent.id}.json`, import.meta.url), 'utf8')) as {
+        phonemes: Record<string, { files: { ms: number; rms: number }[] }>;
+      };
+      const manifest = JSON.parse(readFileSync(new URL(`../../public/audio/${accent.id}/manifest.json`, import.meta.url), 'utf8')) as {
+        phrases: Record<string, string>; phonemes: Record<string, string[]>;
+      };
+      it('all 18 sounds have three takes, each long and loud enough for its type', () => {
+        expect(Object.keys(audit.phonemes).length).toBe(18);
+        for (const [k, v] of Object.entries(audit.phonemes)) {
+          expect(v.files.length, k).toBe(3);
+          for (const f of v.files) {
+            const t = kind(k);
+            if (t === 'stop') { expect(f.ms, `/${k}/`).toBeGreaterThanOrEqual(130); expect(f.ms, `/${k}/`).toBeLessThanOrEqual(320); }
+            else expect(f.ms, `/${k}/`).toBeGreaterThanOrEqual(MIN[t]);
+            expect(f.rms, `/${k}/ too quiet`).toBeGreaterThan(0.04);
+          }
+        }
+      });
+      it('every instruction the screens speak exists as audio (so no child is left with text they cannot read)', () => {
+        const src = ['games.ts', 'games2.ts', 'app.ts'].map((f) => readFileSync(new URL(`../ui/${f}`, import.meta.url), 'utf8')).join('\n');
+        const keys = new Set([...src.matchAll(/phrase: '([a-z_]+)'/g), ...src.matchAll(/sayPhrase\('([a-z_]+)'/g)].map((m) => m[1] as string));
+        expect(keys.size).toBeGreaterThan(8);
+        for (const k of keys) expect(manifest.phrases[k], `no audio for spoken instruction "${k}"`).toBeTruthy();
+        for (const g of GRAPHEMES) expect(manifest.phrases[`story_${g.id}`], `story line for ${g.id}`).toBeTruthy();
+      });
+    });
+  }
+});

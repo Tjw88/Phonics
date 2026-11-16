@@ -2,3 +2,5 @@ node_modules
 dist
 *.log
 __pycache__
+scripts/audio/voices
+scripts/audio/__pycache__

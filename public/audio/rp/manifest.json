@@ -1,7 +1,8 @@
 {
  "accent": "rp",
  "label": "Southern British (RP)",
- "voice": "en-GB-x-rp",
+ "voice": "en_GB-cori-medium",
+ "credit": "Cori Samuel (LibriVox / Hi-Fi TTS), CC BY 4.0",
  "phonemes": {
   "s": [
    "rp/phonemes/s_0.wav",
@@ -29,24 +30,24 @@
    "rp/phonemes/i_2.wav"
   ],
   "n": [
-   "shared/phonemes/n_0.wav",
-   "shared/phonemes/n_1.wav",
-   "shared/phonemes/n_2.wav"
+   "rp/phonemes/n_0.wav",
+   "rp/phonemes/n_1.wav",
+   "rp/phonemes/n_2.wav"
   ],
   "m": [
-   "shared/phonemes/m_0.wav",
-   "shared/phonemes/m_1.wav",
-   "shared/phonemes/m_2.wav"
+   "rp/phonemes/m_0.wav",
+   "rp/phonemes/m_1.wav",
+   "rp/phonemes/m_2.wav"
   ],
   "d": [
-   "shared/phonemes/d_0.wav",
-   "shared/phonemes/d_1.wav",
-   "shared/phonemes/d_2.wav"
+   "rp/phonemes/d_0.wav",
+   "rp/phonemes/d_1.wav",
+   "rp/phonemes/d_2.wav"
   ],
   "g": [
-   "shared/phonemes/g_0.wav",
-   "shared/phonemes/g_1.wav",
-   "shared/phonemes/g_2.wav"
+   "rp/phonemes/g_0.wav",
+   "rp/phonemes/g_1.wav",
+   "rp/phonemes/g_2.wav"
   ],
   "o": [
    "rp/phonemes/o_0.wav",
@@ -69,9 +70,9 @@
    "rp/phonemes/u_2.wav"
   ],
   "r": [
-   "shared/phonemes/r_0.wav",
-   "shared/phonemes/r_1.wav",
-   "shared/phonemes/r_2.wav"
+   "rp/phonemes/r_0.wav",
+   "rp/phonemes/r_1.wav",
+   "rp/phonemes/r_2.wav"
   ],
   "h": [
    "rp/phonemes/h_0.wav",
@@ -79,9 +80,9 @@
    "rp/phonemes/h_2.wav"
   ],
   "b": [
-   "shared/phonemes/b_0.wav",
-   "shared/phonemes/b_1.wav",
-   "shared/phonemes/b_2.wav"
+   "rp/phonemes/b_0.wav",
+   "rp/phonemes/b_1.wav",
+   "rp/phonemes/b_2.wav"
   ],
   "f": [
    "rp/phonemes/f_0.wav",
@@ -89,9 +90,9 @@
    "rp/phonemes/f_2.wav"
   ],
   "l": [
-   "shared/phonemes/l_0.wav",
-   "shared/phonemes/l_1.wav",
-   "shared/phonemes/l_2.wav"
+   "rp/phonemes/l_0.wav",
+   "rp/phonemes/l_1.wav",
+   "rp/phonemes/l_2.wav"
   ]
  },
  "words": {
@@ -264,11 +265,13 @@
   "octopus": "rp/words/octopus.wav",
   "orange": "rp/words/orange.wav",
   "cow": "rp/words/cow.wav",
-  "kite": "rp/words/kite.wav",
-  "key": "rp/words/key.wav",
   "camel": "rp/words/camel.wav",
   "car": "rp/words/car.wav",
   "cake": "rp/words/cake.wav",
+  "kite": "rp/words/kite.wav",
+  "key": "rp/words/key.wav",
+  "kiwi": "rp/words/kiwi.wav",
+  "kangaroo": "rp/words/kangaroo.wav",
   "elephant": "rp/words/elephant.wav",
   "envelope": "rp/words/envelope.wav",
   "umbrella": "rp/words/umbrella.wav",
@@ -311,35 +314,66 @@
   "tap_sounds": "rp/phrases/tap_sounds.wav",
   "blend_it": "rp/phrases/blend_it.wav",
   "again": "rp/phrases/again.wav",
+  "hungry_for": "rp/phrases/hungry_for.wav",
+  "find_the": "rp/phrases/find_the.wav",
+  "your_turn": "rp/phrases/your_turn.wav",
+  "copy_me": "rp/phrases/copy_me.wav",
+  "which_letter": "rp/phrases/which_letter.wav",
+  "well_done": "rp/phrases/well_done.wav",
+  "slide_blend": "rp/phrases/slide_blend.wav",
+  "hello_friend": "rp/phrases/hello_friend.wav",
   "drum_prompt": "rp/phrases/drum_prompt.wav",
   "safari_prompt": "rp/phrases/safari_prompt.wav",
   "kitchen_prompt": "rp/phrases/kitchen_prompt.wav",
   "trace_prompt": "rp/phrases/trace_prompt.wav",
   "pick_egg": "rp/phrases/pick_egg.wav",
-  "show_grownup": "rp/phrases/show_grownup.wav"
+  "show_grownup": "rp/phrases/show_grownup.wav",
+  "story_s": "rp/phrases/story_s.wav",
+  "story_a": "rp/phrases/story_a.wav",
+  "story_t": "rp/phrases/story_t.wav",
+  "story_p": "rp/phrases/story_p.wav",
+  "story_i": "rp/phrases/story_i.wav",
+  "story_n": "rp/phrases/story_n.wav",
+  "story_m": "rp/phrases/story_m.wav",
+  "story_d": "rp/phrases/story_d.wav",
+  "story_g": "rp/phrases/story_g.wav",
+  "story_o": "rp/phrases/story_o.wav",
+  "story_c": "rp/phrases/story_c.wav",
+  "story_k": "rp/phrases/story_k.wav",
+  "story_ck": "rp/phrases/story_ck.wav",
+  "story_e": "rp/phrases/story_e.wav",
+  "story_u": "rp/phrases/story_u.wav",
+  "story_r": "rp/phrases/story_r.wav",
+  "story_h": "rp/phrases/story_h.wav",
+  "story_b": "rp/phrases/story_b.wav",
+  "story_f": "rp/phrases/story_f.wav",
+  "story_ff": "rp/phrases/story_ff.wav",
+  "story_l": "rp/phrases/story_l.wav",
+  "story_ll": "rp/phrases/story_ll.wav",
+  "story_ss": "rp/phrases/story_ss.wav"
  },
  "sources": {
-  "s": "espeak-ng",
-  "a": "espeak-ng",
-  "t": "espeak-ng",
-  "p": "espeak-ng",
-  "i": "espeak-ng",
-  "n": "formant-synth",
-  "m": "formant-synth",
-  "d": "formant-synth",
-  "g": "formant-synth",
-  "o": "espeak-ng",
-  "k": "espeak-ng",
-  "e": "espeak-ng",
-  "u": "espeak-ng",
-  "r": "formant-synth",
-  "h": "espeak-ng",
-  "b": "formant-synth",
-  "f": "espeak-ng",
-  "l": "formant-synth"
+  "s": "piper (cut 145 ms of hiss before the vowel)",
+  "a": "piper (lone vowel from the voice)",
+  "t": "piper (unvoiced stop: burst + breathy release (no voiced vowel))",
+  "p": "piper (unvoiced stop: burst + breathy release (no voiced vowel))",
+  "i": "piper (lone vowel from the voice)",
+  "n": "piper (cut 143 ms before the vowel)",
+  "m": "piper (cut 70 ms before the vowel)",
+  "d": "piper (voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/))",
+  "g": "piper (voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/))",
+  "o": "piper (lone vowel from the voice)",
+  "k": "piper (unvoiced stop: burst + breathy release (no voiced vowel))",
+  "e": "piper (lone vowel from the voice)",
+  "u": "piper (lone vowel from the voice)",
+  "r": "piper (cut 193 ms before the vowel)",
+  "h": "piper (cut 85 ms of hiss before the vowel)",
+  "b": "piper (voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/))",
+  "f": "piper (cut 80 ms of hiss before the vowel)",
+  "l": "piper (cut 148 ms before the vowel)"
  },
- "removed_safari": [],
  "removed_words": [
   "pass"
- ]
+ ],
+ "removed_safari": []
 }

@@ -17,6 +17,15 @@ async function passGate(page) {
   await page.click(`[data-testid=gate-option][data-n="${a * b}"]`);
 }
 
+/** A real pointer drag from one element to another (what a finger does). */
+async function dragBetween(page, fromSel, toSel, steps = 14) {
+  const a = await page.locator(fromSel).first().boundingBox();
+  const b = await page.locator(toSel).first().boundingBox();
+  await page.mouse.move(a.x + a.width / 2, a.y + a.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2, { steps });
+  await page.mouse.up();
+}
 const sceneId = (page) => page.getAttribute('#stage', 'data-scene');
 const scenePast = (page, sid) => page.waitForFunction((id) => document.querySelector('#stage')?.dataset.scene !== id, sid, { timeout: 9000 }).catch(() => {});
 
@@ -36,7 +45,7 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
       sawFeed = true; kinds.add('feed');
       if (shot && !seen.has('feed')) { seen.add('feed'); await page.waitForTimeout(500); await page.screenshot({ path: `${shots}/${shot}-feed.png` }); }
       if (!madeMistake && (await page.locator('[data-testid=tile][data-answer="0"]').count())) {
-        await page.locator('[data-testid=tile][data-answer="0"]').first().click();
+        await dragBetween(page, '[data-testid=tile][data-answer="0"]', '[data-testid=mouth]'); // a wrong letter, dragged in: the dino says "oh"
         madeMistake = true;
         await page.waitForTimeout(900);
       }
@@ -55,7 +64,7 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
         await page.waitForTimeout(650);
         await page.screenshot({ path: `${shots}/${shot}-chomp.png` });
       } else {
-        await page.locator('[data-testid=tile][data-answer="1"]:not([disabled])').first().click().catch(() => {});
+        await dragBetween(page, '[data-testid=tile][data-answer="1"]:not([disabled])', '[data-testid=mouth]').catch(() => {});
       }
       await scenePast(page, sid);
     } else if (await has('chips')) {
@@ -70,7 +79,7 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
       sawRhyme = true; kinds.add('rhyme');
       const sid = await sceneId(page);
       if (shot && !seen.has('rhyme')) { seen.add('rhyme'); await page.waitForTimeout(500); await page.screenshot({ path: `${shots}/${shot}-rhyme.png` }); }
-      await page.locator('[data-testid=pic][data-answer="1"]').first().click().catch(() => {});
+      await dragBetween(page, '[data-testid=pic][data-answer="1"]', '.rocket').catch(() => {});
       if (shot && !seen.has('rhyme2')) { seen.add('rhyme2'); await page.waitForTimeout(1100); await page.screenshot({ path: `${shots}/${shot}-rocket-launch.png` }); }
       await scenePast(page, sid);
     } else if (await has('drum')) {
@@ -111,14 +120,15 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
       const order = gs.slice();
       if (!seen.has('kitchen') && decoy) {
         seen.add('kitchen'); // a wrong letter in the first slot: it must go back, the right ones stay
-        await page.locator(`[data-testid=ktile][data-letter="${decoy}"]`).first().click();
-        for (const g of gs.slice(1)) { await page.locator(`[data-testid=ktile][data-letter="${g}"]:not([disabled])`).first().click(); await page.waitForTimeout(120); }
+        await dragBetween(page, `[data-testid=ktile][data-letter="${decoy}"]`, '[data-testid=slot] >> nth=0');
+        for (let k = 1; k < gs.length; k++) { await dragBetween(page, `[data-testid=ktile][data-letter="${gs[k]}"]:not([disabled])`, `[data-testid=slot] >> nth=${k}`); await page.waitForTimeout(150); }
         await page.waitForFunction(() => [...document.querySelectorAll('[data-testid=slot]')].filter((s) => s.textContent).length === Math.max(0, document.querySelectorAll('[data-testid=slot]').length - 1), null, { timeout: 6000 });
         kinds.add('kitchen-retry');
         if (shot) await page.screenshot({ path: `${shots}/${shot}-kitchen.png` });
         order.splice(1); // only slot 0 is empty now
       }
-      for (const g of order) { await page.locator(`[data-testid=ktile][data-letter="${g}"]:not([disabled])`).first().click(); await page.waitForTimeout(150); }
+      // each tile is dropped on ITS slot (the game puts a dropped tile in the empty slot nearest to where it lands)
+      for (let k = 0; k < order.length; k++) { await dragBetween(page, `[data-testid=ktile][data-letter="${order[k]}"]:not([disabled])`, `[data-testid=slot] >> nth=${k}`); await page.waitForTimeout(150); }
       if (shot && !seen.has('cook')) { seen.add('cook'); await page.waitForTimeout(1500); await page.screenshot({ path: `${shots}/${shot}-cooked.png` }); }
       await scenePast(page, sid);
     } else if (await has('trace-svg')) {
@@ -147,6 +157,23 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
       if (shot && !seen.has('bridge')) { seen.add('bridge'); await page.screenshot({ path: `${shots}/${shot}-bridge.png` }); }
       const n = await page.locator('[data-testid=soundbutton]').count();
       for (let i = 0; i < n; i++) { await page.locator('[data-testid=soundbutton]').nth(i).click(); await page.waitForTimeout(80); }
+      if (!seen.has('replay')) {
+        seen.add('replay');
+        await page.waitForSelector('[data-testid=wordchoice]', { timeout: 6000 });
+        // the child can tap any sound again, in any order, after all have been tapped (it must not reset or dead-end)
+        await page.locator('[data-testid=soundbutton]').nth(0).click();
+        await page.locator('[data-testid=soundbutton]').nth(n - 1).click();
+        await page.waitForTimeout(250);
+        const hits = await page.locator('[data-testid=soundbutton].hit').count();
+        check(hits === n && (await page.locator('[data-testid=wordchoice]').count()) > 0, 'Bridge Builder: after all sounds are tapped they can be tapped again (no reset, choices stay)');
+        // slide a finger across the letters left to right: the letters blend
+        const cols = await page.locator('.gcol .glyph').evaluateAll((els) => els.map((e) => { const r = e.getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; }));
+        await page.mouse.move(cols[0][0] - 20, cols[0][1]); await page.mouse.down();
+        for (const [x, y] of cols) { await page.mouse.move(x, y, { steps: 5 }); }
+        await page.mouse.move(cols[cols.length - 1][0] + 30, cols[0][1], { steps: 3 }); await page.mouse.up();
+        await page.waitForTimeout(200);
+        check((await page.locator('.word.merge').count()) === 1, 'Bridge Builder: sliding a finger across the letters blends the word');
+      }
       await page.waitForSelector('[data-testid=wordchoice]', { timeout: 6000 }).catch(async (e) => { await page.screenshot({ path: `${shots}/DEBUG-bridge.png` }); console.log((await page.innerHTML('#stage')).slice(0, 1500)); throw e; });
       const sid = await sceneId(page);
       if (shot && !seen.has('planks')) { seen.add('planks'); await page.waitForTimeout(400); await page.screenshot({ path: `${shots}/${shot}-planks.png` }); }
@@ -244,6 +271,20 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
   for (const k of ['feed', 'robot', 'drum', 'safari', 'kitchen', 'bridge', 'rhyme', 'trace']) check(fpKinds.has(k), `free play: ${k} played to completion`);
   check(fpKinds.has('drum-retry'), 'Beat the Drum: a wrong count is modelled and the child can retry');
   check(fpKinds.has('kitchen-retry'), 'Word Kitchen: a wrong letter goes back to the tray, the right ones stay');
+  // tap fallback: taps do not place the letter at first (it hops toward the mouth to show the way); the 4th tap places it
+  {
+    const sid0 = await sceneId(page);
+    await page.click('[data-testid=fp-feed]');
+    await scenePast(page, sid0);
+    await page.waitForSelector('[data-testid=tile]');
+    const sidF = await sceneId(page);
+    for (let i = 0; i < 3; i++) { await page.locator('[data-testid=tile][data-answer="1"]').first().click(); await page.waitForTimeout(600); }
+    check((await sceneId(page)) === sidF, 'tap fallback: the first three taps do not place the letter (it hops toward the mouth to teach the drag)');
+    await page.locator('[data-testid=tile][data-answer="1"]').first().click();
+    await scenePast(page, sidF);
+    check((await sceneId(page)) !== sidF, 'tap fallback: after three taps a tap places the letter (no child is ever stuck)');
+    await page.waitForSelector('[data-testid=gamegrid]', { timeout: 12000 }).catch(() => {});
+  }
   await page.click('[data-testid=freeplay-back]');
   await page.waitForSelector('[data-testid=greeting]');
 
@@ -335,13 +376,30 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
   await pageB.click('[data-testid=play]');
   check(/grown-up/i.test(await pageB.textContent('[data-testid=coplay]')), 'Sound Play opens with "Find a grown-up to play with you"');
   await pageB.click('[data-testid=next]');
-  let letters = 0;
-  for (let i = 0; i < 3; i++) {
-    await pageB.waitForSelector('[data-testid=rhyme-target]');
+  let letters = 0, beats = 0, finds = 0;
+  for (let step = 0; step < 40; step++) {
+    await pageB.waitForTimeout(250);
     letters += await pageB.locator('[data-letter]').count();
-    await pageB.locator('[data-testid=pic][data-answer="1"]').click();
-    await pageB.waitForTimeout(1500);
+    if (await pageB.locator('[data-testid=beat-drum]').count()) {
+      beats++;
+      const n = Number(await pageB.getAttribute('[data-testid=beat-drum]', 'data-n'));
+      const sid = await sceneId(pageB);
+      await pageB.waitForFunction(() => /your turn/i.test(document.querySelector('[data-testid=caption]')?.textContent || ''), null, { timeout: 15000 });
+      for (let i = 0; i < n; i++) { await pageB.click('[data-testid=beat-drum]'); await pageB.waitForTimeout(150); }
+      await scenePast(pageB, sid);
+    } else if (await pageB.locator('[data-testid=pic]').count()) {
+      finds++;
+      const sid = await sceneId(pageB);
+      await pageB.locator('[data-testid=pic][data-answer="0"]').first().click(); // a wrong tap only names that picture
+      await pageB.locator('[data-testid=pic][data-answer="1"]').click();
+      await scenePast(pageB, sid);
+    } else if (await pageB.locator('[data-testid=next]').count()) {
+      const caption = await pageB.textContent('[data-testid=caption]').catch(() => '');
+      if (/goodnight|tomorrow/i.test(caption || '')) break;
+      await pageB.click('[data-testid=next]');
+    }
   }
+  check(beats === 3 && finds === 4, `Sound Play for age 2-3: 3 "copy the beat" rounds and 4 "find the..." rounds (got ${beats} and ${finds}), both tap-only`);
   check(letters === 0, 'no letters shown in Sound Play (listening only)');
   const stB = await pageB.evaluate(() => JSON.parse(localStorage.getItem('soundling.proto.v1')));
   check(stB.band === 'B' && Object.keys(stB.sounds).length === 0, 'band B records no letter-sound mastery');
