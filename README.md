@@ -29,7 +29,8 @@ daily adventure. The parent area (⚙, gated) has Today, Sound map, Words read, 
 |---|---|
 | Sets 1-5 in spec order, one new sound per day; the next set opens when 3 of 4 sounds are secure and the 4th is carried forward | Built (changed from whole-set gating, see findings) |
 | Mastery gate (3 separate days), errorless 1→2→3 choices, spaced review of hardest sounds | Built, with a stricter definition of "right" (≥2 correct and ≥60% that day) |
-| Companion grows with progress (accessory per set), plank-by-plank Bridge Builder, glowing feed target | Built |
+| Look and feel: drawn original characters (4 baby dinos, robot, rocket, chest), living Dino Valley backdrop with night mode, chunky buttons, sparkle bursts, game sound effects | Built (see "Look and feel") |
+| Companion grows with progress (an accessory per set secured) | Built |
 | Accent option (setup step + parent Settings): Southern British (RP) or Northern English | Built; Scottish held back (see Accents) |
 | Audio | Generated, not recorded, see below |
 | Placement game → starting set | Built (sets 1-3 only; never grants mastery) |
@@ -44,6 +45,28 @@ daily adventure. The parent area (⚙, gated) has Today, Sound map, Words read, 
 
 **Not built:** Beat the Drum, Sound Safari, Word Kitchen, Trace Trail, microphone, CloudKit sync, StoreKit,
 Rive/SpriteKit animation (CSS only), other worlds, Free Play is a simple loop, no iPhone-specific layouts.
+
+## Look and feel
+
+All art is original inline SVG (no images, no third-party code, works offline): four baby-dino companions with
+blinking eyes and moods (happy, mouth-open, "oh", sleepy), a robot, a rocket, a treasure chest, and a calm Dino
+Valley backdrop that turns to night when the island sleeps. Game feel:
+
+- **Feed the Creature:** drag a letter (or tap it); the dino opens wide as it nears, the letter flies in, the dino
+  gulps with a squash, and sparkles. A wrong letter makes the dino say "oh", then it models the sound again.
+- **Robot Talk:** the robot's lights flash and coloured beads light up, one per sound. Beads, not letters: this is
+  the oral stage.
+- **Bridge Builder:** each sound button drops a plank; the right word sends the dino hopping across to a flag.
+- **Rhyme Rocket:** the right rhyme fills the fuel tube, then the rocket launches.
+- **Make it real / treasure:** the word's picture bursts out with rays; the treasure chest opens by itself on the
+  sound's own friend (known in advance, never random).
+- Synthesised sound effects (pop, whoosh, chomp, thud, sparkle, launch); sparkles stop under Reduce Motion, and
+  every celebration is under 3 seconds and ends on any tap.
+
+What this is **not**: I can only judge how it looks in screenshots and that it behaves correctly; **whether it is
+fun is for you and real children to say**. Not yet done: the sound-friend characters and picture cards are still
+emoji (so they look different per device), the sound effects are plain synthesised tones, and performance has not
+been measured on a real iPad.
 
 ## Audio: generated, never listened to
 

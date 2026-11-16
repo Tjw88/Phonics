@@ -9,19 +9,15 @@ import { playDay } from '../engine/simulate';
 import {
   newChild, recordTrial, recordWord, statusOf, unlockedSet, wordsRead, type ChildState,
 } from '../engine/state';
-import { audioSource, blip, initAudio, praise, sayPhrase, setMuted, speak, tap, unlockAudio } from './audio';
+import { audioSource, blip, initAudio, praise, sayPhrase, setMuted, sfx, speak, tap, unlockAudio } from './audio';
+import { DINOS, chestSVG, eggSVG, islandSVG, sceneSVG } from './art';
+import { burst, mount, setNight } from './fx';
 import { bigButton, h, sleep } from './dom';
 import {
   bridgeBuilder, companionEl, feedCreature, placementTrial, rhymeRocket, rhymeSets, robotTalk, type Ctx, type TrialResult,
 } from './games';
 import { clockDay, load, save, wipe } from './storage';
 
-const EGGS = [
-  { egg: '🥚', kind: '🦖', label: 'green egg' },
-  { egg: '🥚', kind: '🦕', label: 'blue egg' },
-  { egg: '🥚', kind: '🐊', label: 'spotty egg' },
-  { egg: '🥚', kind: '🐲', label: 'speckled egg' },
-];
 
 export class App {
   s: ChildState = load();
@@ -45,8 +41,13 @@ export class App {
       class: 'corner parentbtn', 'data-testid': 'parent-btn', 'aria-label': 'Grown-ups area',
       onClick: () => void this.openParent(),
     }, '⚙︎');
+    const bg = h('div', { id: 'scene-bg', 'aria-hidden': 'true' });
+    bg.innerHTML = sceneSVG();
+    document.body.prepend(bg);
+    const logo = h('span', { class: 'logo' });
+    logo.innerHTML = `${eggSVG('rexy')}<span>Soundling</span>`;
     this.root.replaceChildren(
-      h('header', { class: 'top' }, h('span', { class: 'logo' }, 'Soundling'), this.hintBtn, parent),
+      h('header', { class: 'top' }, logo, this.hintBtn, parent),
       this.banner, this.hintCard, this.stage,
     );
     document.addEventListener('pointerdown', unlockAudio, { once: true });
@@ -122,7 +123,7 @@ export class App {
   private async interlude(parts: (Node | string)[], label = '▶', testid = 'next'): Promise<void> {
     const b = bigButton(label, testid, 'go');
     b.el.setAttribute('aria-label', 'Next');
-    this.stage.replaceChildren(h('div', { class: 'scene' }, ...parts, h('div', { class: 'row' }, b.el)));
+    mount(this.stage, h('div', { class: 'scene' }, ...parts, h('div', { class: 'row' }, b.el)));
     await b.pressed;
     tap();
   }
@@ -154,7 +155,7 @@ export class App {
       },
     }, a.label));
     const go = bigButton('Next', 'setup-next');
-    this.stage.replaceChildren(
+    mount(this.stage, 
       h('div', { class: 'scene setup' }, h('h1', {}, 'Welcome to Soundling'),
         h('p', {}, 'No account, email, photo or real name needed. Everything stays on this device.'),
         input, h('div', { class: 'row' }, bandBtns),
@@ -172,24 +173,37 @@ export class App {
     let chosen = 0;
     const names = h('input', { type: 'text', maxlength: 16, placeholder: 'Name your friend', 'data-testid': 'companion-name', class: 'input' }) as HTMLInputElement;
     const hatch = bigButton('Hatch!', 'hatch');
-    const eggRow = h('div', { class: 'row eggs', 'data-testid': 'eggs' }, EGGS.map((e, i) =>
-      h('button', {
-        class: `tile egg${i === 0 ? ' on' : ''}`, 'data-testid': 'egg', 'aria-label': e.label,
+    const eggRow = h('div', { class: 'row eggs', 'data-testid': 'eggs' }, DINOS.map((d, i) => {
+      const b = h('button', {
+        class: `tile egg${i === 0 ? ' on' : ''}`, 'data-testid': 'egg', 'aria-label': d.label,
         onClick: (ev: Event) => {
           chosen = i;
           eggRow.querySelectorAll('.egg').forEach((n) => n.classList.remove('on'));
           (ev.currentTarget as HTMLElement).classList.add('on');
           tap();
+          sfx.pop();
         },
-      }, e.egg)));
-    this.stage.replaceChildren(
+      });
+      b.innerHTML = eggSVG(d.id);
+      return b;
+    }));
+    mount(this.stage,
       h('div', { class: 'scene setup' }, h('h1', {}, 'Pick an egg'), eggRow, names, hatch.el),
     );
     await hatch.pressed;
-    const kind = EGGS[chosen]!.kind;
+    const kind = DINOS[chosen]!.id;
     this.s.companion = { kind, name: names.value.trim() || 'Dino' };
+    // the egg wobbles, cracks and the dino pops out
+    const hatchEgg = h('div', { class: 'hatch-egg' });
+    hatchEgg.innerHTML = eggSVG(kind);
+    mount(this.stage, h('div', { class: 'scene' }, hatchEgg, h('p', { class: 'caption' }, 'Something is hatching…')));
+    sfx.boing();
+    await sleep(900);
+    sfx.pop();
+    burst(hatchEgg, 'confetti', 18);
     praise();
-    await this.interlude([h('div', { class: 'companion big hatching' }, kind), h('p', { class: 'caption' }, `${this.s.companion.name} hatched! Hello, ${nick}!`)]);
+    const hatched = companionEl(this.s, 'big hatching');
+    await this.interlude([hatched, h('p', { class: 'caption' }, `${this.s.companion.name} hatched! Hello, ${nick}!`)]);
 
     // placement (band C only)
     if (band === 'C') {
@@ -215,19 +229,23 @@ export class App {
     const last = [...Object.entries(s.sounds)].filter(([, r]) => r.introducedOn < today).sort((a, b) => b[1].introducedOn.localeCompare(a[1].introducedOn))[0];
     const name = s.companion?.name ?? 'Dino';
 
+    // Treasures sit on the island in fixed, known places (never random). Each is a sticker of its mnemonic friend.
+    const SPOTS: [number, number][] = [[14, 62], [28, 72], [44, 78], [60, 76], [76, 70], [88, 60], [22, 52], [38, 60], [54, 62], [70, 58], [82, 48], [10, 44], [92, 74]];
     const island = h('div', { class: 'island', 'data-testid': 'island' },
-      s.collection.length
-        ? s.collection.map((id) => h('span', { class: 'prize', title: MNEMONICS[id]?.name ?? id }, MNEMONICS[id]?.emoji ?? '⭐'))
-        : h('span', { class: 'hint-empty' }, 'Your island is waiting for treasures.'),
+      (() => { const a = h('div', { class: 'island-art' }); a.innerHTML = islandSVG(); return a; })(),
+      ...s.collection.slice(0, SPOTS.length).map((id, i) =>
+        h('span', { class: 'prize', title: MNEMONICS[id]?.name ?? id, style: `left:${SPOTS[i]![0]}%;top:${SPOTS[i]![1]}%;animation-delay:${(i % 5) * 0.4}s` }, MNEMONICS[id]?.emoji ?? '⭐')),
+      h('div', { class: 'island-pet' }, companionEl(s, `big ${asleep ? 'sleepy' : ''}`, 'companion')),
+      s.collection.length ? null : h('span', { class: 'hint-empty' }, 'Treasures will appear here.'),
     );
+    setNight(asleep);
     const playLabel = s.band === 'B' ? 'Play together' : done ? 'Play again' : 'Play';
     const play = bigButton(`▶ ${playLabel}`, 'play', 'go');
     play.el.setAttribute('aria-label', playLabel);
     play.el.addEventListener('pointerdown', () => sayPhrase(s.band === 'B' ? 'play_together' : done ? 'play_again' : 'play', playLabel));
     const free = bigButton('Free play', 'freeplay', 'quiet');
-    this.stage.replaceChildren(
+    mount(this.stage, 
       h('div', { class: 'scene home' },
-        companionEl(s, `big ${asleep ? 'sleepy' : ''}`, 'companion'),
         h('p', { class: 'caption', 'data-testid': 'greeting' },
           asleep
             ? `${name} is sleepy. See you tomorrow, ${s.nickname}!`
@@ -247,6 +265,7 @@ export class App {
     this.inChild = true;
     const s = this.s;
     const today = this.today();
+    setNight(false);
     const plan = startAdventure(s, today, seeded((Date.now() & 0xffff) ^ s.dayOffset));
     this.persist();
     const ctx = this.ctx();
@@ -277,7 +296,7 @@ export class App {
       await this.interlude([
         h('div', { class: 'story' }, h('span', { class: 'mn' }, m?.emoji ?? '⭐'), h('span', { class: 'letter-big', 'data-testid': 'newsound' }, plan.newSound.id)),
         h('p', { class: 'caption' }, `${m?.name ?? ''}: ${m?.line ?? ''}`),
-        h('button', { class: 'btn soundbtn', onClick: () => blip(plan.newSound!.phoneme) }, `🔊 ${slashed(plan.newSound.id)}`),
+        h('button', { class: 'bubble-btn', 'aria-label': `Hear ${slashed(plan.newSound.id)}`, onClick: () => { tap(); blip(plan.newSound!.phoneme); } }, h('span', { class: 'speaker' }, '🔊'), h('span', { class: 'bubble-sound' }, slashed(plan.newSound.id))),
       ], '▶', 'story-next');
     } else {
       await this.interlude([h('p', { class: 'caption' }, `No new sound today, ${s.nickname}. Let’s make our sounds strong!`)]);
@@ -336,8 +355,10 @@ export class App {
         const others = shuffle(pictured.filter((x) => x.text !== word.text), ctx.rng).slice(0, 2);
         await robotTalk(ctx, word, others);
       }
+      const aliveEl = h('div', { class: 'alive-word', 'data-testid': 'alive' }, h('span', { class: 'alive-rays' }), h('span', { class: 'alive-pic' }, word.emoji ?? '✨'));
+      setTimeout(() => { burst(aliveEl, 'confetti', 20); sfx.sparkle(); speak(word.text); }, 350);
       await this.interlude([
-        h('div', { class: 'alive-word', 'data-testid': 'alive' }, word.emoji ?? '✨'),
+        aliveEl,
         h('p', { class: 'caption' }, `${word.text}!${name ? ` ${name} cheers.` : ''}`),
       ], '▶', 'alive-next');
     }
@@ -367,15 +388,20 @@ export class App {
         if (plan.makeItReal) speak(plan.makeItReal.word.text);
       },
     }, 'Show a grown-up');
-    this.stage.replaceChildren(
+    // The chest always holds the sound's own friend (known in advance, never random). It opens by itself, so there is nothing to miss.
+    const chest = h('div', { class: 'chest' });
+    chest.innerHTML = chestSVG();
+    const prizeEl = h('div', { class: 'treasure', 'data-testid': 'treasure' }, m?.emoji ?? '⭐');
+    mount(this.stage,
       h('div', { class: 'scene' },
         h('p', { class: 'caption' }, 'You found a treasure!'),
-        h('div', { class: 'treasure', 'data-testid': 'treasure' }, m?.emoji ?? '⭐'),
-        h('p', {}, m?.name ?? ''),
+        h('div', { class: 'chest-wrap' }, chest, prizeEl),
+        h('p', { class: 'treasure-name' }, m?.name ?? ''),
         h('div', { class: 'row' }, show, shown.el)),
     );
-    praise();
+    setTimeout(() => { chest.classList.add('open'); sfx.chest(); burst(prizeEl, 'stars', 16); praise(); }, 450);
     await shown.pressed; // goodnight is a celebration, not a cut-off: the child chooses to close the day
+    setNight(true);
     await this.interlude([companionEl(s, 'big sleepy'), h('p', { class: 'caption' }, 'Zzz… the island is asleep.')], '🏝️', 'sleep-next');
   }
 
@@ -416,6 +442,7 @@ export class App {
     for (const p of prompts) await this.interlude([h('p', { class: 'caption' }, p), h('p', {}, '(Away from the screen, together!)')]);
     this.setHint(null);
     this.inChild = false;
+    setNight(true);
     await this.interlude([companionEl(this.s, 'big sleepy'), h('p', { class: 'caption' }, 'Goodnight! See you tomorrow.')], '🏝️');
   }
 

@@ -130,6 +130,51 @@ export const blip = (phoneme: string): void => {
   else tone(freqFor(phoneme), 0.32, 'triangle', 0.22);
 };
 export const tap = (): void => tone(660, 0.07, 'sine', 0.1);
+
+// ---- game sound effects (synthesised; these are UI sounds, not phonics content) ----
+const sweep = (f0: number, f1: number, dur: number, type: OscillatorType = 'sine', gain = 0.16, delay = 0): void => {
+  const a = ac();
+  if (!a || muted) return;
+  const t0 = a.currentTime + delay;
+  const o = a.createOscillator();
+  const g = a.createGain();
+  o.type = type;
+  o.frequency.setValueAtTime(f0, t0);
+  o.frequency.exponentialRampToValueAtTime(f1, t0 + dur);
+  g.gain.setValueAtTime(gain, t0);
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  o.connect(g).connect(a.destination);
+  o.start(t0);
+  o.stop(t0 + dur + 0.05);
+};
+const noise = (dur: number, gain = 0.12, lowpass = 1800, delay = 0): void => {
+  const a = ac();
+  if (!a || muted) return;
+  const n = Math.floor(a.sampleRate * dur);
+  const buf = a.createBuffer(1, n, a.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / n);
+  const src = a.createBufferSource();
+  const f = a.createBiquadFilter();
+  const g = a.createGain();
+  f.type = 'lowpass';
+  f.frequency.value = lowpass;
+  g.gain.value = gain;
+  src.buffer = buf;
+  src.connect(f).connect(g).connect(a.destination);
+  src.start(a.currentTime + delay);
+};
+export const sfx = {
+  pop: () => sweep(500, 900, 0.09, 'sine', 0.14),
+  whoosh: () => noise(0.35, 0.09, 1400),
+  thud: () => { sweep(140, 60, 0.14, 'sine', 0.22); noise(0.06, 0.08, 500); },
+  chomp: () => { sweep(260, 110, 0.1, 'square', 0.07); sweep(300, 120, 0.1, 'square', 0.07, 0.11); },
+  boing: () => sweep(220, 520, 0.22, 'sine', 0.16),
+  sparkle: () => [1319, 1568, 2093].forEach((f, i) => tone(f, 0.16, 'sine', 0.07, i * 0.07)),
+  step: () => sweep(320, 240, 0.06, 'sine', 0.08),
+  launch: () => { noise(0.9, 0.12, 900); sweep(120, 420, 0.9, 'sawtooth', 0.05); },
+  chest: () => { sweep(180, 330, 0.25, 'triangle', 0.14); [784, 988, 1319].forEach((f, i) => tone(f, 0.22, 'triangle', 0.1, 0.25 + i * 0.09)); },
+};
 export const soft = (): void => tone(196, 0.25, 'sine', 0.1); // never a buzzer
 export const praise = (): void => {
   const pool: [number, number, number][] = [

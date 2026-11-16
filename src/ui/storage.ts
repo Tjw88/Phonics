@@ -1,5 +1,6 @@
 import { addDays, todayReal } from '../engine/dates';
 import { newChild, type ChildState } from '../engine/state';
+import { DINOS } from './art';
 
 // On-device only (spec: no accounts, no backend). localStorage stands in for SwiftData.
 const KEY = 'soundling.proto.v1';
@@ -9,7 +10,11 @@ export const load = (): ChildState => {
     const raw = localStorage.getItem(KEY);
     if (raw) {
       const s = JSON.parse(raw) as ChildState;
-      if (s.version === 1) return { ...newChild(), ...s }; // fill fields added since this save was written (e.g. accent)
+      if (s.version === 1) {
+        const merged = { ...newChild(), ...s }; // fill fields added since this save was written (e.g. accent)
+        if (merged.companion && !DINOS.some((d) => d.id === merged.companion?.kind)) merged.companion = { ...merged.companion, kind: 'rexy' }; // pre-art saves stored an emoji
+        return merged;
+      }
     }
   } catch {
     /* corrupted or unavailable storage: start fresh */

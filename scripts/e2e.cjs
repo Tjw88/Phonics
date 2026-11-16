@@ -17,6 +17,9 @@ async function passGate(page) {
   await page.click(`[data-testid=gate-option][data-n="${a * b}"]`);
 }
 
+const sceneId = (page) => page.getAttribute('#stage', 'data-scene');
+const scenePast = (page, sid) => page.waitForFunction((id) => document.querySelector('#stage')?.dataset.scene !== id, sid, { timeout: 9000 }).catch(() => {});
+
 /** Play whatever is on screen until the island is asleep. `wrongFirst` makes one deliberate first-try mistake. */
 async function playAdventure(page, { wrongFirst = false, shot } = {}) {
   let madeMistake = !wrongFirst, steps = 0, sawBridge = false, sawRobot = false, sawFeed = false, sawRhyme = false;
@@ -36,31 +39,56 @@ async function playAdventure(page, { wrongFirst = false, shot } = {}) {
         madeMistake = true;
         await page.waitForTimeout(900);
       }
-      await page.locator('[data-testid=tile][data-answer="1"]:not([disabled])').first().click().catch(() => {});
-      await page.waitForTimeout(900);
+      const sid = await sceneId(page);
+      if (shot && !seen.has('drag')) {
+        // a REAL pointer drag into the mouth, with frames of the dino opening and chomping
+        seen.add('drag');
+        const t = await page.locator('[data-testid=tile][data-answer="1"]').first().boundingBox();
+        const m = await page.locator('[data-testid=mouth]').boundingBox();
+        await page.mouse.move(t.x + t.width / 2, t.y + t.height / 2);
+        await page.mouse.down();
+        await page.mouse.move(m.x + m.width / 2, m.y + m.height / 2, { steps: 12 });
+        await page.waitForTimeout(150);
+        await page.screenshot({ path: `${shots}/${shot}-drag-hot.png` });
+        await page.mouse.up();
+        await page.waitForTimeout(650);
+        await page.screenshot({ path: `${shots}/${shot}-chomp.png` });
+      } else {
+        await page.locator('[data-testid=tile][data-answer="1"]:not([disabled])').first().click().catch(() => {});
+      }
+      await scenePast(page, sid);
     } else if (await has('chips')) {
       sawRobot = true;
       if (shot && !seen.has('robot')) { seen.add('robot'); await page.screenshot({ path: `${shots}/${shot}-robot.png` }); }
+      if (shot && !seen.has('robot2')) { seen.add('robot2'); await page.waitForTimeout(700); await page.screenshot({ path: `${shots}/${shot}-robot-talking.png` }); }
       await page.waitForTimeout(2500); // let the robot finish
+      const sid = await sceneId(page);
       await page.locator('[data-testid=pic][data-answer="1"]').first().click().catch(() => {});
-      await page.waitForTimeout(1300);
+      await scenePast(page, sid);
     } else if (await has('rhyme-target')) {
       sawRhyme = true;
+      const sid = await sceneId(page);
+      if (shot && !seen.has('rhyme')) { seen.add('rhyme'); await page.waitForTimeout(500); await page.screenshot({ path: `${shots}/${shot}-rhyme.png` }); }
       await page.locator('[data-testid=pic][data-answer="1"]').first().click().catch(() => {});
-      await page.waitForTimeout(1500);
+      if (shot && !seen.has('rhyme2')) { seen.add('rhyme2'); await page.waitForTimeout(1100); await page.screenshot({ path: `${shots}/${shot}-rocket-launch.png` }); }
+      await scenePast(page, sid);
     } else if (await has('word')) {
       sawBridge = true;
       if (shot && !seen.has('bridge')) { seen.add('bridge'); await page.screenshot({ path: `${shots}/${shot}-bridge.png` }); }
       const n = await page.locator('[data-testid=soundbutton]').count();
       for (let i = 0; i < n; i++) { await page.locator('[data-testid=soundbutton]').nth(i).click(); await page.waitForTimeout(80); }
       await page.waitForSelector('[data-testid=wordchoice]', { timeout: 6000 }).catch(async (e) => { await page.screenshot({ path: `${shots}/DEBUG-bridge.png` }); console.log((await page.innerHTML('#stage')).slice(0, 1500)); throw e; });
+      const sid = await sceneId(page);
+      if (shot && !seen.has('planks')) { seen.add('planks'); await page.waitForTimeout(400); await page.screenshot({ path: `${shots}/${shot}-planks.png` }); }
       await page.locator('[data-testid=wordchoice][data-answer="1"]').click();
-      await page.waitForSelector('[data-testid=wordchoice]', { state: 'detached', timeout: 8000 }); // wait for the scene to change, not a fixed sleep
+      if (shot && !seen.has('cross')) { seen.add('cross'); await page.waitForTimeout(800); await page.screenshot({ path: `${shots}/${shot}-crossing.png` }); }
+      await scenePast(page, sid); // wait for the scene to change, not a fixed sleep
     } else {
       for (const id of ['story-next', 'alive-next', 'goodnight', 'sleep-next', 'next']) {
         if (await has(id)) {
           if (shot && id === 'story-next' && !seen.has('story')) { seen.add('story'); await page.screenshot({ path: `${shots}/${shot}-story.png` }); }
-          if (shot && id === 'goodnight' && !seen.has('good')) { seen.add('good'); await page.screenshot({ path: `${shots}/${shot}-goodnight.png` }); }
+          if (shot && id === 'goodnight' && !seen.has('good')) { seen.add('good'); await page.waitForTimeout(1500); await page.screenshot({ path: `${shots}/${shot}-goodnight.png` }); }
+          if (shot && id === 'alive-next' && !seen.has('alive')) { seen.add('alive'); await page.waitForTimeout(900); await page.screenshot({ path: `${shots}/${shot}-alive.png` }); }
           await page.click(`[data-testid=${id}]`);
           break;
         }
@@ -88,6 +116,8 @@ async function playAdventure(page, { wrongFirst = false, shot } = {}) {
   await page.click('[data-testid=accent-north]');
   check(/short a/.test(await page.textContent('[data-testid=accent-note]')), 'choosing Northern English explains the differences (short a, shared bus/put vowel)');
   await page.click('[data-testid=setup-next]');
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: `${shots}/setup-welcome.png` });
   await page.locator('[data-testid=egg]').nth(1).click();
   await page.fill('[data-testid=companion-name]', 'Dotty');
   await page.click('[data-testid=hatch]');
@@ -122,6 +152,7 @@ async function playAdventure(page, { wrongFirst = false, shot } = {}) {
   check(st1.collection.length >= 1, 'treasure collected');
   const greet = await page.textContent('[data-testid=greeting]');
   check(/sleepy/i.test(greet), 'island sleeps after goodnight; no autoplay into another activity');
+  await page.waitForTimeout(1500);
   await page.screenshot({ path: `${shots}/home-asleep.png` });
   check((await page.locator('[data-testid=play]').count()) === 1, 'play again offered only on the home screen (no upsell/ads on child screens)');
 
@@ -181,6 +212,18 @@ async function playAdventure(page, { wrongFirst = false, shot } = {}) {
   const stC = await pageC.evaluate(() => JSON.parse(localStorage.getItem('soundling.proto.v1')));
   check(Object.keys(stC.sounds).join() === 's' && stC.adventureDays.length === 1, 'exactly one new sound (s) introduced and the adventure completed');
   check(errC.length === 0, 'no page errors on the from-scratch path');
+
+  log('REDUCE MOTION (spec: respect the OS setting)');
+  const ctxRM = await browser.newContext({ viewport: { width: VW, height: VH }, reducedMotion: 'reduce' });
+  const pageRM = await ctxRM.newPage();
+  await pageRM.goto(url);
+  await pageRM.waitForSelector('[data-testid=gate]');
+  const rm = await pageRM.evaluate(() => ({
+    cloud: getComputedStyle(document.querySelector('#scene-bg .cloud')).animationName,
+    rays: getComputedStyle(document.querySelector('#scene-bg .rays')).animationName,
+    scene: getComputedStyle(document.querySelector('#stage')).animationDuration,
+  }));
+  check(rm.cloud === 'none' && rm.rays === 'none', `backdrop animations are off under Reduce Motion (cloud=${rm.cloud}, rays=${rm.rays})`);
 
   log('BAND B (ages 2-3, Sound Play, co-play only)');
   const pageB = await (await browser.newContext({ viewport: { width: VW, height: VH }, hasTouch: MOBILE, isMobile: MOBILE })).newPage();
