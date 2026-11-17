@@ -4,27 +4,6 @@ Standing instruction from Tom: **any question I ask that remains unanswered goes
 
 ## Open
 
-### Q16. Where should the "For the grown-up" mission live on the finale screen? (asked 17 Nov 2026)
-- **Context:** the cycle-2 review found the mission card now sits below the fold at 1180x820 (its text edge peeks in) and off-screen at 1024x768. It must be visible to the grown-up, not the centre of the child's celebration.
-- **Options:** (a) a small "For the grown-up" corner tab that opens the card; (b) keep it on the screen but compact, directly under the chest and above Goodnight; (c) move it to the parent area only (the Today and This week tabs already show it).
-- **My default while open:** the current layout (below the Goodnight button, scrollable).
-
-### Q15. Continue to animation cycle 3 now? (asked 17 Nov 2026)
-- **Context:** cycle 2 met the exit criterion by the reviewer's scores, but variety (3.4) and fun (3.9) are still the weakest dimensions; the ranked backlog is in `docs/ANIMATION_SPEC.md` section 9.
-- **Options:** (a) yes, run cycle 3 now (hatch follow-through, Safari wrong tap, first-success waits, Rhyme vehicle, home idle in all worlds, Bridge weight, robot body); (b) pause the animation work until a person has watched a few sessions on a real device; (c) something else first (new packs, audio).
-- **My recommendation:** (b) for the major remaining items, but do the small ones (hatch wave, Safari wrong tap, the waits) in a short cycle first.
-- **My default while open:** none started.
-
-### Q14. Free Play from the start: is the "quiet Play again" right? (asked 17 Nov 2026)
-- **Context:** Free Play now appears on the home screen as soon as the child has met one sound, the adventure stays the big green button until it is done, and then "Play again" becomes a quiet button. It counts toward the daily limit and uses only sounds already met.
-- **Options:** (a) keep this; (b) also hide "Play again" once the day is done (Free Play only); (c) show the adventure and Free Play as equals.
-- **My default while open:** (a).
-
-### Q13. Build the six recommended new theme packs? (asked 17 Nov 2026)
-- **Context:** `docs/THEME_PACKS_SPEC.md` recommends Jungle Safari, Robot Workshop, Pirate Cove, Fairy Garden, Music Band and Arctic Friends next (about one artist run each plus the props and reactions system from the animation cycle). Construction, Weather/Seasons, Bakery and Superhero City are second wave.
-- **Options:** (a) build all six; (b) build three first (say Jungle, Robot Workshop, Fairy Garden); (c) change the list.
-- **My default while open:** none built until the animation cycle's props and reactions are in (they make a pack cheaper and better).
-
 ### Q9. Hear the new sounds yourself, or a listening checklist for someone else? (asked 16 Nov 2026, still open)
 - **Context:** the 8 new sounds (sh, ch, th, ng, ai, ee, oa, oo) and ~120 new words are machine-generated and nobody has heard them. I cannot hear.
 - **Options:** (a) you listen via `public/audio-check.html` and tell me what is wrong; (b) I draft a short listening checklist for another adult (a teacher, a parent); (c) neither yet.
@@ -51,6 +30,11 @@ Standing instruction from Tom: **any question I ask that remains unanswered goes
 - **My default while open:** as built; each is documented where it is defined.
 
 ## Answered
+
+- **Q16: where should the "For the grown-up" mission live on the finale screen?** (asked 17 Nov) Answered 17 Nov 2026: "I think that's fine, as long as the header for it is above the fold": keep the current layout (below Goodnight, scrollable) **provided the "For the grown-up" header is visible without scrolling** at 1180x820, 1024x768 and 390x844. Being done in animation cycle 3 with a measured test.
+- **Q15: continue to animation cycle 3 now?** (asked 17 Nov) Answered 17 Nov 2026: **yes, cycle 3.** Backlog in `docs/ANIMATION_SPEC.md` section 9.
+- **Q14: Free Play from the start, is the quiet "Play again" right?** (asked 17 Nov) Answered 17 Nov 2026: "what?" (the question was unclear); I explained it and recommended keeping it as built (option a). Treated as settled unless Tom says otherwise.
+- **Q13: build the six recommended new theme packs?** (asked 17 Nov) Answered 17 Nov 2026: **yes, all six**: Jungle Safari, Robot Workshop, Pirate Cove, Fairy Garden, Music Band, Arctic Friends. Stage 1 (creatures, arrivals, backdrop, island) in progress; stage 2 (themed props and reactions) follows cycle 3.
 
 - **Q10: what should the curriculum teach after set 7?** (asked 17 Nov) Answered 17 Nov 2026: **(a) then (b)**: the missing consonants as sets 8-9 (j v w x | y z zz qu), then the remaining vowel sounds as sets 10-12 (igh ar or ur | ow oi ear air | er). Built; `ure` was left out on purpose (in cure/pure it is /jʊə/, not one vowel sound).
 - **Q11: what pack options should there be?** (asked 17 Nov) Answered 17 Nov 2026: a full potential spec is in `docs/THEME_PACKS_SPEC.md` (selection criteria, 14 candidate packs with companions, world, arrival, scores and risks, the anatomy of a complete pack, the pack-system upgrades, quality bar and cost). The follow-up decision is Q13.
