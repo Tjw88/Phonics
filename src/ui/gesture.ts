@@ -4,10 +4,10 @@
 import { reducedMotion } from './dom';
 
 export interface Assist { taps: number; readonly allow: boolean; miss: () => void }
-/** Tap is allowed from the start if the parent asked for it, otherwise after 3 taps that did not drag. */
+/** Tap is allowed from the start if the parent asked for it (or there is nothing to get wrong), otherwise after 2 taps that did not drag. */
 export const makeAssist = (easyTap: boolean): Assist => ({
   taps: 0,
-  get allow() { return easyTap || this.taps >= 3; },
+  get allow() { return easyTap || this.taps >= 2; },
   miss() { this.taps++; },
 });
 

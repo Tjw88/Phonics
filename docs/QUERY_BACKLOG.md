@@ -4,7 +4,23 @@ Standing instruction from Tom: **any question I ask that remains unanswered goes
 
 ## Open
 
-### Q9. Hear the new sounds yourself, or a listening checklist for someone else? (asked 16 Nov 2026)
+### Q12. Should Free Play be available before the day's adventure is done? (asked 17 Nov 2026)
+- **Context:** both reviewers flagged that Free Play is hidden until the adventure is finished, so a 4-year-old who wants to bang the drum or a 5-year-old who wants the Kitchen first cannot. The spec's "one adventure a day" rule and the pull-not-hook stance pull the other way.
+- **Options:** (a) keep it gated (current); (b) offer 2-3 themed Free Play doors on the home screen from the start, adventure still the primary button; (c) offer Free Play only after the story and first game.
+- **My default while open:** (a), unchanged.
+
+### Q11. Are six theme packs enough, and which next? (asked 17 Nov 2026)
+- **Context:** Dino Valley, Dragon Castle, Transport Town, Space Station, Ocean Reef, Farm Friends. A new pack is about one artist-agent run plus tests.
+- **Options (not exclusive):** jungle/safari animals, fairies and flowers, pirates and treasure, construction site, superheroes (original), seasons/weather, bugs and garden, or your own list. Also: should themes eventually carry their own props (bridge, drum, rocket) and reactions? (I plan to do that in the animation cycle unless you say otherwise.)
+- **My default while open:** the six as built; themed props and reactions scheduled for the animation cycle.
+
+### Q10. What should the curriculum teach after set 7? (asked 17 Nov 2026)
+- **Context:** the practitioner review pointed out that many everyday words need j v w x y z zz qu, and the rest of the "long vowel" digraphs (igh, ar, or, ur, ow, oi, ear, air, ure, er). The app currently runs out of new content around day 48-57 for a daily player.
+- **Options:** (a) next the missing consonants (j v w x y z zz qu) as set 8, then the remaining vowel sounds; (b) the remaining vowel sounds first; (c) leave the curriculum here and spend the effort on engagement and the animation cycle.
+- **My recommendation:** (a), because it unlocks far more decodable words, then (b). Each new set costs about one round like set 7 (data, audio, pictures, tests).
+- **My default while open:** (c): no new curriculum until you choose.
+
+### Q9. Hear the new sounds yourself, or a listening checklist for someone else? (asked 16 Nov 2026, still open)
 - **Context:** the 8 new sounds (sh, ch, th, ng, ai, ee, oa, oo) and ~120 new words are machine-generated and nobody has heard them. I cannot hear.
 - **Options:** (a) you listen via `public/audio-check.html` and tell me what is wrong; (b) I draft a short listening checklist for another adult (a teacher, a parent); (c) neither yet.
 - **Why it matters:** the research review found no evidence on synthetic voices for isolated sounds; the recogniser flagged sh/ch confusions, /ng/ words, "thin" and a Northern pack it barely understands.

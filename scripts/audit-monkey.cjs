@@ -15,7 +15,9 @@ async function gate(page) {
 
 (async () => {
   const browser = await chromium.launch();
-  const page = await (await browser.newContext({ viewport: { width: 1180, height: 820 }, hasTouch: true })).newPage();
+  const mctx = await browser.newContext({ viewport: { width: 1180, height: 820 }, hasTouch: true });
+  await mctx.addInitScript(() => { try { localStorage.setItem('soundling.tools', '1'); } catch { /* ignore */ } }); // the prototype tools are hidden unless set
+  const page = await mctx.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(String(e)));
   await page.goto(url);

@@ -234,3 +234,22 @@ export const drumBeats = (word: Word): number => word.graphemes.length;
 /** Distractor pictures for an oral game: different first sound, and never a look-alike of the answer. */
 export const pickDistractors = (pool: Word[], target: Word, n: number, rng: Rng): Word[] =>
   shuffle(pool.filter((x) => x.text !== target.text && x.graphemes[0] !== target.graphemes[0] && !isConfusable(x.text, target.text)), rng).slice(0, n);
+
+/**
+ * Distractors for a printed-word choice that force the child to DECODE: words that share the first or last sound (letter group) with the
+ * answer, are the same length, or share its vowel, so the answer cannot be guessed from the word's length or its first letter alone.
+ * (A review found "mash / sock / in" and "raid / hush / fun": guessable without reading.)
+ */
+export const pickNeighbours = (pool: Word[], target: Word, n: number, rng: Rng): Word[] => {
+  const first = target.graphemes[0], last = target.graphemes[target.graphemes.length - 1];
+  const vowels = new Set(target.graphemes.filter((g) => 'aeiou'.includes(g.charAt(0)) || ['ai', 'ee', 'oa', 'oo'].includes(g)));
+  const score = (w: Word): number =>
+    (w.graphemes[0] === first ? 2 : 0) + (w.graphemes[w.graphemes.length - 1] === last ? 2 : 0) +
+    (w.graphemes.length === target.graphemes.length ? 1 : 0) + (w.graphemes.some((g) => vowels.has(g)) ? 1 : 0) + rng() * 0.5;
+  return pool
+    .filter((w) => w.text !== target.text && !isConfusable(w.text, target.text))
+    .map((w) => ({ w, s: score(w) }))
+    .sort((a, b) => b.s - a.s)
+    .slice(0, n)
+    .map((x) => x.w);
+};

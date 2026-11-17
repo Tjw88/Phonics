@@ -222,7 +222,10 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
 
 (async () => {
   const browser = await chromium.launch();
+  const TOOLS = () => { try { localStorage.setItem('soundling.tools', '1'); } catch { /* ignore */ } }; // the prototype tools (fast-forward) are hidden unless this is set
+  const newPageWithTools = async (opts) => { const c = await browser.newContext(opts); await c.addInitScript(TOOLS); return c.newPage(); };
   const ctx = await browser.newContext({ viewport: { width: VW, height: VH }, deviceScaleFactor: 1, hasTouch: MOBILE, isMobile: MOBILE });
+  await ctx.addInitScript(TOOLS);
   const page = await ctx.newPage();
   page.on('pageerror', (e) => errors.push(String(e)));
   page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
@@ -283,6 +286,8 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
   check(/sleepy/i.test(greet), 'island sleeps after goodnight; no autoplay into another activity');
   await page.waitForTimeout(1500);
   await page.screenshot({ path: `${shots}/home-asleep.png` });
+  await page.click('[data-testid=island-pet]'); await page.waitForTimeout(100);
+  check(/wiggle/.test(await page.getAttribute('[data-testid=island-pet]', 'class')), 'touching the home character makes it wiggle (every child tries this first)');
   check((await page.locator('[data-testid=play]').count()) === 1, 'play again offered only on the home screen (no upsell/ads on child screens)');
 
   log('FREE PLAY (a menu of every game, one round each)');
@@ -301,18 +306,18 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
   for (const k of ['feed', 'robot', 'drum', 'safari', 'kitchen', 'bridge', 'rhyme', 'trace']) check(fpKinds.has(k), `free play: ${k} played to completion`);
   check(fpKinds.has('drum-retry'), 'Beat the Drum: a wrong count is modelled and the child can retry');
   check(fpKinds.has('kitchen-retry'), 'Word Kitchen: a wrong letter goes back to the tray, the right ones stay');
-  // tap fallback: taps do not place the letter at first (it hops toward the mouth to show the way); the 4th tap places it
+  // tap fallback: with several letters the first taps do not place the letter (it hops toward the mouth to show the way); the 3rd tap places it
   {
     const sid0 = await sceneId(page);
     await page.click('[data-testid=fp-feed]');
     await scenePast(page, sid0);
     await page.waitForSelector('[data-testid=tile]');
     const sidF = await sceneId(page);
-    for (let i = 0; i < 3; i++) { await page.locator('[data-testid=tile][data-answer="1"]').first().click(); await page.waitForTimeout(600); }
-    check((await sceneId(page)) === sidF, 'tap fallback: the first three taps do not place the letter (it hops toward the mouth to teach the drag)');
+    for (let i = 0; i < 2; i++) { await page.locator('[data-testid=tile][data-answer="1"]').first().click(); await page.waitForTimeout(600); }
+    check((await sceneId(page)) === sidF, 'tap fallback: the first two taps do not place the letter (it hops toward the mouth to teach the drag)');
     await page.locator('[data-testid=tile][data-answer="1"]').first().click();
     await scenePast(page, sidF);
-    check((await sceneId(page)) !== sidF, 'tap fallback: after three taps a tap places the letter (no child is ever stuck)');
+    check((await sceneId(page)) !== sidF, 'tap fallback: after two taps a tap places the letter (no child is ever stuck)');
     await page.waitForSelector('[data-testid=gamegrid]', { timeout: 12000 }).catch(() => {});
   }
   await page.click('[data-testid=freeplay-back]');
@@ -402,9 +407,24 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
   check((await page.locator('[data-testid=soundbuttons]').count()) === 1, 'Settings has the sound-buttons option');
   await page.click('[data-testid=parent-close]'); await page.waitForSelector('[data-testid=greeting]');
 
+  log('GROWN-UP GATE and small fixes');
+  {
+    const pg = await newPageWithTools({ viewport: { width: VW, height: VH }, hasTouch: MOBILE, isMobile: MOBILE });
+    await pg.goto(url);
+    await pg.waitForSelector('[data-testid=gate]');
+    const q = await pg.textContent('[data-testid=gate-q]'); const [, ga, gb] = q.match(/(\d+) × (\d+)/);
+    const wrongN = await pg.locator(`[data-testid=gate-option]:not([data-n="${ga * gb}"])`).first().getAttribute('data-n');
+    await pg.click(`[data-testid=gate-option][data-n="${wrongN}"]`);
+    await pg.waitForSelector('[data-testid=gate-locked]', { timeout: 4000 }).catch(() => {});
+    const lockText = await pg.locator('[data-testid=gate-locked]').textContent().catch(() => '');
+    check(/Please wait \d+ seconds/.test(lockText), `a wrong grown-up-gate answer locks the gate for a while (${lockText.trim().slice(0, 60)})`);
+    check((await pg.locator('[data-testid=gate-option]').count()) === 0, 'while locked there are no answers to guess');
+    await pg.close();
+  }
+
   log('WORLDS (theme packs)');
   {
-    const pw = await (await browser.newContext({ viewport: { width: VW, height: VH }, hasTouch: MOBILE, isMobile: MOBILE })).newPage();
+    const pw = await newPageWithTools({ viewport: { width: VW, height: VH }, hasTouch: MOBILE, isMobile: MOBILE });
     const errW = [];
     pw.on('pageerror', (e) => errW.push(String(e)));
     await pw.goto(url);
@@ -434,7 +454,7 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
     await pw.waitForSelector('[data-testid=greeting]');
     const stW = await pw.evaluate(() => JSON.parse(localStorage.getItem('soundling.proto.v1')));
     check(stW.theme === 'ocean' && /^ocean-/.test(stW.companion.kind), `the chosen world and friend are saved (${stW.theme}, ${stW.companion.kind}); the name defaults per world (${stW.companion.name})`);
-    check(stW.companion.name === 'Splash', 'the default friend name comes from the world');
+    check(stW.companion.name === 'Tilly', `the default friend name comes from the creature (the turtle is called ${stW.companion.name})`);
     await pw.screenshot({ path: `${shots}/world-ocean-home.png` });
     // a grown-up switches world later: same friend slot, new backdrop, progress untouched
     await pw.click('[data-testid=parent-btn]'); await passGate(pw);
@@ -452,7 +472,7 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
   }
 
   log('FROM SCRATCH (fails placement, day 1 is oral only: no print)');
-  const pageC = await (await browser.newContext({ viewport: { width: VW, height: VH }, hasTouch: MOBILE, isMobile: MOBILE })).newPage();
+  const pageC = await newPageWithTools({ viewport: { width: VW, height: VH }, hasTouch: MOBILE, isMobile: MOBILE });
   const errC = [];
   pageC.on('pageerror', (e) => errC.push(String(e)));
   await pageC.goto(url);
@@ -500,9 +520,10 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
   check(rm.cloud === 'none' && rm.rays === 'none', `backdrop animations are off under Reduce Motion (cloud=${rm.cloud}, rays=${rm.rays})`);
 
   log('BAND B (ages 2-3, Sound Play, co-play only)');
-  const pageB = await (await browser.newContext({ viewport: { width: VW, height: VH }, hasTouch: MOBILE, isMobile: MOBILE })).newPage();
+  const pageB = await newPageWithTools({ viewport: { width: VW, height: VH }, hasTouch: MOBILE, isMobile: MOBILE });
   await pageB.goto(url);
   await passGate(pageB);
+  check((await pageB.locator('[data-testid=band-help]').count()) === 1, 'setup says which band to choose when unsure (a 3-year-old sits between Sound Play and the journey)');
   await pageB.fill('[data-testid=nick]', 'Wee');
   await pageB.click('[data-testid=band-B]');
   await pageB.click('[data-testid=setup-next]');
@@ -539,6 +560,13 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
   check(letters === 0, 'no letters shown in Sound Play (listening only)');
   const stB = await pageB.evaluate(() => JSON.parse(localStorage.getItem('soundling.proto.v1')));
   check(stB.band === 'B' && Object.keys(stB.sounds).length === 0, 'band B records no letter-sound mastery');
+  check(stB.adventureDays.length === 1, 'Sound Play counts as a day played (so the grown-up sees it)');
+  if (await pageB.locator('[data-testid=next]').count()) await pageB.click('[data-testid=next]'); // (the loop above may already have clicked through goodnight)
+  await pageB.waitForSelector('[data-testid=greeting]');
+  await pageB.click('[data-testid=parent-btn]'); await passGate(pageB);
+  check(/Sound Play done today/.test(await pageB.textContent('[data-testid=today-sound]')), 'the grown-up Today tab says Sound Play was done (it used to say "No adventure played yet today")');
+  await pageB.click('[data-testid=tab-week]');
+  check(/Played on 1 day/.test(await pageB.textContent('[data-testid=week-lines]')), 'the This week tab counts the Sound Play day');
 
   check(errors.length === 0, `no console/page errors${errors.length ? ': ' + errors.join(' | ') : ''}`);
   check(externalRequests.length === 0, `no third-party network requests${externalRequests.length ? ': ' + externalRequests.join(', ') : ''}`);

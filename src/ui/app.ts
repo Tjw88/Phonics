@@ -1,4 +1,4 @@
-import { ACCENTS, GRAPHEMES, MAX_SET, MNEMONICS, STORY_SAY, bankFor, type AccentId } from '../engine/data';
+import { ACCENTS, GRAPHEMES, MAX_SET, MNEMONICS, STORY_SAY, TODDLER_WORDS, bankFor, type AccentId } from '../engine/data';
 import { seeded, shuffle } from '../engine/dates';
 import { strugglingSounds } from '../engine/review';
 import { weekActivity, weekLines, weeklySummary } from '../engine/summary';
@@ -16,7 +16,7 @@ import { pictureEl } from './pictures';
 import { copyBeat, findIt } from './games2';
 import { GAME_LABEL, availableGames, safariLearned, roundBridge, roundDrum, roundFeed, roundKitchen, roundRhyme, roundRobot, roundSafari, roundTrace, type GameKind } from './rounds';
 import { chestSVG } from './art';
-import { PACKS, arrivalSVG, companionSVG, packById, sameSlotIn } from './themes';
+import { PACKS, arrivalSVG, companionSVG, defaultNameFor, packById, sameSlotIn } from './themes';
 import { burst, mount, setNight } from './fx';
 import { bigButton, h, sleep } from './dom';
 import {
@@ -109,7 +109,26 @@ export class App {
   }
 
   // ----- parental gate -----
+  private gateLockedUntil = 0;
+  /** Prototype tools (move the clock, fast-forward) are for testing only: hidden unless the page was opened with ?tools=1 once (remembered in this browser). */
+  private toolsOn = ((): boolean => {
+    try {
+      if (new URLSearchParams(location.search).has('tools')) localStorage.setItem('soundling.tools', '1');
+      return localStorage.getItem('soundling.tools') === '1';
+    } catch { return false; }
+  })();
   private async gate(): Promise<boolean> {
+    // after a wrong answer the gate stays shut for 30 seconds, so a child cannot simply keep guessing (1 in 4 each try)
+    const waitMs = this.gateLockedUntil - Date.now();
+    if (waitMs > 0) {
+      let res!: (ok: boolean) => void;
+      const closed = new Promise<boolean>((r) => (res = r));
+      const lock = h('div', { class: 'overlay', role: 'dialog', 'aria-label': 'Grown-ups only', 'data-testid': 'gate-locked' },
+        h('div', { class: 'card' }, h('h2', {}, 'Grown-ups only'), h('p', {}, `Please wait ${Math.ceil(waitMs / 1000)} seconds and try again.`),
+          h('button', { class: 'btn quiet', onClick: () => { lock.remove(); res(false); } }, 'Back to the game')));
+      document.body.append(lock);
+      return closed;
+    }
     const a = 6 + Math.floor(Math.random() * 4), b = 6 + Math.floor(Math.random() * 4);
     const right = a * b;
     const wrongs = new Set<number>();
@@ -124,7 +143,7 @@ export class App {
         h('h2', {}, 'Grown-ups only'),
         h('p', { 'data-testid': 'gate-q' }, `What is ${a} × ${b}?`),
         h('div', { class: 'row' }, shuffle([right, ...wrongs], Math.random).map((n) =>
-          h('button', { class: 'btn', 'data-testid': 'gate-option', 'data-n': n, onClick: () => { overlay.remove(); resolve(n === right); } }, String(n)))),
+          h('button', { class: 'btn', 'data-testid': 'gate-option', 'data-n': n, onClick: () => { overlay.remove(); if (n !== right) this.gateLockedUntil = Date.now() + 30_000; resolve(n === right); } }, String(n)))),
         h('button', { class: 'btn quiet', 'data-testid': 'gate-cancel', onClick: () => { overlay.remove(); resolve(false); } }, 'Back to the game'),
       ));
     document.body.append(overlay);
@@ -160,6 +179,7 @@ export class App {
       class: `btn choice${k === band ? ' on' : ''}`, 'data-testid': `band-${k}`,
       onClick: () => { band = k; bandBtns.forEach((x, i) => x.classList.toggle('on', i === (k === 'B' ? 0 : 1))); },
     }, k === 'B' ? 'Sound Play · ages 2–3, play together' : 'Phonics journey · ages 3–5'));
+    const bandHelp = h('p', { class: 'muted small', 'data-testid': 'band-help' }, 'Not sure? Start with Sound Play until your child knows a few letter sounds; you can start the journey later from a new profile.');
     let accent: AccentId = this.s.accent;
     const accentNote = h('p', { class: 'muted', 'data-testid': 'accent-note' }, ACCENTS.find((a) => a.id === accent)?.note ?? '');
     const accentBtns = ACCENTS.map((a) => h('button', {
@@ -175,7 +195,7 @@ export class App {
     mount(this.stage, 
       h('div', { class: 'scene setup' }, h('h1', {}, 'Welcome to Soundling'),
         h('p', {}, 'No account, email, photo or real name needed. Everything stays on this device.'),
-        input, h('div', { class: 'row' }, bandBtns),
+        input, h('div', { class: 'row' }, bandBtns), bandHelp,
         h('p', { class: 'caption small' }, 'How do you say your sounds?'),
         h('div', { class: 'row' }, accentBtns), accentNote, go.el),
     );
@@ -232,7 +252,7 @@ export class App {
     await hatch.pressed;
     const pack = packById(this.s.theme);
     const kind = (pack.creatures[chosen] as { id: string }).id;
-    this.s.companion = { kind, name: names.value.trim() || pack.defaultName };
+    this.s.companion = { kind, name: names.value.trim() || defaultNameFor(kind) };
     // the egg (or crate, or capsule) wobbles, opens and the friend pops out
     const arrives = pack.arrival === 'egg' ? 'hatching' : 'arriving';
     const hatchEgg = h('div', { class: 'hatch-egg' });
@@ -276,12 +296,20 @@ export class App {
     const name = s.companion?.name ?? 'Dino';
 
     // Treasures sit on the island in fixed, known places (never random). Each is a sticker of its mnemonic friend.
-    const SPOTS: [number, number][] = [[14, 62], [28, 72], [44, 78], [60, 76], [76, 70], [88, 60], [22, 52], [38, 60], [54, 62], [70, 58], [82, 48], [10, 44], [92, 74]];
+    // Spots for every collected friend (31 of them), on either side of the companion so none hides behind it: rows from the front
+    // (bottom) of the island upwards, filling the inner places first so a small collection looks tidy and balanced.
+    const SPOTS: [number, number][] = [];
+    for (const y of [82, 72, 62, 52, 42, 32, 22]) for (const dx of [0, 1, 2]) { SPOTS.push([24 - dx * 9, y]); SPOTS.push([76 + dx * 9, y]); }
     const island = h('div', { class: 'island', 'data-testid': 'island' },
       (() => { const a = h('div', { class: 'island-art' }); a.innerHTML = packById(s.theme).island(); return a; })(),
       ...s.collection.slice(0, SPOTS.length).map((id, i) =>
         h('span', { class: 'prize', title: MNEMONICS[id]?.name ?? id, style: `left:${SPOTS[i]![0]}%;top:${SPOTS[i]![1]}%;animation-delay:${(i % 5) * 0.4}s` }, friendEl(id))),
-      h('div', { class: 'island-pet' }, companionEl(s, `big ${asleep ? 'sleepy' : ''}`, 'companion')),
+      (() => {
+        const pet = h('div', { class: 'island-pet', 'data-testid': 'island-pet' }, companionEl(s, `big ${asleep ? 'sleepy' : ''}`, 'companion'));
+        // touching the character is the first thing a small child tries: it answers (a wiggle and a pop; a sleepy one gives a snore-wiggle)
+        pet.addEventListener('pointerdown', () => { tap(); sfx.pop(); pet.classList.remove('wiggle'); void pet.offsetWidth; pet.classList.add('wiggle'); });
+        return pet;
+      })(),
       s.collection.length ? null : h('span', { class: 'hint-empty' }, 'Treasures will appear here.'),
     );
     setNight(asleep);
@@ -433,7 +461,7 @@ export class App {
     const s = this.s;
     const ctx = this.ctx();
     const learned = GRAPHEMES.filter((g) => statusOf(s, g.id) !== 'not-started');
-    const back = h('button', { class: 'btn quiet', 'data-testid': 'freeplay-back' }, 'Back to my island');
+    const back = h('button', { class: 'btn quiet', 'data-testid': 'freeplay-back', 'aria-label': 'Back to my island' }, h('span', { class: 'back-ico', 'aria-hidden': 'true' }, '🏝️'), h('span', { class: 'back-lbl' }, ' Back to my island'));
     let leave = false;
     const backed = new Promise<null>((res) => back.addEventListener('click', () => { leave = true; res(null); }));
     this.root.querySelector('.top')?.append(back);
@@ -481,7 +509,7 @@ export class App {
     void sayPhrase('find_grownup', 'Find a grown-up to play with you!');
     await this.interlude([companionEl(this.s, 'big'), h('p', { class: 'caption', 'data-testid': 'coplay' }, 'Find a grown-up to play with you!')]);
     // age 2-3: rhythm and naming (no letters, nothing scored); rhyme recognition is a later (3-4) skill
-    const pictured = bankFor(this.s.accent).filter((w) => w.emoji && w.graphemes.length >= 2);
+    const pictured = bankFor(this.s.accent).filter((w) => w.emoji && TODDLER_WORDS.includes(w.text));
     const picks = shuffle(pictured, ctx.rng);
     await copyBeat(ctx, 1);
     for (const w of picks.slice(0, 2)) await findIt(ctx, w, pickDistractors(pictured, w, 2, ctx.rng));
@@ -492,6 +520,8 @@ export class App {
     for (const p of prompts) await this.interlude([h('p', { class: 'caption' }, p), h('p', {}, '(Away from the screen, together!)')]);
     this.setHint(null);
     this.inChild = false;
+    if (!this.s.adventureDays.includes(this.today())) this.s.adventureDays.push(this.today()); // so the grown-up's Today and This week show that Sound Play happened
+    this.persist();
     setNight(true);
     await this.interlude([companionEl(this.s, 'big sleepy'), h('p', { class: 'caption' }, 'Goodnight! See you tomorrow.')], '🏝️');
   }
@@ -526,7 +556,7 @@ export class App {
         const done = s.adventureDays.includes(today);
         body.append(
           h('h2', {}, 'Today in 30 seconds'),
-          h('p', { 'data-testid': 'today-sound' }, done || intro ? `Sound: ${intro ? slashed(intro.id) : 'revision day'} · words read so far: ${wordsRead(s).length}` : 'No adventure played yet today.'),
+          h('p', { 'data-testid': 'today-sound' }, s.band === 'B' ? (done ? 'Sound Play done today: copy the beat and naming pictures (nothing is scored).' : 'No Sound Play yet today.') : done || intro ? `Sound: ${intro ? slashed(intro.id) : 'revision day'} · words read so far: ${wordsRead(s).length}` : 'No adventure played yet today.'),
           h('p', {}, missionFor(intro ?? null)),
           h('p', { class: 'muted' }, `Sets unlocked: ${unlockedSet(s)} of ${MAX_SET} · minutes today: ${Math.round((s.playMs[today] ?? 0) / 60000)}`),
         );
@@ -557,7 +587,7 @@ export class App {
             const icon = st === 'secure' ? '●' : st === 'learning' ? '◐' : '○';
             return h('div', { class: `mapcell ${st}`, 'data-testid': 'mapcell', 'data-status': st, 'data-id': g.id },
               h('span', { class: 'glyph' }, g.id), h('span', {}, `${icon} ${st === 'not-started' ? 'not started' : st}`),
-              h('span', { class: 'muted src', 'data-testid': 'audio-source' }, audioSource(phonemeOf(g.id))),
+              this.toolsOn ? h('span', { class: 'muted src', 'data-testid': 'audio-source' }, audioSource(phonemeOf(g.id))) : null,
               h('button', { class: 'btn small', 'aria-label': `hear ${slashed(g.id)}`, onClick: () => blip(phonemeOf(g.id)) }, `🔊 ${slashed(g.id)}`));
           })));
       } else if (tab === 'words') {
@@ -615,11 +645,12 @@ export class App {
           h('p', { class: 'muted', 'data-testid': 'accent-help' }, `${ACCENTS.find((a) => a.id === s.accent)?.note ?? ''} Choose the one that matches how you and your child’s school say the sounds. Your child’s progress is kept when you switch.`),
           h('p', { class: 'muted' }, 'Microphone: off (not implemented in this prototype). Reminders: off.'),
           h('p', { class: 'muted', 'data-testid': 'credits' }, 'Voices: Piper neural text-to-speech. Southern British: Cori Samuel (CC BY 4.0). Northern English: OpenSLR 83 speaker (CC BY-SA 4.0). Machine-generated stand-ins for recordings, not yet reviewed by a phonics specialist.'),
-          h('h3', {}, 'Prototype tools'),
-          h('p', { class: 'muted' }, 'These move the on-device clock so the three-separate-days mastery gate can be tried without waiting.'),
-          h('div', { class: 'row' },
-            h('button', { class: 'btn small', 'data-testid': 'skip-day', onClick: () => { s.dayOffset++; this.dirty = true; this.persist(); draw(); } }, 'Skip to tomorrow (no play)'),
-            fast(1, 0.9), fast(3, 0.9), fast(7, 0.9)),
+          ...(this.toolsOn ? [
+            h('h3', {}, 'Prototype tools'),
+            h('p', { class: 'muted' }, 'These move the on-device clock so the three-separate-days mastery gate can be tried without waiting.'),
+            h('div', { class: 'row' },
+              h('button', { class: 'btn small', 'data-testid': 'skip-day', onClick: () => { s.dayOffset++; this.dirty = true; this.persist(); draw(); } }, 'Skip to tomorrow (no play)'),
+              fast(1, 0.9), fast(3, 0.9), fast(7, 0.9))] : []),
           h('div', { class: 'row' }, h('button', { class: 'btn small danger', 'data-testid': 'reset', onClick: () => { if (confirm('Delete all progress on this device?')) { wipe(); this.dirty = true; location.reload(); } } }, 'Delete all progress')));
       }
       overlay.replaceChildren(h('div', { class: 'card wide' },

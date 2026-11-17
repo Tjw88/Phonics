@@ -452,7 +452,7 @@ export const copyBeat = async (ctx: Ctx, n: number): Promise<TrialResult> => {
     idle = setTimeout(() => { if (phase === 'turn') void demo(); }, 7000); // gently show it again; never a penalty
   };
   drum.addEventListener('pointerdown', async () => {
-    if (phase !== 'turn') return;
+    if (phase !== 'turn') { if (phase !== 'done') hit(); return; } // a drum is for banging: it sounds during the demo too (it just does not count)
     hit();
     beads.append(h('span', { class: 'bead on pop', style: `--c:${BEAD_COLOURS[count % BEAD_COLOURS.length]}` }));
     count++;

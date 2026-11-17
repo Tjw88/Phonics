@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { BANK, CONFUSABLE, GRAPHEMES, SAFARI, bankFor, isConfusable, soundsClose } from './data';
+import { BANK, CONFUSABLE, GRAPHEMES, SAFARI, TODDLER_WORDS, bankFor, isConfusable, soundsClose } from './data';
+import { hasPicture } from '../ui/pictures';
 import { seeded } from './dates';
 import { GLYPHS, advanceTrace, glyphWidth, pathLength, samplePath, shiftPath, strokesFor, traceDone } from './glyphs';
-import { buildFeedTrial, buildKitchenTiles, buildSafari, drumBeats, phonemeOf, pickDistractors, safariGraphemes, startAdventure } from './session';
+import { pickNeighbours, buildFeedTrial, buildKitchenTiles, buildSafari, drumBeats, phonemeOf, pickDistractors, safariGraphemes, startAdventure } from './session';
 import { playDay } from './simulate';
 import { introduce, newChild } from './state';
 
@@ -231,5 +232,52 @@ describe('look-alike pictures are never an answer and a distractor together', ()
         const { targets, items } = buildSafari(s, p, seeded(seed));
         for (const t of targets) for (const it of items) expect(isConfusable(t.word, it.word), `${t.word} vs ${it.word}`).toBe(false);
       }
+  });
+});
+
+
+describe('Sound Play vocabulary (ages 2-3)', () => {
+  it('only offers words a toddler plausibly knows, every one a pictured word in both accents', () => {
+    expect(TODDLER_WORDS.length).toBeGreaterThanOrEqual(20);
+    for (const accent of ['rp', 'north'] as const)
+      for (const w of TODDLER_WORDS) {
+        const word = bankFor(accent).find((b) => b.text === w);
+        expect(word, `${w} in the ${accent} bank`).toBeDefined();
+        expect(word!.emoji, `${w} has a picture`).toBeTruthy();
+        expect(hasPicture(w), `${w} has a drawing`).toBe(true);
+      }
+    // the review's examples of things a toddler would not know
+    for (const bad of ['pin', 'gong', 'tin', 'axe', 'thumb', 'moth', 'nail', 'thread', 'shed']) expect(TODDLER_WORDS).not.toContain(bad);
+  });
+  it('has enough words that are not look-alikes to build a round with two distractors', () => {
+    const pool = bankFor('rp').filter((w) => TODDLER_WORDS.includes(w.text));
+    for (const w of pool) expect(pickDistractors(pool, w, 2, seeded(3)).length, w.text).toBe(2);
+  });
+});
+
+describe('printed-word choices force decoding (near-neighbour distractors)', () => {
+  const s = newChild();
+  for (const g of GRAPHEMES) introduce(s, g.id, '2026-01-01');
+  const pool = bankFor('rp').filter((w) => !w.oralOnly);
+  it('the top distractor shares a first or last sound with the answer, so length or first letter alone cannot find it', () => {
+    let ok = 0, n = 0;
+    for (const w of pool) {
+      const d = pickNeighbours(pool, w, 2, seeded(5));
+      expect(d.length, w.text).toBe(2);
+      expect(new Set(d.map((x) => x.text)).size).toBe(2);
+      for (const x of d) { expect(x.text).not.toBe(w.text); expect(isConfusable(x.text, w.text)).toBe(false); }
+      n++;
+      if (d.every((x) => x.graphemes[0] === w.graphemes[0] || x.graphemes[x.graphemes.length - 1] === w.graphemes[w.graphemes.length - 1])) ok++;
+    }
+    expect(ok / n, 'share of words whose two distractors both share a first or last sound').toBeGreaterThan(0.95);
+  });
+  it('the examples from the review are fixed: mash and raid no longer get sock / in / hush / fun', () => {
+    for (const [word, banned] of [['mash', ['sock', 'in']], ['raid', ['hush', 'fun']]] as const) {
+      const w = pool.find((x) => x.text === word)!;
+      for (let seed = 0; seed < 30; seed++) {
+        const d = pickNeighbours(pool, w, 2, seeded(seed)).map((x) => x.text);
+        for (const b of banned) expect(d, `${word} with ${b}`).not.toContain(b);
+      }
+    }
   });
 });

@@ -92,7 +92,7 @@ const play = (el: Element, cls: string, ms = 700): void => {
  * Feed the Creature (sound to letter). DRAG a letter into the dino's mouth: its eyes follow your finger, it opens wide as the
  * letter nears, chews, gulps and jumps for joy. Dropping it elsewhere makes it spring back (no penalty). A wrong letter makes
  * the dino say "oh" and model the sound again. A ghost hand shows the drag if nothing has happened for a few seconds; tapping
- * a letter makes it hop towards the mouth, and after three taps (or with the parent setting) a tap places it directly.
+ * a letter makes it hop towards the mouth, and after two taps (or with the parent setting) a tap places it directly (at once when there is only one letter to choose).
  */
 export const feedCreature = async (ctx: Ctx, target: Grapheme, options: Grapheme[]): Promise<TrialResult> => {
   const choices = options.length;
@@ -105,7 +105,7 @@ export const feedCreature = async (ctx: Ctx, target: Grapheme, options: Grapheme
   const bubble = h('button', {
     class: 'bubble-btn', 'data-testid': 'replay', 'aria-label': `Hear the sound ${slashed(target.id)} again`, onClick: () => { tap(); say(); },
   }, h('span', { class: 'speaker' }, '🔊'), h('span', { class: 'bubble-sound' }, slashed(target.id)));
-  const assist = makeAssist(ctx.s.easyTap);
+  const assist = makeAssist(ctx.s.easyTap || choices < 2); // one option = nothing to get wrong: a tap just works (a 3-year-old taps first)
   let firstTry = true;
   let resolve!: (r: TrialResult) => void;
   const done = new Promise<TrialResult>((r) => (resolve = r));
@@ -440,6 +440,7 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
           if (w === word) {
             b.dataset.busy = '1';
             b.classList.add('alive');
+            caps.textContent = 'You built the bridge! Well done!'; // clears any "Not quite" from an earlier wrong pick
             praise();
             speak(word.text);
             const span = far.getBoundingClientRect().left - walker.getBoundingClientRect().left - 30;

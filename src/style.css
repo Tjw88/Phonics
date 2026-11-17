@@ -237,7 +237,7 @@ body.night .home .caption { color: #fff; }
 .island-art svg { width: 100%; height: 100%; }
 .island-pet { position: absolute; left: 50%; top: 4%; transform: translateX(-50%); width: 40%; }
 .island-pet .companion { width: 100%; }
-.prize { position: absolute; display: grid; place-items: center; width: 11%; aspect-ratio: 1; transform: translate(-50%, -50%); font-size: clamp(1.4rem, 4.4vw, 2.4rem); border-radius: 50%; background: #ffffffd8; box-shadow: 0 3px 0 #1d355733; animation: bob 3.6s ease-in-out infinite; }
+.prize { position: absolute; display: flex; align-items: center; justify-content: center; width: 9%; aspect-ratio: 1; transform: translate(-50%, -50%); font-size: clamp(1.4rem, 4.4vw, 2.4rem); border-radius: 50%; background: #ffffffd8; box-shadow: 0 3px 0 #1d355733; animation: bob 3.6s ease-in-out infinite; }
 .hint-empty { position: absolute; left: 50%; bottom: 18%; transform: translateX(-50%); opacity: 0.7; font-size: 1rem; }
 body.night .hint-empty { color: #fff; }
 
@@ -288,8 +288,8 @@ body.night .hint-empty { color: #fff; }
 .friend { width: 100%; height: auto; display: block; overflow: visible; }
 .friend .eyes { transform-box: fill-box; transform-origin: center; animation: blink 5.5s infinite; }
 .story .mn .friend-wrap { width: 82%; animation: bob 3s ease-in-out infinite; }
-.prize { padding: 6%; }
-.prize .friend-wrap { width: 100%; }
+.prize { padding: 0; }
+.prize .friend-wrap { width: 88%; }
 .treasure .friend-wrap { width: clamp(90px, 20vw, 130px); }
 .treasure { line-height: 1; }
 
@@ -432,3 +432,21 @@ body.night #scene-bg .scenery { filter: brightness(0.45) saturate(0.8); }
 /* world-picker thumbnails always show the DAY version of a backdrop (the night layers belong to #scene-bg only) */
 .world .wt-scene .sky-night, .world .wt-scene .moon, .world .wt-scene .stars { display: none; }
 .world .wt-scene .scenery-glow { display: none; }
+
+/* phones and small windows: the Back button must not wrap into the top bar */
+.top .btn.quiet, .top .hintbtn, .top .parentbtn { white-space: nowrap; }
+@media (max-width: 560px) {
+  .top .btn.quiet { font-size: 20px; padding: 10px 14px; min-width: 52px; }
+  .top .btn.quiet .back-lbl { display: none; }   /* icon only on a phone: the label was wrapping into the top bar */
+  .top .logo > span:last-child { display: none; } /* and the word mark gives its room to the buttons */
+}
+
+/* the home character answers a touch */
+.island-pet { cursor: pointer; }
+.island-pet.wiggle { animation: petwiggle 0.7s ease-out; }
+@keyframes petwiggle { 0% { transform: translateX(-50%) rotate(0) scale(1); } 20% { transform: translateX(-50%) rotate(-6deg) scale(1.06); } 45% { transform: translateX(-50%) rotate(5deg) scale(1.04); } 70% { transform: translateX(-50%) rotate(-3deg) scale(1.02); } 100% { transform: translateX(-50%) rotate(0) scale(1); } }
+@media (prefers-reduced-motion: reduce) { .island-pet.wiggle { animation: none; } }
+/* grown-ups' settings: stacked, labelled, finger-sized controls */
+.pbody label { display: flex; align-items: center; gap: 12px; margin: 14px 0; font-size: 17px; }
+.pbody select { min-height: 44px; font-size: 16px; padding: 4px 10px; border-radius: 10px; max-width: 100%; }
+.pbody input[type=checkbox] { width: 24px; height: 24px; flex: none; }

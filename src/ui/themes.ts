@@ -35,3 +35,14 @@ export const sameSlotIn = (kind: string, packId: string): string => {
   const target = packById(packId);
   return (target.creatures[f?.index ?? 0] ?? target.creatures[0] as CreatureDef).id;
 };
+
+/** A friendly default name per creature (used if the grown-up leaves the name blank), so the pig is not called "Chick". */
+const NAMES: Record<string, string> = {
+  rexy: 'Rexy', longneck: 'Bluey', trike: 'Trixie', stego: 'Sunny',
+  'dragon-ember': 'Ember', 'dragon-frost': 'Frost', 'dragon-leaf': 'Leafy', 'dragon-sun': 'Sunny',
+  'transport-fire': 'Ruby', 'transport-digger': 'Digger', 'transport-train': 'Chuff', 'transport-plane': 'Zoom',
+  'space-zip': 'Zip', 'space-plum': 'Plum', 'space-star': 'Twinkle', 'space-sky': 'Skye',
+  'ocean-whale': 'Splash', 'ocean-jelly': 'Jelly', 'ocean-turtle': 'Tilly', 'ocean-crab': 'Crabby',
+  'farm-chick': 'Chirp', 'farm-piglet': 'Piggle', 'farm-lamb': 'Woolly', 'farm-calf': 'Daisy',
+};
+export const defaultNameFor = (kind: string): string => NAMES[kind] ?? findCreature(kind)?.pack.defaultName ?? 'Friend';

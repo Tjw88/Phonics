@@ -221,3 +221,12 @@ export const STORY_SAY: Record<string, string> = {
   sh: 'Shelly the shell whispers.', ch: 'Choo-Choo the train chugs along.', th: 'Theo the thumb sticks his tongue out.', ng: 'Gong the gong rings out.',
   ai: 'Rainy the raindrop splashes down.', ee: 'Bea the bee buzzes by.', oa: 'Boa the boat toots her horn.', oo: 'Moony the moon sings softly.',
 };
+
+/**
+ * Sound Play (ages 2-3) is a naming game, so it only uses words a two-year-old is likely to know. Every one has a drawn picture. (A review
+ * found it offering "push pin" and "gong" to a toddler.) These are my judgement of common first words, not a researched list.
+ */
+export const TODDLER_WORDS: readonly string[] = [
+  'cat', 'dog', 'pig', 'hen', 'bus', 'sun', 'hat', 'bed', 'bag', 'cup', 'mug', 'fish', 'moon', 'bee', 'tree', 'feet', 'boat', 'coat',
+  'train', 'goat', 'sheep', 'rain', 'spoon', 'boot',
+];

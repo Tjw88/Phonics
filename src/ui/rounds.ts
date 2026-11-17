@@ -2,7 +2,7 @@
 // The adventure and Free Play both use these, so a game behaves identically wherever it is played.
 import { GRAPHEMES, bankFor, isConfusable, type Grapheme, type Word } from '../engine/data';
 import { shuffle } from '../engine/dates';
-import { buildFeedTrial, buildKitchenTiles, buildSafari, decodableWords, pickDistractors, safariGraphemes } from '../engine/session';
+import { buildFeedTrial, buildKitchenTiles, buildSafari, decodableWords, pickDistractors, pickNeighbours, safariGraphemes } from '../engine/session';
 import { recordTrial, recordWord } from '../engine/state';
 import { bridgeBuilder, feedCreature, rhymeRocket, rhymeSets, robotTalk, type Ctx, type TrialResult } from './games';
 import { beatDrum, soundSafari, traceTrail, wordKitchen } from './games2';
@@ -41,7 +41,7 @@ export const roundKitchen = (ctx: Ctx, w: Word): Promise<TrialResult> =>
   wordKitchen(ctx, w, buildKitchenTiles(ctx.s, w, ctx.rng));
 
 export const roundBridge = async (ctx: Ctx, w: Word): Promise<TrialResult> => {
-  const others = shuffle(decodableWords(ctx.s).filter((x) => x.text !== w.text), ctx.rng).slice(0, 2);
+  const others = pickNeighbours(decodableWords(ctx.s), w, 2, ctx.rng);
   const r = await bridgeBuilder(ctx, w, others);
   recordWord(ctx.s, w.text, r.firstTryCorrect, ctx.today);
   return r;
