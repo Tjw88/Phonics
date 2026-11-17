@@ -757,7 +757,8 @@
   "story_oi": "north/phrases/story_oi.wav",
   "story_ear": "north/phrases/story_ear.wav",
   "story_air": "north/phrases/story_air.wav",
-  "story_er": "north/phrases/story_er.wav"
+  "story_er": "north/phrases/story_er.wav",
+  "tap_chest": "north/phrases/tap_chest.wav"
  },
  "sources": {
   "s": "piper (cut 394 ms of hiss before the vowel)",

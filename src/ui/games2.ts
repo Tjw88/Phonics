@@ -12,7 +12,7 @@ import { ghostDrag, makeAssist, makeDraggable, springBack } from './gesture';
 import { companionEl, lookAt, setMood, type Ctx, type TrialResult } from './games';
 import { celebrate } from './celebrate';
 import { friendEl } from './friends';
-import { coverFor, drumArt, potArt, sticksArt, worldId } from './games2-art';
+import { WORLD_GLOW, coverFor, drumArt, potArt, sticksArt, worldBadge, worldId } from './games2-art';
 import { creatureOf } from './themes';
 
 const BEAD_COLOURS = ['#ff6b9a', '#ffd166', '#4cc3d9', '#8ee27a', '#9b8bf0'];
@@ -52,15 +52,17 @@ const cheerPet = (pet: HTMLElement, timers: Timers, calmAfter = 1300): void => {
   timers.later(() => setMood(pet, 'idle'), calmAfter);
 };
 /** A soft head-tilt "oh" (a wrong answer is information, never a "no"). */
-const tiltPet = (pet: HTMLElement, timers: Timers): void => {
+const tiltPet = (pet: HTMLElement, timers: Timers, dir: -1 | 1 = -1): void => {
   setMood(pet, 'oops');
-  anim(pet, [{ transform: 'rotate(0)' }, { transform: 'rotate(-7deg) translateY(2px)', offset: 0.3 }, { transform: 'rotate(4deg)', offset: 0.7 }, { transform: 'rotate(0)' }], { duration: 700, easing: 'ease-in-out' });
+  anim(pet, [{ transform: 'rotate(0)' }, { transform: `rotate(${dir * 9}deg) translateY(3px)`, offset: 0.3 }, { transform: `rotate(${dir * -4}deg)`, offset: 0.7 }, { transform: 'rotate(0)' }], { duration: 800, easing: 'ease-in-out' });
   timers.later(() => setMood(pet, 'idle'), 900);
 };
 
 /** A creature that plays the drum: it stands behind the drum, bobs and swings a stick on every hit. Visual only (the caller plays the sound). */
 interface DrumKit { stage: HTMLElement; drum: HTMLButtonElement; pet: HTMLElement; hit: () => void }
+let drumRounds = 0; // drum rounds this session: the drummer's style rotates 0, 1, 2 (deterministic, so a block never looks copied)
 const drumKit = (ctx: Ctx, testid: string, n: number, timers: Timers): DrumKit => {
+  const pose = drumRounds++ % 3; // 0: alternate sticks and bob | 1: both sticks and a rock side to side | 2: a hop on every beat
   const pet = companionEl(ctx.s, 'drummer-pet');
   const drum = h('button', { class: 'drum', 'data-testid': testid, 'data-n': n, 'aria-label': 'drum' });
   drum.innerHTML = drumArt() + sticksArt(creatureOf(ctx.s.companion?.kind ?? 'rexy').main);
@@ -80,9 +82,17 @@ const drumKit = (ctx: Ctx, testid: string, n: number, timers: Timers): DrumKit =
     ], { duration: 300, easing: 'ease-out' });
     anim(ring, [{ transform: 'scale(1, 1)', opacity: 0.85 }, { transform: 'scale(1.3, 1.5)', opacity: 0 }], { duration: 440, easing: 'ease-out' });
     // the drummer: a bob, a stick swing (left, right, left...) and an open mouth
-    anim(pet, [{ transform: 'translateY(0) rotate(0) scale(1, 1)' }, { transform: `translateY(9px) rotate(${mine ? 4 : -4}deg) scale(1.03, 0.95)`, offset: 0.35 }, { transform: 'translateY(0) rotate(0) scale(1, 1)' }], { duration: 260, easing: 'ease-out' });
-    const rest = mine ? 13 : -13;
-    anim(sticks[mine] as SVGElement, [{ transform: `rotate(${rest}deg)` }, { transform: `rotate(${mine ? -3 : 3}deg)`, offset: 0.3 }, { transform: `rotate(${rest}deg)` }], { duration: 280, easing: 'ease-out' });
+    const lean = mine ? 1 : -1;
+    const bob: Keyframe[] = pose === 1
+      ? [{ transform: 'translateY(0) rotate(0)' }, { transform: `translateY(5px) rotate(${lean * 9}deg)`, offset: 0.4 }, { transform: 'translateY(0) rotate(0)' }]
+      : pose === 2
+        ? [{ transform: 'translateY(0) scale(1, 1)' }, { transform: 'translateY(-16px) scale(0.97, 1.06)', offset: 0.32 }, { transform: 'translateY(3px) scale(1.06, 0.93)', offset: 0.68 }, { transform: 'translateY(0) scale(1, 1)' }]
+        : [{ transform: 'translateY(0) rotate(0) scale(1, 1)' }, { transform: `translateY(9px) rotate(${lean * 4}deg) scale(1.03, 0.95)`, offset: 0.35 }, { transform: 'translateY(0) rotate(0) scale(1, 1)' }];
+    anim(pet, bob, { duration: pose === 2 ? 340 : 260, easing: 'ease-out' });
+    (pose === 1 ? [0, 1] : [mine]).forEach((k) => {
+      const rest = k ? 13 : -13;
+      anim(sticks[k] as SVGElement, [{ transform: `rotate(${rest}deg)` }, { transform: `rotate(${k ? -3 : 3}deg)`, offset: 0.3 }, { transform: `rotate(${rest}deg)` }], { duration: 280, easing: 'ease-out' });
+    });
     setMood(pet, 'open');
     if (calm) clearTimeout(calm);
     calm = timers.later(() => setMood(pet, 'idle'), 240);
@@ -222,11 +232,12 @@ export const soundSafari = async (ctx: Ctx, target: Grapheme, scene: { targets: 
   const field = h('div', { class: `safari-field w-${world}`, 'data-testid': 'safari' });
   const cells: HTMLElement[] = [];
 
-  /** The picture of an unfound target, so a wrong tap can make the creature look at it. */
+  /** The next unfound target (it gets a soft glint after a second miss). */
   const nextTarget = (): HTMLElement | undefined => cells.find((c) => c.dataset.answer === '1' && !c.dataset.busy);
-  const glance = (cell: HTMLElement | undefined) => {
-    if (!cell) return;
-    const r = cell.getBoundingClientRect();
+  /** The creature turns its head toward the tray: that is where the right things go. */
+  const towardTray = (): -1 | 1 => (tray.getBoundingClientRect().left + tray.getBoundingClientRect().width / 2 < pet.getBoundingClientRect().left + pet.getBoundingClientRect().width / 2 ? -1 : 1);
+  const glance = () => {
+    const r = tray.getBoundingClientRect();
     lookAt(pet, r.left + r.width / 2, r.top + r.height / 2);
     timers.later(() => lookAt(pet, null, null), 1800);
   };
@@ -259,6 +270,9 @@ export const soundSafari = async (ctx: Ctx, target: Grapheme, scene: { targets: 
         // it pops, then flies into the found tray; the creature cheers; the shared success reaction plays from the item
         celebrate(b, { game: 'safari', last: all });
         cheerPet(pet, timers, all ? 2200 : 1200);
+        const rc = b.getBoundingClientRect();
+        lookAt(pet, rc.left + rc.width / 2, rc.top + rc.height / 2);
+        timers.later(() => lookAt(pet, null, null), 900);
         const fill = () => { slot.replaceChildren(pictureEl(it.word, it.emoji)); slot.classList.add('filled'); };
         flyClone(pic, pic.getBoundingClientRect(), slot.getBoundingClientRect(), { ms: 760, pop: true, scale: 0.7 }, fill);
         if (all) {
@@ -270,15 +284,19 @@ export const soundSafari = async (ctx: Ctx, target: Grapheme, scene: { targets: 
         }
       } else {
         wrong++;
-        play(b, 'wobble', 650);
         soft();
         speak(it.word);
-        tiltPet(pet, timers);
-        glance(nextTarget());
-        // after a second miss the right choice gently pulses (information, not punishment)
+        // the picture sinks back into its cover with a small wobble (no red, no shake), the creature tilts its head toward the tray,
+        // and after a second miss the next right item gives a soft glint
+        anim(pic, [
+          { transform: 'translateY(0) rotate(0deg)' }, { transform: 'translateY(48%) rotate(-4deg)', offset: 0.3 }, { transform: 'translateY(42%) rotate(3deg)', offset: 0.48 },
+          { transform: 'translateY(-5%) rotate(-1.5deg)', offset: 0.78 }, { transform: 'translateY(0) rotate(0deg)' },
+        ], { duration: 820, easing: 'ease-in-out' });
+        tiltPet(pet, timers, towardTray());
+        glance();
         if (wrong >= 2) {
           const t = nextTarget();
-          if (t) { t.classList.remove('hint'); void t.offsetWidth; t.classList.add('hint'); timers.later(() => t.classList.remove('hint'), 3200); }
+          if (t) { timers.later(() => { t.classList.remove('hint'); void t.offsetWidth; t.classList.add('hint'); timers.later(() => t.classList.remove('hint'), 3400); }, 700); }
         }
         timers.later(say, 900); // say the target sound again so the child can compare
       }
@@ -289,8 +307,8 @@ export const soundSafari = async (ctx: Ctx, target: Grapheme, scene: { targets: 
 
   mount(ctx.stage, h('div', { class: 'scene safariscene' },
     caption('Find things that start with…'),
-    h('div', { class: 'row safari-top' }, pet, bubble, tray),
-    field));
+    h('div', { class: 'row safari-top' }, bubble, tray),
+    h('div', { class: 'safari-body' }, field, pet)));
   await sleep(300);
   saySeq([{ phrase: 'safari_prompt', text: 'Find things that start with the sound.' }, { sound: ph }]);
   return done;
@@ -300,6 +318,7 @@ export const soundSafari = async (ctx: Ctx, target: Grapheme, scene: { targets: 
  * Word Kitchen (segmenting to spell). Hear the word, then tap letter tiles in order to build it; when it is right the
  * pot cooks and the picture pops out. A wrong letter goes back to the tray; the right ones stay.
  */
+let kitchenRuns = 0; // cooked words this session: the first payoff is the full show, the rest are short (about 1.5 s), so a block never drags
 export const wordKitchen = async (ctx: Ctx, word: Word, tiles: string[]): Promise<TrialResult> => {
   const n = word.graphemes.length;
   ctx.hint('Ask: "What is the first sound you hear? Which letter makes it?" Say the word slowly together, one sound at a time. Drag each letter onto the board.');
@@ -354,7 +373,8 @@ export const wordKitchen = async (ctx: Ctx, word: Word, tiles: string[]): Promis
   });
   const board = h('div', { class: 'row board', 'data-testid': 'board' }, slotEls);
   const tray = h('div', { class: 'row tiles', 'data-testid': 'ktiles' }, tileEls);
-  const kitchen = h('div', { class: 'row kitchen-row', 'data-testid': 'kitchen', 'data-graphemes': word.graphemes.join(',') }, picture, potWrap);
+  const pet = companionEl(ctx.s, 'kitchen-pet');
+  const kitchen = h('div', { class: 'row kitchen-row', 'data-testid': 'kitchen', 'data-graphemes': word.graphemes.join(',') }, picture, potWrap, pet);
 
   const render = () => {
     slotEls.forEach((s, i) => {
@@ -431,23 +451,27 @@ export const wordKitchen = async (ctx: Ctx, word: Word, tiles: string[]): Promis
     await sleep(350);
     const wrongSlots = word.graphemes.map((g, i) => (tiles[placed[i] as number] === g ? -1 : i)).filter((i) => i >= 0);
     if (wrongSlots.length === 0) {
-      // cook: the pot shivers and steams, then the lid hops and the picture pops out in a puff
+      // cook: the pot shivers and steams, then the lid hops and the picture pops out in a puff. The first time this session is the full
+      // show; after that steam is cut to about 0.5 s and the lid pop to about 0.7 s.
+      const short = kitchenRuns++ > 0;
       pot.classList.add('cooking');
       sfx.sizzle();
-      puffs(5, false);
-      await sleep(900);
+      setMood(pet, 'open'); // the creature leans in to smell it
+      puffs(short ? 3 : 5, false);
+      await sleep(short ? 500 : 900);
       sfx.sparkle();
       praise();
       pot.classList.remove('cooking');
       play(pot, 'kpop', 600);
-      puffs(6, true);
+      puffs(short ? 4 : 6, true);
       // the lid pops off and tumbles to the side, so the picture can come up out of the open pot
       pot.querySelectorAll<SVGElement>('.lid').forEach((lid) => {
         const rest = 'translate(54px, 16px) rotate(32deg)';
-        anim(lid, [{ transform: 'translate(0px, 0px) rotate(0deg)' }, { transform: 'translate(20px, -62px) rotate(12deg)', offset: 0.4 }, { transform: rest }], { duration: 520, easing: 'cubic-bezier(0.3, 0.6, 0.4, 1)' });
+        anim(lid, [{ transform: 'translate(0px, 0px) rotate(0deg)' }, { transform: 'translate(20px, -62px) rotate(12deg)', offset: 0.4 }, { transform: rest }], { duration: short ? 380 : 520, easing: 'cubic-bezier(0.3, 0.6, 0.4, 1)' });
         lid.style.transform = rest;
       });
-      timers.later(() => potWrap.classList.add('front'), reducedMotion() ? 0 : 950);
+      const popMs = short ? 700 : 950;
+      timers.later(() => potWrap.classList.add('front'), reducedMotion() ? 0 : popMs);
       dish.classList.add('out');
       anim(dish, [
         { transform: 'translate(-50%, 30%) scale(0.2) rotate(0deg)', opacity: 0 },
@@ -455,11 +479,12 @@ export const wordKitchen = async (ctx: Ctx, word: Word, tiles: string[]): Promis
         { transform: 'translate(-50%, -58%) scale(0.94, 1.08) rotate(5deg)', opacity: 1, offset: 0.66 },
         { transform: 'translate(-50%, -64%) scale(1.04, 0.97) rotate(-3deg)', opacity: 1, offset: 0.82 },
         { transform: 'translate(-50%, -62%) scale(1) rotate(0deg)', opacity: 1 },
-      ], { duration: 950, easing: 'ease-out' });
+      ], { duration: popMs, easing: 'ease-out' });
       potWrap.classList.add('done');
       speak(word.text);
-      timers.later(() => celebrate(dish, { game: 'kitchen' }), 430);
-      await skippableWait(1600);
+      cheerPet(pet, timers, 1500); // it tastes it: a happy face and two hops
+      timers.later(() => celebrate(dish, { game: 'kitchen' }), short ? 300 : 430);
+      await skippableWait(short ? 1100 : 1600);
       timers.clear();
       resolve({ firstTryCorrect: firstTry, choices: tiles.length });
     } else {
@@ -592,7 +617,12 @@ export const traceTrail = async (ctx: Ctx, target: Grapheme): Promise<TrialResul
         cheerPet(pet, timers, 2000);
         // the finished letter melts into its sound-friend, who says the sound and hops
         const friend = friendEl(target.id, 'trace-friend');
-        const layer = h('div', { class: 'trace-friend-layer', 'aria-hidden': 'true' }, friend);
+        // ...in the world's colours: a glow behind it and a small medal with the world's emblem, so it belongs to this world
+        const glow = h('span', { class: 'trace-glow', style: `--glow:${WORLD_GLOW[worldId()]}` });
+        const badge = h('span', { class: 'trace-badge' });
+        badge.innerHTML = worldBadge();
+        const holder = h('div', { class: 'trace-friend-holder' }, glow, friend, badge);
+        const layer = h('div', { class: 'trace-friend-layer', 'aria-hidden': 'true' }, holder);
         board.append(layer);
         letter.style.transformBox = 'fill-box';
         letter.style.transformOrigin = 'center';
@@ -602,10 +632,13 @@ export const traceTrail = async (ctx: Ctx, target: Grapheme): Promise<TrialResul
           friend.animate([
             { transform: 'scale(0.2) rotate(-14deg)', opacity: 0 }, { transform: 'scale(1.18) rotate(4deg)', opacity: 1, offset: 0.62 }, { transform: 'scale(1) rotate(0deg)', opacity: 1 },
           ], { duration: 640, delay: 200, easing: 'cubic-bezier(0.2, 1.3, 0.4, 1)', fill: 'backwards' });
+          glow.animate([{ transform: 'scale(0.3)', opacity: 0 }, { transform: 'scale(1.15)', opacity: 0.95, offset: 0.7 }, { transform: 'scale(1)', opacity: 0.8 }], { duration: 760, delay: 150, easing: 'ease-out', fill: 'backwards' });
+          badge.animate([{ transform: 'scale(0) rotate(-60deg)', opacity: 0 }, { transform: 'scale(1.25) rotate(8deg)', opacity: 1, offset: 0.65 }, { transform: 'scale(1) rotate(0deg)', opacity: 1 }], { duration: 560, delay: 520, easing: 'cubic-bezier(0.2, 1.4, 0.4, 1)', fill: 'backwards' });
         }
         timers.later(() => {
           blip(phonemeOf(target.id));
           celebrate(friend, { game: 'trace' });
+          badge.animate([{ transform: 'rotate(0) scale(1)' }, { transform: 'rotate(-14deg) scale(1.12)', offset: 0.4 }, { transform: 'rotate(0) scale(1)' }], { duration: 560, iterations: 2, easing: 'ease-out' });
           anim(friend, [
             { transform: 'translateY(0) scale(1, 1)' }, { transform: 'translateY(-30px) scale(0.96, 1.06)', offset: 0.42 }, { transform: 'translateY(0) scale(1.06, 0.92)', offset: 0.78 }, { transform: 'translateY(0) scale(1, 1)' },
           ], { duration: 560, iterations: 2, easing: 'ease-out' });

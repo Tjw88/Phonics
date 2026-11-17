@@ -91,7 +91,7 @@ export const anim = (el: Element, frames: Keyframe[], opts: KeyframeAnimationOpt
 };
 const runLeave = (): void => { for (const fn of leaveHooks.splice(0)) { try { fn(); } catch { /* a dead element is fine */ } } };
 
-const XFADE_IN = 280, XFADE_OUT = 240;
+const XFADE_IN = 240, XFADE_OUT = 120; // the old card leaves fast, so the two are never both readable
 /**
  * Replace the stage contents and tag the scene with a counter, so tests (and animations) can tell scenes apart.
  * The new card CROSS-FADES in while the old one fades out (no blank landscape between rounds), and when the child's creature is on both
@@ -117,6 +117,8 @@ export const mount = (stage: HTMLElement, ...kids: Node[]): void => {
       ghost.setAttribute('inert', '');
       ghost.querySelectorAll('[data-testid],[data-answer],[id]').forEach((n) => { n.removeAttribute('data-testid'); n.removeAttribute('data-answer'); n.removeAttribute('id'); });
       ghost.removeAttribute('data-testid');
+      // words must never be in the double exposure: the old captions go at once (the rest of the card fades under the new one)
+      ghost.querySelectorAll<HTMLElement>('.caption, h1, h2, .treasure-name').forEach((n) => { n.style.visibility = 'hidden'; });
     }
   }
   stage.dataset.scene = String(Number(stage.dataset.scene ?? '0') + 1);
@@ -133,23 +135,28 @@ export const mount = (stage: HTMLElement, ...kids: Node[]): void => {
         g.querySelector<HTMLElement>('.companion')!.style.visibility = 'hidden';
         const dx = oldPet.left + oldPet.width / 2 - (nr.left + nr.width / 2);
         const dy = oldPet.bottom - nr.bottom;
-        const sc = oldPet.width / nr.width;
+        const sc = Math.min(1.5, Math.max(0.65, oldPet.width / nr.width)); // never starts huge over the new card's buttons
         const far = Math.abs(dx) + Math.abs(dy) > 6 || Math.abs(sc - 1) > 0.03;
         if (far) {
           const hop = Math.min(26, 8 + (Math.abs(dx) + Math.abs(dy)) / 14);
-          newPet.animate([
+          newPet.style.zIndex = '-1'; // behind the new card's buttons while it travels, so it can never sit over a button
+          const glide = newPet.animate([
             { transform: `translate(${dx}px, ${dy}px) scale(${sc})`, transformOrigin: '50% 100%', easing: 'cubic-bezier(0.3, 0.6, 0.4, 1)' },
             { transform: `translate(${dx * 0.45}px, ${dy * 0.45 - hop}px) scale(${(1 + sc) / 2 * 1.02}, ${(1 + sc) / 2 * 1.05})`, transformOrigin: '50% 100%', offset: 0.5, easing: 'cubic-bezier(0.5, 0, 0.7, 1)' },
             { transform: 'translate(0, 0) scale(1.03, 0.96)', transformOrigin: '50% 100%', offset: 0.86 },
             { transform: 'none', transformOrigin: '50% 100%' },
           ], { duration: 460 });
+          const settle = (): void => { newPet.style.zIndex = ''; };
+          glide.onfinish = settle; glide.oncancel = settle;
         }
       }
     }
     g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: XFADE_OUT, easing: 'ease-in', fill: 'forwards' });
     window.setTimeout(() => g.remove(), XFADE_OUT + 40);
   }
+  // the incoming card fades in as ONE piece (never a hollow frame), its words a beat later so they are never over the old words
   fresh?.animate([{ opacity: 0 }, { opacity: 1 }], { duration: XFADE_IN, easing: 'cubic-bezier(0.2, 0.8, 0.3, 1)', fill: 'backwards' });
+  if (ghost) fresh?.querySelectorAll('.caption, h1, .treasure-name').forEach((n) => n.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 160, delay: 90, fill: 'backwards' }));
 };
 
 export const setNight = (night: boolean): void => {

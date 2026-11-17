@@ -13,7 +13,7 @@ import { ghostDrag, makeAssist, makeDraggable, springBack } from './gesture';
 import { celebrate, celebrationCount } from './celebrate';
 import { currentPack, emit } from './particles';
 import { lookAt, reactions, setMood, type Mood } from './reactions';
-import { VEHICLE_NAME, vehicleExit, vehicleSVG } from './vehicles';
+import { VEHICLE_NAME, robotWithProp, vehicleExit, vehicleSVG } from './vehicles';
 
 // the creature's face and eyes live in reactions.ts (so the reaction library can use them); re-exported for the other game files
 export { lookAt, setMood };
@@ -126,7 +126,7 @@ export const feedCreature = async (ctx: Ctx, target: Grapheme, options: Grapheme
           celebrate(crown, { game: 'feed', last: ctx.last });
         },
       });
-      await skippableWait(index > 0 ? 250 : 350);
+      await skippableWait(index > 0 ? 100 : 300);
       resolve({ firstTryCorrect: firstTry, choices });
     } else {
       firstTry = false;
@@ -206,7 +206,7 @@ export const robotTalk = async (ctx: Ctx, word: Word, distractors: Word[]): Prom
   const phonemes = word.graphemes.map(phonemeOf);
   const beads = phonemes.map((_, i) => h('span', { class: 'bead', 'data-testid': 'chip', style: `--c:${BEAD_COLOURS[i % BEAD_COLOURS.length]}` }));
   const robot = h('div', { class: 'robot' });
-  robot.innerHTML = robotSVG();
+  robot.innerHTML = robotWithProp(robotSVG(), currentPack());
   let firstTry = true;
   let resolve!: (r: TrialResult) => void;
   const done = new Promise<TrialResult>((r) => (resolve = r));
@@ -236,7 +236,7 @@ export const robotTalk = async (ctx: Ctx, word: Word, distractors: Word[]): Prom
       if (w === word) {
         b.dataset.busy = '1';
         finished = true; // answers are live while the robot speaks: an early tap is fine
-        beads.forEach((x) => x.classList.remove('on'));
+        beads.forEach((x, k) => { x.classList.remove('on'); x.style.transitionDelay = `${k * 90}ms`; x.classList.add('ok'); }); // all the bulbs light green
         robot.classList.remove('talking');
         b.classList.add('alive');
         robot.classList.remove('cheer');
@@ -254,7 +254,7 @@ export const robotTalk = async (ctx: Ctx, word: Word, distractors: Word[]): Prom
         b.classList.add('dim');
         b.setAttribute('disabled', '');
         soft();
-        play(robot, 'hmm', 700); // the robot tilts its head, once: "hmm", never a buzzer
+        play(robot, 'shrug', 900); // a gentle shrug, once: never a buzzer
         await wait(350);
         void robotSays(); // model it again, no penalty
       }
@@ -315,7 +315,7 @@ export const rhymeRocket = async (ctx: Ctx, target: Word, answer: Word, distract
       rocket.classList.add('charge'); // a gentle squash-and-rise, not a rattle
       praise();
       speak(`${target.text}, ${answer.text}`);
-      await wait(short ? 500 : 850);
+      await wait(short ? 300 : 600);
       sfx.launch();
       rocket.classList.remove('charge');
       rocket.classList.add('launch');
@@ -323,7 +323,7 @@ export const rhymeRocket = async (ctx: Ctx, target: Word, answer: Word, distract
       const leaving = vehicleExit(rocket, pack, index, short);
       for (const at of short ? [260, 560] : [300, 650, 1000]) setTimeout(() => rocket.isConnected && emit(rocket, { level: 1, variant: index }), at); // a trail
       void leaving;
-      await skippableWait(short ? 900 : 1400);
+      await skippableWait(short ? 800 : 1400);
       resolve({ firstTryCorrect: firstTry, choices: options.length });
     } else {
       firstTry = false;
@@ -492,12 +492,12 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
             const index = celebrationCount('bridge');
             lightClear();
             bridge.classList.add('built');
-            await cross();
+            await cross(index > 0);
             setMood(walker, 'happy');
             sfx.sparkle();
             waveFlag();
             celebrate(far, { game: 'bridge', last: ctx.last });
-            await skippableWait(index > 0 ? 450 : 750);
+            await skippableWait(index > 0 ? 250 : 750);
             resolve({ firstTryCorrect: firstTry, choices: options.length });
           } else {
             firstTry = false;
@@ -506,14 +506,14 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
             soft();
             void reactions.wrong(walker, { toward: wordRow }); // a soft "oh" and a look at the word: the sounds are still there
             // a wrong pick is not a reset: the sounds are still there to tap and listen to again
-            caps.textContent = 'Not quite. Tap the sounds again, then slide across to blend!';
+            caps.textContent = 'Not quite. Tap the sounds, then slide!';
             buttons.forEach((x) => x.classList.remove('faded')); // support returns in full
           }
         });
         return b;
       }),
     );
-    caps.textContent = 'Slide your finger across the word to blend it. Which word is it?';
+    caps.textContent = 'Slide across to blend. Which word is it?';
     slideHint.hidden = false;
     // if the creature is standing on the last plank, it hops back to the bank, ready to cross
     if (!faded) setTimeout(() => { if (hopper.isConnected && !bridge.classList.contains('built') && !visited.length) hopTo({ x: 0, y: 0 }, 420, 30); }, 700);
@@ -521,7 +521,7 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
   };
 
   /** The crossing has weight: a slow walk along the planks, a squash with every step, each plank dips under the creature, a hop onto the far bank. */
-  const cross = async (): Promise<void> => {
+  const cross = async (short: boolean): Promise<void> => {
     const fr = far.getBoundingClientRect(), wr = walker.getBoundingClientRect();
     const from = visual();
     hopper.getAnimations().forEach((x) => x.cancel());
@@ -529,8 +529,8 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
     const endX = from.x + (fr.left - wr.left - 30);
     const first = slots[0]?.getBoundingClientRect();
     const plankY = first ? from.y + (first.top - feetOf()) + 2 : from.y;
-    const n = Math.max(2, slots.length + 1); // steps
-    const D = 800 + n * 190;
+    const n = short ? 3 : Math.max(2, slots.length + 1); // steps: after the first success of the session it is a quick hop-hop-hop
+    const D = short ? 1000 : 800 + n * 190;
     const stepEvery = D / (n * 2);
     // plank dips and footsteps, timed to when the creature passes each plank
     const sx = slots.map((sl) => { const r = sl.getBoundingClientRect(); return r.left + r.width / 2 - (wr.left + wr.width / 2); });
@@ -542,7 +542,7 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
       const f = k / M;
       const x = from.x + (endX - from.x) * ease(f);
       const level = f < 0.1 ? from.y + (plankY - from.y) * (f / 0.1) : f > 0.92 ? plankY * (1 - (f - 0.92) / 0.08) : plankY;
-      const bob = -Math.abs(Math.sin(f * n * Math.PI)) * 9;
+      const bob = -Math.abs(Math.sin(f * n * Math.PI)) * (short ? 16 : 9);
       kf.push({ transform: `translate(${x.toFixed(1)}px, ${(level + bob).toFixed(1)}px)`, offset: f });
     }
     const anim = hopper.animate(kf, { duration: D, easing: 'linear', fill: 'forwards' });
@@ -596,7 +596,8 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
   });
   const glyphs = word.graphemes.map((g) => h('span', { class: 'glyph' }, g));
   word.graphemes.forEach((_, i) => wordRow.append(h('div', { class: 'gcol', 'data-i': i }, glyphs[i], buttons[i])));
-  mount(ctx.stage, h('div', { class: 'scene bridgescene' }, caps, wordRow, slideHint, bridge, choicesBox));
+  wordRow.append(slideHint); // drawn over the letters (absolute), so it costs no height
+  mount(ctx.stage, h('div', { class: 'scene bridgescene' }, caps, wordRow, bridge, choicesBox));
   if (faded) {
     slots.forEach((sl) => sl.classList.add('filled'));
     showChoices(); // straight to blending; it speaks its own prompt

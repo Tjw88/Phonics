@@ -3296,6 +3296,10 @@
   "pick_friend": {
    "text": "Pick a friend.",
    "ms": 773
+  },
+  "tap_chest": {
+   "text": "Tap the chest!",
+   "ms": 981
   }
  },
  "safari": {

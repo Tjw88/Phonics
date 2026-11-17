@@ -88,12 +88,12 @@ const pose = (pack: PackId, v: number, f: number): { x: number; y: number; r: nu
   return { x, y, r, s, o: f < 0.78 ? 1 : 1 - (f - 0.78) / 0.22 };
 };
 
-const SPEED: Record<PackId, number> = { dino: 1.15, dragon: 1.1, transport: 0.95, space: 1, ocean: 1.2, farm: 1.25 };
+const SPEED: Record<PackId, number> = { dino: 1.05, dragon: 1, transport: 0.95, space: 1, ocean: 1.1, farm: 1.1 };
 
 /** Fly the vehicle off the panel. `variant` is the round number (0, 1, 2, 0...), `short` shortens repeats. Resolves when it has gone. */
 export const vehicleExit = (el: HTMLElement, pack: PackId, variant: number, short: boolean): Promise<void> => {
   if (reducedMotion()) { el.style.opacity = '0'; return Promise.resolve(); }
-  const dur = (short ? 950 : 1450) * SPEED[pack];
+  const dur = (short ? 850 : 1400) * SPEED[pack];
   const N = 16;
   const kf: Keyframe[] = [];
   for (let k = 0; k <= N; k++) {
@@ -103,4 +103,35 @@ export const vehicleExit = (el: HTMLElement, pack: PackId, variant: number, shor
   }
   const a = el.animate(kf, { duration: dur, easing: 'linear', fill: 'forwards' });
   return a.finished.then(() => undefined, () => undefined);
+};
+
+// ---- Robot Talk's little per-world prop (drawn INTO the robot's own svg so it moves with it) ----------------------------------
+// `back` is drawn behind the antenna and the head (only the part above the head shows), `front` over the head. The antenna bulb always stays visible.
+const PROPS: Record<PackId, { back?: string; front?: string }> = {
+  transport: { // a hard hat, tipped a little
+    back: '<g transform="translate(-6 0) rotate(-10 56 34)"><path d="M26 36 Q26 2 70 2 Q114 2 114 36Z" fill="#ffd23f" stroke="#e0a100" stroke-width="4"/><rect x="62" y="6" width="16" height="26" rx="5" fill="#ffe27a"/><rect x="18" y="32" width="104" height="9" rx="4.5" fill="#ffc21a" stroke="#e0a100" stroke-width="3"/></g>',
+  },
+  space: { // a clear helmet round the head
+    front: '<rect x="18" y="24" width="124" height="96" rx="40" fill="#bfeaff" fill-opacity=".22" stroke="#eaf8ff" stroke-width="4"/><path d="M34 52 Q40 36 58 32" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".85"/><rect x="62" y="116" width="36" height="8" rx="4" fill="#9fb4d6"/>',
+  },
+  farm: { // a straw hat with a red band
+    back: '<g transform="translate(-4 0) rotate(-12 56 34)"><path d="M32 34 Q34 6 62 6 Q90 6 92 34Z" fill="#f1d27a" stroke="#b8893a" stroke-width="3"/><rect x="32" y="24" width="60" height="7" fill="#c0392b"/><ellipse cx="62" cy="35" rx="48" ry="9" fill="#e8c46a" stroke="#b8893a" stroke-width="3"/></g>',
+  },
+  ocean: { // a swimming mask over the eyes and a snorkel
+    front: '<rect x="32" y="40" width="96" height="50" rx="22" fill="#bdeeff" fill-opacity=".3" stroke="#2a86b5" stroke-width="6"/><path d="M130 66 Q152 60 148 14" stroke="#2fb4c8" stroke-width="8" fill="none" stroke-linecap="round"/><circle cx="148" cy="12" r="6" fill="#ff7a5a"/>',
+  },
+  dino: { // a crown of leaves
+    front: '<g fill="#5cb85c" stroke="#3f9e4d" stroke-width="2.5" stroke-linejoin="round"><path d="M32 38 Q20 22 28 6 Q46 14 44 36Z"/><path d="M52 32 Q46 12 56 0 Q69 10 64 30Z"/><path d="M96 30 Q92 10 104 2 Q116 12 110 34Z"/><path d="M116 36 Q126 20 124 4 Q142 12 136 38Z"/></g>',
+  },
+  dragon: { // a tiny gold crown, a little to one side so the bulb shows
+    front: '<g transform="translate(22 0) rotate(10 80 30)"><path d="M54 34 L54 12 L66 24 L80 6 L94 24 L106 12 L106 34Z" fill="#ffd23f" stroke="#e0a100" stroke-width="3.5" stroke-linejoin="round"/><circle cx="80" cy="22" r="4" fill="#ef476f"/><circle cx="62" cy="26" r="2.6" fill="#4cc3d9"/><circle cx="98" cy="26" r="2.6" fill="#4cc3d9"/></g>',
+  },
+};
+/** The robot's drawing with the world's prop on it. */
+export const robotWithProp = (svg: string, pack: PackId): string => {
+  const p = PROPS[pack];
+  let out = svg;
+  if (p.back) out = out.replace('<line x1="80" y1="30"', `${p.back}<line x1="80" y1="30"`);
+  if (p.front) out = out.replace('</svg>', `${p.front}</svg>`);
+  return out;
 };

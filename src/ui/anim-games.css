@@ -14,6 +14,9 @@
 .burst-anchor { position: absolute; left: 50%; top: 14%; width: 1px; height: 1px; pointer-events: none; }
 
 /* ---------- Feed the Creature ---------- */
+/* the hot ring is a thin dashed outline round the mouth, never a disc: the creature's face (and its eyes following your finger) stays visible */
+.feed-dino .mouthzone.hot { background: transparent; border: 4px dashed #ff9f1c; box-shadow: none; animation: ring-thin 1s ease-in-out infinite; }
+@keyframes ring-thin { 50% { transform: translate(-50%, -50%) scale(1.22); } }
 .tile.flying { z-index: 8; pointer-events: none; }
 /* after the second miss the right letter gently pulses: a soft halo, never red, never a shake */
 .tile.hint-pulse { animation: hint-pulse 1.7s ease-in-out 3; }
@@ -25,12 +28,16 @@
 .robotscene .robot.talking svg { animation: rock-once 1s ease-in-out 1; }
 .robotscene .robot.talking .bulb { fill: #ff6b6b; transform-box: fill-box; transform-origin: center; animation: bulb-slow 2s ease-in-out infinite; }
 .robotscene .robot.talking .grill rect { animation: none; }
-.robotscene .robot.hmm svg { animation: robot-hmm 0.7s ease-in-out 1; }
-.robotscene .robot.cheer svg { animation: robot-cheer 0.7s cubic-bezier(0.3, 0.7, 0.4, 1) 1; }
+.robotscene .robot.shrug svg { animation: robot-shrug 0.9s ease-in-out 1; }
+.robotscene .robot.shrug svg rect[x="16"][y="120"], .robotscene .robot.shrug svg rect[x="122"][y="120"] { transform-box: fill-box; transform-origin: center; animation: arm-shrug 0.9s ease-in-out 1; }
+.robotscene .robot.cheer svg { animation: robot-nod 0.9s ease-in-out 1; }
+.robotscene .robot.cheer .bulb { fill: #4fd36b; }
+.bead.ok { background: #4fd36b; opacity: 1; box-shadow: 0 0 0 6px #ffffffaa, 0 0 16px #4fd36b, inset 0 -6px 0 #0002; transition: background 0.2s, box-shadow 0.2s; }
 @keyframes rock-once { 30% { transform: rotate(-3deg); } 70% { transform: rotate(3deg); } }
 @keyframes bulb-slow { 50% { transform: scale(1.3); } }
-@keyframes robot-hmm { 40% { transform: rotate(5deg) translateX(3px); } }
-@keyframes robot-cheer { 0% { transform: scale(1, 1); } 25% { transform: scale(1.06, 0.92); } 55% { transform: translateY(-18px) scale(0.96, 1.06); } 80% { transform: scale(1.04, 0.95); } 100% { transform: scale(1, 1); } }
+@keyframes robot-shrug { 0%, 100% { transform: rotate(0deg) translateY(0); } 35%, 65% { transform: rotate(4deg) translateY(3px); } }
+@keyframes arm-shrug { 0%, 100% { transform: translateY(0); } 35%, 65% { transform: translateY(-12px); } }
+@keyframes robot-nod { 0%, 100% { transform: translateY(0) rotate(0deg); } 18% { transform: translateY(8px) rotate(2deg); } 36% { transform: translateY(-3px); } 56% { transform: translateY(8px) rotate(-2deg); } 76% { transform: translateY(-3px); } }
 
 /* ---------- Rhyme Rocket: a skinned sky and vehicle per world ---------- */
 .rocket.charge { animation: charge 0.45s ease-in-out 2; }
@@ -39,9 +46,16 @@
 .rocket .flame { animation-duration: 0.45s; }
 .rocket .prop { transform-box: fill-box; transform-origin: center; animation: prop 0.9s ease-in-out infinite alternate; }
 @keyframes prop { to { transform: scaleY(0.25); } }
-.rocket[data-vehicle=dino], .rocket[data-vehicle=dragon], .rocket[data-vehicle=transport] { width: 150px; }
-.rocket[data-vehicle=ocean] { width: 92px; }
-.rocket[data-vehicle=farm] { width: 80px; }
+.rocket { width: 120px; } /* the vehicle is about 1.4x bigger than in cycle 1 */
+.rocket[data-vehicle=dino], .rocket[data-vehicle=dragon], .rocket[data-vehicle=transport] { width: 210px; }
+.rocket[data-vehicle=ocean] { width: 130px; }
+.rocket[data-vehicle=farm] { width: 112px; }
+.rocketscene .skypanel { min-height: 280px; }
+@media (max-width: 600px) {
+  .rocket { width: 92px; } .rocket[data-vehicle=dino], .rocket[data-vehicle=dragon], .rocket[data-vehicle=transport] { width: 150px; }
+  .rocket[data-vehicle=ocean] { width: 100px; } .rocket[data-vehicle=farm] { width: 86px; }
+  .rocketscene .skypanel { min-height: 230px; }
+}
 [data-pack=dino] .skypanel { background: radial-gradient(ellipse at 50% 24%, #ffffffaa 0 9%, transparent 10%), radial-gradient(ellipse at 56% 27%, #ffffffaa 0 6%, transparent 7%), linear-gradient(#f4a259, #ffd6a0 62%, #8fcf6a 62.5%, #6fb85a); }
 [data-pack=dragon] .skypanel { background: radial-gradient(circle at 20% 24%, #fff 0 1.5px, transparent 2px), radial-gradient(circle at 78% 18%, #fff 0 1.5px, transparent 2px), radial-gradient(circle at 60% 40%, #fff 0 1px, transparent 2px), radial-gradient(circle at 56% 24%, #ffe9a8 0 6%, transparent 7%), linear-gradient(#3b2a78, #8a5fd0 68%, #e9a6d4); }
 [data-pack=transport] .skypanel { background: radial-gradient(ellipse at 24% 30%, #fff 0 9%, transparent 10%), radial-gradient(ellipse at 31% 33%, #fff 0 7%, transparent 8%), radial-gradient(ellipse at 76% 22%, #fff 0 8%, transparent 9%), linear-gradient(#5ec0f2, #cdeefc); }
@@ -51,7 +65,14 @@
 .fuel { border-color: #ffffffee; }
 
 /* ---------- Bridge Builder: one themed plank per tapped sound, a weighty crossing, a flag that waves ---------- */
-.bridgescene .bridge { margin-top: 34px; }
+.bridgescene { gap: 10px; }
+.bridgescene .word { position: relative; }
+.bridgescene .glyph { font-size: clamp(4rem, min(11vw, 12.5vh), 6.4rem); }
+.bridgescene .caption { font-size: clamp(1.25rem, 3vw, 1.9rem); }
+.bridgescene .slide-hint { position: absolute; left: 50%; top: 22%; margin-left: -1.3rem; pointer-events: none; z-index: 3; }
+.bridgescene .slide-hint[hidden] { display: none; }
+.bridgescene .bridge { margin-top: 30px; min-height: 130px; }
+@media (max-height: 800px) { .bridgescene .bridge { margin-top: 22px; min-height: 110px; } .bridgescene .tile.wordtile { min-height: 96px; } }
 .bridgescene .bridge .slot:not(.filled) { border: 3px dotted #a98a52; opacity: 0.2; }
 .bridgescene .bridge .slot { transition: box-shadow 0.2s; }
 .bridgescene .bridge .slot.lit { box-shadow: 0 0 0 4px #fff, 0 0 16px 6px #ffe27acc; }
@@ -87,3 +108,4 @@
   .tile.hint-pulse::after { animation: none; opacity: 0.9; }
   .rocket .prop { animation: none; }
 }
+.robotscene .robot svg { overflow: visible; }

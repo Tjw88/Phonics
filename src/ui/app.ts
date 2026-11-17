@@ -18,7 +18,7 @@ import { copyBeat, findIt } from './games2';
 import { availableGames, safariLearned, roundBridge, roundDrum, roundFeed, roundKitchen, roundRhyme, roundRobot, roundSafari, roundTrace, type GameKind } from './rounds';
 import { PACKS, arrivalSVG, companionSVG, defaultNameFor, packById, sameSlotIn } from './themes';
 import { mount, setNight } from './fx';
-import { doorGrid, finaleScene, hatchScene, homeIdle, sleepScene, zsEl } from './flow';
+import { doorGrid, doorsHint, emptyNest, finaleScene, hatchScene, homeIdle, sleepScene, zsEl } from './flow';
 import { bigButton, h, sleep } from './dom';
 import {
   companionEl, placementTrial, type Ctx,
@@ -304,7 +304,7 @@ export class App {
         pet.addEventListener('pointerdown', () => { tap(); sfx.pop(); pet.classList.remove('wiggle'); void pet.offsetWidth; pet.classList.add('wiggle'); });
         return pet;
       })(),
-      s.collection.length ? null : h('span', { class: 'hint-empty' }, 'Treasures will appear here.'),
+      s.collection.length ? null : emptyNest(),
     );
     setNight(asleep);
     const playLabel = s.band === 'B' ? 'Play together' : done ? 'Play again' : 'Play';
@@ -375,32 +375,42 @@ export class App {
     }
 
     // 4. Practice: Feed, then one listening game, then the rest of the Feed, then one print/rhyme game (rising difficulty overall)
-    for (const it of blocks.early) await roundFeed(ctx, it.g, it.idx);
+    // each block ends on its largest payoff: ctx.last marks the final round of a block so the success is a finale (see celebrate)
+    const block = async <T,>(items: readonly T[], run: (x: T, i: number) => Promise<unknown>): Promise<void> => {
+      for (let i = 0; i < items.length; i++) {
+        ctx.last = i === items.length - 1;
+        await run(items[i] as T, i);
+      }
+      ctx.last = false;
+    };
+    await block(blocks.early, (it) => roundFeed(ctx, it.g, it.idx));
     this.persist();
     if (this.overLimit()) return this.goodnight(plan);
 
-    if (plan.second === 'robot') for (const [i, w] of plan.robotWords.entries()) await roundRobot(ctx, w, i);
-    else if (plan.second === 'drum') for (const w of plan.drumWords) await roundDrum(ctx, w);
-    else if (plan.newSound) await roundSafari(ctx, plan.newSound);
+    if (plan.second === 'robot') await block(plan.robotWords, (w, i) => roundRobot(ctx, w, i));
+    else if (plan.second === 'drum') await block(plan.drumWords, (w) => roundDrum(ctx, w));
+    else if (plan.newSound) await block([plan.newSound], (g) => roundSafari(ctx, g));
     this.persist();
     if (this.overLimit()) return this.goodnight(plan);
 
-    for (const it of blocks.late) await roundFeed(ctx, it.g, it.idx);
+    await block(blocks.late, (it) => roundFeed(ctx, it.g, it.idx));
     this.persist();
     if (this.overLimit()) return this.goodnight(plan);
 
     // the printed-word block is two rounds plus the "make it real" word (three Bridge rounds in all, not four)
-    if (plan.third === 'bridge') for (const w of plan.bridgeWords.slice(0, 2)) await roundBridge(ctx, w);
-    else if (plan.third === 'kitchen') for (const w of plan.kitchenWords) await roundKitchen(ctx, w);
-    else for (let i = 0; i < 2; i++) await roundRhyme(ctx);
+    if (plan.third === 'bridge') await block(plan.bridgeWords.slice(0, 2), (w) => roundBridge(ctx, w));
+    else if (plan.third === 'kitchen') await block(plan.kitchenWords, (w) => roundKitchen(ctx, w));
+    else await block([0, 1], () => roundRhyme(ctx));
     this.persist();
 
     // 5. Make it real, then ONE end-of-day celebration: the decoded word comes alive, then the chest the child taps (flow.ts)
     let alive: Word | null = null;
     if (plan.makeItReal) {
       const { word, mode } = plan.makeItReal;
+      ctx.last = true; // the day's final round is the biggest celebration
       if (mode === 'print') await roundBridge(ctx, word);
       else await roundRobot(ctx, word, 1);
+      ctx.last = false;
       alive = word;
     }
     await this.goodnight(plan, alive);
@@ -471,9 +481,9 @@ export class App {
     while (!leave && !this.overLimit()) {
       const games = availableGames(ctx, printBlendOpen(s), learned.length > 0);
       const pick = await race(new Promise<GameKind>((resolve) => {
-        mount(this.stage, h('div', { class: 'scene' },
-          h('p', { class: 'caption' }, 'What shall we play?'),
-          doorGrid(games, s.companion?.kind ?? 'rexy', (k) => { tap(); sfx.pop(); resolve(k); })));
+        const grid = doorGrid(games, s.companion?.kind ?? 'rexy', (k) => { tap(); sfx.pop(); resolve(k); });
+        mount(this.stage, h('div', { class: 'scene' }, h('p', { class: 'caption' }, 'What shall we play?'), grid));
+        doorsHint(grid);
       }));
       if (!pick) break;
       const rounds = Number(new URLSearchParams(location.search).get('fpRounds')) || 3; // (tests use 1)

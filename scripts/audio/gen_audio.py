@@ -81,7 +81,7 @@ PHRASES = {
     "again": "Let's tap the sounds again.", "hungry_for": "I'm hungry for", "find_the": "Find the", "your_turn": "Your turn!", "copy_me": "Copy me!", "which_letter": "Which letter says", "well_done": "Well done!",
     "slide_blend": "Slide your finger across to blend.", "hello_friend": "Hello, friend!",
     "drum_prompt": "Beat the drum once for each sound.", "safari_prompt": "Find things that start with the sound.",
-    "kitchen_prompt": "Build the word.", "trace_prompt": "Trace the letter. Start at the green dot.", "pick_egg": "Pick an egg.", "pick_friend": "Pick a friend.", "show_grownup": "Show a grown-up",
+    "kitchen_prompt": "Build the word.", "trace_prompt": "Trace the letter. Start at the green dot.", "pick_egg": "Pick an egg.", "pick_friend": "Pick a friend.", "tap_chest": "Tap the chest!", "show_grownup": "Show a grown-up",
 }
 
 

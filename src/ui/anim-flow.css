@@ -103,9 +103,12 @@ body.night #scene-bg::after { animation: shooting 13s linear infinite 2.5s; }
 .door .da-feed { position: relative; display: inline-block; line-height: 0; }
 .door .da-feed .dino { width: auto; height: clamp(92px, 14vw, 126px); }
 .door .da-letter { position: absolute; right: -16px; top: 30%; padding: 0 9px; font-size: 1.7rem; font-weight: 700; line-height: 1.25; color: var(--ink); background: #fff; border-radius: 12px; box-shadow: 0 3px 0 #1d355733, inset 0 0 0 3px #ff8fab; }
-.door .da-rocket { display: inline-block; line-height: 0; transform: rotate(24deg); }
-.door .da-rocket svg { height: clamp(96px, 15vw, 130px); width: auto; display: block; overflow: visible; }
-.door .da-rocket .flame { animation: none; }
+.door .da-vehicle { display: inline-block; line-height: 0; }
+.door .da-vehicle.da-space { transform: rotate(24deg); } .door .da-vehicle.da-transport { transform: rotate(-8deg); }
+.door .da-vehicle { max-width: 92%; }
+.door .da-vehicle svg { height: clamp(96px, 15vw, 130px); width: auto; max-width: 100%; display: block; overflow: visible; }
+.door .da-vehicle svg { filter: drop-shadow(0 2px 2px #1d355733); }
+.door .da-vehicle .flame { animation: none; }
 .door .robot-art, .door .drum-art, .door .pot-art { height: clamp(88px, 14vw, 124px); }
 .door .pot-art .steam { opacity: 0.9; }
 @keyframes door-in { from { opacity: 0; transform: translateY(18px) scale(0.92); } to { opacity: 1; transform: none; } }
@@ -118,3 +121,35 @@ body.night #scene-bg::after { animation: shooting 13s linear infinite 2.5s; }
   .sleep-pet .dino, .island-pet .companion, .island-pet .companion .dino, .island-pet.asleep .companion { animation: none !important; }
   .door { animation: none; }
 }
+
+/* ---------- chest cue: a soft ring and a bouncing hand after a few seconds without a tap ---------- */
+.fin-ring { position: absolute; inset: -6% -8% 2% -8%; border-radius: 30px; border: 5px solid #ffd166; pointer-events: none; z-index: -1; animation: ring-pulse 1.5s ease-out infinite; }
+@keyframes ring-pulse { 0% { transform: scale(0.94); opacity: 0.95; } 100% { transform: scale(1.18); opacity: 0; } }
+.fin-hand { position: absolute; left: 50%; bottom: -30px; margin-left: -20px; font-size: 2.6rem; line-height: 1; pointer-events: none; z-index: 2; animation: hand-bob 0.95s ease-in-out infinite; filter: drop-shadow(0 3px 3px #0003); }
+@keyframes hand-bob { 0%, 100% { transform: translateY(6px); } 50% { transform: translateY(-8px); } }
+
+/* ---------- grown-up content during a celebration: quiet, readable, away from the child's focus ---------- */
+.goodnight-row { min-height: 92px; }
+.grownup-zone { width: min(100%, 560px); margin-top: 10px; padding-top: 12px; border-top: 2px dotted #1d355730; display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0.88; }
+.grownup-zone .btn { min-height: 48px; font-size: 1.05rem; padding: 6px 20px; background: transparent; box-shadow: inset 0 0 0 2px #1d355733; font-weight: 600; }
+.grownup-zone .btn:active { transform: none; }
+.grownup-zone .grownup-card { margin: 0; max-width: 100%; padding: 6px 10px; border: 0; background: transparent; font-size: 1.05rem; line-height: 1.35; color: #4f3f12; }
+.grownup-zone .grownup-card strong { font-size: 0.8rem; margin-bottom: 1px; }
+@media (prefers-reduced-motion: reduce) { .fin-ring { animation: none; opacity: 0.7; } .fin-hand { animation: none; } }
+
+/* ---------- the home island: an empty nest where the first treasure will sit ---------- */
+.hint-empty.nest { left: 24%; top: 76%; bottom: auto; transform: translate(-50%, -50%); opacity: 1; line-height: 0; }
+
+/* ---------- header on a phone: opaque buttons, so nothing from the backdrop (a moon, a cloud) shows through behind the icons ---------- */
+.top .btn.quiet, .top .corner { background: #fff; }
+
+/* ---------- Free Play on a phone: the grid scrolls, so a round chevron floats at the bottom edge until the end is reached ---------- */
+.doors-more { display: none; }
+@media (max-width: 600px) {
+  .door { min-height: 188px; }
+  .doors-more { display: grid; position: sticky; bottom: 10px; grid-column: 1 / -1; justify-self: center; place-items: center; width: 48px; height: 48px; margin-top: -8px; border-radius: 50%;
+    background: #ffffffee; box-shadow: 0 3px 0 #1d355730, inset 0 0 0 3px #4cc3d9; font-size: 1.7rem; line-height: 1; color: var(--ink); pointer-events: none; animation: nudge-down 2.4s ease-in-out infinite; }
+  .doors-more.off { display: none; }
+}
+@keyframes nudge-down { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+@media (prefers-reduced-motion: reduce) { .doors-more { animation: none; } }

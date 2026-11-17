@@ -182,3 +182,19 @@ export const sticksArt = (hand: string): string => `<svg class="sticks" viewBox=
   <g class="stick sl"><line x1="56" y1="6" x2="80" y2="62" stroke="#b5793c" stroke-width="6" stroke-linecap="round"/><circle cx="81" cy="63" r="7" fill="#ffd166" stroke="#c98f00" stroke-width="2.5"/><line x1="78" y1="22" x2="56" y2="6" stroke="${hand}" stroke-width="10" stroke-linecap="round"/><circle cx="56" cy="6" r="8.5" fill="${hand}" stroke="#0003" stroke-width="2"/></g>
   <g class="stick sr"><line x1="144" y1="6" x2="120" y2="62" stroke="#b5793c" stroke-width="6" stroke-linecap="round"/><circle cx="119" cy="63" r="7" fill="#ffd166" stroke="#c98f00" stroke-width="2.5"/><line x1="122" y1="22" x2="144" y2="6" stroke="${hand}" stroke-width="10" stroke-linecap="round"/><circle cx="144" cy="6" r="8.5" fill="${hand}" stroke="#0003" stroke-width="2"/></g>
 </svg>`;
+
+// ---------------------------------------------------------------------------------------------------------------
+// World flavour for the sound-friend that appears when a letter is traced: a glow in the world's colour and a small medal with the
+// world's emblem (a leaf, a flame, a star, a ringed planet, a shell, an ear of wheat), so the friend feels like it belongs to this world.
+// ---------------------------------------------------------------------------------------------------------------
+export const WORLD_GLOW: Record<World, string> = { dino: '#b5e46a', dragon: '#ffb36b', transport: '#ffd166', space: '#b7a2ff', ocean: '#8fe0f7', farm: '#ffd98a' };
+const EMBLEM: Record<World, string> = {
+  dino: '<path d="M0 -13 C12 -9 12 8 0 14 C-12 8 -12 -9 0 -13Z" fill="#5cb85c"/><path d="M0 -9 V11" stroke="#2f7d3a" stroke-width="2"/>',
+  dragon: '<path d="M0 -14 C9 -4 11 5 0 13 C-11 5 -9 -4 0 -14Z" fill="#ff9f43"/><path d="M0 -3 C4 2 4 7 0 10 C-4 7 -4 2 0 -3Z" fill="#ffe27a"/>',
+  transport: '<path d="M0 -14 L4 -4.5 L14 -4.5 L6 2 L9 12 L0 6 L-9 12 L-6 2 L-14 -4.5 L-4 -4.5Z" fill="#ffc233"/>',
+  space: '<circle r="7.5" fill="#a98bff"/><ellipse rx="14" ry="4.5" fill="none" stroke="#ffd166" stroke-width="2.6" transform="rotate(-20)"/>',
+  ocean: '<path d="M0 12 L-13 -2 Q-12 -13 0 -12 Q12 -13 13 -2Z" fill="#ff9fb4"/><path d="M0 12 L-7 -10 M0 12 L0 -12 M0 12 L7 -10" stroke="#e0577a" stroke-width="1.8" fill="none"/>',
+  farm: '<path d="M0 14 V-10" stroke="#c98f2a" stroke-width="2.4"/><g fill="#f2cf63"><ellipse cx="-4.5" cy="-8" rx="3" ry="5.5" transform="rotate(-25 -4.5 -8)"/><ellipse cx="4.5" cy="-8" rx="3" ry="5.5" transform="rotate(25 4.5 -8)"/><ellipse cx="-4.5" cy="-1" rx="3" ry="5.5" transform="rotate(-25 -4.5 -1)"/><ellipse cx="4.5" cy="-1" rx="3" ry="5.5" transform="rotate(25 4.5 -1)"/><ellipse cx="0" cy="-13" rx="3" ry="5"/></g>',
+};
+export const worldBadge = (w: World = worldId()): string =>
+  `<svg class="world-badge" viewBox="-20 -20 40 40" aria-hidden="true" focusable="false"><circle r="18" fill="#fff" stroke="${WORLD_GLOW[w]}" stroke-width="3.5"/>${EMBLEM[w]}</svg>`;

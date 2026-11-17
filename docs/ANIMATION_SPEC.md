@@ -73,3 +73,14 @@ The adventure's Feed trials used to run in one block (up to 10 in a row). Cycle 
 ## 7. What cannot be judged here
 
 Audio sync (the sounds are generated audio nobody here can hear), real children's reactions, feel on a real touchscreen, and long-term novelty (a reaction set of 3 variants may still feel repeated over weeks).
+
+---
+
+## 8. Cycle 1 results (17 Nov 2026)
+
+Implemented by three engineers in separate files (flow and scenes: `app.ts`, `flow.ts`, `fx.ts`, `anim-flow.css`; Feed/Robot/Rhyme/Bridge and the reaction library: `games.ts`, `celebrate.ts`, `reactions.ts`, `particles.ts`, `vehicles.ts`, `anim-games.css`; Drum/Safari/Kitchen/Trace/Sound Play: `games2.ts`, `games2-art.ts`, `anim-games2.css`), then reviewed by an independent reviewer who had not seen their reports (frame sequences in all six worlds).
+
+**Measured:** a Feed trial takes 2.3-2.4 s for the first success of a session and 1.5-1.7 s after (was about 3 s each); a block of four is about 7 s (was about 12 s); the longest run of the same game is 3 on day 1 and 2 on a later day (was 10); the end of the day is two screens (was five); there is no blank flash between rounds (the stage cross-fades and the creature persists).
+**Reviewer scores (1-5, averages):** polish 3.9, fun 3.7, clarity 4.1, theme fit 3.9, variety 3.1. The exit criterion in section 6 (nothing below 4 for polish and theme fit) was **not met**: Robot Talk and the home idle were below 4 on theme fit, Trace Trail and the Free Play doors on theme fit, and variety was the weakest dimension.
+**Bugs found (no crash, stuck state or page error):** Bridge Builder word choices clipped at 1180x820 (fixed in cycle 2), no visible reaction to a wrong tap in Sound Safari, a chest-open cue that was too faint with Goodnight hidden behind it, the filled hot ring hiding the creature's face during a drag, a 250 ms cross-fade double exposure, waits above the 2 s budget with no short version (Rhyme, Kitchen, Bridge), eat variants that were visibly the same in some worlds, grown-up content in the child's celebration.
+**Cycle 2** (same engineers, with the reviewer's findings for their area): the chest cue, transition polish, world-flavoured home idle and Free Play doors; the Bridge clip, the hot ring, real eat-variant variety, short versions for Rhyme and Bridge, a reactive and themed Robot, a bigger Rhyme vehicle; Safari's wrong tap, a bigger creature in Safari and Kitchen, a short Kitchen after the first success, a world-flavoured Trace friend, drummer pose variety. A second independent review follows.

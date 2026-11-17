@@ -3295,6 +3295,10 @@
   "pick_friend": {
    "text": "Pick a friend.",
    "ms": 699
+  },
+  "tap_chest": {
+   "text": "Tap the chest!",
+   "ms": 760
   }
  },
  "safari": {
@@ -3413,9 +3417,7 @@
   "quilt": "ok"
  },
  "problems": [],
- "warnings": [
-  "[north] /z/ v1: voiced fricative short or not voiced"
- ],
+ "warnings": [],
  "asr": {
   "understood": 59,
   "of": 254,

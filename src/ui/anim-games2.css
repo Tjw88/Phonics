@@ -24,7 +24,10 @@
 
 /* ---------- Sound Safari: things peek out of the world's cover ---------- */
 .safari-top { gap: 14px; }
-.safari-top .safari-pet { width: clamp(70px, 12vw, 96px); }
+.safari-body { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: center; gap: 14px; width: 100%; }
+.safari-body .safari-field { flex: 1 1 420px; max-width: 660px; }
+.safari-body .safari-pet { flex: 0 0 auto; width: clamp(120px, 17vw, 180px); }
+@media (max-width: 980px) { .safari-body .safari-pet { order: -1; width: clamp(88px, 22vw, 120px); } }
 .safari-field { position: relative; gap: 10px; padding: 16px; }
 .safari-field .safari-item {
   position: relative; overflow: hidden; display: flex; align-items: flex-start; justify-content: center; padding: 0;
@@ -53,8 +56,14 @@
 }
 @keyframes star-in { from { transform: scale(0.2) rotate(-40deg); opacity: 0; } to { transform: none; opacity: 1; } }
 .safari-field .safari-item.wobble { animation: wobble-soft 0.65s ease-in-out; }
-.safari-field .safari-item.hint, .tile.hint { animation: hint-pulse 1.2s ease-in-out 3; }
-@keyframes hint-pulse { 50% { transform: scale(1.07); } }
+.safari-field .safari-item.hint, .tile.hint { animation: hint-pulse 1.4s ease-in-out 2; }
+@keyframes hint-pulse { 50% { transform: scale(1.045); } }
+/* a soft glint on the right item after a second miss (information, never a red mark or a shake) */
+.safari-field .safari-item.hint::before, .find-cards .tile.hint::before {
+  content: '✦'; position: absolute; z-index: 3; left: 54%; top: 4%; font-size: clamp(2.4rem, 7vw, 3.4rem); line-height: 1; color: #fff; text-shadow: 0 0 6px #ffd166, 0 0 14px #ffd166;
+  animation: glint 1.5s ease-in-out 2;
+}
+@keyframes glint { 0% { transform: scale(0.2) rotate(0deg); opacity: 0; } 40% { transform: scale(1.1) rotate(45deg); opacity: 1; } 100% { transform: scale(0.3) rotate(90deg); opacity: 0; } }
 @keyframes wobble-soft { 20% { transform: rotate(-2.6deg) scale(1.02); } 50% { transform: rotate(2.2deg); } 80% { transform: rotate(-1deg); } }
 
 /* the world's board behind the covers */
@@ -68,6 +77,12 @@
 .safari-field.w-farm { background: linear-gradient(#d4effa 0 22%, #c3e58e 22%, #93d063); box-shadow: inset 0 0 0 5px #6aae3f; }
 
 /* ---------- Word Kitchen ---------- */
+/* a bigger payoff: the pot and the picture that pops out are about 1.5x, and the creature stands by to taste it */
+.kitchenscene .kitchen-row { flex-wrap: nowrap; gap: 20px; align-items: flex-end; }
+.kitchenscene .pot-wrap { width: clamp(180px, 33vw, 270px); margin-top: 56px; flex: none; }
+.kitchenscene .dish .pic-wrap { width: clamp(120px, 24vw, 170px); }
+.kitchenscene .dish { font-size: clamp(5rem, 15vw, 8rem); }
+.kitchenscene .kitchen-pet { width: clamp(96px, 15vw, 150px); flex: none; }
 .kitchenscene .pot svg { transform-origin: 50% 100%; }
 .kitchenscene .pot.cooking svg { animation: kshiver 0.36s ease-in-out 3; } /* a short shiver, not an endless shake */
 .kitchenscene .pot.cooking .lid { animation: lidhop 0.3s ease-in-out infinite alternate; transform-box: fill-box; }
@@ -97,7 +112,11 @@
 /* ---------- Trace Trail ---------- */
 .trace-board { position: relative; }
 .trace-friend-layer { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
-.trace-friend-layer .trace-friend { width: min(54%, 230px); }
+.trace-friend-holder { position: relative; display: grid; place-items: center; width: min(54%, 230px); }
+.trace-friend-holder .trace-friend { position: relative; z-index: 1; width: 100%; }
+.trace-glow { position: absolute; z-index: 0; inset: -14%; border-radius: 50%; background: radial-gradient(circle, var(--glow, #ffd166) 0 38%, transparent 70%); opacity: 0.8; }
+.trace-badge { position: absolute; z-index: 2; right: -8%; top: -6%; width: 34%; max-width: 64px; }
+.trace-badge .world-badge { width: 100%; height: auto; display: block; filter: none; }
 /* guide dots stay calm: the start dot breathes slowly, the firefly glides ahead and glows softly */
 .trace-svg .startdot { animation: dotbreathe 2.8s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
 .trace-svg .firefly { animation: fireglow 2.4s ease-in-out infinite; transition: transform 0.32s ease-out; }
@@ -114,6 +133,10 @@
 .find-cards .tile.pic.dim { opacity: 0.45; }
 
 @media (max-width: 600px) {
+  .kitchenscene .kitchen-row { flex-direction: column; align-items: center; gap: 6px; }
+  .kitchenscene .pot-wrap { width: 168px; margin-top: 44px; }
+  .kitchenscene .dish .pic-wrap { width: 100px; }
+  .kitchenscene .kitchen-pet { display: none; }
   .drum-stage { margin-top: 80px; }
   .drum-stage .drummer-pet { width: 108px; left: calc(50% - 54px); }
 }

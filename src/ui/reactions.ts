@@ -133,28 +133,37 @@ const doubleHop = (k = 1): Prim => ({
 
 /** The three "I'm happy" moves of each world; the variant is picked by index so no two in a row are the same. */
 const HAPPY: Record<PackId, ((k: number) => Prim)[]> = {
-  dino: [stomp, (k) => hop(34, k), wiggle],
+  dino: [(k) => stomp(k * 1.4), (k) => hop(40, k), (k) => wiggle(k * 1.6)],
   dragon: [(k) => hop(36, k), twirl, wiggle],
   transport: [rock, twirl, (k) => hop(28, k)],
   space: [floatUp, twirl, (k) => hop(52, k)],
-  ocean: [jelly, floatUp, twirl],
+  ocean: [(k) => jelly(k * 1.6), floatUp, twirl],
   farm: [(k) => hop(30, k), wiggle, doubleHop],
 };
 const LEVEL_K: Record<Level, number> = { 1: 0.65, 2: 1, 3: 1.3 };
 
 /** Run the world's happy move number `variant` on the creature; dust puffs on landings for the heavy movers. Returns its length in ms. */
-const happyMove = (root: HTMLElement, pack: PackId, variant: number, level: Level): number => {
+const happyMove = (root: HTMLElement, pack: PackId, variant: number, level: Level, speed = 1): number => {
   const prim = (HAPPY[pack][variant % 3] as (k: number) => Prim)(LEVEL_K[level]);
-  run(root, prim.kf, prim.dur, 'cubic-bezier(0.3, 0.7, 0.4, 1)');
-  if (pack === 'dino' && prim.dust) for (const f of prim.dust) setTimeout(() => puffAt(root, 3), f * prim.dur);
-  return prim.dur;
+  const dur = prim.dur * speed;
+  run(root, prim.kf, dur, 'cubic-bezier(0.3, 0.7, 0.4, 1)');
+  if (pack === 'dino' && prim.dust) for (const f of prim.dust) setTimeout(() => puffAt(root, 3), f * dur);
+  return dur;
+};
+
+/** Variants 1 and 2 also change the body's rhythm WHILE chewing (variant 0: steady; 1: a sway from side to side; 2: little bounces), so three rounds
+ *  in a row differ in the creature's body, not only in the particles. Applied to the body group (the root for the dino, whose body group is used). */
+const chewRhythm = (parts: Parts, pack: PackId, variant: number, dur: number): void => {
+  const tgt = pack === 'dino' ? parts.root : parts.body;
+  if (variant === 1) run(tgt, [{ transform: 'rotate(0deg)' }, { transform: 'rotate(-6deg)', offset: 0.25 }, { transform: 'rotate(6deg)', offset: 0.75 }, { transform: 'rotate(0deg)' }], dur);
+  else if (variant === 2) run(tgt, [{ transform: 'translateY(0px)' }, { transform: 'translateY(-9px)', offset: 0.17 }, { transform: 'translateY(0px)', offset: 0.33 }, { transform: 'translateY(-9px)', offset: 0.5 }, { transform: 'translateY(0px)', offset: 0.67 }, { transform: 'translateY(-9px)', offset: 0.83 }, { transform: 'translateY(0px)' }], dur);
 };
 
 // ---- the letter's flight into the mouth, shaped by the world ------------------------------------------------------------------
 const T = (x: number, y: number, s: number, r: number): string => `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) scale(${s}) rotate(${r}deg)`;
 const mix = (a: number, b: number, f: number): number => a + (b - a) * f;
 interface Flight { kf: Keyframe[]; dur: number; easing: string }
-const flightFor = (pack: PackId, start: string, cur: { x: number; y: number }, end: { x: number; y: number }, short: boolean): Flight => {
+const flightRaw = (pack: PackId, start: string, cur: { x: number; y: number }, end: { x: number; y: number }, short: boolean): Flight => {
   const s = short ? 0.85 : 1;
   const M = (f: number, dy = 0) => ({ x: mix(cur.x, end.x, f), y: mix(cur.y, end.y, f) + dy });
   switch (pack) {
@@ -189,6 +198,15 @@ const flightFor = (pack: PackId, start: string, cur: { x: number; y: number }, e
       return { dur: 420 * s, easing: 'ease-out', kf: [{ transform: start }, { transform: T(a.x, a.y, 0.7, -10), offset: 0.45 }, { transform: T(b.x, b.y, 0.4, 6), offset: 0.75 }, { transform: T(end.x, end.y, 0.16, 12) }] };
     }
   }
+};
+
+/** A flight whose letter never gets BIGGER than it was when released: a tile carried to the mouth is already shrunk, and must not swell over the face. */
+const flightFor = (pack: PackId, start: string, cur: { x: number; y: number }, end: { x: number; y: number }, short: boolean): Flight => {
+  const f = flightRaw(pack, start, cur, end, short);
+  const m = /scale\(([\d.]+)\)/.exec(start);
+  const s0 = m ? Number(m[1]) : 1;
+  for (const k of f.kf) if (typeof k.transform === 'string') k.transform = k.transform.replace(/scale\(([\d.]+)\)/, (_, v) => `scale(${Math.min(Number(v), s0, 0.62)})`);
+  return f;
 };
 
 /** A ring that grows and fades (the ocean's glow ripple, the vehicles' honk ring). Uses a plain div so it can be a full circle. */
@@ -286,6 +304,7 @@ const eat = async (a: EatArgs): Promise<void> => {
     default: // farm: chomp chomp chomp
       run(parts.head, [{ transform: 'translateY(0px)' }, { transform: 'translateY(7px)', offset: 0.17 }, { transform: 'translateY(0px)', offset: 0.33 }, { transform: 'translateY(7px)', offset: 0.5 }, { transform: 'translateY(0px)', offset: 0.67 }, { transform: 'translateY(7px)', offset: 0.83 }, { transform: 'translateY(0px)' }], chewTimes * unit * 2);
   }
+  chewRhythm(parts, pack, variant, chewTimes * unit * 2);
   for (let i = 0; i < chewTimes; i++) {
     setMood(creature, 'oops');
     await sleep(unit);
@@ -294,9 +313,9 @@ const eat = async (a: EatArgs): Promise<void> => {
   }
   setMood(creature, 'happy');
   lookAt(creature, null, null);
-  const len = happyMove(creature, pack, variant, a.short ? 1 : 2);
+  const len = happyMove(creature, pack, variant, 2, a.short ? 0.72 : 1); // the whole move is seen, just quicker after the first
   a.onHappy?.();
-  await sleep(a.short ? Math.min(len, 440) : Math.min(len, 700));
+  await sleep(len);
 };
 
 /** Right answer: the creature's happy move (3 variants by index), sized by level. Leaves it alone if another reaction owns it. */
