@@ -99,6 +99,7 @@ const XFADE_IN = 220, XFADE_OUT = 90; // the old card leaves fast, so the two ar
  */
 export const mount = (stage: HTMLElement, ...kids: Node[]): void => {
   runLeave();
+  try { window.scrollTo(0, 0); } catch { /* no window to scroll (a test) */ } // every new screen opens at its top, never at the last screen's scroll position
   stage.querySelectorAll(':scope > .scene-ghost').forEach((g) => g.remove());
   const old = stage.querySelector<HTMLElement>(':scope > .scene');
   const motion = !reducedMotion();

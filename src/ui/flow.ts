@@ -100,6 +100,7 @@ export const hatchScene = async (stage: HTMLElement, o: HatchOpts): Promise<void
       arr.style.display = 'none'; glow.style.display = 'none';
       petBox.style.opacity = '1'; setMood(o.pet, 'happy');
       sfx.pop(); praise(); finished();
+      later(() => { setMood(o.pet, 'idle'); lookAtButton(); }, 900); // the smiling eyes are shut: open them again soon, so it does not look asleep
     }, 500);
     await next.pressed;
     return;
@@ -372,14 +373,14 @@ const FLAVOUR: Record<string, Flavour> = {
     return 1300;
   },
   farm: (c, at) => { // chews: four small mouthfuls and a wisp of hay
-    wobble(c, [{ transform: 'none' }, { transform: 'scale(1.03, 0.95)', offset: 0.13 }, { transform: 'scale(0.99, 1.02)', offset: 0.25 }, { transform: 'scale(1.03, 0.95)', offset: 0.38 }, { transform: 'scale(0.99, 1.02)', offset: 0.5 }, { transform: 'scale(1.03, 0.95)', offset: 0.63 }, { transform: 'scale(0.99, 1.02)', offset: 0.75 }, { transform: 'none' }], 1100);
-    at(() => emitKind(topOf(c), 'hay', 1), 100);
-    return 1200;
+    wobble(c, [{ transform: 'none' }, { transform: 'translateY(-8px) scale(0.98, 1.04)', offset: 0.1 }, { transform: 'scale(1.07, 0.9)', offset: 0.2 }, { transform: 'scale(0.98, 1.04)', offset: 0.32 }, { transform: 'scale(1.07, 0.9)', offset: 0.44 }, { transform: 'scale(0.98, 1.04)', offset: 0.56 }, { transform: 'scale(1.07, 0.9)', offset: 0.68 }, { transform: 'scale(0.99, 1.02) rotate(2deg)', offset: 0.84 }, { transform: 'none' }], 1400);
+    at(() => emitKind(topOf(c), 'hay', 3, { scale: 1.3 }), 100);
+    return 1500;
   },
-  jungle: (c, at) => { // swings its weight to one side, as if on a vine, and shakes down two leaves
-    wobble(c, [{ transform: 'none' }, { transform: 'rotate(7deg) translateX(8px)', offset: 0.35 }, { transform: 'rotate(7deg) translateX(8px)', offset: 0.5 }, { transform: 'rotate(-3deg) translateX(-3px)', offset: 0.78 }, { transform: 'none' }], 1300);
-    at(() => emitKind(topOf(c), 'leaf', 2), 350);
-    return 1400;
+  jungle: (c, at) => { // swings its weight out and back, as if on a vine, and shakes down a shower of leaves
+    wobble(c, [{ transform: 'none' }, { transform: 'rotate(13deg) translate(18px, -6px)', offset: 0.38 }, { transform: 'rotate(13deg) translate(18px, -6px)', offset: 0.5 }, { transform: 'rotate(-6deg) translate(-8px, 0)', offset: 0.78 }, { transform: 'none' }], 1500);
+    at(() => emitKind(topOf(c), 'leaf', 5, { scale: 1.3 }), 300);
+    return 1600;
   },
   robot: (c, at) => { // a beep: a quick jolt, a ring of signal and a spark from the antenna
     wobble(c, [{ transform: 'none' }, { transform: 'scale(1.04, 0.95)', offset: 0.15 }, { transform: 'translateY(-6px) scale(0.98, 1.03)', offset: 0.3 }, { transform: 'translateX(-3px)', offset: 0.45 }, { transform: 'translateX(3px)', offset: 0.6 }, { transform: 'none' }], 600);
@@ -387,8 +388,8 @@ const FLAVOUR: Record<string, Flavour> = {
     return 800;
   },
   pirate: (c, at) => { // rocks like a deck on the swell, a gold glint
-    wobble(c, [{ transform: 'none' }, { transform: 'rotate(-5deg) translateX(-4px)', offset: 0.3 }, { transform: 'rotate(5deg) translateX(4px)', offset: 0.65 }, { transform: 'none' }], 1500);
-    at(() => emitKind(topOf(c), 'star', 2), 500);
+    wobble(c, [{ transform: 'none' }, { transform: 'rotate(-9deg) translateX(-8px)', offset: 0.3 }, { transform: 'rotate(9deg) translateX(8px)', offset: 0.65 }, { transform: 'none' }], 1700);
+    at(() => emitKind(topOf(c), 'star', 3), 500);
     return 1600;
   },
   fairy: (c, at) => { // drifts up like a petal on the breeze, scatters a few petals
@@ -411,7 +412,8 @@ const FLAVOUR: Record<string, Flavour> = {
 const SWAY: Flavour = (c) => { wobble(c, [{ transform: 'none' }, { transform: 'rotate(-3.5deg)', offset: 0.25 }, { transform: 'rotate(3.5deg)', offset: 0.6 }, { transform: 'none' }], 1000); return 1100; };
 /** every 4th time a slightly bigger, still gentle, action for any world: two happy hops */
 const BIG: Flavour = (c) => { wobble(c, [{ transform: 'none' }, { transform: 'translateY(-22px) rotate(-4deg) scale(0.96, 1.06)', offset: 0.22 }, { transform: 'scale(1.07, 0.92)', offset: 0.4 }, { transform: 'translateY(-22px) rotate(4deg) scale(0.96, 1.06)', offset: 0.62 }, { transform: 'scale(1.07, 0.92)', offset: 0.8 }, { transform: 'none' }], 1300); return 1400; };
-const FLAVOUR_GAPS = [8000, 10000, 12000];
+/** the gaps between actions, a little different for every world (8 to 12 s), so twelve worlds never all do it at the same moment */
+const gapsFor = (id: string): number[] => { const k = [...id].reduce((a, ch) => a + ch.charCodeAt(0), 0) % 5; return [8000 + k * 600, 10000 + (k % 3) * 500, 12000 - k * 300]; };
 
 export const homeIdle = (pet: HTMLElement, play: HTMLElement, asleep: boolean): void => {
   if (asleep) return;
@@ -432,7 +434,8 @@ export const homeIdle = (pet: HTMLElement, play: HTMLElement, asleep: boolean): 
   };
   let i = 0;
   const flavour = (): void => {
-    const gap = FLAVOUR_GAPS[i % FLAVOUR_GAPS.length] as number;
+    const gaps = gapsFor(packId());
+    const gap = gaps[i % gaps.length] as number;
     later(() => {
       if (pet.isConnected && !busy && !reducedMotion()) {
         // the world's own action, a calm sway, the world's action, then every 4th a bigger double hop (about every 40 s: not a loop of stimulation)
@@ -461,13 +464,34 @@ export const emptyNest = (): HTMLElement => {
 // ================================================================================================================ Free Play doors
 const art = (inner: string, vb = '0 0 120 100'): string => `<svg viewBox="${vb}" aria-hidden="true" focusable="false">${inner}</svg>`;
 const peek = (word: string, tf: string): string => `<g transform="${tf}">${PICTURES[word] ?? ''}</g>`;
-// per world: the animal that peeks out of the safari cover, the colours of the cover, the bridge's water, planks and bank
-const SAFARI_DOOR: Record<string, { animal: string; leaf1: string; leaf2: string }> = {
-  dino: { animal: 'lion', leaf1: '#3f9e5a', leaf2: '#6fd37e' }, dragon: { animal: 'fox', leaf1: '#7a5fc0', leaf2: '#a98bff' },
-  transport: { animal: 'dog', leaf1: '#3f9e5a', leaf2: '#8ed36f' }, space: { animal: 'frog', leaf1: '#6f5fd0', leaf2: '#b9a8ff' },
-  ocean: { animal: 'octopus', leaf1: '#ff7a6b', leaf2: '#ffa890' }, farm: { animal: 'sheep', leaf1: '#c9a23a', leaf2: '#f1cd70' },
+// per world: what peeks out of the safari cover and what the cover is, and the bridge's water, planks and banks
+type Cover = 'leaves' | 'shelf' | 'mounds' | 'petals' | 'stage' | 'ice';
+const SAFARI_DOOR: Record<string, { animal?: string; draw?: string; cover: Cover; c1: string; c2: string }> = {
+  dino: { animal: 'lion', cover: 'leaves', c1: '#3f9e5a', c2: '#6fd37e' }, dragon: { animal: 'fox', cover: 'leaves', c1: '#7a5fc0', c2: '#a98bff' },
+  transport: { animal: 'dog', cover: 'leaves', c1: '#3f9e5a', c2: '#8ed36f' }, space: { animal: 'frog', cover: 'leaves', c1: '#6f5fd0', c2: '#b9a8ff' },
+  ocean: { animal: 'octopus', cover: 'leaves', c1: '#ff7a6b', c2: '#ffa890' }, farm: { animal: 'sheep', cover: 'leaves', c1: '#c9a23a', c2: '#f1cd70' },
+  jungle: { animal: 'parrot', cover: 'leaves', c1: '#2f8f4a', c2: '#62c46a' },
+  robot: { animal: 'robot', cover: 'shelf', c1: '#8693b3', c2: '#a9b6d0' },
+  pirate: { cover: 'mounds', c1: '#e0c078', c2: '#f6dfa8',
+    draw: '<g transform="translate(60 62)"><path d="M-22 6 Q-22 -16 0 -16 Q22 -16 22 6Z" fill="#ef6a4c"/><circle cx="-9" cy="-14" r="5" fill="#fff"/><circle cx="9" cy="-14" r="5" fill="#fff"/><circle cx="-9" cy="-14" r="2.4" fill="#26303f"/><circle cx="9" cy="-14" r="2.4" fill="#26303f"/><path d="M-22 -4 Q-34 -8 -32 -18 Q-26 -14 -24 -10Z M22 -4 Q34 -8 32 -18 Q26 -14 24 -10Z" fill="#d9503a"/><path d="M-6 -2 Q0 3 6 -2" stroke="#26303f" stroke-width="2" fill="none" stroke-linecap="round"/></g>' },
+  fairy: { cover: 'petals', c1: '#f48fb8', c2: '#ffc2dc',
+    draw: '<g transform="translate(60 60)"><path d="M-20 8 Q-20 -18 0 -18 Q20 -18 20 8Z" fill="#e8434e"/><path d="M0 -18 V8" stroke="#26303f" stroke-width="2.4"/><circle cx="-9" cy="-6" r="3" fill="#26303f"/><circle cx="9" cy="-6" r="3" fill="#26303f"/><circle cx="-4" cy="2" r="2.4" fill="#26303f"/><circle cx="5" cy="2" r="2.4" fill="#26303f"/><path d="M-6 -18 Q-9 -26 -14 -26 M6 -18 Q9 -26 14 -26" stroke="#26303f" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="-14" cy="-26" r="2" fill="#26303f"/><circle cx="14" cy="-26" r="2" fill="#26303f"/></g>' },
+  music: { animal: 'guitar', cover: 'stage', c1: '#7a4fc0', c2: '#a98bff' },
+  arctic: { cover: 'ice', c1: '#bfe3f5', c2: '#e8f7ff',
+    draw: '<g transform="translate(60 56)"><ellipse cx="0" cy="2" rx="18" ry="24" fill="#2f3a4a"/><ellipse cx="0" cy="8" rx="11" ry="17" fill="#fff"/><circle cx="-6" cy="-12" r="4" fill="#fff"/><circle cx="6" cy="-12" r="4" fill="#fff"/><circle cx="-6" cy="-12" r="2" fill="#26303f"/><circle cx="6" cy="-12" r="2" fill="#26303f"/><path d="M-5 -6 L0 0 L5 -6Z" fill="#ff9f43"/><path d="M-18 4 Q-28 14 -22 22 Q-17 16 -16 8Z M18 4 Q28 14 22 22 Q17 16 16 8Z" fill="#2f3a4a"/></g>' },
 };
-const BRIDGE_DOOR: Record<string, { water: string; wave: string; bank: string; bank2: string; plank: (x: number, y: number, r: number) => string }> = {
+/** the cover the creature peeks out from: leaves, a shelf, sand mounds, petals, a stage front, ice blocks */
+const coverSVG = (c: Cover, c1: string, c2: string): string => {
+  switch (c) {
+    case 'shelf': return `<rect x="6" y="70" width="108" height="26" rx="5" fill="${c1}"/><rect x="6" y="70" width="108" height="6" rx="3" fill="${c2}"/><circle cx="18" cy="84" r="3" fill="#ffd166"/><circle cx="102" cy="84" r="3" fill="#ffd166"/><path d="M30 84 h60" stroke="#6b7a99" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 6"/>`;
+    case 'mounds': return `<path d="M0 96 Q22 62 50 78 Q70 66 96 74 Q114 80 120 96Z" fill="${c1}"/><path d="M0 96 Q26 76 52 86 Q76 76 120 96Z" fill="${c2}"/>`;
+    case 'petals': return `<path d="M60 84 C40 84 24 74 20 56 C40 56 56 66 60 84Z M60 84 C80 84 96 74 100 56 C80 56 64 66 60 84Z" fill="${c1}"/><path d="M60 90 C44 90 30 84 22 72 C42 70 56 78 60 90Z M60 90 C76 90 90 84 98 72 C78 70 64 78 60 90Z" fill="${c2}"/><circle cx="60" cy="84" r="5" fill="#ffd166"/>`;
+    case 'stage': return `<rect x="4" y="74" width="112" height="22" rx="4" fill="${c1}"/><rect x="4" y="74" width="112" height="5" fill="${c2}"/><path d="M14 80 v16 M34 80 v16 M54 80 v16 M74 80 v16 M94 80 v16" stroke="#ffffff55" stroke-width="2"/>`;
+    case 'ice': return `<rect x="6" y="76" width="48" height="20" rx="6" fill="${c1}" stroke="#8cc4e0" stroke-width="2.5"/><rect x="62" y="70" width="52" height="26" rx="6" fill="${c2}" stroke="#8cc4e0" stroke-width="2.5"/><path d="M14 82 h14 M70 78 h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`;
+    default: return `<path d="M6 96 C4 70 22 58 38 74 C34 82 28 92 6 96Z" fill="${c1}"/><path d="M114 96 C116 68 98 56 82 74 C86 82 92 92 114 96Z" fill="${c1}"/><path d="M18 96 C16 76 30 68 44 82 C40 90 34 96 18 96Z" fill="${c2}"/><path d="M102 96 C104 74 90 66 76 82 C80 90 86 96 102 96Z" fill="${c2}"/>`;
+  }
+};
+const BRIDGE_DOOR: Record<string, { water: string; wave: string; bank: string; bank2: string; plank: (x: number, y: number, r: number) => string; extra?: string }> = {
   // logs
   dino: { water: '#4cc3d9', wave: '#fff', bank: '#6fd37e', bank2: '#3f9e5a', plank: (x, y, r) => `<g transform="rotate(${r} ${x} ${y})"><rect x="${x - 10}" y="${y - 5}" width="20" height="10" rx="5" fill="#b8793a" stroke="#7a4a1d" stroke-width="2.5"/><circle cx="${x + 7}" cy="${y}" r="3" fill="#e3b277" stroke="#7a4a1d" stroke-width="1.5"/></g>` },
   // castle stones
@@ -480,13 +504,26 @@ const BRIDGE_DOOR: Record<string, { water: string; wave: string; bank: string; b
   ocean: { water: '#2fb8d8', wave: '#fff', bank: '#f6dfa8', bank2: '#e0c078', plank: (x, y, r) => `<g transform="rotate(${r} ${x} ${y})"><path d="M${x - 10} ${y + 5} Q${x - 10} ${y - 8} ${x} ${y - 8} Q${x + 10} ${y - 8} ${x + 10} ${y + 5}Z" fill="#ff9fc0" stroke="#d6608a" stroke-width="2.5" stroke-linejoin="round"/><path d="M${x} ${y + 5} V${y - 6} M${x - 5} ${y + 5} L${x - 5} ${y - 4} M${x + 5} ${y + 5} L${x + 5} ${y - 4}" stroke="#d6608a" stroke-width="1.6"/></g>` },
   // hay bales
   farm: { water: '#6fc4e8', wave: '#fff', bank: '#8ed36f', bank2: '#5fae4a', plank: (x, y, r) => `<g transform="rotate(${r} ${x} ${y})"><rect x="${x - 10}" y="${y - 6}" width="20" height="12" rx="4" fill="#f1cd70" stroke="#b98a22" stroke-width="2.5"/><path d="M${x - 6} ${y - 6} v12 M${x + 6} ${y - 6} v12" stroke="#b98a22" stroke-width="1.8"/></g>` },
+  // a rope-and-vine bridge: thin slats hung on two green vines
+  jungle: { water: '#4aa890', wave: '#d6f5e6', bank: '#62c46a', bank2: '#2f8f4a', extra: '<path d="M26 50 Q60 66 94 50" stroke="#2f8f4a" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M26 58 Q60 74 94 58" stroke="#62c46a" stroke-width="3" fill="none" stroke-linecap="round"/>',
+    plank: (x, y, r) => `<g transform="rotate(${r} ${x} ${y})"><rect x="${x - 6}" y="${y - 6}" width="12" height="13" rx="2.5" fill="#b8793a" stroke="#7a4a1d" stroke-width="2"/></g>` },
+  // steel girders with orange bolts over a dark channel
+  robot: { water: '#4a5878', wave: '#ffd166', bank: '#a9b6d0', bank2: '#6b7a99', plank: (x, y, r) => `<g transform="rotate(${r} ${x} ${y})"><rect x="${x - 10}" y="${y - 5}" width="20" height="10" rx="2" fill="#b8c4dc" stroke="#4a5878" stroke-width="2.5"/><circle cx="${x - 6}" cy="${y}" r="1.8" fill="#ff8a1f"/><circle cx="${x + 6}" cy="${y}" r="1.8" fill="#ff8a1f"/></g>` },
+  // a plank dock with nails on sand
+  pirate: { water: '#2fb0b8', wave: '#fff', bank: '#f6dfa8', bank2: '#d6a95a', plank: (x, y, r) => `<g transform="rotate(${r} ${x} ${y})"><rect x="${x - 10}" y="${y - 5}" width="20" height="10" rx="1.5" fill="#c98f4f" stroke="#6b4420" stroke-width="2.5"/><circle cx="${x - 6}" cy="${y}" r="1.4" fill="#3a2410"/><circle cx="${x + 6}" cy="${y}" r="1.4" fill="#3a2410"/></g>` },
+  // big green leaves on a pond
+  fairy: { water: '#a8c8f0', wave: '#fff', bank: '#f7b6d6', bank2: '#e07aa8', plank: (x, y, r) => `<g transform="rotate(${r} ${x} ${y})"><path d="M${x - 11} ${y} Q${x} ${y - 11} ${x + 11} ${y} Q${x} ${y + 9} ${x - 11} ${y}Z" fill="#7ad37e" stroke="#3f9e5a" stroke-width="2.2"/><path d="M${x - 9} ${y} H${x + 9}" stroke="#3f9e5a" stroke-width="1.6"/></g>` },
+  // piano keys: white keys with a black key
+  music: { water: '#8f6fd8', wave: '#e4d6ff', bank: '#c9b6f2', bank2: '#7a4fc0', plank: (x, y, r) => `<g transform="rotate(${r} ${x} ${y})"><rect x="${x - 8}" y="${y - 7}" width="16" height="15" rx="2" fill="#fff" stroke="#4a3a6a" stroke-width="2.2"/><rect x="${x + 3}" y="${y - 7}" width="7" height="9" rx="1.5" fill="#2f2840"/></g>` },
+  // ice blocks
+  arctic: { water: '#6fa8d8', wave: '#e8f7ff', bank: '#f2fbff', bank2: '#a9d4ec', plank: (x, y, r) => `<g transform="rotate(${r} ${x} ${y})"><rect x="${x - 10}" y="${y - 6}" width="20" height="12" rx="4" fill="#d4efff" stroke="#6fb0d8" stroke-width="2.5"/><path d="M${x - 6} ${y - 2} h7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></g>` },
 };
 const bridgeDoor = (w: string): string => {
   const d = (BRIDGE_DOOR[w] ?? BRIDGE_DOOR.dino) as (typeof BRIDGE_DOOR)[string];
   const stars = w === 'space' ? '<circle cx="16" cy="82" r="1.6" fill="#fff"/><circle cx="52" cy="92" r="1.2" fill="#fff"/><circle cx="96" cy="86" r="1.6" fill="#fff"/><circle cx="76" cy="94" r="1.1" fill="#fff"/>' : '';
   return art(`<rect x="0" y="74" width="120" height="26" rx="8" fill="${d.water}"/><path d="M0 80 q10 -6 20 0 t20 0 t20 0 t20 0 t20 0 t20 0" stroke="${d.wave}" stroke-width="3" fill="none" opacity=".6"/>${stars}
     <path d="M0 74 L0 46 Q14 40 24 50 L30 74Z" fill="${d.bank}" stroke="${d.bank2}" stroke-width="2"/><path d="M120 74 L120 46 Q106 40 96 50 L90 74Z" fill="${d.bank}" stroke="${d.bank2}" stroke-width="2"/>
-    ${d.plank(31, 57, -8)}${d.plank(50, 50, -3)}${d.plank(70, 49, 3)}${d.plank(89, 55, 8)}
+    ${d.extra ?? ''}${d.plank(31, 57, -8)}${d.plank(50, 50, -3)}${d.plank(70, 49, 3)}${d.plank(89, 55, 8)}
     <path d="M100 48 L100 22" stroke="#7d5a2a" stroke-width="3" stroke-linecap="round"/><path d="M100 22 L116 28 L100 35Z" fill="#ef476f"/>`);
 };
 /** the door illustrations: the world's own props where they exist (drum, pot, vehicle), the child's own friend, and small drawings for the rest */
@@ -495,9 +532,11 @@ const DOOR_ART: Record<GameKind, (kind: string, w: string) => string> = {
   robot: () => robotSVG(),
   drum: (_k, w) => drumArt(w as World) || drumArt('dino'),
   rhyme: (_k, w) => `<span class="da-vehicle da-${w}">${vehicleSVG(w as PackId) || vehicleSVG('dino')}</span>`,
-  safari: (_k, w) => { const d = (SAFARI_DOOR[w] ?? SAFARI_DOOR.dino) as (typeof SAFARI_DOOR)[string]; return art(`<ellipse cx="60" cy="90" rx="46" ry="6" fill="#0000001c"/>${peek(d.animal, 'translate(14 -6) scale(0.92)')}
-    <path d="M6 96 C4 70 22 58 38 74 C34 82 28 92 6 96Z" fill="${d.leaf1}"/><path d="M114 96 C116 68 98 56 82 74 C86 82 92 92 114 96Z" fill="${d.leaf1}"/>
-    <path d="M18 96 C16 76 30 68 44 82 C40 90 34 96 18 96Z" fill="${d.leaf2}"/><path d="M102 96 C104 74 90 66 76 82 C80 90 86 96 102 96Z" fill="${d.leaf2}"/>`); },
+  safari: (_k, w) => {
+    const d = (SAFARI_DOOR[w] ?? SAFARI_DOOR.dino) as (typeof SAFARI_DOOR)[string];
+    const who = d.draw ?? peek(d.animal ?? 'lion', d.cover === 'shelf' ? 'translate(18 -14) scale(0.84)' : d.cover === 'stage' ? 'translate(18 -18) scale(0.84)' : 'translate(14 -6) scale(0.92)');
+    return art(`<ellipse cx="60" cy="90" rx="46" ry="6" fill="#0000001c"/>${who}${coverSVG(d.cover, d.c1, d.c2)}`);
+  },
   kitchen: (_k, w) => potArt(w as World) || potArt('dino'),
   bridge: (_k, w) => bridgeDoor(w),
   trace: () => art(`<rect x="8" y="8" width="104" height="84" rx="14" fill="#fff8e6" stroke="#e0b84a" stroke-width="4"/>

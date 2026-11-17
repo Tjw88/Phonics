@@ -5,7 +5,7 @@
 // `.bodyg`. Everything is deterministic (variants are chosen by index, never by chance) and nothing moves under Reduce Motion: the face
 // (mood classes) and the sound still say "yes".
 import { h, reducedMotion, sleep } from './dom';
-import { currentPack, emit, emitKind, familyOf, puffAt, showerAcross, type Level, type PackId } from './particles';
+import { currentPack, emit, emitKind, familyOf, puffAt, rawPack, showerAcross, type Level, type PackId } from './particles';
 import { findCreature } from './themes';
 
 // ---- face: mood and eyes (moved here from games.ts, which re-exports them) --------------------------------------------------
@@ -28,6 +28,12 @@ export const lookAt = (el: Element, x: number | null, y: number | null): void =>
 
 /** The style family (one of the six hand-made reaction sets) of a creature's world (by its id, e.g. 'space-zip'); a world without its own set
  *  (jungle, robot, pirate, fairy, music, arctic, or any later pack) gets its nearest family; falls back to the world on screen. Never throws. */
+/** The raw world id of a creature ('jungle', 'space'...), for the few tables that have their own entry for a newer world. */
+export const worldOfCreature = (kind?: string | null): string => {
+  let id: string | undefined;
+  try { id = kind ? findCreature(kind)?.pack.id : undefined; } catch { id = undefined; }
+  return id ?? rawPack();
+};
 export const packOfCreature = (kind?: string | null): PackId => {
   let id: string | undefined;
   try { id = kind ? findCreature(kind)?.pack.id : undefined; } catch { id = undefined; }
@@ -135,6 +141,30 @@ const doubleHop = (k = 1): Prim => ({
   ],
 });
 
+const swing = (k = 1): Prim => ({ // jungle: a pendulum swing, a little lift at each end
+  dur: 900,
+  kf: [
+    { transform: 'rotate(0deg) translateY(0px)' },
+    { transform: `rotate(${-10 * k}deg) translateY(${-8 * k}px)`, offset: 0.25 },
+    { transform: `rotate(${10 * k}deg) translateY(${-14 * k}px)`, offset: 0.55 },
+    { transform: `rotate(${-5 * k}deg) translateY(${-4 * k}px)`, offset: 0.8 },
+    { transform: 'rotate(0deg) translateY(0px)' },
+  ],
+});
+const snap = (k = 1): Prim => ({ // robot: hold, snap, hold, snap (a little robot dance)
+  dur: 760,
+  kf: [
+    { transform: 'rotate(0deg) translateY(0px)' },
+    { transform: `rotate(${-7 * k}deg) translateY(0px)`, offset: 0.12 }, { transform: `rotate(${-7 * k}deg) translateY(${-6 * k}px)`, offset: 0.34 },
+    { transform: `rotate(${7 * k}deg) translateY(0px)`, offset: 0.46 }, { transform: `rotate(${7 * k}deg) translateY(${-6 * k}px)`, offset: 0.7 },
+    { transform: 'rotate(0deg) translateY(0px)' },
+  ],
+});
+const shiver = (k = 1): Prim => ({ // arctic: a quick little shiver that settles
+  dur: 720,
+  kf: [...[0, 1, 2, 3, 4, 5, 6, 7].map((i) => ({ transform: `rotate(${i % 2 ? 2.6 * k : -2.6 * k}deg) translateY(${i % 2 ? -3 * k : 0}px)`, offset: i / 8 })), { transform: 'rotate(0deg) translateY(0px)', offset: 1 }],
+});
+
 /** The three "I'm happy" moves of each world; the variant is picked by index so no two in a row are the same. */
 const HAPPY: Record<PackId, ((k: number) => Prim)[]> = {
   dino: [(k) => stomp(k * 1.4), (k) => hop(40, k), (k) => wiggle(k * 1.6)],
@@ -144,21 +174,32 @@ const HAPPY: Record<PackId, ((k: number) => Prim)[]> = {
   ocean: [(k) => jelly(k * 1.6), floatUp, twirl],
   farm: [(k) => hop(30, k), wiggle, doubleHop],
 };
+/** Worlds with their OWN three moves (the rest use their family's): gentle, and different in the creature's BODY. */
+const HAPPY_OWN: Partial<Record<string, ((k: number) => Prim)[]>> = {
+  jungle: [swing, (k) => hop(34, k), doubleHop],
+  robot: [snap, (k) => hop(26, k), twirl],
+  pirate: [rock, (k) => hop(30, k), wiggle],
+  fairy: [(k) => floatUp(k * 0.7), twirl, (k) => hop(22, k)],
+  music: [doubleHop, wiggle, (k) => hop(34, k)],
+  arctic: [shiver, (k) => hop(26, k), rock],
+};
 const LEVEL_K: Record<Level, number> = { 1: 0.65, 2: 1, 3: 1.3 };
 
 /** Run the world's happy move number `variant` on the creature; dust puffs on landings for the heavy movers. Returns its length in ms. */
-const happyMove = (root: HTMLElement, pack: PackId, variant: number, level: Level, speed = 1): number => {
-  const prim = (((HAPPY[pack] ?? HAPPY.dino) as ((k: number) => Prim)[])[variant % 3] as (k: number) => Prim)(LEVEL_K[level]);
+const happyMove = (root: HTMLElement, world: string, variant: number, level: Level, speed = 1): number => {
+  const pack = familyOf(world);
+  const table = HAPPY_OWN[world] ?? HAPPY[pack] ?? HAPPY.dino;
+  const prim = (table[variant % 3] as (k: number) => Prim)(LEVEL_K[level]);
   const dur = prim.dur * speed;
   run(root, prim.kf, dur, 'cubic-bezier(0.3, 0.7, 0.4, 1)');
-  if (pack === 'dino' && prim.dust) for (const f of prim.dust) setTimeout(() => puffAt(root, 3), f * dur);
+  if (world === 'dino' && prim.dust) for (const f of prim.dust) setTimeout(() => puffAt(root, 3), f * dur);
   return dur;
 };
 
 /** Variants 1 and 2 also change the body's rhythm WHILE chewing (variant 0: steady; 1: a sway from side to side; 2: little bounces), so three rounds
  *  in a row differ in the creature's body, not only in the particles. Applied to the body group (the root for the dino, whose body group is used). */
-const chewRhythm = (parts: Parts, pack: PackId, variant: number, dur: number): void => {
-  const tgt = pack === 'dino' ? parts.root : parts.body;
+const chewRhythm = (parts: Parts, world: string, variant: number, dur: number): void => {
+  const tgt = world === 'dino' ? parts.root : parts.body; // (own signatures use the root and the head)
   if (variant === 1) run(tgt, [{ transform: 'rotate(0deg)' }, { transform: 'rotate(-6deg)', offset: 0.25 }, { transform: 'rotate(6deg)', offset: 0.75 }, { transform: 'rotate(0deg)' }], dur);
   else if (variant === 2) run(tgt, [{ transform: 'translateY(0px)' }, { transform: 'translateY(-9px)', offset: 0.17 }, { transform: 'translateY(0px)', offset: 0.33 }, { transform: 'translateY(-9px)', offset: 0.5 }, { transform: 'translateY(0px)', offset: 0.67 }, { transform: 'translateY(-9px)', offset: 0.83 }, { transform: 'translateY(0px)' }], dur);
 };
@@ -235,6 +276,48 @@ const beam = (creature: HTMLElement, ms: number): void => {
   a.onfinish = () => el.remove();
 };
 
+/** Which family's FLIGHT (how the letter travels into the mouth) a newer world borrows. */
+const FLIGHT_AS: Partial<Record<string, PackId>> = { jungle: 'dino', robot: 'space', pirate: 'transport', fairy: 'ocean', music: 'farm', arctic: 'dragon' };
+
+interface SigCtx { parts: Parts; mouth: HTMLElement; chewMs: number; short: boolean; unit: number }
+const nodHead = (p: Parts, ms: number, dy: number, times: number): void => {
+  const kf: Keyframe[] = [{ transform: 'translateY(0px)' }];
+  for (let i = 0; i < times; i++) kf.push({ transform: `translateY(${dy}px)`, offset: (i * 2 + 1) / (times * 2) }, { transform: 'translateY(0px)', offset: (i * 2 + 2) / (times * 2) });
+  run(p.head, kf, ms);
+};
+/** The chewing signature of a newer world (a family's own is the switch inside eat). All gentle. */
+const SIG_OWN: Partial<Record<string, (c: SigCtx) => void>> = {
+  jungle: ({ parts, mouth, chewMs, short }) => { // swing-munch: the monkey sways like on a vine while it munches
+    run(parts.root, [{ transform: 'rotate(0deg) translateX(0px)' }, { transform: 'rotate(-6deg) translateX(-6px)', offset: 0.3 }, { transform: 'rotate(6deg) translateX(6px)', offset: 0.7 }, { transform: 'rotate(0deg) translateX(0px)' }], chewMs);
+    nodHead(parts, chewMs, 4, 3);
+    emitKind(mouth, 'leaf', short ? 2 : 3);
+  },
+  robot: ({ parts, mouth, chewMs, unit }) => { // beep-chomp: quick jerky bites and a beep ring
+    nodHead(parts, chewMs, 6, 3);
+    run(parts.root, [{ transform: 'scale(1,1)' }, { transform: 'scale(1.05,0.95)', offset: 0.15 }, { transform: 'scale(1,1)', offset: 0.3 }, { transform: 'scale(1.05,0.95)', offset: 0.6 }, { transform: 'scale(1,1)' }], chewMs);
+    setTimeout(() => ripple(mouth, '#7ee2ff', 80), unit);
+    emitKind(mouth, 'ring', 1);
+  },
+  pirate: ({ parts, mouth, chewMs, unit, short }) => { // gulp: the head tips back and swallows, a bubble or two
+    run(parts.head, [{ transform: 'rotate(0deg)' }, { transform: 'rotate(-8deg) translateY(-3px)', offset: 0.35 }, { transform: 'rotate(2deg) translateY(2px)', offset: 0.7 }, { transform: 'rotate(0deg)' }], chewMs);
+    setTimeout(() => emitKind(mouth, 'bubble', short ? 1 : 2), unit * 2);
+  },
+  fairy: ({ parts, mouth, chewMs, short }) => { // sparkle-sip: a slow dainty dip of the head and a few sparkles
+    run(parts.head, [{ transform: 'rotate(0deg) translateY(0px)' }, { transform: 'rotate(6deg) translateY(4px)', offset: 0.4 }, { transform: 'rotate(-2deg) translateY(0px)', offset: 0.75 }, { transform: 'rotate(0deg) translateY(0px)' }], chewMs, 'ease-in-out');
+    emitKind(mouth, 'spark', short ? 2 : 4);
+  },
+  music: ({ parts, mouth, chewMs, short }) => { // bounce-bite: the body bounces to a beat and a note floats out
+    run(parts.root, [{ transform: 'translateY(0px)' }, { transform: 'translateY(-8px)', offset: 0.17 }, { transform: 'translateY(0px)', offset: 0.33 }, { transform: 'translateY(-8px)', offset: 0.5 }, { transform: 'translateY(0px)', offset: 0.67 }, { transform: 'translateY(-8px)', offset: 0.83 }, { transform: 'translateY(0px)' }], chewMs);
+    nodHead(parts, chewMs, 4, 3);
+    emitKind(mouth, 'note', short ? 1 : 2);
+  },
+  arctic: ({ parts, mouth, chewMs, short }) => { // shiver-nibble: a tiny shiver while it nibbles
+    run(parts.root, [0, 1, 2, 3, 4, 5, 6].map((i) => ({ transform: `rotate(${i % 2 ? 2 : -2}deg)`, offset: i / 6 })), chewMs, 'linear');
+    nodHead(parts, chewMs, 3, 4);
+    emitKind(mouth, 'snow', short ? 1 : 3);
+  },
+};
+
 // ---- the public reactions ---------------------------------------------------------------------------------------------------------
 export interface EatArgs {
   creature: HTMLElement;
@@ -258,7 +341,8 @@ export interface EatArgs {
 /** The creature takes the letter: flight, swallow (the world's signature), chew, then a happy move. Resolves when it is time to move on. */
 const eat = async (a: EatArgs): Promise<void> => {
   const { creature, tile, mouth } = a;
-  const pack = packOfCreature(a.kind ?? creature.dataset.kind);
+  const world = worldOfCreature(a.kind ?? creature.dataset.kind);
+  const pack = familyOf(world);
   const parts = partsOf(creature);
   const variant = a.index % 3;
   const chewTimes = a.short ? 2 : 3;
@@ -267,7 +351,7 @@ const eat = async (a: EatArgs): Promise<void> => {
   const start = tile.style.transform || 'translate(0px, 0px) scale(1) rotate(0deg)';
   tile.classList.add('flying');
   tile.style.transition = 'none';
-  const fl = flightFor(pack, start, a.cur, a.end, a.short);
+  const fl = flightFor(FLIGHT_AS[world] ?? pack, start, a.cur, a.end, a.short);
   setMood(creature, 'open');
   if (reducedMotion()) {
     tile.style.opacity = '0';
@@ -277,14 +361,17 @@ const eat = async (a: EatArgs): Promise<void> => {
     const tr = tile.getBoundingClientRect(), mr = mouth.getBoundingClientRect();
     const toward = Math.sign(tr.left + tr.width / 2 - (mr.left + mr.width / 2));
     run(parts.head, [{ transform: 'rotate(0deg) translateY(0px)' }, { transform: `rotate(${-4 * toward}deg) translateY(-3px)` }], fl.dur * 0.6);
-    if (pack === 'space') beam(creature, fl.dur + (chewTimes * unit * 2) + 200);
+    if (world === 'space' || world === 'robot') beam(creature, fl.dur + (chewTimes * unit * 2) + 200);
     const flight = tile.animate(fl.kf, { duration: fl.dur, easing: fl.easing, fill: 'forwards' });
     await done(flight);
     tile.style.opacity = '0';
   }
   // the swallow and the chew: the world's signature
   a.onSwallow?.();
-  switch (pack) {
+  const chewMs = chewTimes * unit * 2;
+  const own = SIG_OWN[world];
+  if (own) own({ parts, mouth, chewMs, short: a.short, unit });
+  else switch (pack) {
     case 'dino': // stomp-chomp: the head nods into every bite
       run(parts.head, [{ transform: 'translateY(0px)' }, { transform: 'translateY(6px)', offset: 0.25 }, { transform: 'translateY(0px)', offset: 0.5 }, { transform: 'translateY(6px)', offset: 0.75 }, { transform: 'translateY(0px)' }], chewTimes * unit * 2);
       run(parts.body, [{ transform: 'scale(1,1)' }, { transform: 'scale(1.06,0.93)', offset: 0.2 }, { transform: 'scale(1,1)' }], 380);
@@ -308,7 +395,7 @@ const eat = async (a: EatArgs): Promise<void> => {
     default: // farm: chomp chomp chomp
       run(parts.head, [{ transform: 'translateY(0px)' }, { transform: 'translateY(7px)', offset: 0.17 }, { transform: 'translateY(0px)', offset: 0.33 }, { transform: 'translateY(7px)', offset: 0.5 }, { transform: 'translateY(0px)', offset: 0.67 }, { transform: 'translateY(7px)', offset: 0.83 }, { transform: 'translateY(0px)' }], chewTimes * unit * 2);
   }
-  chewRhythm(parts, pack, variant, chewTimes * unit * 2);
+  chewRhythm(parts, world, variant, chewMs);
   for (let i = 0; i < chewTimes; i++) {
     setMood(creature, 'oops');
     await sleep(unit);
@@ -317,7 +404,7 @@ const eat = async (a: EatArgs): Promise<void> => {
   }
   setMood(creature, 'happy');
   lookAt(creature, null, null);
-  const len = happyMove(creature, pack, variant, 2, a.short ? 0.72 : 1); // the whole move is seen, just quicker after the first
+  const len = happyMove(creature, world, variant, 2, a.short ? 0.72 : 1); // the whole move is seen, just quicker after the first
   a.onHappy?.();
   await sleep(len);
 };
@@ -325,11 +412,11 @@ const eat = async (a: EatArgs): Promise<void> => {
 /** Right answer: the creature's happy move (3 variants by index), sized by level. Leaves it alone if another reaction owns it. */
 const right = (creature: HTMLElement, o: { level?: Level; index?: number; kind?: string | null } = {}): void => {
   if (isBusy(creature)) return;
-  const pack = packOfCreature(o.kind ?? creature.dataset.kind);
+  const world = worldOfCreature(o.kind ?? creature.dataset.kind);
   const level = o.level ?? 2;
   setMood(creature, 'happy');
   claim(creature, 900);
-  happyMove(creature, pack, o.index ?? 0, level);
+  happyMove(creature, world, o.index ?? 0, level);
   setTimeout(() => { if (creature.isConnected) setMood(creature, 'idle'); }, 1100);
 };
 
@@ -368,10 +455,10 @@ const nod = (creature: HTMLElement): void => {
 const finale = (creature: HTMLElement | null, o: { kind?: string | null } = {}): void => {
   showerAcross({ n: 18 });
   if (!creature || reducedMotion()) { if (creature) setMood(creature, 'happy'); return; }
-  const pack = packOfCreature(o.kind ?? creature.dataset.kind);
+  const world = worldOfCreature(o.kind ?? creature.dataset.kind);
   setMood(creature, 'happy');
   claim(creature, 2800);
-  [0, 1, 2].forEach((v, i) => setTimeout(() => { if (creature.isConnected) happyMove(creature, pack, v, 3); }, i * 820));
+  [0, 1, 2].forEach((v, i) => setTimeout(() => { if (creature.isConnected) happyMove(creature, world, v, 3); }, i * 820));
   setTimeout(() => { if (creature.isConnected) setMood(creature, 'idle'); }, 2600);
 };
 

@@ -156,7 +156,7 @@ async function smokePack(browser, pack) {
   } catch (e) {
     errors.push(`script (${stage}): ${String(e.message || e).split('\n')[0]}`);
   }
-  await ctx.close();
+  await ctx.close().catch(() => {});
   return { pack, errors, notes, won, played };
 }
 
@@ -176,7 +176,10 @@ async function smokePack(browser, pack) {
   await Promise.all(Array.from({ length: Math.min(PAR, queue.length) }, async () => {
     while (queue.length) {
       const p = queue.shift();
-      const r = await smokePack(browser, p);
+      // one browser per pack: a crash or a memory spike in one world can never take the others down
+      const br = await chromium.launch();
+      const r = await smokePack(br, p).catch((e) => ({ pack: p, errors: [`script: ${String(e.message || e).split('\n')[0]}`], notes: [], won: 0, played: 0 }));
+      await br.close().catch(() => {});
       results.push(r);
       console.log(`${r.errors.length ? '✗' : '✓'} ${r.pack.padEnd(10)} played ${r.played}/${GAMES.length}, won ${r.won}/${r.played}${r.notes.length ? ' | ' + r.notes.join('; ') : ''}${r.errors.length ? '\n    ' + [...new Set(r.errors)].slice(0, 4).join('\n    ') : ''}`);
     }

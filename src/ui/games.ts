@@ -11,7 +11,7 @@ import { h, reducedMotion, sleep } from './dom';
 import { mount, skippableWait } from './fx';
 import { ghostDrag, makeAssist, makeDraggable, springBack } from './gesture';
 import { celebrate, celebrationCount } from './celebrate';
-import { currentPack, emit, rawPack } from './particles';
+import { emit, rawPack } from './particles';
 import { lookAt, reactions, setMood, type Mood } from './reactions';
 import { exitMs, robotWithProp, vehicleExit, vehicleName, vehicleSVG } from './vehicles';
 
@@ -303,7 +303,7 @@ export const rhymeRocket = async (ctx: Ctx, target: Word, answer: Word, distract
   let firstTry = true;
   let resolve!: (r: TrialResult) => void;
   const done = new Promise<TrialResult>((r) => (resolve = r));
-  const pack = currentPack();
+  const pack = rawPack(); // the world's own id: a world without its own vehicle gets its family's (vehicles.ts)
   const rocket = h('div', { class: 'rocket', 'data-vehicle': pack, 'data-name': vehicleName(pack) }); // the vehicle is skinned per world (vehicles.ts)
   rocket.innerHTML = vehicleSVG(pack);
   const fuel = h('div', { class: 'fuel', 'aria-hidden': 'true' }, h('div', { class: 'fuel-fill' }));

@@ -50,11 +50,17 @@
 .rocket[data-vehicle=dino], .rocket[data-vehicle=dragon], .rocket[data-vehicle=transport] { width: 300px; }
 .rocket[data-vehicle=ocean] { width: 190px; }
 .rocket[data-vehicle=farm] { width: 164px; }
+.rocket[data-vehicle=robot] { width: 230px; } .rocket[data-vehicle=pirate] { width: 270px; } .rocket[data-vehicle=fairy] { width: 250px; }
+.rocket[data-vehicle=jungle] { width: 176px; } .rocket[data-vehicle=music] { width: 160px; } .rocket[data-vehicle=arctic] { width: 280px; }
+.rocket .wing { transform-box: fill-box; transform-origin: 85% 55%; animation: wing-flutter 0.8s ease-in-out infinite alternate; }
+@keyframes wing-flutter { to { transform: scaleY(0.7) rotate(-5deg); } }
 .rocketscene .skypanel { min-height: 340px; }
 .rocketscene .skypanel.launching { overflow: visible; } /* the take-off may cross the whole card */
 @media (max-width: 600px) {
   .rocket { width: 112px; } .rocket[data-vehicle=dino], .rocket[data-vehicle=dragon], .rocket[data-vehicle=transport] { width: 176px; }
   .rocket[data-vehicle=ocean] { width: 116px; } .rocket[data-vehicle=farm] { width: 102px; }
+  .rocket[data-vehicle=robot] { width: 150px; } .rocket[data-vehicle=pirate] { width: 170px; } .rocket[data-vehicle=fairy] { width: 160px; }
+  .rocket[data-vehicle=jungle] { width: 112px; } .rocket[data-vehicle=music] { width: 100px; } .rocket[data-vehicle=arctic] { width: 176px; }
   .rocketscene .skypanel { min-height: 250px; }
 }
 [data-pack=dino] .skypanel, [data-pack=jungle] .skypanel { background: radial-gradient(ellipse at 50% 24%, #ffffffaa 0 9%, transparent 10%), radial-gradient(ellipse at 56% 27%, #ffffffaa 0 6%, transparent 7%), linear-gradient(#f4a259, #ffd6a0 62%, #8fcf6a 62.5%, #6fb85a); }
@@ -91,8 +97,8 @@
 [data-pack=space] .bridge .slot.filled { border: 3px solid #6f7488; border-radius: 50%; background: radial-gradient(circle at 30% 36%, #7e8496 0 11%, transparent 12%), radial-gradient(circle at 68% 62%, #858b9c 0 9%, transparent 10%), radial-gradient(circle at 50% 30%, #c9ced9, #a3a9ba 70%); }
 [data-pack=space] .bridge .river { background: radial-gradient(circle at 14% 40%, #fff 0 1.5px, transparent 2px), radial-gradient(circle at 56% 60%, #fff 0 1.5px, transparent 2px), radial-gradient(circle at 86% 36%, #bfe 0 1.5px, transparent 2px), #1c2250; background-size: 120px 100%; animation: none; }
 /* shells (ocean) */
-[data-pack=ocean] .bridge .slot.filled, [data-pack=fairy] .bridge .slot.filled { border: 3px solid #e58aa5; border-radius: 50% 50% 8px 8px / 100% 100% 8px 8px; background: repeating-conic-gradient(from -90deg at 50% 100%, #ffd9e2 0 11deg, #ffb7c9 11deg 22deg); }
-[data-pack=ocean] .bridge .river, [data-pack=fairy] .bridge .river, [data-pack=pirate] .bridge .river { background-color: #4cc3d9; opacity: 0.95; }
+[data-pack=ocean] .bridge .slot.filled { border: 3px solid #e58aa5; border-radius: 50% 50% 8px 8px / 100% 100% 8px 8px; background: repeating-conic-gradient(from -90deg at 50% 100%, #ffd9e2 0 11deg, #ffb7c9 11deg 22deg); }
+[data-pack=ocean] .bridge .river, [data-pack=pirate] .bridge .river { background-color: #4cc3d9; opacity: 0.95; }
 /* hay bales (farm) */
 [data-pack=farm] .bridge .slot.filled { border: 3px solid #a8761c; border-radius: 7px; background: linear-gradient(90deg, transparent 20%, #8d5a22 20% 25%, transparent 25% 75%, #8d5a22 75% 80%, transparent 80%), repeating-linear-gradient(90deg, #ebc05a 0 7px, #d9a93e 7px 9px); }
 [data-pack=farm] .bridge .river, [data-pack=jungle] .bridge .river { background: repeating-linear-gradient(90deg, #7cc8e0 0 40px, #98d6ea 40px 80px); }
@@ -103,6 +109,10 @@
 [data-pack=transport] .bridge .slot.filled, [data-pack=robot] .bridge .slot.filled { border: 3px solid #2f3340; border-radius: 4px; background: linear-gradient(90deg, transparent 0 18%, #fff 18% 38%, transparent 38% 62%, #fff 62% 82%, transparent 82%) center / 100% 4px no-repeat, #4d525f; }
 [data-pack=transport] .bridge .river, [data-pack=robot] .bridge .river { background: repeating-linear-gradient(90deg, #9a8f7a 0 40px, #aa9f8a 40px 80px); }
 
+/* fairy: mushroom caps (pink, then lilac) over a quiet pond */
+[data-pack=fairy] .bridge .slot.filled { border: 3px solid #c24a73; border-radius: 50% 50% 8px 8px / 100% 100% 8px 8px; background: radial-gradient(circle at 24% 38%, #fff 0 4px, transparent 4.8px), radial-gradient(circle at 58% 28%, #fff 0 5px, transparent 5.8px), radial-gradient(circle at 80% 52%, #fff 0 3.5px, transparent 4.2px), #ff8fb8; }
+[data-pack=fairy] .bridge .slot.filled:nth-child(even) { border-color: #7b4fd1; background: radial-gradient(circle at 24% 38%, #fff 0 4px, transparent 4.8px), radial-gradient(circle at 58% 28%, #fff 0 5px, transparent 5.8px), radial-gradient(circle at 80% 52%, #fff 0 3.5px, transparent 4.2px), #b79af0; }
+[data-pack=fairy] .bridge .river { background: repeating-linear-gradient(90deg, #8fd6c4 0 40px, #a6e3d2 40px 80px); }
 /* pirate: wooden boards; music: piano keys; arctic: ice blocks */
 [data-pack=pirate] .bridge .slot.filled { border: 3px solid #5a3a1c; border-radius: 5px; background: radial-gradient(circle at 8px 50%, #3a2410 0 2.4px, transparent 3px), radial-gradient(circle at calc(100% - 8px) 50%, #3a2410 0 2.4px, transparent 3px), repeating-linear-gradient(0deg, #b5834a 0 6px, #a2733c 6px 8px); }
 [data-pack=music] .bridge .slot.filled { border: 3px solid #2b2b3a; border-radius: 4px 4px 9px 9px; background: linear-gradient(90deg, transparent 0 14%, #2b2b3a 14% 20%, transparent 20% 34%, #2b2b3a 34% 40%, transparent 40% 60%, #2b2b3a 60% 66%, transparent 66% 80%, #2b2b3a 80% 86%, transparent 86%) top / 100% 62% no-repeat, #fbfbff; }
@@ -114,6 +124,6 @@
 @media (prefers-reduced-motion: reduce) {
   #fxp { display: none; }
   .tile.hint-pulse::after { animation: none; opacity: 0.9; }
-  .rocket .prop { animation: none; }
+  .rocket .prop, .rocket .wing { animation: none; }
 }
 .robotscene .robot svg { overflow: visible; }

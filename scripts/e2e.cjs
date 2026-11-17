@@ -533,10 +533,23 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
     }
     await pF.waitForSelector('[data-testid=mission-card]', { timeout: 5000 });
     await pF.waitForTimeout(400);
-    const mF = await pF.evaluate(() => { const e = document.querySelector('[data-testid=mission-card] strong'); const r = e.getBoundingClientRect(); return { text: e.textContent, top: r.top, bottom: r.bottom, ih: innerHeight }; });
+    const mF = await pF.evaluate(() => { const e = document.querySelector('[data-testid=mission-card] strong'); const r = e.getBoundingClientRect(); return { text: e.textContent, top: r.top, bottom: r.bottom, ih: innerHeight, doc: document.documentElement.scrollHeight }; });
     check(/For the grown-up/.test(mF.text) && mF.top >= 0 && mF.bottom <= mF.ih, `end of day at ${fw}x${fh}: the "For the grown-up" header is above the fold (bottom ${Math.round(mF.bottom)} of ${mF.ih})`);
+    check(mF.doc <= mF.ih + 24, `end of day at ${fw}x${fh}: the page barely scrolls (document ${mF.doc} for a ${mF.ih} px window)`);
     check(errF.length === 0, `no page errors on the finale at ${fw}x${fh}`);
     await cF.close();
+  }
+
+  log('PICK A FRIEND LAYOUT (twelve worlds: title, worlds, friends and Hatch reachable without hunting)');
+  for (const [pw, ph, mob] of [[1180, 820, false], [1024, 768, false], [390, 844, true]]) {
+    const cP = await browser.newContext({ viewport: { width: pw, height: ph }, hasTouch: mob, isMobile: mob });
+    await cP.addInitScript(TOOLS);
+    const pP = await cP.newPage();
+    await pP.goto(url); await passGate(pP);
+    await pP.click('[data-testid=setup-next]'); await pP.waitForSelector('[data-testid=hatch]'); await pP.waitForTimeout(500);
+    const mP = await pP.evaluate(() => { const t = document.querySelector('#stage h1').getBoundingClientRect(); const hb = document.querySelector('[data-testid=hatch]').getBoundingClientRect(); const w = [...document.querySelectorAll('[data-testid=world]')].map((e) => e.getBoundingClientRect()); return { y: window.scrollY, titleTop: t.top, hatchBottom: hb.bottom, ih: innerHeight, minW: Math.min(...w.map((r) => r.width)), minH: Math.min(...w.map((r) => r.height)), n: w.length, doc: document.documentElement.scrollHeight }; });
+    check(mP.n === 12 && mP.y === 0 && mP.titleTop >= 0 && mP.hatchBottom <= mP.ih && mP.minW >= 64 && mP.minH >= 64, `pick a friend at ${pw}x${ph}: ${mP.n} worlds, opens at the top, title and Hatch on screen (Hatch bottom ${Math.round(mP.hatchBottom)} of ${mP.ih}), smallest world ${Math.round(mP.minW)}x${Math.round(mP.minH)}`);
+    await cP.close();
   }
 
   log('REDUCE MOTION (spec: respect the OS setting)');

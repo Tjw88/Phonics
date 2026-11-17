@@ -126,8 +126,10 @@ export const ghostDrag = (host: HTMLElement, from: HTMLElement, to: HTMLElement,
     hand.style.margin = '0';
     const hr = host.getBoundingClientRect(), a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
     const HAND = 26; // half the width of the emoji
-    const ax = a.left + a.width / 2 - hr.left - HAND, ay = a.bottom - hr.top - 18;
-    const bx = b.left + b.width / 2 - hr.left - HAND, by = b.bottom - hr.top - 18;
+    const phone = window.innerWidth < 600; // on a phone the things are small: the fingertip just touches the edge, a little to one side
+    const lap = phone ? 2 : 18, side = phone ? 16 : 0;
+    const ax = a.left + a.width / 2 - hr.left - HAND + side, ay = a.bottom - hr.top - lap;
+    const bx = b.left + b.width / 2 - hr.left - HAND + side, by = b.bottom - hr.top - lap;
     anim = hand.animate(
       [
         { transform: `translate(${ax}px, ${ay}px) scale(1)`, opacity: 0 },

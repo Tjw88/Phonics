@@ -228,3 +228,155 @@ export const worldGlow = (w: World = worldId()): string => WORLD_GLOW[w] ?? worl
 const STAR_EMBLEM = '<path d="M0 -14 L4 -4.5 L14 -4.5 L6 2 L9 12 L0 6 L-9 12 L-6 2 L-14 -4.5 L-4 -4.5Z" fill="#ffc233"/>';
 export const worldBadge = (w: World = worldId()): string =>
   `<svg class="world-badge" viewBox="-20 -20 40 40" aria-hidden="true" focusable="false"><circle r="18" fill="#fff" stroke="${worldGlow(w)}" stroke-width="3.5"/>${EMBLEM[w] ?? STAR_EMBLEM}</svg>`;
+
+// ---------------------------------------------------------------------------------------------------------------
+// The six newer worlds: jungle, robot, pirate, fairy, music, arctic. Same geometry and class hooks as the older entries (a drum's
+// ellipse.skin and ellipse.ripple, a pot's BODY, rim and g.lid, a cover's back and front layers), so the games treat them alike.
+// ---------------------------------------------------------------------------------------------------------------
+const BARREL = 'M26 70 Q14 112 26 138 Q42 154 100 154 Q158 154 174 138 Q186 112 174 70Z';
+const clipOf = (id: string, d: string) => `<defs><clipPath id="${id}"><path d="${d}"/></clipPath></defs>`;
+
+Object.assign(DRUMS, {
+  // a hollow log drum with a hide on top, wrapped in a green vine with leaves
+  jungle: `${drumOpen}<path d="${CYL}" fill="#9a6a3a"/>
+    <path d="M44 76 L42 146 M70 80 L68 152 M100 82 L100 152 M130 80 L132 152 M156 76 L158 146" stroke="#6f4a24" stroke-width="4" stroke-linecap="round" opacity=".75"/>
+    <path d="M28 104 Q64 126 100 112 Q140 98 172 122" fill="none" stroke="#3f9b52" stroke-width="7" stroke-linecap="round"/>
+    <path d="M52 118 q-10 -14 -22 -8 q8 14 22 8z M118 108 q8 -16 22 -12 q-4 16 -22 12z M150 120 q10 -12 20 -4 q-6 12 -20 4z" fill="#5cc26b" stroke="#2f7d3a" stroke-width="2"/>
+    <path d="${CYL}" fill="none" stroke="#5a3a1a" stroke-width="4"/>
+    <ellipse class="skin" cx="100" cy="70" rx="72" ry="26" fill="#f0d9a8" stroke="#8a6a3a" stroke-width="5"/>
+    <ellipse cx="100" cy="70" rx="72" ry="26" fill="none" stroke="#3f9b52" stroke-width="3" stroke-dasharray="10 6" stroke-linecap="round" transform="translate(0 6)"/>${ripple('#fff')}</svg>`,
+  // a gear drum: a steel shell with a ring of gear teeth, rivets, and a dark beeper head with a red button
+  robot: `${drumOpen}<path d="${CYL}" fill="#8e9bb0"/>
+    ${Array.from({ length: 14 }, (_, k) => `<rect x="${28 + k * 10.3}" y="${96 + Math.round(10 * Math.sin((k / 13) * Math.PI))}" width="7" height="12" rx="1.5" fill="#5a6a82"/>`).join('')}
+    <path d="M28 98 Q100 124 172 98" fill="none" stroke="#5a6a82" stroke-width="5"/>
+    <circle cx="44" cy="134" r="3.2" fill="#d9e0ea"/><circle cx="78" cy="144" r="3.2" fill="#d9e0ea"/><circle cx="122" cy="144" r="3.2" fill="#d9e0ea"/><circle cx="156" cy="134" r="3.2" fill="#d9e0ea"/>
+    <path d="M40 80 Q36 98 40 120" stroke="#fff" opacity=".35" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <path d="${CYL}" fill="none" stroke="#46546b" stroke-width="4"/>
+    <ellipse class="skin" cx="100" cy="70" rx="72" ry="26" fill="#2b3c5a" stroke="#ff9f43" stroke-width="5"/>
+    <ellipse cx="100" cy="70" rx="46" ry="16" fill="none" stroke="#5ec8ff" stroke-width="3" opacity=".8"/><circle cx="100" cy="70" r="7" fill="#ef476f" stroke="#fff" stroke-width="2"/>${ripple('#5ec8ff')}</svg>`,
+  // a wooden barrel with iron hoops and a black X on the drum head
+  pirate: `${drumOpen}${clipOf('pbBody', BARREL)}<path d="${BARREL}" fill="#a8703a"/>
+    <g clip-path="url(#pbBody)" stroke="#7a4a1d" stroke-width="3" opacity=".8"><path d="M52 76 Q44 112 56 152 M78 80 Q74 116 80 154 M104 80 V154 M130 80 Q134 116 128 154 M154 76 Q162 112 150 152"/></g>
+    <path d="M22 90 Q100 118 178 90" fill="none" stroke="#3a3f4a" stroke-width="8" stroke-linecap="round"/><path d="M26 134 Q100 160 174 134" fill="none" stroke="#3a3f4a" stroke-width="8" stroke-linecap="round"/>
+    <path d="${BARREL}" fill="none" stroke="#5a3a1a" stroke-width="4"/>
+    <ellipse class="skin" cx="100" cy="70" rx="72" ry="26" fill="#f1dca0" stroke="#7a4a1d" stroke-width="5"/>
+    <path d="M100 50 L106.5 63.5 L121 65.5 L110.5 75.5 L113 90 L100 83 L87 90 L89.5 75.5 L79 65.5 L93.5 63.5Z" fill="#ffc233" stroke="#c98f00" stroke-width="3" stroke-linejoin="round"/>${ripple('#fff')}</svg>`,
+  // a mushroom drum: a cream stalk and a red spotted cap that is the drum head
+  fairy: `${drumOpen}<path d="M30 70 L36 134 Q36 152 100 152 Q164 152 164 134 L170 70Z" fill="#fff3d9"/>
+    <path d="M40 104 Q100 128 160 104 M42 124 Q100 148 158 124" fill="none" stroke="#e8d3a8" stroke-width="3.5"/>
+    <path d="M36 140 q6 -10 12 0 M150 142 q6 -10 12 0 M96 150 q4 -10 8 0" stroke="#5cc26b" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <path d="M30 70 L36 134 Q36 152 100 152 Q164 152 164 134 L170 70Z" fill="none" stroke="#d9bd8a" stroke-width="4"/>
+    <ellipse class="skin" cx="100" cy="70" rx="72" ry="26" fill="#ef5b7b" stroke="#b83a58" stroke-width="5"/>
+    <g fill="#fff"><circle cx="64" cy="66" r="7"/><circle cx="100" cy="58" r="6"/><circle cx="136" cy="68" r="7.5"/><circle cx="84" cy="80" r="5"/><circle cx="118" cy="82" r="5.5"/></g>${ripple('#fff')}</svg>`,
+  // a real snare drum: a silver shell, chrome hoops, tension rods and a white head
+  music: `${drumOpen}<path d="${CYL}" fill="#d9dde6"/>
+    <path d="M28 88 Q100 114 172 88 L172 98 Q100 124 28 98Z" fill="#9aa3b5"/><path d="M28 130 Q100 156 172 130 L172 140 Q100 166 28 140Z" fill="#9aa3b5"/>
+    ${[46, 70, 100, 130, 154].map((x) => `<rect x="${x - 2.5}" y="${96 + Math.round(18 * Math.sin(((x - 28) / 144) * Math.PI) * 0.7) + 2}" width="5" height="34" rx="2" fill="#6f7a90"/><circle cx="${x}" cy="${96 + Math.round(18 * Math.sin(((x - 28) / 144) * Math.PI) * 0.7)}" r="4.5" fill="#46546b"/>`).join('')}
+    <path d="M40 80 Q36 98 40 120" stroke="#fff" opacity=".6" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <path d="${CYL}" fill="none" stroke="#6f7a90" stroke-width="4"/>
+    <ellipse class="skin" cx="100" cy="70" rx="72" ry="26" fill="#fffdf6" stroke="#9aa3b5" stroke-width="6"/>
+    <path d="M60 76 Q100 62 140 76" fill="none" stroke="#e8e0cc" stroke-width="2.5"/>${ripple('#ffc233')}</svg>`,
+  // an ice drum: pale blue frosted shell with light facets and a snow-white rim
+  arctic: `${drumOpen}<path d="${CYL}" fill="#a9dcf5"/>
+    <path d="M28 96 L70 150 M60 80 L100 152 M96 80 L140 152 M132 80 L172 134" stroke="#e8f8ff" stroke-width="5" stroke-linecap="round" opacity=".75"/>
+    <path d="M28 116 L60 100 M110 142 L172 104" stroke="#7cc4ec" stroke-width="3" opacity=".7"/>
+    <path d="${CYL}" fill="none" stroke="#5aa8d6" stroke-width="4"/>
+    <ellipse cx="100" cy="70" rx="76" ry="29" fill="#fff" opacity=".95"/>
+    <ellipse class="skin" cx="100" cy="70" rx="68" ry="24" fill="#e9f7ff" stroke="#bfe6fa" stroke-width="4"/>
+    <path d="M100 56 V84 M86 62 L114 78 M114 62 L86 78" stroke="#bfe6fa" stroke-width="3" stroke-linecap="round"/>${ripple('#7cc4ec')}</svg>`,
+});
+
+Object.assign(POTS, {
+  // a dark wok on a big green leaf, with a woven bamboo steamer lid
+  jungle: `${potOpen}<path d="M6 138 Q40 124 80 130 Q120 124 154 138 Q120 150 80 148 Q40 150 6 138Z" fill="#4caf5d" stroke="#2f7d3a" stroke-width="3"/><path d="M20 138 H140" stroke="#2f7d3a" stroke-width="2" opacity=".6"/>
+    <path d="${BODY}" fill="#4a4036"/><path d="M30 96 Q80 110 130 96" stroke="#ff9f43" stroke-width="4" fill="none" stroke-linecap="round" opacity=".85"/>
+    <path d="${BODY}" fill="none" stroke="#2a241e" stroke-width="4"/>${shine}${rim('#6b5a48', '#2a241e')}
+    <g class="lid"><path d="${LID}" fill="#e0bd78" stroke="#a8803a" stroke-width="4"/><path d="M44 52 Q80 42 116 52 M52 42 Q80 34 108 42 M36 52 L124 52" stroke="#a8803a" stroke-width="2.6" fill="none"/><path d="M62 30 V56 M80 30 V56 M98 30 V56" stroke="#a8803a" stroke-width="2.6"/><circle cx="80" cy="26" r="6" fill="#4caf5d" stroke="#2f7d3a" stroke-width="3"/></g></svg>`,
+  // a soup tank: riveted steel with a glass gauge of orange soup, a side pipe and valve, a lid with an antenna bulb
+  robot: `${potOpen}<path d="M122 112 h22 v-26 h-8" stroke="#6f7a90" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="144" cy="84" r="7" fill="#ef476f" stroke="#a02538" stroke-width="3"/>
+    <path d="${BODY}" fill="#8e9bb0"/><rect x="58" y="82" width="44" height="34" rx="8" fill="#26354f" stroke="#5a6a82" stroke-width="3"/><rect x="63" y="96" width="34" height="15" rx="4" fill="#ff9f43"/><path d="M63 96 q8.5 -5 17 0 t17 0" fill="#ffb86b"/>
+    <circle cx="36" cy="92" r="3" fill="#d9e0ea"/><circle cx="124" cy="92" r="3" fill="#d9e0ea"/><circle cx="42" cy="118" r="3" fill="#d9e0ea"/><circle cx="118" cy="118" r="3" fill="#d9e0ea"/>
+    <path d="${BODY}" fill="none" stroke="#46546b" stroke-width="4"/>${shine}${rim('#6f7a90', '#46546b')}
+    <g class="lid"><path d="${LID}" fill="#6f7a90" stroke="#46546b" stroke-width="4"/><path d="M80 30 V10" stroke="#46546b" stroke-width="3.5" stroke-linecap="round"/><circle cx="80" cy="8" r="6" fill="#5ec8ff" stroke="#1c8fa6" stroke-width="3"/></g></svg>`,
+  // a friendly copper treasure pot: a round bronze belly with a gold coin badge, and gold coins heaped on the lid as if it is overflowing
+  pirate: `${potOpen}<path d="${BODY}" fill="#c9783a"/><path d="M26 92 Q80 108 134 92 L132 100 Q80 116 28 100Z" fill="#e8a55a"/>
+    <circle cx="80" cy="118" r="11" fill="#ffc233" stroke="#c98f00" stroke-width="3"/><path d="M80 110 L82.5 116 L89 116.5 L84 120.5 L85.8 127 L80 123.5 L74.2 127 L76 120.5 L71 116.5 L77.5 116Z" fill="#fff3b0"/>
+    <circle cx="44" cy="84" r="2.8" fill="#f6d9b0"/><circle cx="116" cy="84" r="2.8" fill="#f6d9b0"/>
+    <path d="${BODY}" fill="none" stroke="#8f4f1a" stroke-width="4"/>${shine}${rim('#e8a55a', '#8f4f1a')}
+    <g class="lid"><path d="${LID}" fill="#c9783a" stroke="#8f4f1a" stroke-width="4"/><g fill="#ffc233" stroke="#c98f00" stroke-width="2.6"><ellipse cx="66" cy="28" rx="10" ry="6.5"/><ellipse cx="92" cy="27" rx="10" ry="6.5"/><ellipse cx="79" cy="19" rx="10" ry="6.5"/></g><path d="M72 28 H60 M98 27 H86 M85 19 H73" stroke="#fff3b0" stroke-width="2" stroke-linecap="round" opacity=".8"/></g></svg>`,
+  // a pink teacup on a saucer with a handle; the lid is a brown acorn cap
+  fairy: `${potOpen}<ellipse cx="80" cy="138" rx="66" ry="8" fill="#e8c2e8" stroke="#b98ad0" stroke-width="3"/>
+    <path d="M136 82 q26 -2 20 22 q-6 16 -24 12" fill="none" stroke="#f3a6cc" stroke-width="8" stroke-linecap="round"/><path d="M136 82 q26 -2 20 22 q-6 16 -24 12" fill="none" stroke="#c46a9a" stroke-width="2" stroke-linecap="round" opacity=".5"/>
+    <path d="${BODY}" fill="#ffc2dc"/><g fill="#fff" opacity=".9"><circle cx="48" cy="96" r="4"/><circle cx="76" cy="108" r="4"/><circle cx="108" cy="96" r="4"/><circle cx="94" cy="122" r="3.5"/></g><path d="M30 92 Q80 108 130 92" stroke="#ffd166" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="${BODY}" fill="none" stroke="#c46a9a" stroke-width="4"/>${shine}${rim('#ffe27a', '#c98f00')}
+    <g class="lid"><path d="${LID}" fill="#a8703a" stroke="#6b4a1d" stroke-width="4"/><path d="M40 46 H120 M46 38 H114 M58 32 H102" stroke="#6b4a1d" stroke-width="2.4" opacity=".7"/><path d="M80 30 V16" stroke="#6b4a1d" stroke-width="5" stroke-linecap="round"/></g></svg>`,
+  // a brass pot with musical notes on its belly; the lid has a note for a knob
+  music: `${potOpen}<path d="${BODY}" fill="#e0a82e"/><path d="${BODY}" fill="none" stroke="#a8761a" stroke-width="4"/>
+    <g fill="#5a3a0a"><ellipse cx="62" cy="116" rx="7" ry="5.4" transform="rotate(-18 62 116)"/><ellipse cx="96" cy="108" rx="7" ry="5.4" transform="rotate(-18 96 108)"/></g>
+    <path d="M68.5 114 V88 M102.5 106 V80 M68.5 88 L102.5 80" stroke="#5a3a0a" stroke-width="3.4" fill="none" stroke-linecap="round"/>${shine}${rim('#ffd166', '#a8761a')}
+    <g class="lid"><path d="${LID}" fill="#e0a82e" stroke="#a8761a" stroke-width="4"/><ellipse cx="74" cy="26" rx="6" ry="4.6" fill="#5a3a0a" transform="rotate(-18 74 26)"/><path d="M79.5 25 V10 q8 2 10 10" stroke="#5a3a0a" stroke-width="3" fill="none" stroke-linecap="round"/></g></svg>`,
+  // an igloo pot: snow-block walls with a dark doorway, and a snow-dome lid
+  arctic: `${potOpen}<path d="${BODY}" fill="#e9f7ff"/><g stroke="#b5dcf2" stroke-width="3" fill="none"><path d="M26 86 Q80 100 134 86 M30 108 Q80 124 130 108"/><path d="M50 90 v18 M80 96 v14 M110 90 v18 M64 112 v18 M96 114 v18"/></g>
+    <path d="M64 138 V120 Q64 106 80 106 Q96 106 96 120 V138Z" fill="#3a5a7a"/>
+    <path d="${BODY}" fill="none" stroke="#8fc8e8" stroke-width="4"/>${shine}${rim('#ffffff', '#8fc8e8')}
+    <g class="lid"><path d="${LID}" fill="#fff" stroke="#8fc8e8" stroke-width="4"/><path d="M52 50 Q80 40 108 50 M62 40 Q80 34 98 40" stroke="#cfe9f7" stroke-width="2.6" fill="none"/><path d="M80 18 l6 8 l-6 9 l-6 -9z" fill="#7cc4ec" stroke="#4aa0d4" stroke-width="2.5" stroke-linejoin="round"/></g></svg>`,
+});
+
+const leaf = (x: number, y: number, a: number, w: number, h: number, c: string) => `<path d="M0 0 C${w} ${-h * 0.35} ${w} ${-h * 0.8} 0 ${-h} C${-w} ${-h * 0.8} ${-w} ${-h * 0.35} 0 0Z" fill="${c}" transform="translate(${x} ${y}) rotate(${a})"/>`;
+Object.assign(COVERS, {
+  // dense jungle: broad overlapping leaves and hanging vines (a different silhouette from the dino ferns)
+  jungle: [
+    { back: cov('<ellipse cx="50" cy="84" rx="40" ry="12" fill="#1f5a3a" opacity=".35"/>', 'back'),
+      front: cov(`${leaf(50, 104, -58, 20, 50, '#2f8a47')}${leaf(50, 104, 58, 20, 50, '#2f8a47')}${leaf(50, 104, -28, 20, 52, '#4caf5d')}${leaf(50, 104, 28, 20, 52, '#4caf5d')}${leaf(50, 104, 0, 18, 44, '#6fcf6a')}<path d="M16 60 Q12 74 18 84 M84 58 Q90 72 82 86" stroke="#2f7d3a" stroke-width="3.2" fill="none" stroke-linecap="round"/><circle cx="18" cy="86" r="3.4" fill="#ff9f43"/><circle cx="82" cy="88" r="3.4" fill="#ff6b9a"/>`, 'front') },
+    { back: cov('<ellipse cx="50" cy="84" rx="40" ry="12" fill="#1f5a3a" opacity=".35"/>', 'back'),
+      front: cov(`${leaf(24, 104, -20, 18, 46, '#3f9b52')}${leaf(76, 104, 20, 18, 46, '#3f9b52')}${leaf(50, 104, -42, 20, 48, '#2f8a47')}${leaf(50, 104, 42, 20, 48, '#2f8a47')}${leaf(50, 104, -8, 20, 54, '#5cc26b')}${leaf(50, 104, 12, 18, 46, '#4caf5d')}<path d="M30 58 Q38 70 30 80 M68 58 Q60 72 70 82" stroke="#2f7d3a" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="30" cy="82" r="3.2" fill="#ffd166"/>`, 'front') },
+  ],
+  // a robot workshop: a steel shelf with bolts and hazard stripes, and a crate of parts with a gear
+  robot: [
+    { back: cov('<rect x="8" y="30" width="84" height="50" rx="6" fill="#5a6a82" opacity=".22"/>', 'back'),
+      front: cov(`<rect x="0" y="68" width="100" height="32" fill="#8e9bb0"/><path d="M0 68 H100" stroke="#46546b" stroke-width="3"/><path d="M0 74 l8 -6 h8 l-8 6z M16 74 l8 -6 h8 l-8 6z M32 74 l8 -6 h8 l-8 6z M48 74 l8 -6 h8 l-8 6z M64 74 l8 -6 h8 l-8 6z M80 74 l8 -6 h8 l-8 6z" fill="#ffc233" opacity=".9"/>
+        <circle cx="12" cy="88" r="3" fill="#d9e0ea"/><circle cx="50" cy="90" r="3" fill="#d9e0ea"/><circle cx="88" cy="88" r="3" fill="#d9e0ea"/><g fill="#ff9f43" stroke="#a85a14" stroke-width="2"><circle cx="76" cy="62" r="9"/>${Array.from({ length: 8 }, (_, k) => `<rect x="-2.5" y="-13" width="5" height="6" transform="translate(76 62) rotate(${k * 45})" stroke="none"/>`).join('')}</g><circle cx="76" cy="62" r="3.5" fill="#8e9bb0"/>`, 'front') },
+    { back: cov('<rect x="8" y="30" width="84" height="50" rx="6" fill="#5a6a82" opacity=".22"/>', 'back'),
+      front: cov(`<rect x="2" y="64" width="96" height="36" rx="3" fill="#ffb347" stroke="#c97a14" stroke-width="3"/><path d="M2 82 H98 M30 64 V100 M70 64 V100" stroke="#c97a14" stroke-width="3"/><circle cx="10" cy="70" r="2.6" fill="#fff"/><circle cx="90" cy="70" r="2.6" fill="#fff"/><rect x="38" y="58" width="24" height="10" rx="2" fill="#5ec8ff" stroke="#1c8fa6" stroke-width="2"/>`, 'front') },
+  ],
+  // a beach: sand dunes with palm fronds (and a sandy dip behind each picture)
+  pirate: [
+    { back: cov('<ellipse cx="50" cy="86" rx="40" ry="10" fill="#d9b56a" opacity=".7"/>', 'back'),
+      front: cov(`<path d="M0 100 V80 Q22 62 48 76 Q76 62 100 78 V100Z" fill="#f1dca0"/><path d="M0 92 Q30 82 60 90 Q82 84 100 90 V100 H0Z" fill="#e2c27a"/><g stroke="#3f9b52" stroke-width="5" stroke-linecap="round" fill="none"><path d="M82 78 Q70 56 52 60"/><path d="M82 78 Q84 52 70 44"/><path d="M82 78 Q96 58 100 64"/></g><path d="M82 78 L84 96" stroke="#8a5a2c" stroke-width="5" stroke-linecap="round"/>`, 'front') },
+    { back: cov('<ellipse cx="50" cy="86" rx="40" ry="10" fill="#d9b56a" opacity=".7"/>', 'back'),
+      front: cov(`<path d="M0 100 V76 Q26 58 52 74 Q78 60 100 74 V100Z" fill="#f4e2ac"/><path d="M0 94 Q34 84 64 92 Q84 86 100 92 V100 H0Z" fill="#e2c27a"/><g stroke="#3f9b52" stroke-width="5" stroke-linecap="round" fill="none"><path d="M18 76 Q30 56 48 60"/><path d="M18 76 Q16 52 30 44"/><path d="M18 76 Q6 58 0 64"/></g><path d="M18 76 L16 96" stroke="#8a5a2c" stroke-width="5" stroke-linecap="round"/><path d="M62 82 l5 -8 l5 8z" fill="#ff6b9a"/>`, 'front') },
+  ],
+  // a fairy garden: big pink petals around each picture, or a pair of red spotted toadstools in front
+  fairy: [
+    { back: cov('<circle cx="50" cy="70" r="24" fill="#ffe27a" opacity=".45"/>', 'back'),
+      front: cov(`<g>${[-64, -38, -14, 12, 38, 64].map((a, k) => `<ellipse cx="50" cy="80" rx="13" ry="26" fill="${k % 2 ? '#ffb3d1' : '#ff8fb8'}" transform="rotate(${a} 50 106)"/>`).join('')}</g><ellipse cx="50" cy="102" rx="46" ry="9" fill="#5cc26b"/>`, 'front') },
+    { back: cov('<circle cx="50" cy="70" r="24" fill="#e0c8ff" opacity=".5"/>', 'back'),
+      front: cov(`<rect x="22" y="80" width="14" height="22" rx="5" fill="#fff3d9" stroke="#e0c48a" stroke-width="2"/><rect x="66" y="84" width="12" height="18" rx="5" fill="#fff3d9" stroke="#e0c48a" stroke-width="2"/><path d="M6 82 Q29 54 52 82 Q29 90 6 82Z" fill="#ef5b7b" stroke="#b83a58" stroke-width="2.5"/><path d="M52 88 Q72 62 94 88 Q72 94 52 88Z" fill="#ef5b7b" stroke="#b83a58" stroke-width="2.5"/><g fill="#fff"><circle cx="18" cy="76" r="3.4"/><circle cx="30" cy="70" r="3"/><circle cx="40" cy="78" r="3.4"/><circle cx="64" cy="80" r="3"/><circle cx="76" cy="76" r="3.4"/><circle cx="86" cy="82" r="2.8"/></g><rect x="0" y="94" width="100" height="6" fill="#5cc26b"/>`, 'front') },
+  ],
+  // a stage: red velvet curtains at the sides and a wooden riser with a gold edge in front
+  music: [
+    { back: cov('<ellipse cx="50" cy="40" rx="30" ry="40" fill="#ffd166" opacity=".18"/>', 'back'),
+      front: cov(`<path d="M0 0 H16 Q10 40 14 100 H0Z" fill="#b8243e"/><path d="M100 0 H84 Q90 40 86 100 H100Z" fill="#b8243e"/><path d="M5 0 Q3 50 6 100 M11 0 Q9 50 11 100 M95 0 Q97 50 94 100 M89 0 Q91 50 89 100" stroke="#7a1428" stroke-width="2" fill="none"/>
+        <rect x="0" y="72" width="100" height="28" fill="#8a5a2c"/><rect x="0" y="72" width="100" height="5" fill="#ffc233"/><path d="M0 86 H100" stroke="#6b4420" stroke-width="2.4"/><circle cx="50" cy="90" r="3" fill="#ffc233"/>`, 'front') },
+    { back: cov('<ellipse cx="50" cy="40" rx="30" ry="40" fill="#ffd166" opacity=".18"/>', 'back'),
+      front: cov(`<path d="M0 0 H12 Q8 40 10 100 H0Z" fill="#7a2a8a"/><path d="M100 0 H88 Q92 40 90 100 H100Z" fill="#7a2a8a"/><path d="M4 0 Q2 50 4 100 M94 0 Q96 50 94 100" stroke="#4f1a5c" stroke-width="2" fill="none"/>
+        <rect x="6" y="66" width="88" height="34" rx="4" fill="#2b2f3a"/><rect x="6" y="66" width="88" height="4" fill="#ffc233"/><circle cx="30" cy="84" r="11" fill="#444b5c" stroke="#9aa3b5" stroke-width="2"/><circle cx="30" cy="84" r="4" fill="#9aa3b5"/><circle cx="70" cy="84" r="11" fill="#444b5c" stroke="#9aa3b5" stroke-width="2"/><circle cx="70" cy="84" r="4" fill="#9aa3b5"/>`, 'front') },
+  ],
+  // snow: a drift with a few ice blocks, and a drift of rounded snow mounds
+  arctic: [
+    { back: cov('<ellipse cx="50" cy="86" rx="40" ry="10" fill="#b5dcf2" opacity=".6"/>', 'back'),
+      front: cov(`<path d="M0 100 V74 Q24 58 50 72 Q76 58 100 74 V100Z" fill="#fff"/><path d="M0 100 V88 Q30 78 60 88 Q80 82 100 88 V100Z" fill="#dff1fb"/><rect x="10" y="62" width="20" height="16" rx="4" fill="#bfe6fa" stroke="#8fc8e8" stroke-width="2.4"/><rect x="66" y="66" width="16" height="14" rx="4" fill="#a9dcf5" stroke="#8fc8e8" stroke-width="2.4"/><path d="M14 66 l6 0 M70 70 l5 0" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>`, 'front') },
+    { back: cov('<ellipse cx="50" cy="86" rx="40" ry="10" fill="#b5dcf2" opacity=".6"/>', 'back'),
+      front: cov(`<g fill="#fff" stroke="#cfe9f7" stroke-width="2.4"><circle cx="20" cy="84" r="17"/><circle cx="48" cy="76" r="19"/><circle cx="76" cy="84" r="17"/><circle cx="94" cy="92" r="12"/></g><rect x="0" y="90" width="100" height="10" fill="#dff1fb"/><path d="M34 70 l4 -6 l4 6z M70 76 l4 -6 l4 6z" fill="#7cc4ec"/>`, 'front') },
+  ],
+});
+
+Object.assign(WORLD_GLOW, { jungle: '#c8f070', robot: '#8fe0ff', pirate: '#ffd98a', fairy: '#f3b6ff', music: '#ffd166', arctic: '#bfeaff' });
+Object.assign(EMBLEM, {
+  jungle: '<path d="M0 14 C-14 6 -12 -8 0 -14 C12 -8 14 6 0 14Z" fill="#4caf5d"/><path d="M0 12 V-10 M0 2 L-7 -4 M0 -3 L7 -8" stroke="#2f7d3a" stroke-width="2" fill="none"/>',
+  robot: '<circle r="6" fill="#8e9bb0"/>' + Array.from({ length: 8 }, (_, k) => `<rect x="-2.5" y="-14" width="5" height="7" fill="#8e9bb0" transform="rotate(${k * 45})"/>`).join('') + '<circle r="2.6" fill="#fff"/>',
+  pirate: '<circle r="12" fill="#ffc233" stroke="#c98f00" stroke-width="2.5"/><path d="M0 -8 L2.3 -2.5 L8 -2 L3.6 1.6 L5 7.5 L0 4.4 L-5 7.5 L-3.6 1.6 L-8 -2 L-2.3 -2.5Z" fill="#fff3b0"/>',
+  fairy: '<g fill="#ff8fb8">' + [0, 72, 144, 216, 288].map((a) => `<ellipse cy="-8" rx="5.5" ry="8" transform="rotate(${a})"/>`).join('') + '</g><circle r="4.5" fill="#ffd166"/>',
+  music: '<ellipse cx="-3" cy="8" rx="6.5" ry="5" fill="#3a2a5a" transform="rotate(-18 -3 8)"/><path d="M2.5 7 V-12 q10 2 10 12" stroke="#3a2a5a" stroke-width="3.2" fill="none" stroke-linecap="round"/>',
+  arctic: '<path d="M0 -14 V14 M-12 -7 L12 7 M12 -7 L-12 7" stroke="#7cc4ec" stroke-width="3.2" stroke-linecap="round"/><circle r="3" fill="#bfeaff"/>',
+});

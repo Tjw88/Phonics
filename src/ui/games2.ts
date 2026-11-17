@@ -298,7 +298,12 @@ export const soundSafari = async (ctx: Ctx, target: Grapheme, scene: { targets: 
           { transform: 'translateY(0) rotate(0deg)' }, { transform: 'translateY(48%) rotate(-4deg)', offset: 0.3 }, { transform: 'translateY(42%) rotate(3deg)', offset: 0.48 },
           { transform: 'translateY(-5%) rotate(-1.5deg)', offset: 0.78 }, { transform: 'translateY(0) rotate(0deg)' },
         ], { duration: 820, easing: 'ease-in-out' });
-        play(b, 'wobble', 650);
+        play(b, 'wobble', 800);
+        // the cover rustles too (the bush, wall, snow drift... shakes a little), so the miss is easy to see on every board
+        anim(front, [
+          { transform: 'rotate(0deg) translateX(0)' }, { transform: 'rotate(-4deg) translateX(-4px) scaleY(0.95)', offset: 0.25 }, { transform: 'rotate(4deg) translateX(4px) scaleY(1.03)', offset: 0.55 },
+          { transform: 'rotate(-2deg) translateX(-2px)', offset: 0.8 }, { transform: 'rotate(0deg) translateX(0)' },
+        ], { duration: 760, easing: 'ease-in-out' });
         tiltPet(pet, timers, towardTray());
         glance();
         if (wrong >= 2) {

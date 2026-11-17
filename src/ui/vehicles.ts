@@ -49,14 +49,69 @@ const balloon = (): string => wrap('v-balloon', '0 0 100 210', `
   <rect x="34" y="152" width="32" height="26" rx="5" fill="#c9893e" stroke="#8d5a22" stroke-width="4"/>
   <path d="M34 162 L66 162 M34 170 L66 170" stroke="#8d5a22" stroke-width="2"/>`);
 
+
+// ---- the six newer worlds' OWN vehicles --------------------------------------------------------------------------------------------
+const cart = (): string => wrap('v-cart', '0 0 160 112', `
+  <ellipse cx="80" cy="104" rx="62" ry="6" fill="#0000001f"/>
+  <path d="M46 48 Q46 14 80 14 Q114 14 114 48Z" fill="#bfeaff" fill-opacity=".75" stroke="#5a86c7" stroke-width="4"/>
+  <circle cx="68" cy="36" r="6" fill="#26364f"/><circle cx="92" cy="36" r="6" fill="#26364f"/><circle cx="70" cy="34" r="2" fill="#7ee2ff"/><circle cx="94" cy="34" r="2" fill="#7ee2ff"/>
+  <line x1="80" y1="14" x2="80" y2="4" stroke="#5a6b86" stroke-width="3"/><circle cx="80" cy="4" r="4.5" fill="#ffd166" stroke="#e0a100" stroke-width="2"/>
+  <rect x="16" y="46" width="128" height="42" rx="16" fill="#8fb3e8" stroke="#5a86c7" stroke-width="4"/>
+  <rect x="20" y="62" width="120" height="9" fill="#ff9f1c"/>
+  <circle cx="46" cy="88" r="15" fill="#26364f"/><circle cx="46" cy="88" r="6" fill="#7ee2ff"/><circle cx="114" cy="88" r="15" fill="#26364f"/><circle cx="114" cy="88" r="6" fill="#7ee2ff"/>`);
+
+const boat = (): string => wrap('v-boat', '0 0 160 120', `
+  <path d="M80 68 L80 10 Q124 28 130 68Z" fill="#fff8e6" stroke="#d8c79a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M74 68 L74 24 Q44 40 36 68Z" fill="#ffe9b8" stroke="#d8c79a" stroke-width="3" stroke-linejoin="round"/>
+  <line x1="80" y1="6" x2="80" y2="74" stroke="#8d5a22" stroke-width="4" stroke-linecap="round"/>
+  <path d="M12 70 L148 70 Q138 104 112 106 L48 106 Q22 104 12 70Z" fill="#c9893e" stroke="#7a4a1d" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M18 80 L142 80" stroke="#7a4a1d" stroke-width="3" opacity=".6"/>
+  <circle cx="56" cy="90" r="6" fill="#bfeaff" stroke="#7a4a1d" stroke-width="3"/><circle cx="80" cy="90" r="6" fill="#bfeaff" stroke="#7a4a1d" stroke-width="3"/><circle cx="104" cy="90" r="6" fill="#bfeaff" stroke="#7a4a1d" stroke-width="3"/>
+  <path d="M6 108 Q22 98 38 108 T70 108 T102 108 T134 108 T158 108" stroke="#ffffff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".85"/>`);
+
+const dragonfly = (): string => wrap('v-dragonfly', '0 0 170 112', `
+  <g class="wing"><ellipse cx="72" cy="38" rx="38" ry="14" transform="rotate(-18 72 38)" fill="#e9d7ff" fill-opacity=".75" stroke="#b79af0" stroke-width="2.5"/><path d="M40 46 L100 30" stroke="#b79af0" stroke-width="1.5" opacity=".7"/></g>
+  <g class="wing"><ellipse cx="96" cy="36" rx="34" ry="12" transform="rotate(-6 96 36)" fill="#ffd6ec" fill-opacity=".75" stroke="#f08fc0" stroke-width="2.5"/></g>
+  <g class="wing"><ellipse cx="72" cy="72" rx="36" ry="13" transform="rotate(16 72 72)" fill="#e9d7ff" fill-opacity=".75" stroke="#b79af0" stroke-width="2.5"/></g>
+  <g class="wing"><ellipse cx="98" cy="70" rx="32" ry="11" transform="rotate(6 98 70)" fill="#ffd6ec" fill-opacity=".75" stroke="#f08fc0" stroke-width="2.5"/></g>
+  <path d="M14 58 Q70 50 128 54" stroke="#4cc3d9" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <path d="M30 56 L30 50 M48 54 L48 48 M66 53 L66 47 M84 52 L84 46 M102 52 L102 46" stroke="#2a8fb8" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="140" cy="54" r="13" fill="#ff7eb6" stroke="#d85a96" stroke-width="3"/><circle cx="145" cy="50" r="5" fill="#fff"/><circle cx="146" cy="50" r="2.4" fill="#26303f"/>`);
+
+const vineBasket = (): string => wrap('v-vine', '0 0 120 190', `
+  <path d="M60 0 C40 20 80 40 60 62 C46 78 70 94 60 112" stroke="#3f9e4d" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M60 28 Q40 18 34 30 Q46 40 60 30Z M60 70 Q82 60 90 72 Q76 82 60 72Z" fill="#6cc24a" stroke="#3f9e4d" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M60 112 L30 138 M60 112 L90 138" stroke="#8d5a22" stroke-width="3" stroke-linecap="round"/>
+  <path d="M24 136 L96 136 Q94 176 60 178 Q26 176 24 136Z" fill="#c9893e" stroke="#7a4a1d" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M30 150 L90 150 M32 162 L88 162 M46 138 L44 174 M60 138 L60 178 M74 138 L76 174" stroke="#7a4a1d" stroke-width="2.4" opacity=".6"/>
+  <circle cx="60" cy="108" r="6" fill="#ff7a5a" stroke="#d65a3a" stroke-width="2"/>`);
+
+const noteBalloon = (): string => wrap('v-note', '0 0 100 210', `
+  <path d="M78 104 L78 18 Q96 26 96 56" stroke="#ef476f" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="46" cy="106" rx="38" ry="30" transform="rotate(-18 46 106)" fill="#8d63df" stroke="#5b3bb0" stroke-width="4"/>
+  <path d="M22 98 Q30 82 46 80" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".7"/>
+  <path d="M46 136 L46 172" stroke="#8d5a22" stroke-width="3"/>
+  <rect x="32" y="172" width="28" height="22" rx="5" fill="#c9893e" stroke="#7a4a1d" stroke-width="3.5"/>`);
+
+const sled = (): string => wrap('v-sled', '0 0 170 104', `
+  <path d="M8 84 L148 84 Q168 84 164 62" stroke="#7a8aa6" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M34 84 L34 72 M128 84 L128 72" stroke="#7a8aa6" stroke-width="6" stroke-linecap="round"/>
+  <rect x="22" y="58" width="130" height="14" rx="6" fill="#c9893e" stroke="#7a4a1d" stroke-width="3.5"/>
+  <rect x="22" y="22" width="12" height="40" rx="5" fill="#c9893e" stroke="#7a4a1d" stroke-width="3.5"/>
+  <rect x="64" y="26" width="48" height="32" rx="7" fill="#9fd8f5" stroke="#4aa3d1" stroke-width="3.5"/><path d="M88 26 L88 58 M64 42 L112 42" stroke="#ef476f" stroke-width="5"/>
+  <path d="M120 58 Q132 38 144 46 Q136 52 132 60Z" fill="#ef476f" stroke="#c7385a" stroke-width="2.5" stroke-linejoin="round"/>`);
+
+
 const NAMES: Record<PackId, string> = {
   dino: 'leaf glider', dragon: 'magic carpet', transport: 'aeroplane', space: 'rocket', ocean: 'bubble pod', farm: 'hot-air balloon',
 };
 
 /** What the vehicle is called in the caption (any world id; a world without its own gets its family's vehicle). */
-export const vehicleName = (id: string): string => NAMES[familyOf(id)];
+export const vehicleName = (id: string): string => OWN[id]?.name ?? NAMES[familyOf(id)];
 /** The vehicle's drawing for a world. */
 export const vehicleSVG = (id: string): string => {
+  const own = OWN[id];
+  if (own) return own.svg();
   switch (familyOf(id)) {
     case 'dino': return leaf();
     case 'dragon': return carpet();
@@ -124,20 +179,61 @@ const pose = (pack: PackId, v: number, f: number): Pose => {
   return { x, y: y + wind, r, s: popped ? s * (1 - (f - 0.93) / 0.07) : s, o: popped ? 1 - (f - 0.93) / 0.07 : f < 0.8 ? 1 : 1 - (f - 0.8) / 0.2 };
 };
 
+const S = Math.sin, C = Math.cos, PI = Math.PI, ab = Math.abs;
+const mk = (x: number, y: number, r: number, f: number, s = 1 - 0.32 * f): Pose => ({ x, y, r, s, o: f < 0.8 ? 1 : 1 - (f - 0.8) / 0.2 });
+/** The newer worlds' own vehicles: drawing, caption name, speed and THREE exits (by round, deterministic), all leaving diagonally across the card. */
+const OWN: Partial<Record<string, { svg: () => string; name: string; speed: number; pose: (v: number, f: number) => Pose }>> = {
+  robot: { svg: cart, name: 'hover cart', speed: 1, pose: (v, f) => { // zip right / hop-hop-hop up / zig-zag left
+    const e = Math.pow(f, 1.8);
+    if (v === 0) return mk(360 * e, -280 * e + 9 * S(f * 22) * (1 - f), -8 * smooth(0, 0.2, f), f);
+    if (v === 1) return mk(36 * S(f * 8), -340 * f - 28 * ab(S(f * PI * 4)), 0, f);
+    return mk(-300 * e + 58 * S(f * 14), -330 * e, 10 * C(f * 14), f);
+  } },
+  pirate: { svg: boat, name: 'little boat', speed: 1.1, pose: (v, f) => { // sails right over the waves / leaps on the waves / sails round in a loop
+    if (v === 0) return mk(380 * Math.pow(f, 1.4), -250 * Math.pow(f, 1.4) + 16 * S(f * 16), 8 * S(f * 16) - 10 * smooth(0, 0.3, f), f);
+    if (v === 1) return mk(-210 * f, -330 * f - 42 * ab(S(f * PI * 3)), 6 * S(f * 9), f);
+    return mk(300 * Math.pow(f, 1.4), -300 * Math.pow(f, 1.4), -360 * smooth(0.25, 0.8, f), f);
+  } },
+  fairy: { svg: dragonfly, name: 'dragonfly', speed: 1.1, pose: (v, f) => { // a figure-eight climb / a zig-zag / a spiral to the left
+    if (v === 0) return mk(200 * f + 110 * S(f * 2 * PI), -360 * f + 46 * S(f * 4 * PI), 12 * C(f * 2 * PI), f);
+    if (v === 1) return mk(290 * f + 60 * S(f * 18), -340 * f, 10 * C(f * 18), f);
+    return mk(-210 * f + 70 * S(f * 12), -360 * f + 40 * (1 - C(f * 12)) * 0.5, 14 * S(f * 12), f);
+  } },
+  jungle: { svg: vineBasket, name: 'vine basket', speed: 1.1, pose: (v, f) => { // swings and is flung off to the right / the left / after three swings
+    const dir = v === 1 ? -1 : 1;
+    const sw = (v === 2 ? 3 : 1.5) * PI * f;
+    const fl = smooth(0.5, 1, f);
+    return mk(190 * S(sw) * (1 - f * 0.5) + dir * 230 * fl, -50 * (1 - C(sw)) - 340 * fl, -14 * S(sw) * (1 - f) + dir * 16 * fl, f);
+  } },
+  music: { svg: noteBalloon, name: 'note balloon', speed: 1.15, pose: (v, f) => { // drifts right with a wobble / rises and twirls / drifts left
+    const e = Math.pow(f, 1.3);
+    if (v === 1) return mk(30 * S(f * 6), -400 * e, 360 * smooth(0.2, 0.9, f) * 0.5 + 10 * S(f * 6), f);
+    const d = v === 0 ? 1 : -1;
+    return mk(d * 260 * e + 40 * S(f * 7), -380 * e, 14 * S(f * 7), f);
+  } },
+  arctic: { svg: sled, name: 'sled', speed: 0.95, pose: (v, f) => { // slides off a ramp / bumps along / flips as it goes
+    const e = Math.pow(f, 1.7);
+    if (v === 0) return mk(420 * e, -300 * e, -18 * smooth(0, 0.2, f), f);
+    if (v === 1) return mk(420 * e, -250 * e - 34 * ab(S(f * PI * 4)), -8, f);
+    return mk(400 * e, -280 * e, -360 * smooth(0.3, 0.8, f), f);
+  } },
+};
+
 const SPEED: Record<PackId, number> = { dino: 1.05, dragon: 1, transport: 0.95, space: 1, ocean: 1.1, farm: 1.1 };
 /** How long the exit takes, in ms (the games wait for about this long). */
-export const exitMs = (id: string, short: boolean): number => (short ? 800 : 1100) * SPEED[familyOf(id)];
+export const exitMs = (id: string, short: boolean): number => (short ? 800 : 1100) * (OWN[id]?.speed ?? SPEED[familyOf(id)]);
 
 /** Fly the vehicle off across the card. `variant` is the round number (0, 1, 2, 0...), `short` shortens repeats. Resolves when it has gone. */
 export const vehicleExit = (el: HTMLElement, id: string, variant: number, short: boolean): Promise<void> => {
   if (reducedMotion()) { el.style.opacity = '0'; return Promise.resolve(); }
   const pack = familyOf(id);
+  const own = OWN[id];
   const dur = exitMs(id, short);
   const N = 22;
   const kf: Keyframe[] = [];
   for (let k = 0; k <= N; k++) {
     const f = k / N;
-    const p = pose(pack, variant % 3, f);
+    const p = own ? own.pose(variant % 3, f) : pose(pack, variant % 3, f);
     kf.push({ transform: `translate(${p.x.toFixed(1)}px, ${p.y.toFixed(1)}px) rotate(${p.r.toFixed(1)}deg) scale(${Math.max(0.02, p.s).toFixed(3)})`, opacity: p.o, offset: f });
   }
   const a = el.animate(kf, { duration: dur, easing: 'linear', fill: 'forwards' });

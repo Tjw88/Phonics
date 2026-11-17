@@ -32,9 +32,9 @@
 .hatch-scene .btn.go { min-width: 120px; }
 
 /* ---------- end of day: the picture comes alive, then the chest the child taps ---------- */
-.finale { gap: 10px; }
+.finale { gap: 6px; }
 .fin-stage { --cw: clamp(190px, 30vw, 240px); --pw: clamp(124px, 20vw, 164px); --ww: clamp(190px, 38vw, 280px);
-  position: relative; width: min(100%, 600px); height: clamp(230px, 36vh, 340px); }
+  position: relative; width: min(100%, 600px); height: clamp(200px, 31vh, 300px); }
 .finale .fin-word { position: absolute; left: 50%; top: 50%; width: var(--ww); margin: calc(var(--ww) / -2) 0 0 calc(var(--ww) / -2); z-index: 4; }
 .finale .alive-pic { animation: none; }
 .finale .alive-pic .pic-wrap { width: 78%; }
@@ -51,7 +51,7 @@
 .fin-star { font-size: 4.4rem; }
 .finale .treasure-name { font-size: 1.5rem; min-height: 1.5em; }
 @media (max-width: 600px) {
-  .fin-stage { --cw: clamp(140px, 42vw, 180px); --pw: clamp(92px, 26vw, 116px); height: clamp(240px, 34vh, 300px); }
+  .fin-stage { --cw: clamp(140px, 42vw, 180px); --pw: clamp(92px, 26vw, 116px); height: clamp(210px, 29vh, 270px); }
   .fin-chest, .fin-prize { left: calc(60% - var(--cw) / 2); } .fin-prize { left: calc(60% - var(--pw) / 2); }
   .fin-pet { width: clamp(80px, 24vw, 104px); }
 }
@@ -129,8 +129,8 @@ body.night #scene-bg::after { animation: shooting 13s linear infinite 2.5s; }
 @keyframes hand-bob { 0%, 100% { transform: translateY(6px); } 50% { transform: translateY(-8px); } }
 
 /* ---------- grown-up content during a celebration: quiet, readable, away from the child's focus ---------- */
-.goodnight-row { min-height: 92px; }
-.grownup-zone { width: min(100%, 560px); margin-top: 10px; padding-top: 12px; border-top: 2px dotted #1d355730; display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0.88; }
+.goodnight-row { min-height: 88px; }
+.grownup-zone { width: min(100%, 560px); margin-top: 4px; padding-top: 8px; border-top: 2px dotted #1d355730; display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0.88; }
 .grownup-zone .btn { min-height: 48px; font-size: 1.05rem; padding: 6px 20px; background: transparent; box-shadow: inset 0 0 0 2px #1d355733; font-weight: 600; }
 .grownup-zone .btn:active { transform: none; }
 .grownup-zone .grownup-card { margin: 0; max-width: 100%; padding: 6px 10px; border: 0; background: transparent; font-size: 1.05rem; line-height: 1.35; color: #4f3f12; }
@@ -164,4 +164,19 @@ body.night #scene-bg::after { animation: shooting 13s linear infinite 2.5s; }
   .world { width: auto; min-width: 0; padding: 3px; border-width: 3px; }
   .world .wthumb { width: 100%; height: 44px; }
   .world .wname { font-size: 11px; }
+}
+
+/* ---------- 'Pick a friend' on a phone: title, twelve worlds, the four friends in ONE row, name and Hatch all fit in 844 px ---------- */
+@media (max-width: 600px) {
+  .eggs { flex-wrap: nowrap; gap: 6px; }
+  .tile.egg { min-width: 0; min-height: 0; flex: 1 1 0; padding: 6px 3px; border-radius: 22px; }
+  .tile.egg svg { width: 100%; max-width: 64px; height: auto; margin: 0 auto; }
+  .scene.setup { gap: 10px; }
+  .scene.setup h1 { font-size: 1.8rem; }
+}
+@media (max-height: 800px) and (min-width: 601px) { .tile.egg svg { width: 88px; height: 110px; } }
+
+/* phone header: a clear dark ring round the header buttons, so a moon or cloud in the backdrop behind them (the space world has a crescent there) never reads as part of the button */
+@media (max-width: 600px) {
+  .top .btn.quiet, .top .corner { box-shadow: inset 0 0 0 3px #1d3557cc, 0 4px 0 #1d355733; border-color: #fff; }
 }
