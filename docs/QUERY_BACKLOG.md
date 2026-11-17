@@ -4,6 +4,17 @@ Standing instruction from Tom: **any question I ask that remains unanswered goes
 
 ## Open
 
+### Q16. Where should the "For the grown-up" mission live on the finale screen? (asked 17 Nov 2026)
+- **Context:** the cycle-2 review found the mission card now sits below the fold at 1180x820 (its text edge peeks in) and off-screen at 1024x768. It must be visible to the grown-up, not the centre of the child's celebration.
+- **Options:** (a) a small "For the grown-up" corner tab that opens the card; (b) keep it on the screen but compact, directly under the chest and above Goodnight; (c) move it to the parent area only (the Today and This week tabs already show it).
+- **My default while open:** the current layout (below the Goodnight button, scrollable).
+
+### Q15. Continue to animation cycle 3 now? (asked 17 Nov 2026)
+- **Context:** cycle 2 met the exit criterion by the reviewer's scores, but variety (3.4) and fun (3.9) are still the weakest dimensions; the ranked backlog is in `docs/ANIMATION_SPEC.md` section 9.
+- **Options:** (a) yes, run cycle 3 now (hatch follow-through, Safari wrong tap, first-success waits, Rhyme vehicle, home idle in all worlds, Bridge weight, robot body); (b) pause the animation work until a person has watched a few sessions on a real device; (c) something else first (new packs, audio).
+- **My recommendation:** (b) for the major remaining items, but do the small ones (hatch wave, Safari wrong tap, the waits) in a short cycle first.
+- **My default while open:** none started.
+
 ### Q14. Free Play from the start: is the "quiet Play again" right? (asked 17 Nov 2026)
 - **Context:** Free Play now appears on the home screen as soon as the child has met one sound, the adventure stays the big green button until it is done, and then "Play again" becomes a quiet button. It counts toward the daily limit and uses only sounds already met.
 - **Options:** (a) keep this; (b) also hide "Play again" once the day is done (Free Play only); (c) show the adventure and Free Play as equals.

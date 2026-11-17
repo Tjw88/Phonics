@@ -70,12 +70,14 @@ const wiggle = (k = 1): Prim => ({
     { transform: 'rotate(0deg) scale(1)' },
   ],
 });
+// a lively wobble-flip: it swings to either side (never edge-on: a full turn made a thin sliver that read as a flicker, width stayed ~0.33)
 const twirl = (k = 1): Prim => ({
   dur: 820,
   kf: [
-    { transform: 'perspective(520px) rotateY(0deg) translateY(0px)' },
-    { transform: `perspective(520px) rotateY(180deg) translateY(${-26 * k}px)`, offset: 0.5 },
-    { transform: 'perspective(520px) rotateY(360deg) translateY(0px)' },
+    { transform: 'perspective(520px) rotateY(0deg) rotateZ(0deg) translateY(0px)' },
+    { transform: `perspective(520px) rotateY(32deg) rotateZ(-6deg) translateY(${-26 * k}px)`, offset: 0.35 },
+    { transform: `perspective(520px) rotateY(-32deg) rotateZ(6deg) translateY(${-18 * k}px)`, offset: 0.7 },
+    { transform: 'perspective(520px) rotateY(0deg) rotateZ(0deg) translateY(0px)' },
   ],
 });
 const rock = (k = 1): Prim => ({

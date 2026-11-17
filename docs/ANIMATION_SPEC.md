@@ -84,3 +84,23 @@ Implemented by three engineers in separate files (flow and scenes: `app.ts`, `fl
 **Reviewer scores (1-5, averages):** polish 3.9, fun 3.7, clarity 4.1, theme fit 3.9, variety 3.1. The exit criterion in section 6 (nothing below 4 for polish and theme fit) was **not met**: Robot Talk and the home idle were below 4 on theme fit, Trace Trail and the Free Play doors on theme fit, and variety was the weakest dimension.
 **Bugs found (no crash, stuck state or page error):** Bridge Builder word choices clipped at 1180x820 (fixed in cycle 2), no visible reaction to a wrong tap in Sound Safari, a chest-open cue that was too faint with Goodnight hidden behind it, the filled hot ring hiding the creature's face during a drag, a 250 ms cross-fade double exposure, waits above the 2 s budget with no short version (Rhyme, Kitchen, Bridge), eat variants that were visibly the same in some worlds, grown-up content in the child's celebration.
 **Cycle 2** (same engineers, with the reviewer's findings for their area): the chest cue, transition polish, world-flavoured home idle and Free Play doors; the Bridge clip, the hot ring, real eat-variant variety, short versions for Rhyme and Bridge, a reactive and themed Robot, a bigger Rhyme vehicle; Safari's wrong tap, a bigger creature in Safari and Kitchen, a short Kitchen after the first success, a world-flavoured Trace friend, drummer pose variety. A second independent review follows.
+
+## 9. Cycle 2 results (17 Nov 2026)
+
+The same engineers fixed the cycle-1 findings; the same independent reviewer then **re-tested every item from scratch** (frames in all six worlds, DOM measurements, Reduce Motion).
+**Scores (1-5 averages), cycle 1 -> cycle 2:** polish 3.9 -> 4.0, fun 3.7 -> 3.9, clarity 4.1 -> 4.2, theme fit 3.9 -> 4.4, variety 3.1 -> 3.4. By the reviewer's scores **the exit criterion (nothing below 4 for polish and theme fit) is met**, with two caveats: the home-idle theme score rests on only two of six worlds checked, and the hatch is unchanged from cycle 1. Variety (3.4) and fun (3.9) remain the weakest dimensions; the spec does not gate on them.
+**Fixed and verified:** the Bridge choices fit at 1180x820, 1024x768 and 390x844 in all six worlds (measured); the chest cue (caption, ring, hand after about 4 s, no countdown) and Goodnight appearing 0.3 s after the tap (was 3.5 s); the dashed hot ring (face visible); Feed rounds with measurably different body motions; short versions (first, repeat: Feed 2.27 / 1.5 s, Rhyme 2.45 / 1.56 s, Kitchen 2.89 / 1.98 s, Bridge 2.37 / 1.33 s); a reactive, hatted Robot per world; a 180 px Safari creature and a 270 px Kitchen pot; Trace friends with a world glow and badge, including two-stroke and 7-stroke letters; per-world Free Play doors; drummer poses; the cross-fade overlap down to about 190 ms. No crash, stuck state or page error in any run; no regressions.
+**Fixed after the re-review:** the ocean Feed round-3 spin that passed through an edge-on sliver is now a wobble-flip that never goes edge-on.
+
+**Cycle 3 backlog (from the re-review, ranked):**
+1. Hatch follow-through: a wave (arm, wing, flipper, ear) and a look at Play before idling.
+2. Safari wrong tap on the item itself (the creature reacts, the tapped picture does not).
+3. First-success waits above 2 s: Rhyme 2.45 s, Kitchen 2.9 s (trim the Rhyme exit to about 1.8 s and the Kitchen steam to about 1.2 s the first time).
+4. Rhyme: the vehicle is still small in its window; make it the star (about 1.5x, a diagonal take-off, more exit variety).
+5. Home idle per world: confirmed only in dragon and ocean; check and finish farm, space, dino, transport; add an occasional bigger action every 10-15 s.
+6. Bridge crossing weight (walk plank by plank with a squash each).
+7. The robot's body should move on the answer (it nods and shrugs; the reviewer saw only the beads and the halo).
+8. Finale layout: the grown-up block sits below the fold at 1180x820 and off-screen at 1024x768 (decision: see Query Backlog).
+9. Day variety: the longest same-game run was 3 in a 14-day day; put a short non-Feed game between blocks; vary Kitchen's 5 s rounds.
+10. Small: Kitchen overflows a 390x844 phone by 10 px; the ghost hand sits on the letter to drag in Kitchen and over the rocket in Rhyme; a ghost frame lingers about 190 ms in the cross-fade.
+**Not judged:** audio sync, real children and touch, smooth motion curves (captured at about 7 fps), long-term novelty.
