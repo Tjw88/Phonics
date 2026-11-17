@@ -103,19 +103,18 @@ export const install = (): void => {
     c(56, 18, 5.8, K.white) + c(68, 18, 5.8, K.white) + c(57, 19, 3.2, K.ink) + c(69, 19, 3.2, K.ink) + c(58, 18, 1, K.white) + c(70, 18, 1, K.white) +
     s('M52 30 q9 5 17 0', '#2f7d47', 2) + c(50, 26, 2.6, K.pink, 'opacity=".5"'));
 
-  // ---- cow: one connected black-and-white cow, three-quarter head joined to the body by a neck, udder, tail --------------
-  const cShade = '#d9d4e4';
-  add('cow', shadow(94, 38) +
-    s('M90 54 Q99 64 93 82', K.ink, 3.6) + p('M89 80 q-6 8 0 14 q8 -2 6 -12z', K.ink) +
-    r(52, 72, 11, 20, 4, cShade) + r(78, 72, 11, 20, 4, cShade) + r(52, 88, 11, 6, 3, K.ink) + r(78, 88, 11, 6, 3, K.ink) +
-    e(58, 62, 32, 22, cShade) + e(58, 60, 32, 22, K.white) + e(72, 50, 10, 8, K.ink, -10) + e(82, 68, 7, 8, K.ink) + e(56, 70, 8, 6, K.ink, 20) + e(50, 46, 7, 6, K.ink, 10) +
-    e(70, 82, 7, 5, K.pink) +
-    r(24, 72, 11, 20, 4, K.white) + r(40, 72, 11, 20, 4, K.white) + r(24, 88, 11, 6, 3, K.ink) + r(40, 88, 11, 6, 3, K.ink) +
-    e(12, 42, 9, 4.5, '#4a4458', -25) + e(46, 38, 9, 4.5, '#4a4458', 20) + e(12, 42, 5, 2.4, K.pink, -25) + e(46, 38, 5, 2.4, K.pink, 20) +
-    p('M20 34 Q16 22 21 18 Q25 26 26 34Z M36 34 Q40 22 35 18 Q31 26 30 34Z', '#f1e2b8') +
-    c(28, 50, 18, cShade) + c(28, 48, 17, K.white) + e(35, 38, 7, 8, K.ink, 20) +
-    e(27, 62, 13, 9.5, K.pink) + e(22, 62, 2.4, 3.2, K.dpink) + e(32, 62, 2.4, 3.2, K.dpink) +
-    eye(21, 47, 3.6) + eye(35, 47, 3.6) + s('M21 69 q6 3.5 12 0', K.dpink, 1.8));
+  // ---- cow: a big friendly black-and-white cow face: horns, ears, a few large patches and a big pink muzzle ----
+  {
+    add('cow', shadow(96, 34) +
+      e(50, 92, 30, 10, '#d9d4e4') + e(50, 90, 30, 10, K.white) +
+      p('M30 24 Q20 8 30 2 Q38 10 44 22Z M70 24 Q80 8 70 2 Q62 10 56 22Z', '#e8c48a') +
+      e(15, 38, 13, 7, '#2a2f3d', -18) + e(85, 38, 13, 7, '#2a2f3d', 18) + e(16, 38, 7, 3.4, K.pink, -18) + e(84, 38, 7, 3.4, K.pink, 18) +
+      e(50, 52, 29, 34, '#d9d4e4') + e(50, 50, 29, 34, K.white) +
+      p('M24 40 C22 24 36 18 44 24 C48 32 42 44 36 52 C30 56 24 50 24 40Z', K.ink) +
+      p('M60 20 C72 18 80 28 74 38 C68 38 62 32 60 20Z', K.ink) +
+      e(50, 70, 20, 15, '#ff7ea1') + e(50, 68, 20, 14, K.pink) + e(42, 68, 3.2, 4.6, K.dpink) + e(58, 68, 3.2, 4.6, K.dpink) + s('M42 77 q8 5 16 0', K.dpink, 2) +
+      eye(35, 46, 4.2) + eye(65, 46, 4.2));
+  }
 
   // ---- sheep: whole fluffy white sheep, side-on, dark face and legs (no horns) -----------------------------------------
   const wool = '#ffffff';

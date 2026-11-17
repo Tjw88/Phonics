@@ -68,20 +68,21 @@ const trumpetSVG = (growth: number): string => {
   const light = mixHex(main, '#ffffff', 0.55);
   const silver = '#e6ecf4', silverDark = '#aab6c6';
   const defs = `<radialGradient id="music-trumpet-bell" cx="42%" cy="36%" r="75%"><stop offset="0" stop-color="#fffbe4"/><stop offset=".65" stop-color="#fff0b0"/><stop offset="1" stop-color="#ffe07a"/></radialGradient>`;
-  // the tube leaves the bell as a long, clearly flared funnel, runs right to the mouthpiece and loops back under itself
-  const loop = 'M178 90 V118 Q178 136 160 136 H136';
+  // the bell flares into a long thin tube that runs right to a mouthpiece, then wraps back round in two nested loops (as a real trumpet does)
+  const loop1 = 'M186 90 V124 Q186 152 160 152 H130';
+  const loop2 = 'M170 90 V116 Q170 134 152 134 H130';
+  const wrap = (d: string) => `<path d="${d}" stroke="${dark}" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" stroke="${main}" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
   const tail = `<g class="tail">
-    <path d="M100 31 L174 75 V93 L100 137Z" fill="${main}" stroke="${dark}" stroke-width="4" stroke-linejoin="round"/>
-    <path d="M128 52 L172 78" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".5"/>
-    <path d="${loop}" stroke="${dark}" stroke-width="17" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${loop}" stroke="${main}" stroke-width="11" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-    <rect x="168" y="75" width="24" height="18" rx="5" fill="${main}" stroke="${dark}" stroke-width="3.5"/><path d="M170 79 H190" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".55"/>
-    <rect x="182" y="73" width="4" height="22" rx="2" fill="${dark}"/>
-    <path d="M192 76 H198 Q202 84 198 92 H192Z" fill="${silver}" stroke="${silverDark}" stroke-width="2.4" stroke-linejoin="round"/></g>`;
-  const valve = (x: number) => `<rect x="${x - 10}" y="150" width="20" height="38" rx="9" fill="${dark}"/><rect x="${x - 7.5}" y="153" width="5" height="32" rx="2.5" fill="#fff" opacity=".35"/><rect x="${x - 12}" y="144" width="24" height="10" rx="5" fill="${light}" stroke="${dark}" stroke-width="2"/><circle cx="${x}" cy="141" r="6" fill="${accent}"/><circle cx="${x - 2}" cy="139" r="1.8" fill="#fff" opacity=".8"/>`;
+    <path d="M100 31 L176 77 V91 L100 137Z" fill="${main}" stroke="${dark}" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M132 50 L172 78" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".5"/>
+    ${wrap(loop1)}${wrap(loop2)}<path d="M181 98 V122" stroke="#fff" stroke-width="2.6" stroke-linecap="round" opacity=".5"/>
+    <rect x="168" y="76" width="30" height="16" rx="8" fill="${main}" stroke="${dark}" stroke-width="3.5"/><path d="M176 81 H192" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"/>
+    <path d="M196 77 H200 Q205 84 200 91 H196Z" fill="${silver}" stroke="${silverDark}" stroke-width="2.2" stroke-linejoin="round"/></g>`;
+  const valve = (x: number) => `<rect x="${x - 8}" y="148" width="16" height="40" rx="7" fill="${dark}"/><rect x="${x - 5.5}" y="151" width="4" height="34" rx="2" fill="#fff" opacity=".4"/><rect x="${x - 11}" y="141" width="22" height="9" rx="4.5" fill="${silver}" stroke="${silverDark}" stroke-width="1.8"/><rect x="${x - 3.5}" y="132" width="7" height="10" rx="2.5" fill="${silverDark}"/><circle cx="${x}" cy="131" r="6.4" fill="${accent}" stroke="#c4175a" stroke-width="1.6"/><circle cx="${x - 2}" cy="129" r="1.9" fill="#fff" opacity=".85"/>`;
   const body = `
     <ellipse cx="74" cy="198" rx="17" ry="9" fill="${dark}"/><ellipse cx="126" cy="198" rx="17" ry="9" fill="${dark}"/>
-    <ellipse cx="100" cy="160" rx="52" ry="38" fill="${main}"/><ellipse cx="100" cy="170" rx="42" ry="27" fill="${light}"/>
-    ${valve(72)}${valve(100)}${valve(128)}`;
+    <ellipse cx="100" cy="162" rx="52" ry="36" fill="${main}"/><ellipse cx="100" cy="172" rx="44" ry="25" fill="${light}"/>
+    ${valve(70)}${valve(100)}${valve(130)}`;
   const head = `<ellipse cx="100" cy="${HY}" rx="50" ry="52" fill="${dark}"/><ellipse cx="100" cy="${HY}" rx="47" ry="49" fill="${main}"/>
     <path d="M60 52 A46 47 0 0 1 100 37" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".6"/>
     <ellipse cx="100" cy="${HY}" rx="43" ry="45" fill="url(#music-trumpet-bell)"/><ellipse cx="100" cy="${HY}" rx="43" ry="45" fill="none" stroke="#f0b400" stroke-width="2.6" opacity=".7"/>`;
@@ -89,13 +90,14 @@ const trumpetSVG = (growth: number): string => {
 };
 
 // ---------------------------------------------------------------- xylophone
-const XYLO = { main: '#29a8ff', dark: '#0b6cc2', accent: '#ff7a1a' };
+const XYLO = { main: '#13b9ef', dark: '#0577a6', accent: '#ff7a1a' };
 const BARS = ['#ff4d5e', '#ff9f1c', '#ffd91a', '#35d07f', '#a066ff'];
 const xyloSVG = (growth: number): string => {
   const { main, dark } = XYLO;
-  const panel = '#ebf8ff';
+  const panel = '#e6fafd';
   const wood = '#b9792f', woodLight = '#f4c682';
-  const tail = `<g class="tail"><path d="M140 180 L184 124" stroke="${wood}" stroke-width="8" stroke-linecap="round"/><path d="M140 180 L184 124" stroke="${woodLight}" stroke-width="4.5" stroke-linecap="round"/><circle cx="188" cy="118" r="13" fill="#e0243a"/><circle cx="188" cy="118" r="13" fill="none" stroke="#a8061c" stroke-width="2"/><ellipse cx="184" cy="113" rx="4" ry="2.8" fill="#fff" opacity=".75"/></g>`;
+  const mallet = (x1: number, y1: number, x2: number, y2: number) => `<path d="M${x1} ${y1} L${x2} ${y2}" stroke="${wood}" stroke-width="7" stroke-linecap="round"/><path d="M${x1} ${y1} L${x2} ${y2}" stroke="${woodLight}" stroke-width="3.6" stroke-linecap="round"/><circle cx="${x2 + (x2 > x1 ? 3 : -3)}" cy="${y2 - 5}" r="12" fill="#e0243a" stroke="#a8061c" stroke-width="2"/><ellipse cx="${x2 + (x2 > x1 ? 0 : -6)}" cy="${y2 - 10}" rx="4" ry="2.8" fill="#fff" opacity=".75"/>`;
+  const tail = `<g class="tail">${mallet(142, 168, 182, 120)}</g>`;
   const bars = BARS.map((c, i) => {
     const w = 70 + i * 8; // wider towards the bottom
     const y = 132 + i * 12.4;
@@ -105,10 +107,12 @@ const xyloSVG = (growth: number): string => {
     <ellipse cx="68" cy="198" rx="17" ry="9" fill="${dark}"/><ellipse cx="132" cy="198" rx="17" ry="9" fill="${dark}"/>
     <path d="M70 124 L130 124 L156 194 L44 194Z" fill="${dark}" stroke="${dark}" stroke-width="10" stroke-linejoin="round"/>
     <path d="M70 124 L130 124 L156 194 L44 194Z" fill="${main}" stroke="${main}" stroke-width="3" stroke-linejoin="round"/>
-    ${bars}`;
-  const head = `<rect x="49" y="36" width="102" height="100" rx="46" fill="${dark}"/><rect x="49" y="36" width="102" height="96" rx="46" fill="${main}"/>
-    <path d="M62 60 Q64 46 78 42" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".55"/>
-    <rect x="58" y="46" width="84" height="82" rx="36" fill="${panel}"/><rect x="58" y="46" width="84" height="82" rx="36" fill="none" stroke="#bfe3f8" stroke-width="2.5"/>`;
+    ${bars}
+    ${mallet(58, 168, 18, 120)}`;
+  const head = `<rect x="49" y="36" width="102" height="100" rx="32" fill="${dark}"/><rect x="49" y="36" width="102" height="96" rx="32" fill="${main}"/>
+    <rect x="72" y="38.5" width="18" height="5" rx="2.5" fill="#ff4d5e"/><rect x="91" y="38.5" width="18" height="5" rx="2.5" fill="#ffd91a"/><rect x="110" y="38.5" width="18" height="5" rx="2.5" fill="#35d07f"/>
+    <path d="M56 62 Q56 48 68 46" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".55"/>
+    <rect x="58" y="47" width="84" height="80" rx="24" fill="${panel}"/><rect x="58" y="47" width="84" height="80" rx="24" fill="none" stroke="#b4eaf5" stroke-width="2.5"/>`;
   return shell('', tail, body, '', head, '', growth);
 };
 

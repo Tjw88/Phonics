@@ -61,23 +61,25 @@ export const install = (): void => {
     p('M32 28 L28 8 L40 17 L50 3 L60 17 L72 8 L68 28Z', K.yellow) + r(31, 22, 38, 8, 3, K.dyellow) + c(28, 8, 3.2, K.pink) + c(50, 3, 3.4, K.red) + c(72, 8, 3.2, K.pink) +
     c(40, 26, 2.2, K.red) + c(50, 26, 2.2, K.blue) + c(60, 26, 2.2, K.red) + r(34, 10, 3.6, 10, 2, '#ffffff77', 12));
 
-  // ---- quilt: a patchwork quilt on a bed, folded back at the top to show a pillow ----
-  const qCols = [K.red, K.yellow, K.blue, K.green, K.violet, K.orange, K.pink, K.red, K.blue, K.yellow, K.green, K.orange, K.violet, K.pink, K.blue];
-  let qPatches = '';
-  for (let j = 0; j < 3; j++) for (let i = 0; i < 5; i++) {
-    const x = 10 + i * 16; const y = 47 + j * 14.4;
-    qPatches += r(x + 0.8, y + 0.8, 14.4, 12.8, 1.6, qCols[j * 5 + i]!) + s(`M${x + 3.6} ${y + 3.4} L${x + 12.4} ${y + 10.6}`, '#ffffff99', 1.3, 'stroke-dasharray="2 2"') + s(`M${x + 12.4} ${y + 3.4} L${x + 3.6} ${y + 10.6}`, '#ffffff55', 1.3, 'stroke-dasharray="2 2"');
+  // ---- quilt: a patchwork quilt with stitched patches and a folded corner, a small cat sitting on top ----
+  {
+    const qC = [K.red, K.yellow, K.blue, K.green, K.violet, K.orange, K.pink, K.blue, K.yellow, K.green, K.red, K.violet];
+    let qp = '';
+    for (let j = 0; j < 3; j++) for (let i = 0; i < 4; i++) {
+      const x = 7 + i * 21.5; const y = 46 + j * 15.5;
+      qp += r(x + 1, y + 1, 19.5, 13.5, 2, qC[j * 4 + i]!) + s(`M${x + 4} ${y + 4} H${x + 17.5} V${y + 11.5} H${x + 4}Z`, '#ffffffaa', 1.2, 'stroke-dasharray="2.2 2"');
+    }
+    add('quilt', shadow(96, 42) +
+      '<defs><clipPath id="qcut"><path d="M4 42 H96 V72 L74 94 H4Z"/></clipPath></defs>' +
+      '<g clip-path="url(#qcut)">' + r(4, 42, 92, 52, 4, K.dviolet) + qp + r(4, 42, 92, 52, 4, 'none', 0, 'stroke="#c2284f" stroke-width="5"') + '</g>' +
+      p('M96 72 L74 94 L74 72Z', '#e0d3b8') + p('M96 72 L74 94 L74 72Z', 'none', 'stroke="#c2284f" stroke-width="2.4" stroke-linejoin="round"') + p('M90 76 L78 88 L78 76Z', '#fff3d6') + p('M74 72 L96 72 L74 94Z', '#00000014') +
+      s('M70 48 Q50 52 30 48', '#ffffff55', 1.6) +
+      p('M64 62 Q86 58 82 40 Q80 34 76 38', 'none', `stroke="${K.dorange}" stroke-width="7" stroke-linecap="round"`) +
+      e(46, 52, 17, 14, '#e8842a') + e(46, 50, 17, 14, K.orange) + e(46, 56, 9, 8, '#ffe2bd') +
+      p('M30 26 L28 8 L40 18Z M62 26 L64 8 L52 18Z', K.orange) + p('M32 22 L31 13 L37 18Z M60 22 L61 13 L55 18Z', K.pink) +
+      c(46, 28, 17, K.orange) + e(46, 36, 8, 5.5, '#ffe2bd') + eye(39, 26, 3.2) + eye(53, 26, 3.2) + c(46, 32, 2.2, K.dpink) + s('M42 36 q4 3 8 0', K.dorange, 1.8) +
+      s('M36 22 v4 M46 18 v5 M56 22 v4', '#d9741a', 1.8, 'opacity=".5"'));
   }
-  const scallops = [0, 1, 2, 3, 4, 5, 6, 7].map((i) => c(14.5 + i * 10.4, 91, 5.6, i % 2 ? K.dred : K.red)).join('');
-  add('quilt', shadow(96, 42) +
-    r(4, 4, 92, 88, 9, K.dbrown) + r(4, 4, 92, 10, 5, '#a8703a') + r(9, 13, 82, 76, 6, '#f6efe3') +
-    r(22, 16, 56, 24, 12, '#dfe7f0') + r(22, 14, 56, 24, 12, K.white) + s('M32 26 Q50 30 68 26', '#dfe7f0', 2) + r(28, 18, 14, 4, 2, '#ffffffcc') +
-    r(9, 44, 82, 46, 4, K.dviolet) + scallops + r(9, 44, 82, 46, 4, 'none') +
-    qPatches +
-    s('M10 45 H90 M10 59.4 H90 M10 73.8 H90', '#ffffffaa', 1.4, 'stroke-dasharray="3 2.4"') +
-    p('M9 44 Q50 36 91 44 V30 Q50 24 9 30Z', '#e0607f') + p('M9 30 Q50 24 91 30 V36 Q50 30 9 36Z', K.pink) +
-    [[18, 38], [34, 40], [50, 40], [66, 40], [82, 38]].map(([x, y]) => c(x!, y!, 2.2, '#ffffffcc')).join('') +
-    p('M9 44 Q50 36 91 44 V47 Q50 39 9 47Z', '#00000018'));
 
   // ---- van: a small yellow delivery van, side view ----
   add('van', shadow(94, 42) +
@@ -128,18 +130,26 @@ export const install = (): void => {
     s('M34 30 C28 40 34 46 28 58 M66 30 C72 40 66 46 72 58', '#ffffff88', 2.2) +
     s('M44 24 C54 28 62 34 68 42', '#ffffff77', 2.2));
 
-  // ---- wing: a single bird's wing, side view: a curved leading edge and three rows of layered feathers ----
-  const feather = (bx: number, by: number, ang: number, len: number, wid: number, f: string): string => {
-    const a = (ang * Math.PI) / 180;
-    return e(bx + (len / 2) * Math.cos(a), by - (len / 2) * Math.sin(a), len / 2, wid, f, -ang);
-  };
-  const fan = (angs: number[], len: number, wid: number, f: string, dx = 0): string => angs.map((a, i) => feather(14 + dx, 40, a, len - (i % 2) * 4, wid, f)).join('');
-  add('wing', shadow(95, 32) +
-    fan([22, 10, -2, -14, -26, -38], 82, 6.6, '#c4dbec') + fan([22, 10, -2, -14, -26, -38], 80, 6.2, K.white) +
-    fan([26, 14, 2, -10, -22, -34, -46], 58, 6.4, '#9fd9ea') +
-    fan([28, 17, 6, -5, -16, -27, -38, -49], 38, 5.6, K.blue) +
-    p('M8 52 Q10 26 38 20 Q66 14 92 24 Q66 24 46 32 Q24 40 8 52Z', '#2fa0c4') + p('M14 46 Q22 28 44 24 Q62 21 80 23 Q58 26 42 32 Q26 38 14 46Z', '#6fd0e6') +
-    c(12, 50, 5, '#2fa0c4') + s('M20 44 Q34 30 58 24', '#ffffff88', 2));
+  // ---- wing: a round blue bird with ONE big wing raised up and out: layered feathers fanning from the shoulder ----
+  {
+    const fth = (ang: number, len: number, wid: number, f: string): string => {
+      const a = (ang * Math.PI) / 180;
+      return e(48 + (len / 2) * Math.cos(a), 62 - (len / 2) * Math.sin(a), len / 2, wid, f, -ang);
+    };
+    const angs = [78, 58, 38, 18];
+    const prim = angs.map((a) => fth(a, 46, 9.5, '#2f56a8')).join('');
+    const primL = angs.map((a) => fth(a, 43, 7, '#5b8fe0')).join('');
+    const cov = [70, 50, 30].map((a) => fth(a, 28, 8.4, '#2f56a8') + fth(a, 25.6, 6.2, '#9cc4f8')).join('');
+    add('wing', shadow(95, 30) +
+      p('M30 82 L6 88 L30 92Z', '#2f56a8') + p('M30 84 L12 88 L30 90Z', '#4f85dc') +
+      prim + primL + cov +
+      e(42, 74, 28, 22, '#2b8fa3') + e(40, 72, 28, 22, K.blue) + e(34, 80, 15, 11, '#e6f8fc') +
+      c(50, 62, 11, '#2f56a8') + c(50, 60.5, 9.6, '#9cc4f8') + s('M45 57 Q50 53 55 56', '#ffffffcc', 2.2) +
+      s('M20 52 Q17 45 23 43 M26 50 Q28 43 33 44', K.dblue, 2.4) +
+      p('M13 60 L1 66 L13 72Z', K.orange) + p('M13 66 L1 66 L13 72Z', K.dorange) +
+      eye(20, 60, 3.8) + c(16, 70, 3.6, K.pink, 'opacity=".6"') +
+      s('M36 92 v4 M50 92 v4', K.dorange, 3.2));
+  }
 
   // ---- yak: shaggy brown-black yak with horns and long fur ----
   const tufts = [14, 26, 38, 50, 62, 74, 86].map((x, i) => p(`M${x - 8} 70 Q${x} ${98 + (i % 2) * 4} ${x + 8} 70Z`, i % 2 ? '#3d2b22' : '#4a3328')).join('');

@@ -1,14 +1,45 @@
 import { cheeks, eyes, face } from './friendKit';
 
 // Sound-friends of set(s) ow oi ear air er. Each entry is an SVG fragment (viewBox 0 0 120 120) in the style of the existing friends.
-// Hairy's bristles: rows of round-tipped dots on the pad, above and below the face.
-const bristles = [14, 22, 30, 70, 78].map((y) => {
-  const hw = 36 * Math.sqrt(Math.max(0, 1 - ((y - 46) / 36) ** 2)) - 5;
-  const n = Math.max(0, Math.floor(hw / 8.5));
-  let out = '';
-  for (let k = -n; k <= n; k++) out += `<circle cx="${60 + k * 8.5}" cy="${y}" r="3.3" fill="#4cc3d9"/><circle cx="${60 + k * 8.5 - 0.3}" cy="${y - 0.6}" r="1.7" fill="#fff"/>`;
-  return out;
-}).join('');
+const r1 = (n: number): number => Math.round(n * 10) / 10;
+// Hairy's bristles: two staggered rows of pin-tipped pegs (round pink tips) standing in a bristle bed above the pad.
+const pegRow = (y: number, h: number, xs: number[], tip: string): string => xs.map((x) =>
+  `<path d="M${x} ${y} V${y - h}" stroke="#2fa7c2" stroke-width="4.6" stroke-linecap="round"/><circle cx="${x}" cy="${y - h}" r="3.6" fill="${tip}"/><circle cx="${x - 0.9}" cy="${y - h - 0.9}" r="1.2" fill="#fff"/>`).join('');
+const bristles =
+  `<ellipse cx="60" cy="42" rx="40" ry="10" fill="#1f8aa3"/>` +
+  pegRow(46, 27, [27, 38, 49, 60, 71, 82, 93], '#ffd6e2');
+
+// Fern's fronds: a cubic stem with pairs of leaflets fanning out along it, shrinking towards the tip.
+type Pt = [number, number];
+const frond = (p0: Pt, p1: Pt, p2: Pt, p3: Pt, dark: string, light: string, n = 7, big = 13, small = 4.5): string => {
+  const at = (t: number): Pt => {
+    const u = 1 - t;
+    const f = (i: 0 | 1): number => u ** 3 * p0[i] + 3 * u * u * t * p1[i] + 3 * u * t * t * p2[i] + t ** 3 * p3[i];
+    return [f(0), f(1)];
+  };
+  let leaves = '';
+  for (let k = 0; k < n; k++) {
+    const t = 0.34 + (0.62 * k) / (n - 1);
+    const a = at(t - 0.02), b = at(t + 0.02);
+    const ang = Math.atan2(b[1] - a[1], b[0] - a[0]);
+    const len = big + (small - big) * (k / (n - 1));
+    for (const side of [-1, 1]) {
+      const d = ang + side * 1.0;
+      const cx = at(t)[0] + Math.cos(d) * len * 0.5, cy = at(t)[1] + Math.sin(d) * len * 0.5;
+      leaves += `<ellipse cx="${r1(cx)}" cy="${r1(cy)}" rx="${r1(len / 2)}" ry="${r1(3.4 - k * 0.12)}" fill="${side < 0 ? dark : light}" transform="rotate(${r1((d * 180) / Math.PI)} ${r1(cx)} ${r1(cy)})"/>`;
+    }
+  }
+  const tip = at(1);
+  leaves += `<ellipse cx="${r1(tip[0])}" cy="${r1(tip[1])}" rx="3" ry="2.6" fill="${light}"/>`;
+  return `<path d="M${p0} C${p1} ${p2} ${p3}" stroke="#2f8a43" stroke-width="2.6" fill="none" stroke-linecap="round"/>${leaves}`;
+};
+const mirror = (p: Pt): Pt => [120 - p[0], p[1]];
+const fronds = [
+  [[50, 76], [24, 78], [6, 62], [6, 38], '#2f8a43', '#3c9a4b'],
+  [[54, 72], [30, 58], [18, 34], [32, 12], '#3c9a4b', '#4cb25c'],
+].map(([a, b, c, d, dk, lt]) => frond(a as Pt, b as Pt, c as Pt, d as Pt, dk as string, lt as string) +
+  frond(mirror(a as Pt), mirror(b as Pt), mirror(c as Pt), mirror(d as Pt), lt as string, dk as string)).join('') +
+  frond([60, 70], [54, 44], [58, 22], [72, 6], '#4cb25c', '#6fd37e', 7, 14, 5);
 
 export const FRIENDS_SET11: Record<string, string> = {
   // ow: Howie the owl, round and fluffy, hooting
@@ -42,18 +73,16 @@ export const FRIENDS_SET11: Record<string, string> = {
      <path d="M52 40 C58 30 70 32 72 42" stroke="#f0b087" stroke-width="3.4" fill="none" stroke-linecap="round" opacity=".8"/>
      ${face(70, 62, 1.15)}`,
   // air: Hairy the hairbrush, a violet paddle brush seen from the front: bristle grid on the pad, a face in the middle, a handle below
-  air: `<rect x="49" y="78" width="22" height="42" rx="10" fill="#5a49b8"/><rect x="51" y="76" width="18" height="42" rx="9" fill="#7b69d8"/><path d="M56 90 v18" stroke="#fff" stroke-width="3.4" opacity=".5" stroke-linecap="round"/><circle cx="60" cy="112" r="3.4" fill="#5a49b8"/>
-     <rect x="52" y="74" width="16" height="8" rx="3" fill="#4cc3d9"/>
-     <ellipse cx="60" cy="48" rx="42" ry="42" fill="#5a49b8"/><ellipse cx="60" cy="46" rx="42" ry="42" fill="#8b7be8"/><ellipse cx="60" cy="46" rx="36" ry="36" fill="#a99df2"/>
+  air: `<g transform="rotate(-12 60 74)">
+     <rect x="49" y="86" width="22" height="38" rx="10" fill="#5a49b8"/><rect x="51" y="84" width="18" height="38" rx="9" fill="#7b69d8"/><path d="M56 96 v16" stroke="#fff" stroke-width="3.4" opacity=".5" stroke-linecap="round"/><circle cx="60" cy="115" r="3.4" fill="#5a49b8"/>
      ${bristles}
-     <path d="M30 24 q6 -10 18 -12" stroke="#fff" stroke-width="4" fill="none" opacity=".55" stroke-linecap="round"/>
-     ${eyes(48, 72, 44, 7.5)}${cheeks(37, 83, 55, 5)}<path d="M47 54 Q60 67 73 54" fill="none" stroke="#3b2030" stroke-width="3.2" stroke-linecap="round"/>`,
+     <rect x="16" y="40" width="88" height="54" rx="27" fill="#5a49b8"/><rect x="16" y="38" width="88" height="52" rx="26" fill="#8b7be8"/><rect x="23" y="43" width="74" height="42" rx="21" fill="#a99df2"/>
+     <path d="M28 56 q5 -8 14 -9" stroke="#fff" stroke-width="3.6" fill="none" opacity=".55" stroke-linecap="round"/>
+     <path d="M40 30 C22 30 10 40 18 50 C24 56 14 62 20 68" stroke="#e0a33c" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M96 40 C108 46 106 54 98 56 C92 58 100 64 96 68" stroke="#e0a33c" stroke-width="3" fill="none" stroke-linecap="round"/>
+     ${eyes(47, 73, 62, 7)}${cheeks(37, 83, 72, 4.6)}<path d="M50 71 Q60 82 70 71" fill="none" stroke="#3b2030" stroke-width="3.2" stroke-linecap="round"/></g>`,
   // er: Fern the fern, a plump frond with pairs of leaflets, a face and a curling tip
-  er: `<ellipse cx="48" cy="116" rx="10" ry="4.6" fill="#8a5a2b"/><ellipse cx="72" cy="116" rx="10" ry="4.6" fill="#8a5a2b"/>
-     <ellipse cx="25.8" cy="84.1" rx="26.0" ry="6.2" fill="#3c9a4b" transform="rotate(232 25.8 84.1)"/><ellipse cx="96.2" cy="84.1" rx="26.0" ry="6.2" fill="#3c9a4b" transform="rotate(-52 96.2 84.1)"/><ellipse cx="26.8" cy="75.9" rx="24.3" ry="6.2" fill="#3c9a4b" transform="rotate(232 26.8 75.9)"/><ellipse cx="95.2" cy="75.9" rx="24.3" ry="6.2" fill="#3c9a4b" transform="rotate(-52 95.2 75.9)"/><ellipse cx="27.8" cy="67.7" rx="22.5" ry="6.2" fill="#3c9a4b" transform="rotate(232 27.8 67.7)"/><ellipse cx="94.2" cy="67.7" rx="22.5" ry="6.2" fill="#3c9a4b" transform="rotate(-52 94.2 67.7)"/><ellipse cx="28.8" cy="59.5" rx="20.8" ry="6.2" fill="#3c9a4b" transform="rotate(232 28.8 59.5)"/><ellipse cx="93.2" cy="59.5" rx="20.8" ry="6.2" fill="#3c9a4b" transform="rotate(-52 93.2 59.5)"/><ellipse cx="29.8" cy="51.3" rx="19.1" ry="6.2" fill="#3c9a4b" transform="rotate(232 29.8 51.3)"/><ellipse cx="92.2" cy="51.3" rx="19.1" ry="6.2" fill="#3c9a4b" transform="rotate(-52 92.2 51.3)"/><ellipse cx="30.8" cy="43.1" rx="17.4" ry="6.2" fill="#3c9a4b" transform="rotate(232 30.8 43.1)"/><ellipse cx="91.2" cy="43.1" rx="17.4" ry="6.2" fill="#3c9a4b" transform="rotate(-52 91.2 43.1)"/><ellipse cx="31.9" cy="34.9" rx="15.6" ry="6.2" fill="#3c9a4b" transform="rotate(232 31.9 34.9)"/><ellipse cx="90.1" cy="34.9" rx="15.6" ry="6.2" fill="#3c9a4b" transform="rotate(-52 90.1 34.9)"/><ellipse cx="32.9" cy="26.7" rx="13.9" ry="6.2" fill="#3c9a4b" transform="rotate(232 32.9 26.7)"/><ellipse cx="89.1" cy="26.7" rx="13.9" ry="6.2" fill="#3c9a4b" transform="rotate(-52 89.1 26.7)"/>
-     <ellipse cx="24.8" cy="82.5" rx="26.0" ry="6.2" fill="#6fd37e" transform="rotate(232 24.8 82.5)"/><ellipse cx="95.2" cy="82.5" rx="26.0" ry="6.2" fill="#6fd37e" transform="rotate(-52 95.2 82.5)"/><ellipse cx="25.8" cy="74.3" rx="24.3" ry="6.2" fill="#6fd37e" transform="rotate(232 25.8 74.3)"/><ellipse cx="94.2" cy="74.3" rx="24.3" ry="6.2" fill="#6fd37e" transform="rotate(-52 94.2 74.3)"/><ellipse cx="26.8" cy="66.1" rx="22.5" ry="6.2" fill="#6fd37e" transform="rotate(232 26.8 66.1)"/><ellipse cx="93.2" cy="66.1" rx="22.5" ry="6.2" fill="#6fd37e" transform="rotate(-52 93.2 66.1)"/><ellipse cx="27.8" cy="57.9" rx="20.8" ry="6.2" fill="#6fd37e" transform="rotate(232 27.8 57.9)"/><ellipse cx="92.2" cy="57.9" rx="20.8" ry="6.2" fill="#6fd37e" transform="rotate(-52 92.2 57.9)"/><ellipse cx="28.8" cy="49.7" rx="19.1" ry="6.2" fill="#6fd37e" transform="rotate(232 28.8 49.7)"/><ellipse cx="91.2" cy="49.7" rx="19.1" ry="6.2" fill="#6fd37e" transform="rotate(-52 91.2 49.7)"/><ellipse cx="29.8" cy="41.5" rx="17.4" ry="6.2" fill="#6fd37e" transform="rotate(232 29.8 41.5)"/><ellipse cx="90.2" cy="41.5" rx="17.4" ry="6.2" fill="#6fd37e" transform="rotate(-52 90.2 41.5)"/><ellipse cx="30.9" cy="33.3" rx="15.6" ry="6.2" fill="#6fd37e" transform="rotate(232 30.9 33.3)"/><ellipse cx="89.1" cy="33.3" rx="15.6" ry="6.2" fill="#6fd37e" transform="rotate(-52 89.1 33.3)"/><ellipse cx="31.9" cy="25.1" rx="13.9" ry="6.2" fill="#6fd37e" transform="rotate(232 31.9 25.1)"/><ellipse cx="88.1" cy="25.1" rx="13.9" ry="6.2" fill="#6fd37e" transform="rotate(-52 88.1 25.1)"/>
-     <ellipse cx="60" cy="72" rx="30" ry="40" fill="#5cc26b"/><ellipse cx="60" cy="70" rx="29" ry="39" fill="#8ee27a"/>
-     <path d="M60 32 C60 14 80 8 85 22 C88 36 70 38 70 27" stroke="#3c9a4b" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M60 32 C60 14 80 8 85 22 C88 36 70 38 70 27" stroke="#6fd37e" stroke-width="3.6" fill="none" stroke-linecap="round"/>
-     <path d="M40 40 q6 -12 18 -14" stroke="#fff" stroke-width="4.4" fill="none" opacity=".5" stroke-linecap="round"/>
-     ${face(60, 70, 1.15)}`,
+  er: `${fronds}
+     <circle cx="60" cy="80" r="25" fill="#5cc26b"/><circle cx="60" cy="78" r="24" fill="#8ee27a"/><path d="M42 64 q6 -8 16 -9" stroke="#fff" stroke-width="4" fill="none" opacity=".55" stroke-linecap="round"/>
+     ${face(60, 77, 1.05)}
+     <path d="M34 100 H86 L80 122 H40Z" fill="#c8693a"/><path d="M36 102 H62 L58 122 H40Z" fill="#df8450" opacity=".7"/><rect x="30" y="97" width="60" height="11" rx="5" fill="#df8450"/><rect x="30" y="97" width="60" height="4" rx="2" fill="#f2a56f" opacity=".7"/>`,
 };

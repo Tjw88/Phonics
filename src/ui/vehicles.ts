@@ -51,14 +51,16 @@ const balloon = (): string => wrap('v-balloon', '0 0 100 210', `
 
 
 // ---- the six newer worlds' OWN vehicles --------------------------------------------------------------------------------------------
-const cart = (): string => wrap('v-cart', '0 0 160 112', `
-  <ellipse cx="80" cy="104" rx="62" ry="6" fill="#0000001f"/>
-  <path d="M46 48 Q46 14 80 14 Q114 14 114 48Z" fill="#bfeaff" fill-opacity=".75" stroke="#5a86c7" stroke-width="4"/>
-  <circle cx="68" cy="36" r="6" fill="#26364f"/><circle cx="92" cy="36" r="6" fill="#26364f"/><circle cx="70" cy="34" r="2" fill="#7ee2ff"/><circle cx="94" cy="34" r="2" fill="#7ee2ff"/>
-  <line x1="80" y1="14" x2="80" y2="4" stroke="#5a6b86" stroke-width="3"/><circle cx="80" cy="4" r="4.5" fill="#ffd166" stroke="#e0a100" stroke-width="2"/>
-  <rect x="16" y="46" width="128" height="42" rx="16" fill="#8fb3e8" stroke="#5a86c7" stroke-width="4"/>
-  <rect x="20" y="62" width="120" height="9" fill="#ff9f1c"/>
-  <circle cx="46" cy="88" r="15" fill="#26364f"/><circle cx="46" cy="88" r="6" fill="#7ee2ff"/><circle cx="114" cy="88" r="15" fill="#26364f"/><circle cx="114" cy="88" r="6" fill="#7ee2ff"/>`);
+const cart = (): string => wrap('v-hover', '0 0 160 124', `
+  <defs><linearGradient id="hvGlow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7ee2ff" stop-opacity=".85"/><stop offset="1" stop-color="#7ee2ff" stop-opacity="0"/></linearGradient></defs>
+  <g class="hglow"><path d="M40 88 L120 88 L142 122 L18 122Z" fill="url(#hvGlow)"/><ellipse cx="80" cy="88" rx="44" ry="7" fill="#bff4ff" opacity=".9"/></g>
+  <line x1="80" y1="30" x2="80" y2="12" stroke="#5a6b86" stroke-width="3.5" stroke-linecap="round"/><circle cx="80" cy="9" r="6" fill="#ffd166" stroke="#e0a100" stroke-width="2.5"/>
+  <path d="M46 66 Q46 28 80 28 Q114 28 114 66Z" fill="#bfeaff" fill-opacity=".8" stroke="#5a86c7" stroke-width="4"/>
+  <rect x="62" y="44" width="36" height="20" rx="8" fill="#26364f"/><circle cx="72" cy="54" r="5" fill="#7ee2ff"/><circle cx="88" cy="54" r="5" fill="#7ee2ff"/><circle cx="73.5" cy="52" r="1.8" fill="#fff"/><circle cx="89.5" cy="52" r="1.8" fill="#fff"/>
+  <ellipse cx="80" cy="76" rx="68" ry="19" fill="#8fb3e8" stroke="#5a86c7" stroke-width="4"/>
+  <path d="M14 78 Q80 106 146 78" fill="none" stroke="#5a86c7" stroke-width="4"/>
+  <path d="M16 74 Q80 92 144 74" fill="none" stroke="#ff9f1c" stroke-width="6" stroke-linecap="round"/>
+  <g fill="#e8f0ff" stroke="#5a86c7" stroke-width="1.6"><circle cx="30" cy="80" r="3.2"/><circle cx="50" cy="86" r="3.2"/><circle cx="72" cy="89" r="3.2"/><circle cx="94" cy="89" r="3.2"/><circle cx="116" cy="86" r="3.2"/><circle cx="136" cy="80" r="3.2"/></g>`);
 
 const boat = (): string => wrap('v-boat', '0 0 160 120', `
   <path d="M80 68 L80 10 Q124 28 130 68Z" fill="#fff8e6" stroke="#d8c79a" stroke-width="3" stroke-linejoin="round"/>
@@ -79,12 +81,14 @@ const dragonfly = (): string => wrap('v-dragonfly', '0 0 170 112', `
   <circle cx="140" cy="54" r="13" fill="#ff7eb6" stroke="#d85a96" stroke-width="3"/><circle cx="145" cy="50" r="5" fill="#fff"/><circle cx="146" cy="50" r="2.4" fill="#26303f"/>`);
 
 const vineBasket = (): string => wrap('v-vine', '0 0 120 190', `
-  <path d="M60 0 C40 20 80 40 60 62 C46 78 70 94 60 112" stroke="#3f9e4d" stroke-width="6" fill="none" stroke-linecap="round"/>
-  <path d="M60 28 Q40 18 34 30 Q46 40 60 30Z M60 70 Q82 60 90 72 Q76 82 60 72Z" fill="#6cc24a" stroke="#3f9e4d" stroke-width="2.5" stroke-linejoin="round"/>
-  <path d="M60 112 L30 138 M60 112 L90 138" stroke="#8d5a22" stroke-width="3" stroke-linecap="round"/>
-  <path d="M24 136 L96 136 Q94 176 60 178 Q26 176 24 136Z" fill="#c9893e" stroke="#7a4a1d" stroke-width="4" stroke-linejoin="round"/>
-  <path d="M30 150 L90 150 M32 162 L88 162 M46 138 L44 174 M60 138 L60 178 M74 138 L76 174" stroke="#7a4a1d" stroke-width="2.4" opacity=".6"/>
-  <circle cx="60" cy="108" r="6" fill="#ff7a5a" stroke="#d65a3a" stroke-width="2"/>`);
+  <path d="M60 0 C48 8 72 16 60 26" stroke="#3f9e4d" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M12 62 Q14 26 60 22 Q106 26 108 62 Q84 50 60 56 Q36 50 12 62Z" fill="#6cc24a" stroke="#3f9e4d" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M60 24 L60 56 M60 34 L30 52 M60 34 L90 52" stroke="#3f9e4d" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".7"/>
+  <path d="M20 60 L34 136 M44 56 L40 136 M76 56 L80 136 M100 60 L86 136" stroke="#8d5a22" stroke-width="3" stroke-linecap="round"/>
+  <rect x="22" y="132" width="76" height="16" rx="7" fill="#c9893e" stroke="#7a4a1d" stroke-width="4"/>
+  <path d="M30 140 L90 140" stroke="#7a4a1d" stroke-width="2" opacity=".6"/>
+  <path d="M28 132 L28 106 Q60 100 92 106 L92 132" fill="#e8b866" fill-opacity=".55" stroke="#7a4a1d" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M34 148 L38 172 M86 148 L82 172" stroke="#8d5a22" stroke-width="3" stroke-linecap="round"/><circle cx="38" cy="176" r="5" fill="#ff7a5a" stroke="#d65a3a" stroke-width="2"/><circle cx="82" cy="176" r="5" fill="#ff7a5a" stroke="#d65a3a" stroke-width="2"/>`);
 
 const noteBalloon = (): string => wrap('v-note', '0 0 100 210', `
   <path d="M78 104 L78 18 Q96 26 96 56" stroke="#ef476f" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
@@ -183,7 +187,7 @@ const S = Math.sin, C = Math.cos, PI = Math.PI, ab = Math.abs;
 const mk = (x: number, y: number, r: number, f: number, s = 1 - 0.32 * f): Pose => ({ x, y, r, s, o: f < 0.8 ? 1 : 1 - (f - 0.8) / 0.2 });
 /** The newer worlds' own vehicles: drawing, caption name, speed and THREE exits (by round, deterministic), all leaving diagonally across the card. */
 const OWN: Partial<Record<string, { svg: () => string; name: string; speed: number; pose: (v: number, f: number) => Pose }>> = {
-  robot: { svg: cart, name: 'hover cart', speed: 1, pose: (v, f) => { // zip right / hop-hop-hop up / zig-zag left
+  robot: { svg: cart, name: 'hover disc', speed: 1, pose: (v, f) => { // zip right / hop-hop-hop up / zig-zag left
     const e = Math.pow(f, 1.8);
     if (v === 0) return mk(360 * e, -280 * e + 9 * S(f * 22) * (1 - f), -8 * smooth(0, 0.2, f), f);
     if (v === 1) return mk(36 * S(f * 8), -340 * f - 28 * ab(S(f * PI * 4)), 0, f);
@@ -199,7 +203,7 @@ const OWN: Partial<Record<string, { svg: () => string; name: string; speed: numb
     if (v === 1) return mk(290 * f + 60 * S(f * 18), -340 * f, 10 * C(f * 18), f);
     return mk(-210 * f + 70 * S(f * 12), -360 * f + 40 * (1 - C(f * 12)) * 0.5, 14 * S(f * 12), f);
   } },
-  jungle: { svg: vineBasket, name: 'vine basket', speed: 1.1, pose: (v, f) => { // swings and is flung off to the right / the left / after three swings
+  jungle: { svg: vineBasket, name: 'leaf swing', speed: 1.1, pose: (v, f) => { // swings and is flung off to the right / the left / after three swings
     const dir = v === 1 ? -1 : 1;
     const sw = (v === 2 ? 3 : 1.5) * PI * f;
     const fl = smooth(0.5, 1, f);

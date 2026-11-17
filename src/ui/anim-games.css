@@ -52,6 +52,8 @@
 .rocket[data-vehicle=farm] { width: 164px; }
 .rocket[data-vehicle=robot] { width: 230px; } .rocket[data-vehicle=pirate] { width: 270px; } .rocket[data-vehicle=fairy] { width: 250px; }
 .rocket[data-vehicle=jungle] { width: 176px; } .rocket[data-vehicle=music] { width: 160px; } .rocket[data-vehicle=arctic] { width: 280px; }
+.rocket .hglow { transform-box: fill-box; transform-origin: 50% 0%; animation: hover-glow 2s ease-in-out infinite alternate; }
+@keyframes hover-glow { from { opacity: 0.65; transform: scaleX(0.94); } to { opacity: 1; transform: scaleX(1.04); } }
 .rocket .wing { transform-box: fill-box; transform-origin: 85% 55%; animation: wing-flutter 0.8s ease-in-out infinite alternate; }
 @keyframes wing-flutter { to { transform: scaleY(0.7) rotate(-5deg); } }
 .rocketscene .skypanel { min-height: 340px; }
@@ -124,6 +126,6 @@
 @media (prefers-reduced-motion: reduce) {
   #fxp { display: none; }
   .tile.hint-pulse::after { animation: none; opacity: 0.9; }
-  .rocket .prop, .rocket .wing { animation: none; }
+  .rocket .prop, .rocket .wing, .rocket .hglow { animation: none; }
 }
 .robotscene .robot svg { overflow: visible; }

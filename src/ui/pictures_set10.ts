@@ -140,17 +140,19 @@ export const install = (): void => {
     r(20, 36, 12, 8, 3, K.red) + s('M44 44 L56 40', K.white, 3, 'opacity=".6"') + '</g>' +
     c(86, 40, 2.4, K.white) + c(78, 62, 2, K.white) + c(92, 66, 2.4, K.white));
 
-  // curl: hair seen from behind (a ginger head of hair with a hairband) with one big glossy ringlet hanging down
+  // curl: one big springy coil of ribbon (three loops, front and back of the coil) with a curled end and sparkles
   {
-    const ring = 'M48 50 C82 52 84 72 54 74 C24 76 22 94 48 94 C66 94 68 80 56 80';
-    const st = (w: number, col: string, tr = '', extra = ''): string => p(ring, 'none', `stroke="${col}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" ${tr ? `transform="${tr}"` : ''} ${extra}`);
-    add('curl', shadow(97, 30) +
-      e(13, 40, 6, 8, K.dskin) + e(87, 40, 6, 8, K.dskin) +
-      p('M16 44 Q10 6 50 4 Q90 6 84 44 Q84 58 68 56 H32 Q16 58 16 44Z', '#a8480f') +
-      p('M18 42 Q14 8 50 6 Q86 8 82 42 Q82 54 66 53 H34 Q18 54 18 42Z', '#e0701f') +
-      s('M50 8 Q36 20 30 44 M50 8 Q60 22 62 46 M50 8 Q48 26 46 48 M50 8 Q74 22 76 42 M50 8 Q28 20 22 38', '#c25a14', 2.4, 'opacity=".7"') +
-      s('M30 20 Q40 12 52 12', K.white, 3.4, 'opacity=".6"') +
-      p('M18 30 Q50 18 82 30 V40 Q50 28 18 40Z', K.dpink) + p('M18 27 Q50 15 82 27 V37 Q50 25 18 37Z', K.pink) + s('M26 26 Q40 20 54 20', K.white, 2.4, 'opacity=".55"') +
-      st(17, '#a8480f', 'translate(1.5 2)') + st(17, '#e0701f') + st(11, '#ff9a3c', 'translate(-1 -1.5)') + st(3, '#fff', 'translate(-3 -3.5)', 'opacity=".7"'));
+    const w = 30; const h = 8; const pch = 19; const y0 = 24;
+    const L = [0, 1, 2].map((i) => y0 + i * pch);
+    const back = L.map((y) => s(`M${50 + w} ${y + pch / 2} Q50 ${y + pch * 0.75 - 2 * h} ${50 - w} ${y + pch}`, '#6f5fd0', 8)).join('');
+    const front = L.map((y) => {
+      const d = `M${50 - w} ${y} Q50 ${y + pch / 4 + 2 * h} ${50 + w} ${y + pch / 2}`;
+      return s(d, '#6f5fd0', 11) + s(d, '#9b8bf0', 8) + s(d, '#ffffffaa', 2, 'transform="translate(0 -2)"');
+    }).join('');
+    const top = 'M20 24 Q13 23 13 17 Q13 11 20 11';
+    const bot = `M${50 - w} ${y0 + 3 * pch} Q${50 - w - 8} ${y0 + 3 * pch + 6} ${50 - w + 2} ${y0 + 3 * pch + 14}`;
+    add('curl', shadow(96, 30) +
+      back + front + s(top, '#6f5fd0', 11) + s(top, '#9b8bf0', 8) + s(bot, '#6f5fd0', 11) + s(bot, '#9b8bf0', 8) +
+      p('M88 20 l2.4 -7 l2.4 7 l7 2.4 l-7 2.4 l-2.4 7 l-2.4 -7 l-7 -2.4z', K.yellow) + p('M10 60 l1.8 -5 l1.8 5 l5 1.8 l-5 1.8 l-1.8 5 l-1.8 -5 l-5 -1.8z', K.pink) + c(90, 62, 2.4, K.pink) + c(88, 84, 2, K.yellow));
   }
 };

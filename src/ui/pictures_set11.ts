@@ -43,13 +43,15 @@ const frond = (): string => {
 };
 
 export const install = (): void => {
-  // ---- air: wind swirls, little clouds and a leaf blowing past ----
-  add('air', shadow(95, 26) + c(50, 50, 45, '#e4f5ff') +
-    [[26, 24, 7], [34, 21, 9], [43, 24, 7]].map(([x, y, rr]) => c(x!, y! + 1.4, rr!, '#c3e4f7')).join('') + [[26, 24, 7], [34, 21, 9], [43, 24, 7]].map(([x, y, rr]) => c(x!, y!, rr!, K.white)).join('') + r(19, 24, 31, 7, 3.5, K.white) +
-    [[66, 74, 5], [72, 71.5, 6.5], [79, 74, 5]].map(([x, y, rr]) => c(x!, y!, rr!, K.white)).join('') + r(61, 74, 23, 5, 2.5, K.white) +
-    s('M12 46 H58 C78 46 78 26 64 28 C56 29 56 38 62 38', K.blue, 6) + s('M12 46 H58 C78 46 78 26 64 28 C56 29 56 38 62 38', '#ffffff66', 1.6, 'transform="translate(0 -1.5)"') +
-    s('M20 62 H64 C86 62 86 82 72 84 C64 85 62 76 68 74', '#7fd5e8', 6) + s('M30 76 H50', K.blue, 5) + s('M8 56 H18 M48 90 H60', '#8fd0f0', 3.4) +
-    '<g transform="rotate(-24 76 46)">' + p('M64 46 Q76 32 90 46 Q76 60 64 46Z', K.green) + p('M64 46 Q76 46 90 46 Q76 60 64 46Z', K.dgreen, 'opacity=".45"') + s('M60 46 H88', K.dgreen, 1.8) + '</g>');
+  // ---- air: a red balloon being blown up with a hand pump; puffs of air travel along the hose ----
+  add('air', shadow(95, 36) +
+    e(31, 33, 25, 28, '#c2284f') + e(29, 31, 25, 28, K.red) + e(20, 20, 6, 9, '#ffffffaa', 28) + p('M31 62 L25 70 L37 70Z', '#c2284f') +
+    s('M31 70 Q31 90 66 84', K.dgrey, 5) + s('M31 70 Q31 90 66 84', K.grey, 2.2) +
+    r(58, 94, 38, 5, 2.5, K.dgrey) + r(66, 46, 20, 48, 6, K.dblue) + r(66, 46, 20, 46, 6, K.blue) + r(70, 50, 5, 38, 2.5, '#ffffff77') + r(62, 76, 6, 10, 2, K.dgrey) +
+    r(74, 24, 4.4, 24, 2, K.dgrey) + r(62, 17, 28, 8, 4, K.orange) + r(62, 17, 28, 3, 1.5, '#ffb066') +
+    [[46, 78, 4.4], [52, 76, 5.2], [58, 78, 4.2]].map(([x, y, rr]) => c(x!, y! - 14, rr!, '#e4f5ff', 'stroke="#4cc3d9" stroke-width="1.8"')).join('') +
+    [[44, 52, 3.6], [49, 50, 4.6], [55, 52, 3.4]].map(([x, y, rr]) => c(x!, y!, rr!, '#e4f5ff', 'stroke="#4cc3d9" stroke-width="1.8"')).join('') +
+    s('M60 40 q6 6 0 12 M65 34 q9 10 0 24', '#4cc3d9', 2.6));
 
   // ---- clown: soft rainbow wig, red nose, ruff collar, big smile ----
   const wig: [number, number, string][] = [[26, 32, K.violet], [19, 46, K.blue], [24, 60, K.green], [74, 32, K.yellow], [81, 46, K.orange], [76, 60, K.pink]];
@@ -88,15 +90,25 @@ export const install = (): void => {
   // ---- fern: a green frond ----
   add('fern', shadow(96, 22) + c(50, 52, 45, '#e9f8e6') + frond());
 
-  // ---- hair: a ponytail of long wavy brown strands held by a pink hairband, with a small bow ----
-  const tail = 'M44 24 C14 36 26 60 20 74 C16 86 24 96 34 90 C38 98 48 98 52 90 C58 98 70 96 70 88 C80 90 86 80 80 68 C74 54 84 36 56 24Z';
-  add('hair', shadow(97, 30) +
-    p(tail, K.dbrown, 'transform="translate(2 2.4)"') + p(tail, K.brown) +
-    p('M44 24 C20 38 36 58 32 74 C30 84 36 92 40 94 C34 74 52 52 50 26Z', '#9a6228') + p('M56 24 C80 36 66 56 72 72 C74 80 70 90 66 92 C60 72 54 50 52 26Z', '#9a6228') +
-    s('M48 28 C36 46 52 62 44 88', '#e8b56f', 2.6, 'opacity=".85"') + s('M36 36 C24 52 34 66 28 82', '#e8b56f', 2.2, 'opacity=".55"') + s('M62 34 C74 50 62 66 68 82', '#e8b56f', 2.2, 'opacity=".4"') +
-    r(37, 15, 26, 16, 7, K.dpink) + r(37, 13, 26, 16, 7, K.pink) + r(41, 15, 18, 4, 2, '#ffffff88') + s('M44 24 V28 M50 24 V28 M56 24 V28', K.dpink, 1.6, 'opacity=".6"') +
-    p('M50 11 C40 -2 28 6 32 14 C35 19 45 16 50 11Z', K.dred) + p('M50 11 C60 -2 72 6 68 14 C65 19 55 16 50 11Z', K.dred) +
-    p('M50 11 C41 1 32 6 35 12 C38 16 45 14 50 11Z', K.red) + p('M50 11 C59 1 68 6 65 12 C62 16 55 14 50 11Z', K.red) + c(50, 11, 4.2, K.dred) + c(49.4, 10.2, 2, K.red) + c(38, 8, 1.6, '#ffffffaa'));
+  // ---- hair: a smiling child's head from the front with a big mop of wavy brown hair, and a hairbrush beside it ----
+  {
+    const bumps = [[18, 34, 13], [26, 20, 14], [40, 14, 14], [54, 18, 14], [64, 30, 13], [66, 46, 12], [14, 52, 12], [16, 68, 12], [66, 62, 12], [20, 82, 11], [62, 78, 11]];
+    add('hair', shadow(97, 38) +
+      e(40, 90, 26, 12, K.dblue) + e(40, 88, 26, 12, K.blue) +
+      bumps.map(([x, y, rr]) => c(x! + 1.5, y! + 2, rr!, K.dbrown)).join('') + e(41, 52, 28, 36, K.dbrown) +
+      bumps.map(([x, y, rr]) => c(x!, y!, rr!, K.brown)).join('') + e(40, 50, 28, 36, K.brown) +
+      s('M18 56 C12 66 22 72 16 84 M62 56 C68 66 58 72 64 84', '#9a6228', 2.6) +
+      r(34, 66, 12, 14, 5, K.dskin) + c(40, 52, 22, K.dskin) + e(40, 56, 21, 20, K.skin) +
+      p('M16 46 C16 24 28 18 40 20 C52 18 64 26 64 46 C58 38 54 34 48 38 C44 28 36 36 32 36 C26 34 20 38 16 46Z', K.dbrown) +
+      p('M18 44 C18 26 28 21 40 22 C52 21 62 28 62 44 C57 37 52 34 48 38 C43 29 36 35 32 36 C26 33 21 37 18 44Z', K.brown) +
+      s('M26 28 C32 22 38 22 44 25', '#e8b56f', 2.6, 'opacity=".75"') +
+      eye(32, 54, 3.4) + eye(48, 54, 3.4) + c(27, 61, 3.8, K.pink, 'opacity=".6"') + c(53, 61, 3.8, K.pink, 'opacity=".6"') + s('M34 62 q6 5 12 0', K.dred, 2.2) +
+      '<g transform="rotate(18 80 60)">' +
+        r(77, 58, 6, 34, 3, K.dpink) + r(77, 58, 3, 34, 2, K.pink) +
+        r(68, 24, 24, 38, 11, '#e0607f') + r(68, 22, 24, 38, 11, K.pink) + r(72, 26, 16, 6, 3, '#ffffff88') +
+        [[74, 38], [80, 38], [86, 38], [74, 46], [80, 46], [86, 46], [74, 54], [80, 54], [86, 54]].map(([x, y]) => c(x!, y!, 1.8, K.white)).join('') +
+      '</g>');
+  }
 
   // ---- oil: a golden drop beside a small cruet bottle with a spout ----
   add('oil', shadow(95, 36) +

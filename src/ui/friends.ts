@@ -45,9 +45,13 @@ const BODY: Record<string, string> = {
      <ellipse cx="96" cy="100" rx="20" ry="7" fill="#fff5e0"/><rect x="76" y="100" width="40" height="14" fill="#ef476f"/><ellipse cx="96" cy="114" rx="20" ry="7" fill="#d6335b"/><ellipse cx="96" cy="100" rx="20" ry="7" fill="none" stroke="#d6335b" stroke-width="3"/>
      <path d="M70 84 L88 98 M104 80 L98 98" stroke="#a46a2c" stroke-width="3.5" stroke-linecap="round"/><circle cx="70" cy="83" r="3.5" fill="#a46a2c"/><circle cx="105" cy="79" r="3.5" fill="#a46a2c"/>`,
   // g: Gus the goat
-  g: `<path d="M38 34 q-14 -22 4 -28 q-6 12 10 24z M82 34 q14 -22 -4 -28 q6 12 -10 24z" fill="#b9a68a"/>
-     <ellipse cx="26" cy="54" rx="14" ry="8" fill="#f1ece4" transform="rotate(20 26 54)"/><ellipse cx="94" cy="54" rx="14" ry="8" fill="#f1ece4" transform="rotate(-20 94 54)"/>
-     <ellipse cx="60" cy="62" rx="28" ry="32" fill="#f7f2ea"/><path d="M60 94 l-9 16 q9 8 18 0z" fill="#e4dccf"/>${eyes(48, 72, 54, 6.5)}<ellipse cx="60" cy="72" rx="9" ry="7" fill="#e8bdb0"/><circle cx="56" cy="72" r="1.6" fill="#3b2030"/><circle cx="64" cy="72" r="1.6" fill="#3b2030"/>${smile(60, 80, 6)}${cheeks(40, 80, 68, 4)}`,
+  g: `<path d="M44 38 C26 34 22 12 38 0 C34 14 44 22 58 30Z" fill="#d9a65a"/><path d="M76 38 C94 34 98 12 82 0 C86 14 76 22 62 30Z" fill="#d9a65a"/><path d="M44 38 C26 34 22 12 38 0 C30 16 38 28 50 33Z" fill="#b07a35"/><path d="M76 38 C94 34 98 12 82 0 C90 16 82 28 70 33Z" fill="#b07a35"/><path d="M33 22 q6 0 9 4 M31 12 q6 -1 9 3 M87 22 q-6 0 -9 4 M89 12 q-6 -1 -9 3" stroke="#8a5a22" stroke-width="2" fill="none" stroke-linecap="round" opacity=".6"/>
+     <ellipse cx="60" cy="106" rx="26" ry="14" fill="#f7f2ea"/><g fill="#5b4636"><path d="M42 110 h12 v9 q0 3 -3 3 h-6 q-3 0 -3 -3z"/><path d="M66 110 h12 v9 q0 3 -3 3 h-6 q-3 0 -3 -3z"/></g><path d="M48 114 v7 M72 114 v7" stroke="#f7f2ea" stroke-width="1.6"/>
+     <path d="M26 52 q-18 -6 -22 8 q-2 14 12 18 q8 0 12 -10z" fill="#c9a97c"/><path d="M94 52 q18 -6 22 8 q2 14 -12 18 q-8 0 -12 -10z" fill="#c9a97c"/><path d="M24 58 q-12 -2 -13 6 q0 8 8 10z M96 58 q12 -2 13 6 q0 8 -8 10z" fill="#f0b9a8"/>
+     <path d="M54 90 Q54 106 56 112 Q58 106 60 116 Q62 106 64 112 Q66 106 66 90Z" fill="#c9a97c"/>
+     <path d="M32 54 Q30 28 60 28 Q90 28 88 54 Q88 74 76 86 Q72 94 60 94 Q48 94 44 86 Q32 74 32 54Z" fill="#f7f2ea"/><path d="M52 32 q8 -4 16 0 q-2 8 -8 10 q-6 -2 -8 -10z" fill="#c9a97c"/>
+     <ellipse cx="60" cy="78" rx="15" ry="11" fill="#fff"/><ellipse cx="60" cy="72" rx="7.5" ry="5" fill="#9a6b5a"/><circle cx="57" cy="72" r="1.5" fill="#3b2030"/><circle cx="63" cy="72" r="1.5" fill="#3b2030"/>
+     ${eyes(48, 72, 52, 6.5)}${smile(60, 81, 6)}${cheeks(40, 80, 66, 4)}`,
   // o: Ollie the octopus
   o: `<g stroke="#9a5fc9" stroke-width="12" stroke-linecap="round" fill="none"><path d="M34 74 q-14 16 -4 32 M48 80 q-6 18 6 30 M72 80 q6 18 -6 30 M86 74 q14 16 4 32"/></g>
      <circle cx="60" cy="52" r="36" fill="#b07ad9"/><circle cx="42" cy="34" r="6" fill="#fff" opacity=".3"/>${eyes(46, 74, 46, 8)}<ellipse cx="60" cy="68" rx="8" ry="10" fill="#6b2437"/>${cheeks(34, 86, 60, 5)}`,
