@@ -26,7 +26,11 @@
   "sh": "Shelly the shell whispers.",
   "ch": "Choo-Choo the train chugs along.",
   "th": "Theo the thumb sticks his tongue out.",
-  "ng": "Gong the gong rings out."
+  "ng": "Gong the gong rings out.",
+  "ai": "Rainy the raindrop splashes down.",
+  "ee": "Bea the bee buzzes by.",
+  "oa": "Boa the boat toots her horn.",
+  "oo": "Moony the moon sings softly."
  },
  "safari": [
   {
@@ -557,6 +561,26 @@
    "id": "ng",
    "set": 6,
    "phoneme": "ng"
+  },
+  {
+   "id": "ai",
+   "set": 7,
+   "phoneme": "ai"
+  },
+  {
+   "id": "ee",
+   "set": 7,
+   "phoneme": "ee"
+  },
+  {
+   "id": "oa",
+   "set": 7,
+   "phoneme": "oa"
+  },
+  {
+   "id": "oo",
+   "set": 7,
+   "phoneme": "oo"
   }
  ],
  "words": [
@@ -2212,6 +2236,630 @@
     "l",
     "o",
     "ng"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "rain",
+   "graphemes": [
+    "r",
+    "ai",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "snail",
+   "graphemes": [
+    "s",
+    "n",
+    "ai",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "sail",
+   "graphemes": [
+    "s",
+    "ai",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "train",
+   "graphemes": [
+    "t",
+    "r",
+    "ai",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "nail",
+   "graphemes": [
+    "n",
+    "ai",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "chain",
+   "graphemes": [
+    "ch",
+    "ai",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "pain",
+   "graphemes": [
+    "p",
+    "ai",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "main",
+   "graphemes": [
+    "m",
+    "ai",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "gain",
+   "graphemes": [
+    "g",
+    "ai",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "tail",
+   "graphemes": [
+    "t",
+    "ai",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "mail",
+   "graphemes": [
+    "m",
+    "ai",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "rail",
+   "graphemes": [
+    "r",
+    "ai",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fail",
+   "graphemes": [
+    "f",
+    "ai",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "paint",
+   "graphemes": [
+    "p",
+    "ai",
+    "n",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "bait",
+   "graphemes": [
+    "b",
+    "ai",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "raid",
+   "graphemes": [
+    "r",
+    "ai",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "maid",
+   "graphemes": [
+    "m",
+    "ai",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "bee",
+   "graphemes": [
+    "b",
+    "ee"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "see",
+   "graphemes": [
+    "s",
+    "ee"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "tree",
+   "graphemes": [
+    "t",
+    "r",
+    "ee"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "feet",
+   "graphemes": [
+    "f",
+    "ee",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "seed",
+   "graphemes": [
+    "s",
+    "ee",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "need",
+   "graphemes": [
+    "n",
+    "ee",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "feel",
+   "graphemes": [
+    "f",
+    "ee",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "keep",
+   "graphemes": [
+    "k",
+    "ee",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "deep",
+   "graphemes": [
+    "d",
+    "ee",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "sleep",
+   "graphemes": [
+    "s",
+    "l",
+    "ee",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "meet",
+   "graphemes": [
+    "m",
+    "ee",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "sheep",
+   "graphemes": [
+    "sh",
+    "ee",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "cheek",
+   "graphemes": [
+    "ch",
+    "ee",
+    "k"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "peel",
+   "graphemes": [
+    "p",
+    "ee",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "seek",
+   "graphemes": [
+    "s",
+    "ee",
+    "k"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "heel",
+   "graphemes": [
+    "h",
+    "ee",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "deed",
+   "graphemes": [
+    "d",
+    "ee",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "boat",
+   "graphemes": [
+    "b",
+    "oa",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "coat",
+   "graphemes": [
+    "c",
+    "oa",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "goat",
+   "graphemes": [
+    "g",
+    "oa",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "soap",
+   "graphemes": [
+    "s",
+    "oa",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "toast",
+   "graphemes": [
+    "t",
+    "oa",
+    "s",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "road",
+   "graphemes": [
+    "r",
+    "oa",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "toad",
+   "graphemes": [
+    "t",
+    "oa",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "foam",
+   "graphemes": [
+    "f",
+    "oa",
+    "m"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "loaf",
+   "graphemes": [
+    "l",
+    "oa",
+    "f"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "moan",
+   "graphemes": [
+    "m",
+    "oa",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "goal",
+   "graphemes": [
+    "g",
+    "oa",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "load",
+   "graphemes": [
+    "l",
+    "oa",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "coach",
+   "graphemes": [
+    "c",
+    "oa",
+    "ch"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "float",
+   "graphemes": [
+    "f",
+    "l",
+    "oa",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "cloak",
+   "graphemes": [
+    "c",
+    "l",
+    "oa",
+    "k"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "moat",
+   "graphemes": [
+    "m",
+    "oa",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "coal",
+   "graphemes": [
+    "c",
+    "oa",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "moon",
+   "graphemes": [
+    "m",
+    "oo",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "spoon",
+   "graphemes": [
+    "s",
+    "p",
+    "oo",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "boot",
+   "graphemes": [
+    "b",
+    "oo",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "moo",
+   "graphemes": [
+    "m",
+    "oo"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "too",
+   "graphemes": [
+    "t",
+    "oo"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "boo",
+   "graphemes": [
+    "b",
+    "oo"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "soon",
+   "graphemes": [
+    "s",
+    "oo",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "noon",
+   "graphemes": [
+    "n",
+    "oo",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "pool",
+   "graphemes": [
+    "p",
+    "oo",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "cool",
+   "graphemes": [
+    "c",
+    "oo",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "tool",
+   "graphemes": [
+    "t",
+    "oo",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "food",
+   "graphemes": [
+    "f",
+    "oo",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "mood",
+   "graphemes": [
+    "m",
+    "oo",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "hoot",
+   "graphemes": [
+    "h",
+    "oo",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "toot",
+   "graphemes": [
+    "t",
+    "oo",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "boom",
+   "graphemes": [
+    "b",
+    "oo",
+    "m"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "doom",
+   "graphemes": [
+    "d",
+    "oo",
+    "m"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "loop",
+   "graphemes": [
+    "l",
+    "oo",
+    "p"
    ],
    "oralOnly": false
   }

@@ -36,7 +36,8 @@ ACCENT_VOICES = {
               "Northern English male (OpenSLR 83), CC BY-SA 4.0"),
 }
 NORTH_MAP = {"ʌ": "ʊ", "æ": "a"}  # applied to Piper's own RP phonemisation of ordinary words (Safari words, phrases)
-VOWEL_SYMS = {"æ", "a", "ɪ", "ɒ", "ɛ", "ʌ", "ʊ"}
+VOWEL_SYMS = {"æ", "a", "ɪ", "ɒ", "ɛ", "ʌ", "ʊ", "eɪ", "iː", "əʊ", "uː"}
+DIPHTHONGS = {"ai", "oa"}  # a glide: keep the voice's own movement, do not loop it into a steady vowel
 LS_WORD, NS, NW = 1.25, 0.5, 0.6  # slower than normal speech for children; steady (low noise) delivery
 CLASS = {"s": "fric", "f": "fric", "h": "fric", "sh": "fric", "th": "fric", "ch": "affr", "m": "sonor", "n": "sonor", "ng": "sonor", "l": "sonor", "r": "sonor",
          "p": "vstop0", "t": "vstop0", "k": "vstop0", "b": "vstop1", "d": "vstop1", "g": "vstop1"}
@@ -240,8 +241,19 @@ def render_consonant(voice, key, ipa_sym):
     return normalise(clip, 0.13 if kind != "fric" else 0.10), info
 
 
-def render_vowel(voice, ipa_sym):
-    a = trim(speak_ids(voice, to_ids(voice, ["ˈ", ipa_sym]), 2.4))
+def render_vowel(voice, ipa_sym, key=None):
+    ids = ["ˈ", *syms(ipa_sym)]
+    if key in DIPHTHONGS:
+        # a diphthong is a glide (e to i): looping its middle would flatten it into a steady vowel, so slow the voice down
+        # until the whole glide is long enough to hear
+        for ls in (2.4, 3.0, 3.6, 4.2):
+            a = trim(speak_ids(voice, to_ids(voice, ids), ls))
+            if len(a) >= int(SR * 0.52):
+                break
+        a = a[: int(SR * 0.75)]  # long enough to hear the glide, not so long it drags
+        a = fade_out(fade_in(a, 20), 120 if len(a) >= int(SR * 0.75) else 90)
+        return normalise(a, 0.11), {"method": f"diphthong spoken slowly by the voice (glide kept), {len(a) / SR * 1000:.0f} ms"}
+    a = trim(speak_ids(voice, to_ids(voice, ids), 2.4))
     a = sustain_voiced(a, TARGET_MS["vowel"], periods=5) if len(a) < int(SR * TARGET_MS["vowel"] / 1000) else a[: int(SR * TARGET_MS["vowel"] / 1000)]
     a = fade_out(fade_in(a, 20), 90)
     return normalise(a, 0.11), {"method": "lone vowel from the voice, steady middle extended to ~520 ms"}
@@ -262,6 +274,7 @@ def checks_for(key, clip):
     warn = []
     kind = CLASS.get(key, "vowel")
     if rms < 0.04: warn.append("very quiet")
+    if kind == "vowel" and vf < 0.6: warn.append("vowel not clearly voiced (this take is breathy or noisy)")
     if kind == "fric" and ms < 300: warn.append("short")
     if kind == "sonor" and (ms < 300 or vf < 0.5): warn.append("short or not clearly voiced")
     if kind == "fric" and key == "s" and out["centroid_hz"] < 4000: warn.append("/s/ should be bright (centroid >4 kHz)")
@@ -284,6 +297,10 @@ def word_phonemes(graphemes, ipa):
             syms.append("ˈ")
             done = True
         syms.extend(list(s))
+        # In running words the voice squeezes the glide of /eɪ/ into a short, flat vowel (a recogniser heard sail/tail/pain as cell/tell/pen:
+        # 2/12 understood). A length mark after it keeps the glide (8/12). /əʊ/ did not need it (15/16 without, 13/16 with), so it is left alone.
+        if s == "eɪ":
+            syms.append("ː")
     return syms
 
 
@@ -351,7 +368,7 @@ def generate(accent, bank, shared_unused):
             # the northern voice only occasionally produces without a voiced murmur, so it gets many more tries.
             for attempt in range(60 if key == "th" else 6):
                 if key in G.VOWELS:
-                    clip, info = render_vowel(voice, sym)
+                    clip, info = render_vowel(voice, sym, key)
                 elif (accent, key) in BORROWED:
                     # the northern voice cannot make a voiceless /th/ (60 takes each came out as a voiced murmur); a voiceless hiss carries no
                     # regional vowel, so the RP voice's /th/ is used and the manifest says so
@@ -473,7 +490,7 @@ def main():
         manifest, report = generate(accent, bank, None)
         index["accents"][accent] = {"label": G.ACCENTS[accent]["label"], "voice": manifest["voice"], "credit": manifest["credit"],
                                     "removed_words": manifest["removed_words"], "removed_safari": manifest["removed_safari"]}
-        print(f"[{accent}] sounds {len(manifest['phonemes'])}/22 words {len(manifest['words'])} phrases {len(manifest['phrases'])} "
+        print(f"[{accent}] sounds {len(manifest['phonemes'])}/26 words {len(manifest['words'])} phrases {len(manifest['phrases'])} "
               f"excluded words {manifest['removed_words']} safari {manifest['removed_safari']}")
         for p in report["problems"]:
             print("   PROBLEM", p)

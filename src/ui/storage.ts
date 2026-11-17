@@ -1,6 +1,6 @@
 import { addDays, todayReal } from '../engine/dates';
 import { newChild, type ChildState } from '../engine/state';
-import { DINOS } from './art';
+import { findCreature, packById } from './themes';
 
 // On-device only (spec: no accounts, no backend). localStorage stands in for SwiftData.
 const KEY = 'soundling.proto.v1';
@@ -12,7 +12,8 @@ export const load = (): ChildState => {
       const s = JSON.parse(raw) as ChildState;
       if (s.version === 1) {
         const merged = { ...newChild(), ...s }; // fill fields added since this save was written (e.g. accent)
-        if (merged.companion && !DINOS.some((d) => d.id === merged.companion?.kind)) merged.companion = { ...merged.companion, kind: 'rexy' }; // pre-art saves stored an emoji
+        if (merged.companion && !findCreature(merged.companion.kind)) merged.companion = { ...merged.companion, kind: 'rexy' }; // pre-art saves stored an emoji
+        merged.theme = packById(findCreature(merged.companion?.kind ?? '')?.pack.id ?? merged.theme ?? 'dino').id; // the pack always matches the companion
         return merged;
       }
     }

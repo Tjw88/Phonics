@@ -1,26 +1,9 @@
 // The picture cards: original flat-style illustrations for every word the games show as a picture (replacing emoji).
-// Style: viewBox 0 0 100 100, flat fills, a darker underlay for depth, white highlights, no outlines. Animals have
-// simple eyes; objects have none (faces belong to the sound-friends). A picture must say ONE word unambiguously:
-// anything that could be read as two words (insect / bug, ox / cow...) was deliberately not drawn.
-
-const K = {
-  red: '#ef476f', dred: '#c2284f', orange: '#ff9f43', dorange: '#d9741a', yellow: '#ffd166', dyellow: '#e0a100', green: '#6fd37e', dgreen: '#3f9e5a',
-  blue: '#4cc3d9', dblue: '#2b8fa3', violet: '#9b8bf0', dviolet: '#6f5fd0', pink: '#ff8fab', dpink: '#e0607f', brown: '#b8793a', dbrown: '#7a4a1d',
-  grey: '#aab4bf', dgrey: '#6b7685', white: '#ffffff', cream: '#fff3d6', ink: '#26303f', skin: '#f7c59f', dskin: '#e0a173', sky: '#bfe8ff', tan: '#e8c48a',
-} as const;
-type Col = string;
-const c = (x: number, y: number, r: number, f: Col, extra = ''): string => `<circle cx="${x}" cy="${y}" r="${r}" fill="${f}" ${extra}/>`;
-const e = (x: number, y: number, rx: number, ry: number, f: Col, rot = 0): string => `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${f}"${rot ? ` transform="rotate(${rot} ${x} ${y})"` : ''}/>`;
-const r = (x: number, y: number, w: number, h: number, rad: number, f: Col, rot = 0, extra = ''): string => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rad}" fill="${f}"${rot ? ` transform="rotate(${rot} ${x + w / 2} ${y + h / 2})"` : ''} ${extra}/>`;
-const p = (d: string, f: Col, extra = ''): string => `<path d="${d}" fill="${f}" ${extra}/>`;
-const s = (d: string, stroke: Col, w = 3, extra = ''): string => `<path d="${d}" fill="none" stroke="${stroke}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" ${extra}/>`;
-const eye = (x: number, y: number, rad = 3.4): string => c(x, y, rad, K.ink) + c(x + rad * 0.3, y - rad * 0.3, rad * 0.35, K.white);
-const shadow = (cy = 92, rx = 30): string => e(50, cy, rx, 4.5, '#0000001c');
-
-export const PICTURES: Record<string, string> = {};
-const add = (words: string, body: string): void => {
-  for (const w of words.split(' ')) PICTURES[w] = body;
-};
+// The drawing helpers and the PICTURES store live in pictureKit.ts so redrawn cards can be written in separate files.
+import { K, PICTURES, add, c, e, eye, p, r, s, shadow, type Col } from './pictureKit';
+import { install as installRedrawA } from './pictures_redraw_a';
+import { install as installRedrawB } from './pictures_redraw_b';
+export { PICTURES };
 
 // ===== ANIMALS =====================================================================================================
 add('cat', shadow() + p('M70 84 Q92 82 88 58 Q86 50 80 54', 'none', `stroke="${K.dorange}" stroke-width="9" stroke-linecap="round"`) +
@@ -232,6 +215,61 @@ add('king', shadow(94, 34) + p('M12 96 Q12 66 50 66 Q88 66 88 96Z', K.red) + p('
 add('gong', shadow(95, 40) + r(4, 90, 26, 6, 3, K.dbrown) + r(70, 90, 26, 6, 3, K.dbrown) + r(10, 8, 9, 84, 3, K.brown) + r(81, 8, 9, 84, 3, K.brown) + r(6, 4, 88, 11, 5, K.dbrown) + r(6, 4, 88, 4, 2, '#d9a066') +
   s('M42 15 L43 28 M58 15 L57 28', K.dbrown, 2.4) + c(50, 50, 28, '#d99a1a') + c(50, 50, 25, K.yellow) + c(50, 50, 19, '#f2c04a') + c(50, 50, 19, 'none', 'stroke="#d99a1a" stroke-width="2.4"') + c(50, 50, 8, '#d99a1a') + c(50, 50, 5.4, '#f6d27a') + s('M31 36 q6 -10 15 -11', K.white, 4, 'opacity=".6"') +
   r(40, 82, 30, 5, 2.5, K.dbrown) + c(36, 84.5, 6.4, K.red) + c(34, 82.5, 2, '#ffffff88'));
+
+// ===== VOWEL-TEAM WORDS (ai ee oa oo) ==============================================================================
+const drop = (x: number, y: number, rot: number, f: Col = K.blue, sc = 1): string =>
+  `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${sc})"><path d="M0 -9 C-1 -6 -6 0 -6 4 A6 6 0 0 0 6 4 C6 0 1 -6 0 -9Z" fill="${f}"/><path d="M-2.4 3 q0 -3 2 -5" fill="none" stroke="#ffffffaa" stroke-width="1.6" stroke-linecap="round"/></g>`;
+
+add('rain', [[28, 40, 17], [50, 30, 21], [73, 40, 17]].map(([x, y, rr]) => c(x!, y! + 3, rr!, '#7d93ae')).join('') + r(12, 42, 78, 20, 10, '#7d93ae') +
+  [[28, 40, 17], [50, 30, 21], [73, 40, 17]].map(([x, y, rr]) => c(x!, y!, rr!, '#a9bdd6')).join('') + r(12, 40, 78, 20, 10, '#a9bdd6') + s('M24 30 q6 -10 18 -12', K.white, 3.4, 'opacity=".4"') +
+  [[20, 70], [44, 70], [68, 70], [90, 70], [32, 81], [56, 81], [80, 81], [20, 92], [44, 92], [68, 92], [90, 92]].map(([x, y], i) => drop(x!, y!, 18, i % 2 ? K.blue : '#3aa9d4', 1.05)).join(''));
+
+add('snail', shadow(95, 38) + p('M6 90 Q2 78 8 70 Q10 54 16 50 Q24 50 22 62 Q26 74 36 76 L84 76 Q98 78 98 86 Q96 92 86 92 L12 92Z', '#d9a85c') +
+  p('M6 87 Q2 76 8 68 Q10 54 16 50 Q24 50 22 62 Q26 74 36 76 L84 76 Q98 78 98 86 Q96 89 86 89 L12 89Z', '#f2c57a') +
+  s('M12 52 L10 32 M22 50 L26 30', '#d9a85c', 4) + c(10, 28, 6.5, K.white) + c(27, 26, 6.5, K.white) + c(11, 29, 3.4, K.ink) + c(28, 27, 3.4, K.ink) + c(12, 27.6, 1.2, K.white) + c(29, 25.6, 1.2, K.white) +
+  s('M10 70 q5 5 10 0', K.dorange, 2.4) + c(8, 62, 3, K.pink, 'opacity=".55"') +
+  c(60, 52, 30, '#c0562f') + c(60, 50, 30, '#ff8f5e') + s('M60 50 a3 3 0 0 1 6 0 a6 6 0 0 1 -12 0 a9 9 0 0 1 18 0 a12 12 0 0 1 -24 0 a15 15 0 0 1 30 0', '#ffe1c8', 3.6) + s('M42 36 q6 -10 16 -12', K.white, 3.4, 'opacity=".55"'));
+
+add('sail', shadow(94, 32) + p('M50 6 L50 66 L14 66Z', K.white) + p('M50 6 L50 66 L34 66Z', '#dfe8f0') + p('M54 22 L54 66 L86 66Z', K.red) + p('M54 22 L54 66 L68 66Z', K.dred) + r(48, 4, 5, 66, 2, K.dbrown) +
+  p('M50 4 L64 9 L50 14Z', K.yellow) + p('M6 66 H94 L82 86 H18Z', K.dblue) + p('M6 66 H94 L90 72 H10Z', K.white) + p('M8 74 H92 L82 86 H18Z', K.blue) + waves(82, '#7fd5e8') + waves(90, K.blue));
+
+add('tree', shadow(94, 34) + p('M44 94 Q46 70 44 52 H58 Q56 70 60 94Z', K.dbrown) + p('M48 94 Q50 70 48 52 H54 Q52 70 54 94Z', K.brown) + s('M50 70 q-12 -10 -16 -18 M52 64 q10 -6 14 -14', K.brown, 4) +
+  c(30, 44, 22, K.dgreen) + c(70, 44, 22, K.dgreen) + c(50, 24, 26, K.dgreen) + c(50, 50, 24, K.dgreen) + c(30, 42, 21, K.green) + c(70, 42, 21, K.green) + c(50, 22, 25, K.green) + c(50, 48, 23, K.green) +
+  c(38, 22, 9, '#ffffff44') + c(24, 38, 5, '#ffffff33') + c(62, 56, 6, '#3f9e5a', 'opacity=".5"') + c(40, 60, 5, '#3f9e5a', 'opacity=".5"'));
+
+const oneFoot = (tx: number, flip: boolean): string => `<g transform="translate(${tx} 64)${flip ? ' scale(-1 1)' : ''} rotate(-5)">` +
+  p('M-19 -14 Q-20 -2 -14 8 Q-12 18 -12 26 Q-12 36 0 36 Q12 36 12 26 Q12 14 17 4 Q20 -6 18 -16Z', K.dskin) +
+  p('M-19 -16 Q-20 -4 -14 6 Q-12 16 -12 24 Q-12 33 -1 33 Q10 33 10 24 Q10 12 16 2 Q20 -8 18 -18Z', K.skin) +
+  c(9, -27, 8, K.dskin) + c(-3, -33, 5.6, K.dskin) + c(-12, -29, 4.8, K.dskin) + c(-19, -22, 4.2, K.dskin) + c(-22, -13, 3.6, K.dskin) +
+  c(9, -29, 8, K.skin) + c(-3, -35, 5.6, K.skin) + c(-12, -31, 4.8, K.skin) + c(-19, -24, 4.2, K.skin) + c(-22, -15, 3.6, K.skin) +
+  e(9, -32, 3.6, 2.4, '#ffe5d3') + e(-3, -37, 2.6, 1.7, '#ffe5d3') + e(-12, -33, 2.3, 1.6, '#ffe5d3') + e(-19, -26, 2, 1.4, '#ffe5d3') +
+  s('M-9 6 q-4 10 0 22', '#ffffff66', 4) + `</g>`;
+add('feet', e(50, 96, 40, 4.5, '#0000001c') + oneFoot(28, false) + oneFoot(72, true));
+
+add('boat', shadow(96, 40) + '<g transform="translate(0 -8)">' + p('M4 46 H78 Q92 44 98 34 Q96 70 70 80 H30 Q8 76 4 46Z', K.dred) + p('M8 60 H94 Q88 74 70 78 H30 Q14 74 8 60Z', K.red) + p('M4 46 H78 Q92 44 98 34 Q96 52 92 60 H6Z', K.white) + p('M4 46 H78 Q92 44 98 34 L96 40 Q86 52 74 52 H4Z', '#b9c8d8') +
+  r(30, 34, 26, 7, 3, K.dbrown) + r(32, 37, 22, 3, 1.5, K.brown) + c(24, 55, 6.5, K.red) + c(24, 55, 6.5, 'none', 'stroke="#fff" stroke-width="3"') + c(24, 55, 3, '#dfe8f0') + p('M12 50 H64', 'none', 'stroke="#ffffff88" stroke-width="2"') + '</g>' +
+  waves(82, K.blue) + waves(90, '#7fd5e8') + waves(98, K.blue));
+
+add('coat', shadow(95, 36) + p('M30 22 Q50 -2 70 22 Q72 36 50 40 Q28 36 30 22Z', K.dorange) + p('M34 22 Q50 6 66 22 Q66 32 50 34 Q34 32 34 22Z', '#ffe0b0') +
+  p('M30 22 Q50 36 70 22 L84 28 L94 76 L78 82 L74 54 V92 H26 V54 L22 82 L6 76 L16 28Z', K.dorange) + p('M32 26 Q50 38 68 26 L82 30 L92 74 L80 78 L76 52 V90 H24 V52 L20 78 L8 74 L18 30Z', K.orange) +
+  p('M6 76 L22 82 L21 90 L4 84Z M94 76 L78 82 L79 90 L96 84Z', K.cream) + r(48, 38, 4, 54, 1, K.dorange) + [48, 60, 72, 83].map((y) => c(58, y, 3.6, K.white) + c(58, y, 1.2, K.dorange)).join('') +
+  r(30, 62, 14, 14, 3, K.dorange) + r(30, 62, 14, 4, 2, '#ffb26b') + p('M32 26 Q40 40 50 40 Q42 30 38 24Z M68 26 Q60 40 50 40 Q58 30 62 24Z', '#ffe0b0') + s('M30 40 q-4 12 -6 24', '#ffffff66', 4));
+
+const slice = 'M20 90 V50 Q4 46 4 30 Q4 8 28 8 Q40 8 50 12 Q60 8 72 8 Q96 8 96 30 Q96 46 80 50 V90Z';
+add('toast', shadow(95, 34) + p(slice, '#b06a2c', 'transform="translate(2 4)"') + p(slice, '#c98a3c') +
+  `<g transform="translate(50 52) scale(.84) translate(-50 -52)">${p(slice, '#e9a850')}</g>` + `<g transform="translate(50 54) scale(.7) translate(-50 -54)">${p(slice, '#f6c577')}</g>` +
+  s('M30 40 q-4 14 0 30 M62 26 q4 14 0 28 M50 62 q4 8 0 18', '#d28a3a', 3, 'opacity=".55"') + c(36, 28, 1.6, '#c98a3c') + c(68, 68, 1.6, '#c98a3c') + c(44, 78, 1.6, '#c98a3c') + s('M14 24 q2 -8 10 -10', K.white, 3.4, 'opacity=".5"') +
+  r(40, 36, 26, 22, 5, '#ffe9a0', -8) + r(40, 36, 26, 8, 4, '#fff6c8', -8) + r(40, 50, 26, 8, 4, '#f0cc5a', -8));
+
+add('spoon', e(50, 95, 30, 4, '#0000001c') + `<g transform="rotate(40 50 52)">` + p('M50 2 C66 2 70 22 64 36 Q60 44 54 48 L55 88 Q55 96 50 96 Q45 96 45 88 L46 48 Q40 44 36 36 C30 22 34 2 50 2Z', K.dgrey) +
+  p('M50 2 C65 2 68 22 62 35 Q58 42 52 46 L53 88 Q53 94 50 94 Q47 94 47 88 L48 46 Q42 42 38 35 C32 22 35 2 50 2Z', '#d5dde5') + e(50, 21, 10, 16, '#b9c3cf') + e(50, 25, 8, 12, '#e6ebf1') + e(44, 14, 2.4, 6, K.white, 8) + r(50, 56, 3, 32, 1.5, K.white, 0) + `</g>`);
+
+add('boot', shadow(95, 38) + p('M30 28 Q30 10 42 10 Q54 10 54 28' , 'none', `stroke="${K.dred}" stroke-width="6" stroke-linecap="round" transform="translate(-8 -3)"`) + p('M26 18 H58 V58 Q58 64 70 66 Q96 68 96 82 V90 H18 V70 Q22 66 26 60Z', K.dred) +
+  p('M26 16 H58 V56 Q58 62 70 64 Q94 66 94 78 V84 H22 V70 Q26 64 26 56Z', K.red) + r(24, 14, 36, 9, 4, K.dred) + r(24, 14, 36, 4, 2, '#ff8fa3') + r(14, 82, 84, 12, 6, K.cream) + r(14, 88, 84, 6, 3, '#e0cfa8') + s('M32 28 V60', K.white, 4, 'opacity=".45"') + s('M72 70 q12 2 18 8', K.white, 3, 'opacity=".4"'));
+
+// Redrawn cards replace the earlier drawings of the same word (they run last on purpose).
+installRedrawA();
+installRedrawB();
 
 export const hasPicture = (word: string): boolean => word in PICTURES;
 import { h } from './dom';

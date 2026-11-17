@@ -8,6 +8,11 @@ const [VW, VH] = (process.env.VP || '1180x820').split('x').map(Number);
 const MOBILE = VW < 600;
 let failures = 0;
 const errors = [];
+// FUN_TIMELINE=/path/file.json records, for every adventure played, when each screen appeared (ms since the adventure started), which testids
+// were on it and its caption. Because the player here answers instantly, each screen's duration is roughly the minimum time the APP makes a
+// child spend on it (voice-over, celebrations, animations): the engagement review uses it to find dead air and repetition.
+const FUN_TIMELINE = process.env.FUN_TIMELINE || '';
+const timelines = [];
 const check = (cond, msg) => { if (cond) log('  ✓', msg); else { failures++; log('  ✗', msg); } };
 
 async function passGate(page) {
@@ -34,9 +39,22 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
   let madeMistake = !wrongFirst, steps = 0, sawBridge = false, sawRobot = false, sawFeed = false, sawRhyme = false;
   const kinds = new Set();
   const seen = new Set();
+  const T0 = Date.now(); let lastSid = null; const timeline = [];
+  if (FUN_TIMELINE) timelines.push(timeline);
   if (start) await page.click('[data-testid=play]');
   while (steps++ < 300) {
     await page.waitForTimeout(120);
+    if (FUN_TIMELINE) {
+      const sid = await sceneId(page).catch(() => null);
+      if (sid !== lastSid) {
+        lastSid = sid;
+        const info = await page.evaluate(() => ({
+          ids: [...document.querySelectorAll('#stage [data-testid]')].map((e) => e.dataset.testid).filter((v, i, a) => a.indexOf(v) === i).slice(0, 12),
+          caption: (document.querySelector('#stage .caption')?.textContent || '').slice(0, 90),
+        })).catch(() => ({ ids: [], caption: '' }));
+        timeline.push({ t: Date.now() - T0, sid, ...info });
+      }
+    }
     const done = stopWhen ? await stopWhen(page) : await page.locator('[data-testid=greeting]').count();
     if (done) break;
     const has = (id) => page.locator(`[data-testid=${id}]`).first().isVisible().catch(() => false);
@@ -165,7 +183,9 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
         await page.locator('[data-testid=soundbutton]').nth(n - 1).click();
         await page.waitForTimeout(250);
         const hits = await page.locator('[data-testid=soundbutton].hit').count();
-        check(hits === n && (await page.locator('[data-testid=wordchoice]').count()) > 0, 'Bridge Builder: after all sounds are tapped they can be tapped again (no reset, choices stay)');
+        const fadedNow = (await page.locator('[data-testid=soundbutton].faded').count()) > 0; // big-reader mode: no tap-in-order step, buttons only replay
+        check(fadedNow ? (await page.locator('[data-testid=wordchoice]').count()) > 0 : hits === n && (await page.locator('[data-testid=wordchoice]').count()) > 0,
+          fadedNow ? 'Bridge Builder (big-reader mode): faded buttons can be tapped for help and the choices stay' : 'Bridge Builder: after all sounds are tapped they can be tapped again (no reset, choices stay)');
         // slide a finger across the letters left to right: the letters blend
         const cols = await page.locator('.gcol .glyph').evaluateAll((els) => els.map((e) => { const r = e.getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; }));
         await page.mouse.move(cols[0][0] - 20, cols[0][1]); await page.mouse.down();
@@ -184,6 +204,11 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
       for (const id of ['story-next', 'alive-next', 'goodnight', 'sleep-next', 'next']) {
         if (await has(id)) {
           if (shot && id === 'story-next' && !seen.has('story')) { seen.add('story'); await page.screenshot({ path: `${shots}/${shot}-story.png` }); }
+          if (id === 'goodnight' && !seen.has('mission')) {
+            seen.add('mission');
+            const card = await page.locator('[data-testid=mission-card]').textContent().catch(() => '');
+            check(/For the grown-up/.test(card) && /Sound hunt/.test(card), 'goodnight screen shows the off-screen mission in plain sight for the grown-up');
+          }
           if (shot && id === 'goodnight' && !seen.has('good')) { seen.add('good'); await page.waitForTimeout(1500); await page.screenshot({ path: `${shots}/${shot}-goodnight.png` }); }
           if (shot && id === 'alive-next' && !seen.has('alive')) { seen.add('alive'); await page.waitForTimeout(900); await page.screenshot({ path: `${shots}/${shot}-alive.png` }); }
           await page.click(`[data-testid=${id}]`);
@@ -297,7 +322,7 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
   await page.click('[data-testid=parent-btn]');
   await passGate(page);
   await page.click('[data-testid=tab-sounds]');
-  check((await page.locator('[data-testid=mapcell]').count()) === 27, 'sound map shows all 27 sounds (sets 1-6)');
+  check((await page.locator('[data-testid=mapcell]').count()) === 31, 'sound map shows all 31 sounds (sets 1-7)');
   const cell = await page.locator('[data-testid=mapcell][data-id=i]').getAttribute('data-status');
   check(cell === 'learning', 'new sound shows as learning (not secure after one day)');
   await page.screenshot({ path: `${shots}/parent-sounds.png` });
@@ -336,6 +361,95 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
   const secure = await page.locator('[data-testid=mapcell][data-status=secure]').count();
   check(secure >= 4, `multi-day play has secured sounds (${secure})`);
   await page.screenshot({ path: `${shots}/parent-sounds-day9.png` });
+
+  log('BIG READER (sound buttons fade once a child has read enough words)');
+  await page.click('[data-testid=parent-close]');
+  await page.waitForSelector('[data-testid=greeting]');
+  const setReaderState = (soundButtons, nWords) => page.evaluate(([sb, n]) => {
+    const k = 'soundling.proto.v1'; const s = JSON.parse(localStorage.getItem(k));
+    const day = (i) => new Date(Date.now() - i * 864e5).toISOString().slice(0, 10);
+    s.words = {}; for (let i = 0; i < n; i++) s.words[`zz${i}`] = { correctDays: [day(2), day(1)], attempts: 2, correct: 2 };
+    s.soundButtons = sb; localStorage.setItem(k, JSON.stringify(s));
+  }, [soundButtons, nWords]);
+  const openBridge = async () => {
+    await page.reload(); await page.waitForSelector('[data-testid=greeting]');
+    await page.click('[data-testid=freeplay]'); await page.waitForSelector('[data-testid=gamegrid]');
+    await page.click('[data-testid=fp-bridge]');
+    await page.waitForSelector('[data-testid=word]');
+  };
+  await setReaderState('auto', 10);
+  await openBridge();
+  await page.waitForSelector('[data-testid=wordchoice]', { timeout: 6000 });
+  const nBtn = await page.locator('[data-testid=soundbutton]').count();
+  check((await page.locator('[data-testid=soundbutton].faded').count()) === nBtn && nBtn >= 2, `big reader: with 10 words read the sound buttons are faded (${nBtn}) and the word choices are already there, no tapping needed`);
+  await page.locator('[data-testid=soundbutton]').nth(0).click(); await page.waitForTimeout(150);
+  check((await page.locator('[data-testid=wordchoice]').count()) > 0, 'big reader: a faded sound button still plays its sound when tapped (help is never removed)');
+  await page.locator('[data-testid=wordchoice][data-answer="0"]').first().click(); await page.waitForTimeout(300);
+  check((await page.locator('[data-testid=soundbutton].faded').count()) === 0, 'big reader: after a wrong pick the sound buttons come back in full');
+  await page.locator('[data-testid=wordchoice][data-answer="1"]').click();
+  await page.waitForSelector('[data-testid=gamegrid]', { timeout: 15000 });
+  await setReaderState('auto', 7);
+  await openBridge();
+  await page.waitForTimeout(500);
+  check((await page.locator('[data-testid=soundbutton].faded').count()) === 0 && (await page.locator('[data-testid=wordchoice]').count()) === 0, 'big reader: with only 7 words read the buttons are not faded and each sound must be tapped first');
+  await page.click('[data-testid=freeplay-back]'); await page.waitForSelector('[data-testid=greeting]');
+  await setReaderState('always', 12);
+  await openBridge();
+  await page.waitForTimeout(500);
+  check((await page.locator('[data-testid=soundbutton].faded').count()) === 0 && (await page.locator('[data-testid=wordchoice]').count()) === 0, 'big reader: the parent setting "always show them" keeps the buttons even for a confident reader');
+  await page.click('[data-testid=freeplay-back]'); await page.waitForSelector('[data-testid=greeting]');
+  await page.click('[data-testid=parent-btn]'); await passGate(page); await page.click('[data-testid=tab-settings]');
+  check((await page.locator('[data-testid=soundbuttons]').count()) === 1, 'Settings has the sound-buttons option');
+  await page.click('[data-testid=parent-close]'); await page.waitForSelector('[data-testid=greeting]');
+
+  log('WORLDS (theme packs)');
+  {
+    const pw = await (await browser.newContext({ viewport: { width: VW, height: VH }, hasTouch: MOBILE, isMobile: MOBILE })).newPage();
+    const errW = [];
+    pw.on('pageerror', (e) => errW.push(String(e)));
+    await pw.goto(url);
+    await passGate(pw);
+    await pw.fill('[data-testid=nick]', 'World');
+    await pw.click('[data-testid=setup-next]');
+    await pw.waitForSelector('[data-testid=world]');
+    const worldIds = await pw.locator('[data-testid=world]').evaluateAll((els) => els.map((e) => e.dataset.id));
+    check(worldIds.length >= 5 && worldIds[0] === 'dino', `the friend picker offers ${worldIds.length} worlds (${worldIds.join(', ')})`);
+    const bgOf = () => pw.evaluate(() => document.querySelector('#scene-bg').innerHTML.length + ':' + (document.querySelector('#scene-bg').innerHTML.match(/id="[^"]+"/g) || []).slice(0, 3).join(','));
+    const eggsOf = () => pw.locator('[data-testid=egg]').evaluateAll((els) => els.map((e) => e.innerHTML.length).join(','));
+    const bg0 = await bgOf(); const eggs0 = await eggsOf();
+    check((await pw.locator('[data-testid=egg]').count()) === 4, 'four friends to pick from in the first world');
+    await pw.locator('[data-testid=world][data-id=ocean]').click();
+    await pw.waitForTimeout(200);
+    check((await bgOf()) !== bg0, 'choosing a world changes the backdrop at once');
+    check((await eggsOf()) !== eggs0 && (await pw.locator('[data-testid=egg]').count()) === 4, 'choosing a world changes the four friends offered');
+    await pw.screenshot({ path: `${shots}/world-ocean-picker.png` });
+    await pw.locator('[data-testid=egg]').nth(2).click();
+    await pw.click('[data-testid=hatch]');
+    await pw.waitForSelector('[data-testid=next]');
+    await pw.screenshot({ path: `${shots}/world-ocean-hatched.png` });
+    await pw.click('[data-testid=next]'); // hatched
+    await pw.click('[data-testid=next]'); // placement intro
+    await pw.waitForSelector('[data-testid=tile]');
+    await pw.locator('[data-testid=tile][data-answer="0"]').first().click(); // a first miss ends placement at once
+    await pw.waitForSelector('[data-testid=greeting]');
+    const stW = await pw.evaluate(() => JSON.parse(localStorage.getItem('soundling.proto.v1')));
+    check(stW.theme === 'ocean' && /^ocean-/.test(stW.companion.kind), `the chosen world and friend are saved (${stW.theme}, ${stW.companion.kind}); the name defaults per world (${stW.companion.name})`);
+    check(stW.companion.name === 'Splash', 'the default friend name comes from the world');
+    await pw.screenshot({ path: `${shots}/world-ocean-home.png` });
+    // a grown-up switches world later: same friend slot, new backdrop, progress untouched
+    await pw.click('[data-testid=parent-btn]'); await passGate(pw);
+    await pw.click('[data-testid=tab-settings]');
+    const bgBefore = await bgOf();
+    await pw.selectOption('[data-testid=theme]', 'farm');
+    await pw.waitForTimeout(300);
+    const stF = await pw.evaluate(() => JSON.parse(localStorage.getItem('soundling.proto.v1')));
+    check(stF.theme === 'farm' && /^farm-/.test(stF.companion.kind), `switching world in Settings re-skins the friend (${stW.companion.kind} -> ${stF.companion.kind})`);
+    check(stF.companion.name === stW.companion.name && JSON.stringify(stF.sounds) === JSON.stringify(stW.sounds), 'switching world keeps the friend\'s name and all progress');
+    check((await bgOf()) !== bgBefore, 'the backdrop changes when the world is switched');
+    await pw.screenshot({ path: `${shots}/world-farm-settings.png` });
+    check(errW.length === 0, `no page errors while choosing and switching worlds${errW.length ? ': ' + errW[0] : ''}`);
+    await pw.close();
+  }
 
   log('FROM SCRATCH (fails placement, day 1 is oral only: no print)');
   const pageC = await (await browser.newContext({ viewport: { width: VW, height: VH }, hasTouch: MOBILE, isMobile: MOBILE })).newPage();
@@ -429,6 +543,7 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
   check(errors.length === 0, `no console/page errors${errors.length ? ': ' + errors.join(' | ') : ''}`);
   check(externalRequests.length === 0, `no third-party network requests${externalRequests.length ? ': ' + externalRequests.join(', ') : ''}`);
   await browser.close();
+  if (FUN_TIMELINE) require('fs').writeFileSync(FUN_TIMELINE, JSON.stringify(timelines, null, 1));
   log(failures ? `\n${failures} FAILED` : '\nALL PASSED');
   process.exit(failures ? 1 : 0);
 })().catch((e) => { console.error(e); if (errors.length) console.error('PAGE ERRORS:', errors); process.exit(1); });

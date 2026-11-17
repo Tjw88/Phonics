@@ -28,12 +28,14 @@ MNEMONIC = {
     "s": "s", "a": "a", "t": "t", "p": "p", "i": "I", "n": "n", "m": "m", "d": "d", "g": "g", "o": "0", "k": "k",
     "e": "E", "u": "V", "r": "r-", "h": "h", "b": "b", "f": "f", "l": "l",
     "sh": "S", "ch": "tS", "th": "T", "ng": "N",
+    "ai": "eI", "ee": "i:", "oa": "oU", "oo": "u:",
 }
 # What each accent SHOULD teach, as IPA. Anything not listed here is the RP value below.
 BASE_IPA = {
     "s": "s", "a": "æ", "t": "t", "p": "p", "i": "ɪ", "n": "n", "m": "m", "d": "d", "g": "ɡ", "o": "ɒ", "k": "k",
     "e": "ɛ", "u": "ʌ", "r": "ɹ", "h": "h", "b": "b", "f": "f", "l": "l",
     "sh": "ʃ", "ch": "tʃ", "th": "θ", "ng": "ŋ",
+    "ai": "eɪ", "ee": "iː", "oa": "əʊ", "oo": "uː",
 }
 ACCENTS = {
     "rp": {"label": "Southern British (RP)", "voice": "en-GB-x-rp", "ipa": {}},
@@ -51,11 +53,12 @@ GRAPHEME_KEY = {  # grapheme -> phoneme key (digraphs share the single sound)
     "s": "s", "a": "a", "t": "t", "p": "p", "i": "i", "n": "n", "m": "m", "d": "d", "g": "g", "o": "o", "c": "k",
     "k": "k", "ck": "k", "e": "e", "u": "u", "r": "r", "h": "h", "b": "b", "f": "f", "ff": "f", "l": "l", "ll": "l",
     "ss": "s", "gg": "g", "sh": "sh", "ch": "ch", "th": "th", "ng": "ng",
+    "ai": "ai", "ee": "ee", "oa": "oa", "oo": "oo",
 }
 STOPS = {"p", "t", "k", "b", "d", "g"}
 VOICELESS_STOPS = {"p", "t", "k"}
 MAX_MS = {"s": 420, "f": 420, "h": 380, "m": 380, "n": 380, "l": 380, "r": 380}
-VOWELS = {"a", "i", "o", "e", "u"}
+VOWELS = {"a", "i", "o", "e", "u", "ai", "ee", "oa", "oo"}
 FRICATIVE_LONG = {"s": "s:", "f": "f:", "h": "h:"}  # the engine's own lengthening works for these
 # espeak-ng renders a lone /b d g/ as SILENCE and a lone /m n l r/ as ~40 ms, so these seven come from formant.py
 WEAK_FORM_WORDS = {"an", "in", "it", "at", "am", "ad", "on", "up", "us", "if", "as", "is"}  # engine may reduce these
@@ -72,7 +75,7 @@ PHRASES = {
     "again": "Let's tap the sounds again.", "hungry_for": "I'm hungry for", "find_the": "Find the", "your_turn": "Your turn!", "copy_me": "Copy me!", "which_letter": "Which letter says", "well_done": "Well done!",
     "slide_blend": "Slide your finger across to blend.", "hello_friend": "Hello, friend!",
     "drum_prompt": "Beat the drum once for each sound.", "safari_prompt": "Find things that start with the sound.",
-    "kitchen_prompt": "Build the word.", "trace_prompt": "Trace the letter. Start at the green dot.", "pick_egg": "Pick an egg.", "show_grownup": "Show a grown-up",
+    "kitchen_prompt": "Build the word.", "trace_prompt": "Trace the letter. Start at the green dot.", "pick_egg": "Pick an egg.", "pick_friend": "Pick a friend.", "show_grownup": "Show a grown-up",
 }
 
 

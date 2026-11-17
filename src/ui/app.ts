@@ -15,7 +15,8 @@ import { friendEl } from './friends';
 import { pictureEl } from './pictures';
 import { copyBeat, findIt } from './games2';
 import { GAME_LABEL, availableGames, safariLearned, roundBridge, roundDrum, roundFeed, roundKitchen, roundRhyme, roundRobot, roundSafari, roundTrace, type GameKind } from './rounds';
-import { DINOS, chestSVG, eggSVG, islandSVG, sceneSVG } from './art';
+import { chestSVG } from './art';
+import { PACKS, arrivalSVG, companionSVG, packById, sameSlotIn } from './themes';
 import { burst, mount, setNight } from './fx';
 import { bigButton, h, sleep } from './dom';
 import {
@@ -28,6 +29,8 @@ export class App {
   s: ChildState = load();
   private stage: HTMLElement;
   private hintBtn: HTMLButtonElement;
+  private bg!: HTMLElement;
+  private logoEl!: HTMLElement;
   private hintCard: HTMLElement;
   private banner: HTMLElement;
   private inChild = false;
@@ -47,10 +50,11 @@ export class App {
       onClick: () => void this.openParent(),
     }, '⚙︎');
     const bg = h('div', { id: 'scene-bg', 'aria-hidden': 'true' });
-    bg.innerHTML = sceneSVG();
     document.body.prepend(bg);
+    this.bg = bg;
     const logo = h('span', { class: 'logo' });
-    logo.innerHTML = `${eggSVG('rexy')}<span>Soundling</span>`;
+    this.logoEl = logo;
+    this.applyTheme();
     this.root.replaceChildren(
       h('header', { class: 'top' }, logo, this.hintBtn, parent),
       this.banner, this.hintCard, this.stage,
@@ -69,6 +73,13 @@ export class App {
       s: this.s, today: this.today(), rng: seeded((Date.now() & 0xffff) + this.s.dayOffset), stage: this.stage,
       hint: (t) => this.setHint(t),
     };
+  }
+
+  /** Paint the current theme pack's backdrop (and its first creature's arrival on the logo). Cosmetic only. */
+  private applyTheme(): void {
+    const pack = packById(this.s.theme);
+    this.bg.innerHTML = pack.scene();
+    this.logoEl.innerHTML = `${arrivalSVG((pack.creatures[0] as { id: string }).id)}<span>Soundling</span>`;
   }
 
   private setHint(t: string | null) {
@@ -175,42 +186,65 @@ export class App {
     this.s.band = band;
     this.s.accent = accent;
 
-    // choose and name a companion
+    // choose a world, then a friend from it, and name them
     let chosen = 0;
     const names = h('input', { type: 'text', maxlength: 16, placeholder: 'Name your friend', 'data-testid': 'companion-name', class: 'input' }) as HTMLInputElement;
     const hatch = bigButton('Hatch!', 'hatch');
-    const eggRow = h('div', { class: 'row eggs', 'data-testid': 'eggs' }, DINOS.map((d, i) => {
+    const eggRow = h('div', { class: 'row eggs', 'data-testid': 'eggs' });
+    const drawEggs = () => {
+      chosen = 0;
+      eggRow.replaceChildren(...packById(this.s.theme).creatures.map((d, i) => {
+        const b = h('button', {
+          class: `tile egg${i === 0 ? ' on' : ''}`, 'data-testid': 'egg', 'aria-label': d.label,
+          onClick: (ev: Event) => {
+            chosen = i;
+            eggRow.querySelectorAll('.egg').forEach((n) => n.classList.remove('on'));
+            (ev.currentTarget as HTMLElement).classList.add('on');
+            tap();
+            sfx.pop();
+          },
+        });
+        b.innerHTML = arrivalSVG(d.id);
+        return b;
+      }));
+    };
+    const worldRow = h('div', { class: 'row worlds', 'data-testid': 'worlds' }, PACKS.map((pk) => {
       const b = h('button', {
-        class: `tile egg${i === 0 ? ' on' : ''}`, 'data-testid': 'egg', 'aria-label': d.label,
+        class: `world${pk.id === this.s.theme ? ' on' : ''}`, 'data-testid': 'world', 'data-id': pk.id, 'aria-label': pk.name,
         onClick: (ev: Event) => {
-          chosen = i;
-          eggRow.querySelectorAll('.egg').forEach((n) => n.classList.remove('on'));
+          this.s.theme = pk.id;
+          this.applyTheme();
+          worldRow.querySelectorAll('.world').forEach((n) => n.classList.remove('on'));
           (ev.currentTarget as HTMLElement).classList.add('on');
+          drawEggs();
           tap();
           sfx.pop();
         },
       });
-      b.innerHTML = eggSVG(d.id);
+      b.innerHTML = `<span class="wthumb"><span class="wt-scene">${pk.scene()}</span><span class="wt-pet">${companionSVG((pk.creatures[0] as { id: string }).id, 0)}</span></span><span class="wname">${pk.name}</span>`;
       return b;
     }));
+    drawEggs();
     mount(this.stage,
-      h('div', { class: 'scene setup' }, h('h1', {}, 'Pick an egg'), eggRow, names, hatch.el),
+      h('div', { class: 'scene setup' }, h('h1', {}, 'Pick a friend'), worldRow, eggRow, names, hatch.el),
     );
-    void sayPhrase('pick_egg', 'Pick an egg.');
+    void sayPhrase('pick_friend', 'Pick a friend.');
     await hatch.pressed;
-    const kind = DINOS[chosen]!.id;
-    this.s.companion = { kind, name: names.value.trim() || 'Dino' };
-    // the egg wobbles, cracks and the dino pops out
+    const pack = packById(this.s.theme);
+    const kind = (pack.creatures[chosen] as { id: string }).id;
+    this.s.companion = { kind, name: names.value.trim() || pack.defaultName };
+    // the egg (or crate, or capsule) wobbles, opens and the friend pops out
+    const arrives = pack.arrival === 'egg' ? 'hatching' : 'arriving';
     const hatchEgg = h('div', { class: 'hatch-egg' });
-    hatchEgg.innerHTML = eggSVG(kind);
-    mount(this.stage, h('div', { class: 'scene' }, hatchEgg, h('p', { class: 'caption' }, 'Something is hatching…')));
+    hatchEgg.innerHTML = arrivalSVG(kind);
+    mount(this.stage, h('div', { class: 'scene' }, hatchEgg, h('p', { class: 'caption' }, `Something is ${arrives}…`)));
     sfx.boing();
     await sleep(900);
     sfx.pop();
     burst(hatchEgg, 'confetti', 18);
     praise();
     const hatched = companionEl(this.s, 'big hatching');
-    await this.interlude([hatched, h('p', { class: 'caption' }, `${this.s.companion.name} hatched! Hello, ${nick}!`)]);
+    await this.interlude([hatched, h('p', { class: 'caption' }, `${this.s.companion.name} ${pack.arrival === 'egg' ? 'hatched' : 'arrived'}! Hello, ${nick}!`)]);
 
     // placement (band C only)
     if (band === 'C') {
@@ -244,7 +278,7 @@ export class App {
     // Treasures sit on the island in fixed, known places (never random). Each is a sticker of its mnemonic friend.
     const SPOTS: [number, number][] = [[14, 62], [28, 72], [44, 78], [60, 76], [76, 70], [88, 60], [22, 52], [38, 60], [54, 62], [70, 58], [82, 48], [10, 44], [92, 74]];
     const island = h('div', { class: 'island', 'data-testid': 'island' },
-      (() => { const a = h('div', { class: 'island-art' }); a.innerHTML = islandSVG(); return a; })(),
+      (() => { const a = h('div', { class: 'island-art' }); a.innerHTML = packById(s.theme).island(); return a; })(),
       ...s.collection.slice(0, SPOTS.length).map((id, i) =>
         h('span', { class: 'prize', title: MNEMONICS[id]?.name ?? id, style: `left:${SPOTS[i]![0]}%;top:${SPOTS[i]![1]}%;animation-delay:${(i % 5) * 0.4}s` }, friendEl(id))),
       h('div', { class: 'island-pet' }, companionEl(s, `big ${asleep ? 'sleepy' : ''}`, 'companion')),
@@ -381,7 +415,9 @@ export class App {
         h('p', { class: 'caption' }, 'You found a treasure!'),
         h('div', { class: 'chest-wrap' }, chest, prizeEl),
         h('p', { class: 'treasure-name' }, m?.name ?? ''),
-        h('div', { class: 'row' }, show, shown.el)),
+        h('div', { class: 'row' }, show, shown.el),
+        // the off-screen mission, in plain sight for the grown-up who is usually next to the child at this point (it was behind a lightbulb)
+        h('div', { class: 'grownup-card', 'data-testid': 'mission-card' }, h('strong', {}, 'For the grown-up'), plan.mission)),
     );
     void sayPhrase('treasure', 'You found a treasure!');
     setTimeout(() => { chest.classList.add('open'); sfx.chest(); burst(prizeEl, 'stars', 16); praise(); }, 900);
@@ -557,8 +593,24 @@ export class App {
         }, `Fast-forward ${days} day${days > 1 ? 's' : ''} at ${Math.round(acc * 100)}%`);
         body.append(h('h2', {}, 'Settings'),
           h('label', {}, 'Daily limit ', sel), mute,
+          h('label', {}, 'World ', h('select', {
+            'data-testid': 'theme',
+            onChange: (e: Event) => {
+              const id = (e.target as HTMLSelectElement).value;
+              s.theme = id;
+              if (s.companion) s.companion = { ...s.companion, kind: sameSlotIn(s.companion.kind, id) }; // same friend slot, in the new world
+              this.applyTheme();
+              this.persist();
+              this.dirty = true; // the home screen is redrawn when the grown-up closes this area
+              draw();
+            },
+          }, PACKS.map((pk) => h('option', { value: pk.id, selected: pk.id === s.theme }, `${pk.name}: ${pk.blurb}`)))),
           h('label', {}, 'Accent ', accentSel),
           h('label', { class: 'check' }, h('input', { type: 'checkbox', 'data-testid': 'tracing', checked: s.tracing, onChange: (e: Event) => { s.tracing = (e.target as HTMLInputElement).checked; this.persist(); } }), ' Letter tracing (Trace Trail) in the daily adventure'),
+          h('label', {}, 'Sound buttons under words ', h('select', {
+            'data-testid': 'soundbuttons',
+            onChange: (e: Event) => { s.soundButtons = (e.target as HTMLSelectElement).value as ChildState['soundButtons']; this.persist(); },
+          }, h('option', { value: 'auto', selected: s.soundButtons === 'auto' }, 'Fade as my child reads more words'), h('option', { value: 'always', selected: s.soundButtons === 'always' }, 'Always show them'))),
           h('label', { class: 'check' }, h('input', { type: 'checkbox', 'data-testid': 'music', checked: s.musicOn, onChange: (e: Event) => { s.musicOn = (e.target as HTMLInputElement).checked; setMusicOn(s.musicOn); this.persist(); } }), ' Background music'),
           h('p', { class: 'muted', 'data-testid': 'accent-help' }, `${ACCENTS.find((a) => a.id === s.accent)?.note ?? ''} Choose the one that matches how you and your child’s school say the sounds. Your child’s progress is kept when you switch.`),
           h('p', { class: 'muted' }, 'Microphone: off (not implemented in this prototype). Reminders: off.'),

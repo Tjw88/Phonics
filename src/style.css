@@ -27,7 +27,7 @@ body { background: #bfe8ff; overscroll-behavior: none; user-select: none; -webki
 body.night #scene-bg .sky-night, body.night #scene-bg .moon, body.night #scene-bg .stars { opacity: 1; }
 body.night #scene-bg .sun { opacity: 0; }
 body.night #scene-bg .cloud { opacity: 0.25; }
-body.night #scene-bg .hills-far, body.night #scene-bg .hills-mid, body.night #scene-bg .hills-near, body.night #scene-bg .volcano, body.night #scene-bg .fern { filter: brightness(0.45) saturate(0.8); }
+/* (night dimming of the scenery is the generic .scenery rule at the end of this file) */
 #scene-bg .sun .rays { animation: spin 60s linear infinite; transform-box: fill-box; transform-origin: center; }
 #scene-bg .cloud { animation: drift 90s linear infinite; }
 #scene-bg .c2 { animation-duration: 140s; animation-delay: -40s; }
@@ -409,3 +409,26 @@ label.check input { width: 28px; height: 28px; }
 .weekday.played { background: #e6f6ea; color: #1f6a3a; }
 .weekday.played .dot { background: #3fae5f; }
 .weekday .dm { font-size: 11px; min-height: 14px; }
+
+/* big-reader mode: the sound buttons fade but stay tappable as help */
+.soundbutton.faded { opacity: 0.22; filter: grayscale(0.5); transition: opacity 0.4s, filter 0.4s; }
+.soundbutton { transition: opacity 0.4s, filter 0.4s; }
+
+/* goodnight: the off-screen mission, for the grown-up */
+.grownup-card { max-width: 560px; margin: 10px auto 0; padding: 10px 16px; border-radius: 16px; background: #fff8e6; border: 2px dashed #e0b84a; color: #5a4310; font-size: 16px; text-align: center; }
+.grownup-card strong { display: block; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; color: #9a7416; margin-bottom: 2px; }
+
+/* theme packs */
+#scene-bg .scenery { transition: filter 1.2s; }
+body.night #scene-bg .scenery { filter: brightness(0.45) saturate(0.8); }
+.worlds { gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 4px; }
+.world { appearance: none; border: 3px solid transparent; border-radius: 16px; background: #ffffffcc; padding: 4px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; width: 92px; font: inherit; color: #26303f; }
+.world.on { border-color: #ff9f1c; background: #fff; box-shadow: 0 4px 12px #0003; }
+.world .wthumb { position: relative; width: 80px; height: 56px; border-radius: 10px; overflow: hidden; display: block; }
+.world .wt-scene, .world .wt-scene svg { display: block; width: 100%; height: 100%; }
+.world .wt-pet { position: absolute; left: 50%; bottom: -2px; width: 34px; transform: translateX(-50%); }
+.world .wt-pet svg { width: 100%; height: auto; display: block; }
+.world .wname { font-size: 12px; font-weight: 700; line-height: 1.1; text-align: center; }
+/* world-picker thumbnails always show the DAY version of a backdrop (the night layers belong to #scene-bg only) */
+.world .wt-scene .sky-night, .world .wt-scene .moon, .world .wt-scene .stars { display: none; }
+.world .wt-scene .scenery-glow { display: none; }

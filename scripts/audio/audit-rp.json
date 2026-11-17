@@ -26,7 +26,11 @@
   "sh": "ʃ",
   "ch": "tʃ",
   "th": "θ",
-  "ng": "ŋ"
+  "ng": "ŋ",
+  "ai": "eɪ",
+  "ee": "iː",
+  "oa": "əʊ",
+  "oo": "uː"
  },
  "phonemes": {
   "s": {
@@ -864,6 +868,158 @@
      "warnings": []
     }
    ]
+  },
+  "ai": {
+   "expected_ipa": "eɪ",
+   "files": [
+    {
+     "file": "rp/phonemes/ai_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 522 ms",
+     "takes_needed": 1,
+     "ms": 522,
+     "rms": 0.11,
+     "voiced_fraction": 0.92,
+     "centroid_hz": 462,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/ai_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 750 ms",
+     "takes_needed": 1,
+     "ms": 750,
+     "rms": 0.11,
+     "voiced_fraction": 0.88,
+     "centroid_hz": 422,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/ai_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 697 ms",
+     "takes_needed": 1,
+     "ms": 697,
+     "rms": 0.11,
+     "voiced_fraction": 0.9,
+     "centroid_hz": 364,
+     "warnings": []
+    }
+   ]
+  },
+  "ee": {
+   "expected_ipa": "iː",
+   "files": [
+    {
+     "file": "rp/phonemes/ee_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 293,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/ee_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.71,
+     "centroid_hz": 318,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/ee_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 347,
+     "warnings": []
+    }
+   ]
+  },
+  "oa": {
+   "expected_ipa": "əʊ",
+   "files": [
+    {
+     "file": "rp/phonemes/oa_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 580 ms",
+     "takes_needed": 1,
+     "ms": 580,
+     "rms": 0.11,
+     "voiced_fraction": 0.93,
+     "centroid_hz": 571,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/oa_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 556 ms",
+     "takes_needed": 1,
+     "ms": 556,
+     "rms": 0.11,
+     "voiced_fraction": 0.94,
+     "centroid_hz": 476,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/oa_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 545 ms",
+     "takes_needed": 1,
+     "ms": 545,
+     "rms": 0.11,
+     "voiced_fraction": 0.93,
+     "centroid_hz": 506,
+     "warnings": []
+    }
+   ]
+  },
+  "oo": {
+   "expected_ipa": "uː",
+   "files": [
+    {
+     "file": "rp/phonemes/oo_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.93,
+     "centroid_hz": 479,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/oo_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.96,
+     "centroid_hz": 311,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/oo_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.98,
+     "centroid_hz": 299,
+     "warnings": []
+    }
+   ]
   }
  },
  "words": {
@@ -1597,6 +1753,262 @@
   "long": {
    "phonemes": "lˈɒŋ",
    "ms": 434
+  },
+  "rain": {
+   "phonemes": "ɹˈeɪːn",
+   "ms": 421
+  },
+  "snail": {
+   "phonemes": "snˈeɪːl",
+   "ms": 679
+  },
+  "sail": {
+   "phonemes": "sˈeɪːl",
+   "ms": 472
+  },
+  "chain": {
+   "phonemes": "tʃˈeɪːn",
+   "ms": 521
+  },
+  "pain": {
+   "phonemes": "pˈeɪːn",
+   "ms": 540
+  },
+  "main": {
+   "phonemes": "mˈeɪːn",
+   "ms": 441
+  },
+  "gain": {
+   "phonemes": "ɡˈeɪːn",
+   "ms": 377
+  },
+  "tail": {
+   "phonemes": "tˈeɪːl",
+   "ms": 495
+  },
+  "mail": {
+   "phonemes": "mˈeɪːl",
+   "ms": 491
+  },
+  "rail": {
+   "phonemes": "ɹˈeɪːl",
+   "ms": 483
+  },
+  "fail": {
+   "phonemes": "fˈeɪːl",
+   "ms": 512
+  },
+  "paint": {
+   "phonemes": "pˈeɪːnt",
+   "ms": 461
+  },
+  "bait": {
+   "phonemes": "bˈeɪːt",
+   "ms": 399
+  },
+  "raid": {
+   "phonemes": "ɹˈeɪːd",
+   "ms": 374
+  },
+  "maid": {
+   "phonemes": "mˈeɪːd",
+   "ms": 436
+  },
+  "see": {
+   "phonemes": "sˈiː",
+   "ms": 302
+  },
+  "tree": {
+   "phonemes": "tɹˈiː",
+   "ms": 405
+  },
+  "feet": {
+   "phonemes": "fˈiːt",
+   "ms": 473
+  },
+  "seed": {
+   "phonemes": "sˈiːd",
+   "ms": 443
+  },
+  "need": {
+   "phonemes": "nˈiːd",
+   "ms": 496
+  },
+  "feel": {
+   "phonemes": "fˈiːl",
+   "ms": 588
+  },
+  "keep": {
+   "phonemes": "kˈiːp",
+   "ms": 386
+  },
+  "deep": {
+   "phonemes": "dˈiːp",
+   "ms": 380
+  },
+  "sleep": {
+   "phonemes": "slˈiːp",
+   "ms": 438
+  },
+  "meet": {
+   "phonemes": "mˈiːt",
+   "ms": 452
+  },
+  "cheek": {
+   "phonemes": "tʃˈiːk",
+   "ms": 451
+  },
+  "peel": {
+   "phonemes": "pˈiːl",
+   "ms": 499
+  },
+  "seek": {
+   "phonemes": "sˈiːk",
+   "ms": 354
+  },
+  "heel": {
+   "phonemes": "hˈiːl",
+   "ms": 421
+  },
+  "deed": {
+   "phonemes": "dˈiːd",
+   "ms": 440
+  },
+  "boat": {
+   "phonemes": "bˈəʊt",
+   "ms": 455
+  },
+  "coat": {
+   "phonemes": "kˈəʊt",
+   "ms": 389
+  },
+  "toast": {
+   "phonemes": "tˈəʊst",
+   "ms": 607
+  },
+  "road": {
+   "phonemes": "ɹˈəʊd",
+   "ms": 477
+  },
+  "toad": {
+   "phonemes": "tˈəʊd",
+   "ms": 381
+  },
+  "foam": {
+   "phonemes": "fˈəʊm",
+   "ms": 423
+  },
+  "loaf": {
+   "phonemes": "lˈəʊf",
+   "ms": 403
+  },
+  "moan": {
+   "phonemes": "mˈəʊn",
+   "ms": 434
+  },
+  "goal": {
+   "phonemes": "ɡˈəʊl",
+   "ms": 406
+  },
+  "load": {
+   "phonemes": "lˈəʊd",
+   "ms": 605
+  },
+  "coach": {
+   "phonemes": "kˈəʊtʃ",
+   "ms": 471
+  },
+  "float": {
+   "phonemes": "flˈəʊt",
+   "ms": 454
+  },
+  "cloak": {
+   "phonemes": "klˈəʊk",
+   "ms": 420
+  },
+  "moat": {
+   "phonemes": "mˈəʊt",
+   "ms": 508
+  },
+  "coal": {
+   "phonemes": "kˈəʊl",
+   "ms": 400
+  },
+  "spoon": {
+   "phonemes": "spˈuːn",
+   "ms": 570
+  },
+  "boot": {
+   "phonemes": "bˈuːt",
+   "ms": 398
+  },
+  "moo": {
+   "phonemes": "mˈuː",
+   "ms": 258
+  },
+  "too": {
+   "phonemes": "tˈuː",
+   "ms": 355
+  },
+  "boo": {
+   "phonemes": "bˈuː",
+   "ms": 291
+  },
+  "soon": {
+   "phonemes": "sˈuːn",
+   "ms": 416
+  },
+  "noon": {
+   "phonemes": "nˈuːn",
+   "ms": 511
+  },
+  "pool": {
+   "phonemes": "pˈuːl",
+   "ms": 514
+  },
+  "cool": {
+   "phonemes": "kˈuːl",
+   "ms": 434
+  },
+  "tool": {
+   "phonemes": "tˈuːl",
+   "ms": 456
+  },
+  "food": {
+   "phonemes": "fˈuːd",
+   "ms": 498
+  },
+  "mood": {
+   "phonemes": "mˈuːd",
+   "ms": 468
+  },
+  "hoot": {
+   "phonemes": "hˈuːt",
+   "ms": 375
+  },
+  "toot": {
+   "phonemes": "tˈuːt",
+   "ms": 230
+  },
+  "boom": {
+   "phonemes": "bˈuːm",
+   "ms": 397
+  },
+  "doom": {
+   "phonemes": "dˈuːm",
+   "ms": 471
+  },
+  "loop": {
+   "phonemes": "lˈuːp",
+   "ms": 392
+  },
+  "train": {
+   "phonemes": "tɹˈeɪːn",
+   "ms": 536
+  },
+  "nail": {
+   "phonemes": "nˈeɪːl",
+   "ms": 530
   }
  },
  "phrases": {
@@ -1715,6 +2127,10 @@
   "show_grownup": {
    "text": "Show a grown-up",
    "ms": 870
+  },
+  "pick_friend": {
+   "text": "Pick a friend.",
+   "ms": 773
   }
  },
  "safari": {
@@ -1820,12 +2236,16 @@
  "problems": [],
  "warnings": [],
  "asr": {
-  "understood": 105,
-  "of": 184,
+  "understood": 147,
+  "of": 253,
   "missed": [
    [
     "an",
     "and"
+   ],
+   [
+    "am",
+    "amp"
    ],
    [
     "ad",
@@ -1833,11 +2253,11 @@
    ],
    [
     "sit",
-    ", is it"
+    ", said"
    ],
    [
     "tin",
-    ", 10"
+    "10"
    ],
    [
     "pin",
@@ -1845,7 +2265,7 @@
    ],
    [
     "pit",
-    ", pet"
+    "pet"
    ],
    [
     "mat",
@@ -1854,18 +2274,6 @@
    [
     "dad",
     "add"
-   ],
-   [
-    "did",
-    ", it"
-   ],
-   [
-    "nap",
-    "now"
-   ],
-   [
-    "tan",
-    "10"
    ],
    [
     "dam",
@@ -1877,23 +2285,23 @@
    ],
    [
     "dig",
-    "egg"
+    ", dick"
    ],
    [
     "dot",
     ""
    ],
    [
-    "kid",
-    ", keep"
+    "got",
+    ", but"
    ],
    [
     "kit",
-    ", kids"
+    ", kate"
    ],
    [
     "nod",
-    ", not"
+    "not"
    ],
    [
     "pod",
@@ -1901,7 +2309,7 @@
    ],
    [
     "peck",
-    ", pack"
+    ", heck"
    ],
    [
     "deck",
@@ -1909,11 +2317,11 @@
    ],
    [
     "ten",
-    "10"
+    ", 10"
    ],
    [
     "men",
-    ", meh"
+    ", man"
    ],
    [
     "rid",
@@ -1921,7 +2329,7 @@
    ],
    [
     "rug",
-    ", ruck"
+    ", rock"
    ],
    [
     "rub",
@@ -1932,104 +2340,104 @@
     ", son"
    ],
    [
-    "mud",
-    ", not"
-   ],
-   [
     "mug",
-    ", mark"
+    "not"
    ],
    [
     "cup",
-    ", come"
+    "cut"
    ],
    [
     "pup",
-    ", but"
+    "pop"
    ],
    [
     "up",
-    "but"
+    "pop"
    ],
    [
     "nut",
     ", not"
    ],
    [
+    "gum",
+    "come"
+   ],
+   [
     "tug",
-    ", talk"
+    ", tuck"
    ],
    [
     "dug",
-    ", duck"
+    "stuck"
    ],
    [
     "egg",
-    "the word he is back"
+    ""
    ],
    [
-    "hat",
-    "at"
+    "hit",
+    "8"
    ],
    [
     "hug",
-    ", huck"
+    ", hark"
    ],
    [
     "hut",
-    ", huh"
+    "art"
    ],
    [
     "bed",
-    "bad"
+    ", but"
    ],
    [
     "bag",
     ", back"
    ],
    [
-    "bus",
-    ", us"
-   ],
-   [
     "bug",
-    "buck"
+    "back"
    ],
    [
-    "bat",
-    "that"
+    "bun",
+    "bum"
    ],
    [
     "bib",
-    "8"
+    ", babe"
    ],
    [
     "fit",
-    ", fate"
+    ", feet"
    ],
    [
-    "puff",
-    "pop"
+    "off",
+    "buff"
    ],
    [
     "huff",
     "half"
    ],
    [
+    "cuff",
+    ", cough"
+   ],
+   [
     "fill",
     ", fail"
    ],
    [
-    "doll",
-    "dull"
+    "fell",
+    ", fail"
    ],
    [
-    "hill",
-    ", he'll"
+    "mill",
+    ", male"
    ],
    [
     "sell",
-    ", cell"
+    "self"
    ],
    [
     "leg",
@@ -2041,15 +2449,23 @@
    ],
    [
     "lid",
-    ", knit"
+    "lit"
+   ],
+   [
+    "miss",
+    ", mess"
+   ],
+   [
+    "kiss",
+    ", case"
    ],
    [
     "hiss",
     ", his"
    ],
    [
-    "fuss",
-    ", fast"
+    "shut",
+    ", jot"
    ],
    [
     "shack",
@@ -2065,7 +2481,7 @@
    ],
    [
     "dash",
-    "that"
+    "ash"
    ],
    [
     "mash",
@@ -2073,23 +2489,27 @@
    ],
    [
     "gush",
-    "gosh"
+    ", gosh"
    ],
    [
     "chip",
     ", ship"
    ],
    [
+    "chick",
+    ", check"
+   ],
+   [
     "chin",
-    ", shin"
+    ", shen"
+   ],
+   [
+    "check",
+    ", jack"
    ],
    [
     "chug",
-    ", chuck"
-   ],
-   [
-    "thin",
-    ", 10"
+    ", shock"
    ],
    [
     "thick",
@@ -2097,19 +2517,23 @@
    ],
    [
     "thud",
-    "thought"
+    ", thought"
    ],
    [
     "thing",
-    "ink"
+    ", hang"
    ],
    [
     "ring",
-    ", ray"
+    "rain"
    ],
    [
     "gong",
     "gone"
+   ],
+   [
+    "sing",
+    "synch"
    ],
    [
     "ping",
@@ -2117,19 +2541,19 @@
    ],
    [
     "ding",
-    ", dink"
+    ", think"
    ],
    [
-    "hang",
-    ", aang"
+    "fang",
+    ", thank you"
    ],
    [
     "hung",
-    ", huh"
+    "home"
    ],
    [
     "lung",
-    "love"
+    "lol"
    ],
    [
     "rung",
@@ -2138,6 +2562,106 @@
    [
     "sung",
     ", song"
+   ],
+   [
+    "long",
+    ", law"
+   ],
+   [
+    "snail",
+    ", snell"
+   ],
+   [
+    "sail",
+    ", cell"
+   ],
+   [
+    "train",
+    "trend"
+   ],
+   [
+    "chain",
+    ", shen"
+   ],
+   [
+    "pain",
+    "pen"
+   ],
+   [
+    "main",
+    ", man"
+   ],
+   [
+    "tail",
+    ", tell"
+   ],
+   [
+    "mail",
+    ", mel"
+   ],
+   [
+    "paint",
+    ", pant"
+   ],
+   [
+    "bait",
+    ", but"
+   ],
+   [
+    "raid",
+    "red"
+   ],
+   [
+    "maid",
+    ", made"
+   ],
+   [
+    "bee",
+    "be"
+   ],
+   [
+    "see",
+    "c"
+   ],
+   [
+    "cheek",
+    ", chic"
+   ],
+   [
+    "heel",
+    ", heal"
+   ],
+   [
+    "toad",
+    ", soad"
+   ],
+   [
+    "goal",
+    ", go"
+   ],
+   [
+    "boot",
+    ", bute"
+   ],
+   [
+    "moo",
+    ", woop"
+   ],
+   [
+    "too",
+    "to"
+   ],
+   [
+    "noon",
+    ", new"
+   ],
+   [
+    "cool",
+    ", call"
+   ],
+   [
+    "toot",
+    "to"
    ]
   ],
   "note": "base.en recogniser on 'The word is X.'; biased on short vowels; misses mean 'listen to this one', not 'wrong'"

@@ -18,9 +18,12 @@ export const GRAPHEMES: Grapheme[] = [
   // set 6: the four consonant digraphs (two letters, ONE sound). th is the unvoiced /θ/ of "thin" only: the voiced /ð/ of
   // "this" and "the" is deliberately not taught or used, so one grapheme never has two sounds.
   g('sh', 6), g('ch', 6), g('th', 6), g('ng', 6),
+  // set 7: four vowel digraphs, each ONE long vowel sound. oo is the LONG sound of "moon" only: the short sound of "book" is a second
+  // sound for the same letters, so it is neither taught nor used (a test keeps book, look, good, foot out of the bank).
+  g('ai', 7), g('ee', 7), g('oa', 7), g('oo', 7),
 ];
 
-export const MAX_SET = 6;
+export const MAX_SET = 7;
 export const GRAPHEME_BY_ID = new Map(GRAPHEMES.map((x) => [x.id, x]));
 export const graphemesInSet = (set: number) => GRAPHEMES.filter((x) => x.set === set);
 
@@ -54,6 +57,10 @@ export const MNEMONICS: Record<string, Mnemonic> = {
   ch: { name: 'Choo-Choo the train', emoji: '🚂', line: 'Choo-Choo chugs ch, ch, ch.' },
   th: { name: 'Theo the thumb', emoji: '👍', line: 'Theo sticks his tongue out: th, th, th.' },
   ng: { name: 'Gong the gong', emoji: '🎶', line: 'Gong rings out: ng, ng, ng.' },
+  ai: { name: 'Rainy the raindrop', emoji: '💧', line: 'Rainy splashes ai, ai, ai in the rain.' },
+  ee: { name: 'Bea the bee', emoji: '🐝', line: 'Bea buzzes ee, ee, ee.' },
+  oa: { name: 'Boa the boat', emoji: '⛵', line: 'Boa toots oa, oa, oa as she sails.' },
+  oo: { name: 'Moony the moon', emoji: '🌙', line: 'Moony sings oo, oo, oo at night.' },
 };
 
 export interface Word {
@@ -105,6 +112,16 @@ const rows: Row[] = [
   ['th-i-n'], ['th-i-ck'], ['th-u-d'], ['th-u-m-p'], ['th-i-ng'], ['m-o-th', '🦋'],
   ['r-i-ng', '💍'], ['k-i-ng', '🤴'], ['g-o-ng', '🛎️'], ['s-o-ng'], ['s-i-ng'], ['p-i-ng'], ['d-i-ng'], ['b-a-ng'], ['h-a-ng'], ['f-a-ng'],
   ['g-a-ng'], ['h-u-ng'], ['l-u-ng'], ['r-u-ng'], ['s-u-ng'], ['l-o-ng'],
+  // set 7 (vowel digraphs). Left out on purpose: the short oo of book/look/good/foot, room/roof/root (said both ways), poo/poop, w/y/z words (not taught),
+  // and anything with a silent or different letter pattern. "rain", "pain", "main" etc. are long /ai/ in every accent.
+  ['r-ai-n', '🌧️'], ['s-n-ai-l', '🐌'], ['s-ai-l', '⛵'], ['t-r-ai-n', '🚂'], ['n-ai-l', '💅'], ['ch-ai-n'], ['p-ai-n'], ['m-ai-n'], ['g-ai-n'], ['t-ai-l'],
+  ['m-ai-l'], ['r-ai-l'], ['f-ai-l'], ['p-ai-n-t'], ['b-ai-t'], ['r-ai-d'], ['m-ai-d'],
+  ['b-ee', '🐝'], ['s-ee'], ['t-r-ee', '🌳'], ['f-ee-t', '🦶'], ['s-ee-d'], ['n-ee-d'], ['f-ee-l'], ['k-ee-p'], ['d-ee-p'], ['s-l-ee-p'], ['m-ee-t'],
+  ['sh-ee-p', '🐑'], ['ch-ee-k'], ['p-ee-l'], ['s-ee-k'], ['h-ee-l'], ['d-ee-d'],
+  ['b-oa-t', '🚤'], ['c-oa-t', '🧥'], ['g-oa-t', '🐐'], ['s-oa-p', '🧼'], ['t-oa-s-t', '🍞'], ['r-oa-d'], ['t-oa-d'], ['f-oa-m'], ['l-oa-f'], ['m-oa-n'], ['g-oa-l'],
+  ['l-oa-d'], ['c-oa-ch'], ['f-l-oa-t'], ['c-l-oa-k'], ['m-oa-t'], ['c-oa-l'],
+  ['m-oo-n', '🌙'], ['s-p-oo-n', '🥄'], ['b-oo-t', '👢'], ['m-oo'], ['t-oo'], ['b-oo'], ['s-oo-n'], ['n-oo-n'], ['p-oo-l'], ['c-oo-l'], ['t-oo-l'], ['f-oo-d'], ['m-oo-d'],
+  ['h-oo-t'], ['t-oo-t'], ['b-oo-m'], ['d-oo-m'], ['l-oo-p'],
 ];
 
 export const BANK: Word[] = rows.map(([seg, emoji, flags = '']) => ({
@@ -179,14 +196,17 @@ export const safariFor = (accent: AccentId): SafariItem[] => SAFARI.filter((i) =
  * Pictures that a child could reasonably mix up (two drinking vessels, two cookware pieces, two big cats). The games never
  * show these together as the answer and a distractor, because the picture, not the child, would be at fault.
  */
-export const CONFUSABLE: readonly (readonly [string, string])[] = [['mug', 'cup'], ['pan', 'pot'], ['cat', 'tiger'], ['chick', 'duck'], ['sheep', 'ram']];
+export const CONFUSABLE: readonly (readonly [string, string])[] = [['mug', 'cup'], ['pan', 'pot'], ['cat', 'tiger'], ['chick', 'duck'], ['sheep', 'ram'],
+  ['boat', 'ship'], ['sail', 'boat'], ['sail', 'ship'], ['goat', 'sheep'], ['rain', 'thunder']];
 export const isConfusable = (a: string, b: string): boolean => CONFUSABLE.some(([x, y]) => (a === x && b === y) || (a === y && b === x));
 
 /**
  * Sounds that are easy to mistake for each other, in a child's ear and especially in a synthetic voice (/θ/ for /f/ is the classic
  * one). They are never offered together as the answer and a distractor in a listen-and-choose game.
  */
-export const CLOSE_SOUNDS: readonly (readonly [string, string])[] = [['s', 'sh'], ['t', 'th'], ['f', 'th'], ['sh', 'ch'], ['t', 'ch'], ['n', 'ng'], ['k', 'ng']];
+export const CLOSE_SOUNDS: readonly (readonly [string, string])[] = [['s', 'sh'], ['t', 'th'], ['f', 'th'], ['sh', 'ch'], ['t', 'ch'], ['n', 'ng'], ['k', 'ng'],
+  // a long vowel next to the short one it is built on (a/ai, e/ai, e/ee, i/ee, o/oa, u/oo): easy to blur, especially in a synthetic voice
+  ['a', 'ai'], ['e', 'ai'], ['e', 'ee'], ['i', 'ee'], ['o', 'oa'], ['u', 'oo']];
 export const soundsClose = (a: string, b: string): boolean => CLOSE_SOUNDS.some(([x, y]) => (a === x && b === y) || (a === y && b === x));
 
 /** What a sound-friend SAYS when introduced. Written without letter names on purpose (a voice reading "t" would say "tee");
@@ -199,4 +219,5 @@ export const STORY_SAY: Record<string, string> = {
   h: 'Hattie the hen huffs.', b: 'Bo the bug bounces.', f: 'Fenn the fox flicks his tail.', ff: 'Fluffy the cloud puffs.',
   l: 'Lulu the lamb licks her lips.', ll: 'Bella the bell rings.', ss: 'Moss hisses.',
   sh: 'Shelly the shell whispers.', ch: 'Choo-Choo the train chugs along.', th: 'Theo the thumb sticks his tongue out.', ng: 'Gong the gong rings out.',
+  ai: 'Rainy the raindrop splashes down.', ee: 'Bea the bee buzzes by.', oa: 'Boa the boat toots her horn.', oo: 'Moony the moon sings softly.',
 };

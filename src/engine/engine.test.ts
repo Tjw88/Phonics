@@ -9,7 +9,7 @@ import {
 } from './session';
 import { playDay, simulate } from './simulate';
 import {
-  MASTERY_DAYS, carriedForward, choicesForTrial, introduce, isSecure, newChild, nextNewSound, recordTrial, recordWord,
+  BUTTON_FADE_AT, MASTERY_DAYS, buttonsFaded, carriedForward, choicesForTrial, introduce, isSecure, newChild, nextNewSound, recordTrial, recordWord,
   statusOf, unlockedSet, wordsRead,
 } from './state';
 
@@ -20,24 +20,26 @@ const good = (s: ReturnType<typeof newChild>, id: string, day: string) => {
 const D = (n: number) => `2026-01-${String(n).padStart(2, '0')}`;
 
 describe('curriculum data', () => {
-  it('has the 23 MVP graphemes in the spec order, then the four set-6 digraphs', () => {
+  it('has the 23 MVP graphemes in the spec order, then the set-6 and set-7 digraphs', () => {
     expect(GRAPHEMES.map((g) => g.id).join(' ')).toBe(
-      's a t p i n m d g o c k ck e u r h b f ff l ll ss sh ch th ng',
+      's a t p i n m d g o c k ck e u r h b f ff l ll ss sh ch th ng ai ee oa oo',
     );
     expect(graphemesInSet(1).map((g) => g.id)).toEqual(['s', 'a', 't', 'p']);
     expect(graphemesInSet(6).map((g) => g.id)).toEqual(['sh', 'ch', 'th', 'ng']);
+    expect(graphemesInSet(7).map((g) => g.id)).toEqual(['ai', 'ee', 'oa', 'oo']);
     // a digraph is ONE sound: it must not share a key with the letters it is written with
-    for (const id of ['sh', 'ch', 'th', 'ng']) expect(['s', 'h', 'c', 't', 'n', 'g']).not.toContain(GRAPHEMES.find((g) => g.id === id)!.phoneme);
+    for (const id of ['sh', 'ch', 'th', 'ng', 'ai', 'ee', 'oa', 'oo']) expect(['s', 'h', 'c', 't', 'n', 'g', 'a', 'e', 'o']).not.toContain(GRAPHEMES.find((g) => g.id === id)!.phoneme);
   });
   it('keeps out words whose digraph or vowel would teach the wrong sound', () => {
     // voiced th (this/that/then/with), the BATH vowel (bath/path), the foot vowel (bush/push), and w-words (no w is taught)
-    const banned = ['this', 'that', 'then', 'them', 'with', 'the', 'bath', 'path', 'maths', 'bush', 'push', 'wing', 'swing', 'shit'];
+    // the short oo (book, look, good, foot), room/roof/root (said both ways), poop, and z-words (no z is taught)
+    const banned = ['this', 'that', 'then', 'them', 'with', 'the', 'bath', 'path', 'maths', 'bush', 'push', 'wing', 'swing', 'shit', 'book', 'look', 'good', 'foot', 'room', 'roof', 'root', 'poop', 'zoo'];
     for (const w of BANK) expect(banned, w.text).not.toContain(w.text);
   });
 });
 
 describe('content linter', () => {
-  it('passes the shipped bank at the end of set 6', () => {
+  it('passes the shipped bank at the end of set 7', () => {
     expect(lintBank()).toEqual([]);
   });
   it('flags the spec’s own "egg" example: the gg grapheme is not taught in sets 1-5', () => {
@@ -205,21 +207,22 @@ describe('feed trials', () => {
 describe('placement', () => {
   it('starts from scratch if the first set fails, and skips sets passed 2/2', () => {
     const items = buildPlacement(seeded(5));
-    expect(items).toHaveLength(12); // two per set, sets 1-6
-    expect([...new Set(items.map((i) => i.set))]).toEqual([1, 2, 3, 4, 5, 6]);
+    expect(items).toHaveLength(14); // two per set, sets 1-7
+    expect([...new Set(items.map((i) => i.set))]).toEqual([1, 2, 3, 4, 5, 6, 7]);
     const yes = (n: number) => Array(n).fill(true) as boolean[];
-    expect(scorePlacement(items, [false, ...yes(11)])).toBe(1);
-    expect(scorePlacement(items, [...yes(4), false, true, ...yes(6)])).toBe(3);
+    expect(scorePlacement(items, [false, ...yes(13)])).toBe(1);
+    expect(scorePlacement(items, [...yes(4), false, true, ...yes(8)])).toBe(3);
     expect(scorePlacement(items, yes(6))).toBe(4);
     expect(scorePlacement(items, yes(10))).toBe(6); // 2/2 on sets 1-5 starts at set 6
-    expect(scorePlacement(items, yes(12))).toBe(6); // there is no set 7
+    expect(scorePlacement(items, yes(12))).toBe(7); // 2/2 on sets 1-6 starts at set 7
+    expect(scorePlacement(items, yes(14))).toBe(7); // there is no set 8
     // the UI stops at the first miss, so results can be shorter than the item list: a missing answer is a miss
     expect(scorePlacement(items, [...yes(2), false])).toBe(2);
   });
   it('never asks for a double (ck ff ll ss) or a sound shared inside its set, and never offers a sound-alike', () => {
     for (let seed = 0; seed < 60; seed++)
       for (const it of buildPlacement(seeded(seed))) {
-        expect(['ck', 'ff', 'll', 'ss', 'c', 'k']).not.toContain(it.target.id);
+        expect(['ck', 'ff', 'll', 'ss', 'c', 'k']).not.toContain(it.target.id); // (ee and oo are real graphemes, not doubles, so they may be asked)
         for (const o of it.options) if (o !== it.target) expect(soundsClose(o.phoneme, it.target.phoneme), `${it.target.id} vs ${o.id}`).toBe(false);
         expect(it.options.length).toBeGreaterThanOrEqual(2);
       }
@@ -297,6 +300,75 @@ describe('set 6 (digraphs) in play', () => {
   });
 });
 
+describe('sound-button fading ("big reader" mode)', () => {
+  const readWords = (s: ReturnType<typeof newChild>, n: number) => {
+    for (let i = 0; i < n; i++) { recordWord(s, `w${i}`, true, D(1)); recordWord(s, `w${i}`, true, D(2)); }
+  };
+  it('starts once enough different words are read, and not before', () => {
+    const s = newChild();
+    expect(buttonsFaded(s)).toBe(false);
+    readWords(s, BUTTON_FADE_AT - 1);
+    expect(buttonsFaded(s)).toBe(false);
+    readWords(s, BUTTON_FADE_AT);
+    expect(buttonsFaded(s)).toBe(true);
+  });
+  it('a word counts as read only after two days, so a lucky day does not fade the buttons', () => {
+    const s = newChild();
+    for (let i = 0; i < 20; i++) recordWord(s, `w${i}`, true, D(1));
+    expect(buttonsFaded(s)).toBe(false);
+  });
+  it('the parent can keep the buttons always', () => {
+    const s = newChild();
+    readWords(s, BUTTON_FADE_AT + 5);
+    s.soundButtons = 'always';
+    expect(buttonsFaded(s)).toBe(false);
+  });
+  it('an old save without the field defaults to auto', () => {
+    expect(newChild().soundButtons).toBe('auto');
+  });
+});
+
+describe('set 7 (vowel digraphs) in play', () => {
+  it('a daily 90%-accurate child reaches ai, ee, oa and oo, and every day on the way has a playable plan', () => {
+    const rng = seeded(21);
+    const s = newChild();
+    const seen = new Set<string>();
+    const want = ['ai', 'ee', 'oa', 'oo'];
+    for (let d = 0; d < 200 && !want.every((g) => seen.has(g)); d++) {
+      const plan = playDay(s, addDays('2026-01-05', d), 0.9, rng);
+      if (plan.newSound) seen.add(plan.newSound.id);
+      expect(plan.robotWords.length, `day ${d} robot words`).toBe(3);
+      if (plan.printBlend) expect(plan.bridgeWords.length, `day ${d} bridge words`).toBe(3);
+      if (plan.newSound?.set === 7) {
+        const withIt = decodableWords(s).filter((w) => w.graphemes.includes(plan.newSound!.id));
+        expect(withIt.length, `${plan.newSound.id} words`).toBeGreaterThanOrEqual(3);
+      }
+    }
+    expect(want.filter((g) => seen.has(g))).toEqual(want);
+    expect(unlockedSet(s)).toBe(7);
+  });
+  it('each vowel digraph has plenty of decodable words and at least two with a picture', () => {
+    const s = newChild();
+    for (const g of GRAPHEMES) introduce(s, g.id, D(1));
+    for (const g of ['ai', 'ee', 'oa', 'oo']) {
+      const ws = decodableWords(s).filter((w) => w.graphemes.includes(g));
+      expect(ws.length, g).toBeGreaterThanOrEqual(8);
+      expect(ws.filter((w) => w.emoji).length, `${g} pictured`).toBeGreaterThanOrEqual(2);
+    }
+  });
+  it('a long vowel is never offered next to the short vowel it is built on', () => {
+    const s = newChild();
+    for (const g of GRAPHEMES) introduce(s, g.id, D(1));
+    for (let seed = 0; seed < 100; seed++)
+      for (const [short, long] of [['a', 'ai'], ['e', 'ai'], ['e', 'ee'], ['i', 'ee'], ['o', 'oa'], ['u', 'oo']] as const) {
+        const target = GRAPHEMES.find((g) => g.id === long)!;
+        expect(buildFeedTrial(s, target, 3, seeded(seed)).options.map((o) => o.id), `${long} with ${short}`).not.toContain(short);
+        const t2 = GRAPHEMES.find((g) => g.id === short)!;
+        expect(buildFeedTrial(s, t2, 3, seeded(seed)).options.map((o) => o.id), `${short} with ${long}`).not.toContain(long);
+      }
+  });
+});
+
 describe('accents', () => {
   it('RP drops "pass" (BATH vowel); northern English keeps it', () => {
     expect(bankFor('rp').some((w) => w.text === 'pass')).toBe(false);
@@ -358,6 +430,7 @@ describe('generated audio stays in sync with the curriculum, per accent', () => 
 describe('sound sweep: every sound is long enough to hear, loud enough, and every spoken instruction exists', () => {
   const MIN = { fric: 400, sonor: 380, vowel: 450 } as const;
   const KIND: Record<string, 'fric' | 'sonor' | 'vowel' | 'stop' | 'affr'> = {
+    ai: 'vowel', ee: 'vowel', oa: 'vowel', oo: 'vowel',
     s: 'fric', f: 'fric', h: 'fric', sh: 'fric', th: 'fric', ch: 'affr', m: 'sonor', n: 'sonor', l: 'sonor', r: 'sonor', ng: 'sonor',
     a: 'vowel', i: 'vowel', o: 'vowel', e: 'vowel', u: 'vowel', p: 'stop', t: 'stop', k: 'stop', b: 'stop', d: 'stop', g: 'stop',
   };
@@ -370,9 +443,9 @@ describe('sound sweep: every sound is long enough to hear, loud enough, and ever
       const manifest = JSON.parse(readFileSync(new URL(`../../public/audio/${accent.id}/manifest.json`, import.meta.url), 'utf8')) as {
         phrases: Record<string, string>; phonemes: Record<string, string[]>;
       };
-      it('all 22 sounds have three takes, each long and loud enough for its type', () => {
+      it('all 26 sounds have three takes, each long and loud enough for its type', () => {
         expect(Object.keys(audit.phonemes).sort()).toEqual([...new Set(GRAPHEMES.map((g) => g.phoneme))].sort());
-        expect(Object.keys(audit.phonemes).length).toBe(22);
+        expect(Object.keys(audit.phonemes).length).toBe(26);
         for (const [k, v] of Object.entries(audit.phonemes)) {
           expect(v.files.length, k).toBe(3);
           for (const f of v.files) {

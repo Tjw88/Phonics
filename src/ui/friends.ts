@@ -152,6 +152,31 @@ const BODY: Record<string, string> = {
       <path d="M36 50 q8 -14 22 -16" stroke="#fff" stroke-width="4.5" fill="none" opacity=".6" stroke-linecap="round"/>
       ${face(60, 66, 1.15)}
       <rect x="62" y="102" width="30" height="6" rx="3" fill="#7a4a1d"/><circle cx="58" cy="105" r="7.5" fill="#ef476f"/><circle cx="55" cy="102" r="2.4" fill="#fff" opacity=".6"/>`,
+  // ai: Rainy the raindrop, with a few splash drops
+  ai: `<path d="M18 34 q-4 -9 -10 -10 M102 34 q4 -9 10 -10 M12 72 h-8 M108 72 h8" stroke="#8fd0f0" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <path d="M60 6 C60 6 20 54 20 80 C20 102 38 114 60 114 C82 114 100 102 100 80 C100 54 60 6 60 6Z" fill="#2f78d6"/>
+      <path d="M60 10 C60 10 24 54 24 80 C24 100 40 110 60 110 C80 110 96 100 96 80 C96 54 60 10 60 10Z" fill="#4ea1f5"/>
+      <path d="M38 78 q-2 -14 8 -28" stroke="#fff" stroke-width="5" fill="none" opacity=".55" stroke-linecap="round"/>${face(60, 82, 1.1)}
+      <path d="M14 100 q-6 6 -2 12 q8 0 6 -10z M106 100 q6 6 2 12 q-8 0 -6 -10z M28 12 q-4 6 0 9 q5 -2 0 -9z M94 12 q4 6 0 9 q-5 -2 0 -9z" fill="#8fd0f0"/>`,
+  // ee: Bea the bee, round and fuzzy
+  ee: `<ellipse cx="38" cy="28" rx="20" ry="13" fill="#cfeaff" stroke="#a6d4f2" stroke-width="2.5" transform="rotate(-28 38 28)"/><ellipse cx="82" cy="28" rx="20" ry="13" fill="#cfeaff" stroke="#a6d4f2" stroke-width="2.5" transform="rotate(28 82 28)"/>
+     <path d="M48 36 q-6 -18 -18 -22 M72 36 q6 -18 18 -22" stroke="#26303f" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="29" cy="13" r="4.6" fill="#26303f"/><circle cx="91" cy="13" r="4.6" fill="#26303f"/>
+     <ellipse cx="60" cy="74" rx="44" ry="40" fill="#e0a100"/><ellipse cx="60" cy="72" rx="44" ry="40" fill="#ffd23f"/>
+     <clipPath id="beaBody"><ellipse cx="60" cy="72" rx="44" ry="40"/></clipPath>
+     <g clip-path="url(#beaBody)"><path d="M0 88 Q60 98 120 88 V99 Q60 109 0 99Z M0 106 Q60 116 120 106 V124 H0Z" fill="#26303f"/></g>
+     ${face(60, 62, 1.15)}<path d="M36 52 q4 -10 14 -12" stroke="#fff" stroke-width="4" fill="none" opacity=".5" stroke-linecap="round"/>`,
+  // oa: Boa the boat, a face on her hull, a little flag on the mast
+  oa: `<path d="M60 8 V58" stroke="#7a4a1d" stroke-width="5" stroke-linecap="round"/><path d="M62 10 L96 22 L62 34Z" fill="#ffd166"/><path d="M62 10 L96 22 L62 22Z" fill="#fff" opacity=".4"/>
+     <path d="M4 56 H116 Q110 98 82 104 H38 Q10 98 4 56Z" fill="#c2284f"/><path d="M8 56 H112 Q106 94 80 100 H40 Q14 94 8 56Z" fill="#ef476f"/><rect x="2" y="50" width="116" height="11" rx="5.5" fill="#fff"/><rect x="2" y="56" width="116" height="5" rx="2.5" fill="#dfe8f0"/>
+     <path d="M22 70 q4 -10 16 -12" stroke="#fff" stroke-width="4" fill="none" opacity=".4" stroke-linecap="round"/>${face(60, 78, 1.05)}
+     <path d="M-4 96 q10 -10 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 V124 H-4Z" fill="#2b8fa3"/><path d="M-4 106 q10 -10 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 V124 H-4Z" fill="#4cc3d9"/>`,
+  // oo: Moony the moon, sleepy-happy, with two stars
+  oo: `<path d="M76 8 A52 52 0 1 0 108 82 A42 42 0 1 1 76 8Z" fill="#e0b800"/><path d="M74 8 A50 50 0 1 0 106 80 A40 40 0 1 1 74 8Z" fill="#ffe98a"/>
+     <path d="M30 40 q6 -16 20 -22" stroke="#fff" stroke-width="4.5" fill="none" opacity=".55" stroke-linecap="round"/>
+     <path d="M32 70 q6 6 12 0 M60 74 q6 6 12 0" stroke="#26303f" stroke-width="3.6" fill="none" stroke-linecap="round"/>
+     ${cheeks(30, 76, 86, 5)}<path d="M42 90 Q52 100 62 90" fill="none" stroke="#3b2030" stroke-width="3.2" stroke-linecap="round"/>
+     <path d="M98 22 l4 10 l10 1 l-8 7 l3 10 l-9 -6 l-9 6 l3 -10 l-8 -7 l10 -1z" fill="#ffd166"/><path d="M102 60 l2.4 6 l6 .6 l-4.6 4 l1.6 6 l-5.4 -3.6 l-5.4 3.6 l1.6 -6 l-4.6 -4 l6 -.6z" fill="#ffd166" transform="translate(-4 -2)"/>
+     <circle cx="64" cy="22" r="2.6" fill="#fff"/><circle cx="110" cy="52" r="2.2" fill="#fff"/>`,
 };
 
 export const FRIEND_IDS = Object.keys(BODY);

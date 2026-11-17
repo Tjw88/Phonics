@@ -113,6 +113,26 @@
    "rp/phonemes/ng_0.wav",
    "rp/phonemes/ng_1.wav",
    "rp/phonemes/ng_2.wav"
+  ],
+  "ai": [
+   "rp/phonemes/ai_0.wav",
+   "rp/phonemes/ai_1.wav",
+   "rp/phonemes/ai_2.wav"
+  ],
+  "ee": [
+   "rp/phonemes/ee_0.wav",
+   "rp/phonemes/ee_1.wav",
+   "rp/phonemes/ee_2.wav"
+  ],
+  "oa": [
+   "rp/phonemes/oa_0.wav",
+   "rp/phonemes/oa_1.wav",
+   "rp/phonemes/oa_2.wav"
+  ],
+  "oo": [
+   "rp/phonemes/oo_0.wav",
+   "rp/phonemes/oo_1.wav",
+   "rp/phonemes/oo_2.wav"
   ]
  },
  "words": {
@@ -372,7 +392,69 @@
   "cheese": "rp/words/cheese.wav",
   "thumb": "rp/words/thumb.wav",
   "thread": "rp/words/thread.wav",
-  "thunder": "rp/words/thunder.wav"
+  "thunder": "rp/words/thunder.wav",
+  "rain": "rp/words/rain.wav",
+  "snail": "rp/words/snail.wav",
+  "sail": "rp/words/sail.wav",
+  "chain": "rp/words/chain.wav",
+  "pain": "rp/words/pain.wav",
+  "main": "rp/words/main.wav",
+  "gain": "rp/words/gain.wav",
+  "tail": "rp/words/tail.wav",
+  "mail": "rp/words/mail.wav",
+  "rail": "rp/words/rail.wav",
+  "fail": "rp/words/fail.wav",
+  "paint": "rp/words/paint.wav",
+  "bait": "rp/words/bait.wav",
+  "raid": "rp/words/raid.wav",
+  "maid": "rp/words/maid.wav",
+  "see": "rp/words/see.wav",
+  "tree": "rp/words/tree.wav",
+  "feet": "rp/words/feet.wav",
+  "seed": "rp/words/seed.wav",
+  "need": "rp/words/need.wav",
+  "feel": "rp/words/feel.wav",
+  "keep": "rp/words/keep.wav",
+  "deep": "rp/words/deep.wav",
+  "sleep": "rp/words/sleep.wav",
+  "meet": "rp/words/meet.wav",
+  "cheek": "rp/words/cheek.wav",
+  "peel": "rp/words/peel.wav",
+  "seek": "rp/words/seek.wav",
+  "heel": "rp/words/heel.wav",
+  "deed": "rp/words/deed.wav",
+  "boat": "rp/words/boat.wav",
+  "coat": "rp/words/coat.wav",
+  "toast": "rp/words/toast.wav",
+  "road": "rp/words/road.wav",
+  "toad": "rp/words/toad.wav",
+  "foam": "rp/words/foam.wav",
+  "loaf": "rp/words/loaf.wav",
+  "moan": "rp/words/moan.wav",
+  "goal": "rp/words/goal.wav",
+  "load": "rp/words/load.wav",
+  "coach": "rp/words/coach.wav",
+  "float": "rp/words/float.wav",
+  "cloak": "rp/words/cloak.wav",
+  "moat": "rp/words/moat.wav",
+  "coal": "rp/words/coal.wav",
+  "spoon": "rp/words/spoon.wav",
+  "boot": "rp/words/boot.wav",
+  "moo": "rp/words/moo.wav",
+  "too": "rp/words/too.wav",
+  "boo": "rp/words/boo.wav",
+  "soon": "rp/words/soon.wav",
+  "noon": "rp/words/noon.wav",
+  "pool": "rp/words/pool.wav",
+  "cool": "rp/words/cool.wav",
+  "tool": "rp/words/tool.wav",
+  "food": "rp/words/food.wav",
+  "mood": "rp/words/mood.wav",
+  "hoot": "rp/words/hoot.wav",
+  "toot": "rp/words/toot.wav",
+  "boom": "rp/words/boom.wav",
+  "doom": "rp/words/doom.wav",
+  "loop": "rp/words/loop.wav"
  },
  "phrases": {
   "play": "rp/phrases/play.wav",
@@ -430,7 +512,12 @@
   "story_sh": "rp/phrases/story_sh.wav",
   "story_ch": "rp/phrases/story_ch.wav",
   "story_th": "rp/phrases/story_th.wav",
-  "story_ng": "rp/phrases/story_ng.wav"
+  "story_ng": "rp/phrases/story_ng.wav",
+  "story_ai": "rp/phrases/story_ai.wav",
+  "story_ee": "rp/phrases/story_ee.wav",
+  "story_oa": "rp/phrases/story_oa.wav",
+  "story_oo": "rp/phrases/story_oo.wav",
+  "pick_friend": "rp/phrases/pick_friend.wav"
  },
  "sources": {
   "s": "piper (cut 145 ms of hiss before the vowel)",
@@ -454,7 +541,11 @@
   "sh": "piper (cut 80 ms of hiss before the vowel)",
   "ch": "piper (affricate: natural burst + 185 ms of the voice's own frication)",
   "th": "piper (cut 80 ms of hiss before the vowel)",
-  "ng": "piper (cut 70 ms before the vowel)"
+  "ng": "piper (cut 70 ms before the vowel)",
+  "ai": "piper (diphthong spoken slowly by the voice (glide kept))",
+  "ee": "piper (lone vowel from the voice)",
+  "oa": "piper (diphthong spoken slowly by the voice (glide kept))",
+  "oo": "piper (lone vowel from the voice)"
  },
  "removed_words": [
   "pass"

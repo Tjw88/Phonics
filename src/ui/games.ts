@@ -1,8 +1,9 @@
 import { bankFor, type AccentId, type Grapheme, type Word } from '../engine/data';
 import { shuffle, type Rng } from '../engine/dates';
 import { phonemeOf, slashed, type PlacementItem } from '../engine/session';
-import { setOpensNext, type ChildState } from '../engine/state';
-import { dinoMouthPct, robotSVG, rocketSVG, dinoSVG } from './art';
+import { buttonsFaded, setOpensNext, type ChildState } from '../engine/state';
+import { robotSVG, rocketSVG } from './art';
+import { companionSVG, mouthPct } from './themes';
 import { pictureEl } from './pictures';
 import { blip, playSequence, praise, sayPhrase, saySeq, sfx, soft, speak, tap } from './audio';
 import { h, sleep } from './dom';
@@ -62,7 +63,7 @@ const idleLook = (el: HTMLElement): void => {
 };
 export const companionEl = (s: ChildState, extra = '', testid?: string): HTMLElement => {
   const el = h('div', { class: `companion ${extra}`, 'aria-hidden': 'true', 'data-testid': testid, 'data-growth': growthLevel(s) });
-  el.innerHTML = dinoSVG(s.companion?.kind ?? 'rexy', growthLevel(s));
+  el.innerHTML = companionSVG(s.companion?.kind ?? 'rexy', growthLevel(s));
   if (/sleepy/.test(extra)) setMood(el, 'sleepy');
   else idleLook(el);
   return el;
@@ -97,7 +98,7 @@ export const feedCreature = async (ctx: Ctx, target: Grapheme, options: Grapheme
   const choices = options.length;
   ctx.hint(`Ask: "What else starts with ${slashed(target.id)}?" Say the sound, not the letter name. Drag the letter to the dino.`);
   const dino = companion(ctx, 'feed-dino-art');
-  const pos = dinoMouthPct(ctx.s.companion?.kind ?? 'rexy');
+  const pos = mouthPct(ctx.s.companion?.kind ?? 'rexy');
   const mouth = h('div', { class: 'mouthzone', 'data-testid': 'mouth', 'aria-hidden': 'true', style: `left:${pos.x}%;top:${pos.y}%` });
   const wrap = h('div', { class: 'feed-dino' }, dino, mouth);
   const say = () => blip(phonemeOf(target.id));
@@ -377,8 +378,13 @@ export const rhymeRocket = async (ctx: Ctx, target: Word, answer: Word, distract
  * like) and you can SLIDE a finger across the letters to blend them. Then pick the word and the dino walks across.
  */
 export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): Promise<TrialResult> => {
-  ctx.hint(`Ask: "Can you push the sounds together to read it?" Tap each button, then slide your finger across the word to blend it.`);
-  let next = 0;
+  // "Big reader" mode: a child who has read plenty of words skips the tap-each-sound step and goes straight to blending. The sound
+  // buttons stay faintly visible (tap one to hear it) and come back at full strength after a wrong pick.
+  const faded = buttonsFaded(ctx.s);
+  ctx.hint(faded
+    ? 'Big-reader round: your child blends the word straight away, with the sound buttons faded (still tappable for help). They return if the first pick is wrong. Change this in Settings.'
+    : `Ask: "Can you push the sounds together to read it?" Tap each button, then slide your finger across the word to blend it.`);
+  let next = faded ? word.graphemes.length : 0;
   let firstTry = true;
   let resolve!: (r: TrialResult) => void;
   const done = new Promise<TrialResult>((r) => (resolve = r));
@@ -454,6 +460,7 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
             soft();
             // a wrong pick is not a reset: the sounds are still there to tap and listen to again
             caps.textContent = 'Not quite. Tap the sounds again, then slide across to blend!';
+            buttons.forEach((x) => x.classList.remove('faded')); // support returns in full
           }
         });
         return b;
@@ -467,7 +474,7 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
   const buttons = word.graphemes.map((g, i) => {
     const digraph = g.length > 1;
     const b = h('button', {
-      class: `soundbutton ${digraph ? 'bar' : 'dot'} tone${i % 4}`, 'data-testid': 'soundbutton', 'aria-label': `sound ${slashed(g)}`,
+      class: `soundbutton ${digraph ? 'bar' : 'dot'} tone${i % 4}${faded ? ' faded' : ''}`, 'data-testid': 'soundbutton', 'aria-label': `sound ${slashed(g)}`,
     });
     b.addEventListener('click', () => {
       if (i < next || allTapped()) {
@@ -496,7 +503,12 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
   const glyphs = word.graphemes.map((g) => h('span', { class: 'glyph' }, g));
   word.graphemes.forEach((_, i) => wordRow.append(h('div', { class: 'gcol', 'data-i': i }, glyphs[i], buttons[i])));
   mount(ctx.stage, h('div', { class: 'scene bridgescene' }, caps, wordRow, slideHint, bridge, choicesBox));
-  saySeq([{ phrase: 'tap_sounds', text: 'Tap each sound, in order.' }]);
+  if (faded) {
+    slots.forEach((sl) => sl.classList.add('filled'));
+    showChoices(); // straight to blending; it speaks its own prompt
+  } else {
+    saySeq([{ phrase: 'tap_sounds', text: 'Tap each sound, in order.' }]);
+  }
   return done;
 };
 

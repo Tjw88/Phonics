@@ -144,7 +144,8 @@ export const buildFeedTrial = (s: ChildState, target: Grapheme, indexInSession: 
 export const PLACEMENT_SETS: readonly number[] = Array.from({ length: MAX_SET }, (_, i) => i + 1);
 export interface PlacementItem { set: number; target: Grapheme; options: Grapheme[] }
 
-const isDouble = (g: Grapheme): boolean => g.id.length === 2 && (g.id.charAt(0) === g.id.charAt(1) || g.id === 'ck');
+const DOUBLES = ['ck', 'ff', 'll', 'ss'];
+const isDouble = (g: Grapheme): boolean => DOUBLES.includes(g.id);
 const placementTargetOk = (g: Grapheme, inSet: Grapheme[]): boolean =>
   !isDouble(g) && !inSet.some((o) => o.id !== g.id && !isDouble(o) && o.phoneme === g.phoneme);
 

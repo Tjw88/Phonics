@@ -35,6 +35,10 @@ export interface ChildState {
   tracing: boolean; // optional Trace Trail step (spec: optional, schools teach different formations)
   musicOn: boolean; // background music (spec: its own toggle in parent settings)
   easyTap: boolean; // letters/pictures can be tapped into place instead of dragged (little hands, accessibility)
+  /** the look of the app: a theme pack id (see ui/themes.ts). Purely cosmetic, never affects teaching or progress. */
+  theme: string;
+  /** 'auto': the sound buttons under a printed word fade once the child is a confident reader (see buttonsFaded); 'always': never fade them */
+  soundButtons: 'auto' | 'always';
   companion: Companion | null;
   startSet: number; // placement result, 1 = from scratch
   sounds: Record<string, SoundRecord>;
@@ -56,6 +60,8 @@ export const newChild = (): ChildState => ({
   tracing: false,
   musicOn: true,
   easyTap: false,
+  soundButtons: 'auto',
+  theme: 'dino',
   companion: null,
   startSet: 1,
   sounds: {},
@@ -164,6 +170,14 @@ export const recordWord = (s: ChildState, text: string, firstTryCorrect: boolean
 };
 export const wordsRead = (s: ChildState): string[] =>
   Object.entries(s.words).filter(([, r]) => r.correctDays.length >= WORD_READ_DAYS).map(([w]) => w);
+
+/**
+ * "Big reader" mode: the printed-word game drops its tap-each-sound step (the sound buttons stay faintly visible, tappable as help, and
+ * return in full after a wrong answer). It starts once this many different words have been read, a prototype threshold with no research behind it:
+ * the point is only that a child who can already blend should not be made to tap every sound of every word for ever.
+ */
+export const BUTTON_FADE_AT = 8;
+export const buttonsFaded = (s: ChildState): boolean => s.soundButtons !== 'always' && wordsRead(s).length >= BUTTON_FADE_AT;
 
 /** Number of answer choices for the n-th graded trial of a sound in a session: 1, then 2, then 3 (errorless start). */
 export const choicesForTrial = (indexInSession: number): number => Math.min(3, indexInSession + 1);

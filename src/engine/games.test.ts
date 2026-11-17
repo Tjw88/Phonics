@@ -108,7 +108,7 @@ describe('Sound Safari', () => {
     }
   });
   it('letters that no word starts with (ck, ff, ll, ss) never get a Safari scene', () => {
-    for (const id of ['ck', 'ff', 'll', 'ss']) expect(safariGraphemes('rp')).not.toContain(id);
+    for (const id of ['ck', 'ff', 'll', 'ss', 'ng', 'ai', 'ee', 'oa', 'oo']) expect(safariGraphemes('rp')).not.toContain(id);
   });
 });
 
