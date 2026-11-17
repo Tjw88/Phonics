@@ -91,7 +91,7 @@ export const anim = (el: Element, frames: Keyframe[], opts: KeyframeAnimationOpt
 };
 const runLeave = (): void => { for (const fn of leaveHooks.splice(0)) { try { fn(); } catch { /* a dead element is fine */ } } };
 
-const XFADE_IN = 240, XFADE_OUT = 120; // the old card leaves fast, so the two are never both readable
+const XFADE_IN = 220, XFADE_OUT = 90; // the old card leaves fast, so the two are never both readable
 /**
  * Replace the stage contents and tag the scene with a counter, so tests (and animations) can tell scenes apart.
  * The new card CROSS-FADES in while the old one fades out (no blank landscape between rounds), and when the child's creature is on both
@@ -151,8 +151,8 @@ export const mount = (stage: HTMLElement, ...kids: Node[]): void => {
         }
       }
     }
-    g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: XFADE_OUT, easing: 'ease-in', fill: 'forwards' });
-    window.setTimeout(() => g.remove(), XFADE_OUT + 40);
+    g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: XFADE_OUT, easing: 'linear', fill: 'forwards' });
+    window.setTimeout(() => g.remove(), XFADE_OUT + 10); // gone the moment it has faded: no ghost frame left over the new card
   }
   // the incoming card fades in as ONE piece (never a hollow frame), its words a beat later so they are never over the old words
   fresh?.animate([{ opacity: 0 }, { opacity: 1 }], { duration: XFADE_IN, easing: 'cubic-bezier(0.2, 0.8, 0.3, 1)', fill: 'backwards' });

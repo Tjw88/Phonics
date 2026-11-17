@@ -56,6 +56,7 @@
 }
 @keyframes star-in { from { transform: scale(0.2) rotate(-40deg); opacity: 0; } to { transform: none; opacity: 1; } }
 .safari-field .safari-item.wobble { animation: wobble-soft 0.65s ease-in-out; }
+.kitchenscene .ghost-hand { margin: 40px 0 0 -8px; } /* the hint hand points from below the letter, so the letter stays readable */
 .safari-field .safari-item.hint, .tile.hint { animation: hint-pulse 1.4s ease-in-out 2; }
 @keyframes hint-pulse { 50% { transform: scale(1.045); } }
 /* a soft glint on the right item after a second miss (information, never a red mark or a shake) */
@@ -67,6 +68,7 @@
 @keyframes wobble-soft { 20% { transform: rotate(-2.6deg) scale(1.02); } 50% { transform: rotate(2.2deg); } 80% { transform: rotate(-1deg); } }
 
 /* the world's board behind the covers */
+.safari-field.w-other { background: linear-gradient(color-mix(in srgb, var(--w, #8bcf72) 18%, #fff), color-mix(in srgb, var(--w, #8bcf72) 38%, #fff)); box-shadow: inset 0 0 0 5px color-mix(in srgb, var(--w, #8bcf72) 70%, #fff); }
 .safari-field.w-dino { background: radial-gradient(circle at 0% 100%, #5fb36a 0 64px, transparent 66px), radial-gradient(circle at 100% 0%, #7cc87a 0 54px, transparent 56px), linear-gradient(#d3f0c2, #b0e098); box-shadow: inset 0 0 0 5px #7fc06a; }
 .safari-field.w-dragon { background: repeating-linear-gradient(0deg, #b3acd2 0 2px, transparent 2px 38px), repeating-linear-gradient(90deg, #b3acd255 0 2px, transparent 2px 64px), linear-gradient(#e2def3, #c8c2e4); box-shadow: inset 0 0 0 5px #9a90c4; }
 .safari-field.w-transport { background: repeating-linear-gradient(0deg, #a8604e 0 2px, transparent 2px 18px), #c9806a; box-shadow: inset 0 0 0 5px #8f4d3e; }
@@ -134,8 +136,9 @@
 
 @media (max-width: 600px) {
   .kitchenscene .kitchen-row { flex-direction: column; align-items: center; gap: 6px; }
-  .kitchenscene .pot-wrap { width: 168px; margin-top: 44px; }
-  .kitchenscene .dish .pic-wrap { width: 100px; }
+  .kitchenscene .pot-wrap { width: 150px; margin-top: 38px; }
+  .kitchenscene .dish .pic-wrap { width: 92px; }
+  .kitchenscene { gap: 10px; padding-bottom: 16px; }
   .kitchenscene .kitchen-pet { display: none; }
   .drum-stage { margin-top: 80px; }
   .drum-stage .drummer-pet { width: 108px; left: calc(50% - 54px); }

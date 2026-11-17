@@ -11,9 +11,9 @@ import { h, reducedMotion, sleep } from './dom';
 import { mount, skippableWait } from './fx';
 import { ghostDrag, makeAssist, makeDraggable, springBack } from './gesture';
 import { celebrate, celebrationCount } from './celebrate';
-import { currentPack, emit } from './particles';
+import { currentPack, emit, rawPack } from './particles';
 import { lookAt, reactions, setMood, type Mood } from './reactions';
-import { VEHICLE_NAME, robotWithProp, vehicleExit, vehicleSVG } from './vehicles';
+import { exitMs, robotWithProp, vehicleExit, vehicleName, vehicleSVG } from './vehicles';
 
 // the creature's face and eyes live in reactions.ts (so the reaction library can use them); re-exported for the other game files
 export { lookAt, setMood };
@@ -206,20 +206,29 @@ export const robotTalk = async (ctx: Ctx, word: Word, distractors: Word[]): Prom
   const phonemes = word.graphemes.map(phonemeOf);
   const beads = phonemes.map((_, i) => h('span', { class: 'bead', 'data-testid': 'chip', style: `--c:${BEAD_COLOURS[i % BEAD_COLOURS.length]}` }));
   const robot = h('div', { class: 'robot' });
-  robot.innerHTML = robotWithProp(robotSVG(), currentPack());
+  robot.innerHTML = robotWithProp(robotSVG(), rawPack());
   let firstTry = true;
   let resolve!: (r: TrialResult) => void;
   const done = new Promise<TrialResult>((r) => (resolve = r));
   let playing = false;
   let finished = false; // the right card was tapped (maybe while the robot was still talking): stop lighting beads
 
+  // the robot's body moves WITH each sound (not a loop): one arm lifts (they alternate), the chest light flashes and the whole robot bobs
+  const armL = robot.querySelector<SVGElement>('rect[x="16"][y="120"]'), armR = robot.querySelector<SVGElement>('rect[x="122"][y="120"]');
+  const chest = robot.querySelector<SVGElement>('circle[cx="80"][cy="144"]');
+  for (const [el, o] of [[armL, '100% 50%'], [armR, '0% 50%'], [chest, '50% 50%']] as const) if (el) { el.style.transformBox = 'fill-box'; el.style.transformOrigin = o; }
+  const robotBeat = (i: number) => {
+    if (reducedMotion()) return;
+    const arm = i % 2 ? armR : armL;
+    arm?.animate([{ transform: 'rotate(0deg)' }, { transform: `rotate(${i % 2 ? -34 : 34}deg)`, offset: 0.4 }, { transform: 'rotate(0deg)' }], { duration: 380, easing: 'ease-in-out' });
+    chest?.animate([{ transform: 'scale(1)', fill: '#ffd166' }, { transform: 'scale(1.4)', fill: '#fff6c8', offset: 0.35 }, { transform: 'scale(1)', fill: '#ffd166' }], { duration: 380, easing: 'ease-out' });
+    robot.querySelector('svg')?.animate([{ transform: 'translateY(0px)' }, { transform: 'translateY(-6px) rotate(' + (i % 2 ? 1.5 : -1.5) + 'deg)', offset: 0.4 }, { transform: 'translateY(0px)' }], { duration: 380, easing: 'ease-out' });
+  };
   const robotSays = async () => {
     if (playing || finished) return;
     playing = true;
-    robot.classList.remove('talking');
-    void robot.getBoundingClientRect(); // restart the single rock
     robot.classList.add('talking');
-    await playSequence(phonemes, (i) => { if (!finished) beads.forEach((b, k) => b.classList.toggle('on', k === i)); });
+    await playSequence(phonemes, (i) => { if (!finished) { beads.forEach((b, k) => b.classList.toggle('on', k === i)); if (i >= 0) robotBeat(i); } });
     robot.classList.remove('talking');
     playing = false;
   };
@@ -241,7 +250,8 @@ export const robotTalk = async (ctx: Ctx, word: Word, distractors: Word[]): Prom
         b.classList.add('alive');
         robot.classList.remove('cheer');
         void robot.getBoundingClientRect();
-        robot.classList.add('cheer'); // one hop
+        robot.classList.add('cheer'); // two nods and both arms up
+        if (!reducedMotion()) { armL?.animate([{ transform: 'rotate(0deg)' }, { transform: 'rotate(40deg)', offset: 0.3 }, { transform: 'rotate(40deg)', offset: 0.75 }, { transform: 'rotate(0deg)' }], { duration: 900, easing: 'ease-in-out' }); armR?.animate([{ transform: 'rotate(0deg)' }, { transform: 'rotate(-40deg)', offset: 0.3 }, { transform: 'rotate(-40deg)', offset: 0.75 }, { transform: 'rotate(0deg)' }], { duration: 900, easing: 'ease-in-out' }); }
         sfx.sparkle();
         praise();
         speak(word.text);
@@ -294,9 +304,12 @@ export const rhymeRocket = async (ctx: Ctx, target: Word, answer: Word, distract
   let resolve!: (r: TrialResult) => void;
   const done = new Promise<TrialResult>((r) => (resolve = r));
   const pack = currentPack();
-  const rocket = h('div', { class: 'rocket', 'data-vehicle': pack, 'data-name': VEHICLE_NAME[pack] }); // the vehicle is skinned per world (vehicles.ts)
+  const rocket = h('div', { class: 'rocket', 'data-vehicle': pack, 'data-name': vehicleName(pack) }); // the vehicle is skinned per world (vehicles.ts)
   rocket.innerHTML = vehicleSVG(pack);
   const fuel = h('div', { class: 'fuel', 'aria-hidden': 'true' }, h('div', { class: 'fuel-fill' }));
+  const sky = h('div', { class: 'skypanel' },
+    h('button', { class: 'tile pic target', 'data-testid': 'rhyme-target', onClick: () => { tap(); speak(target.text); }, 'aria-label': 'hear the word' }, pictureEl(target.text, target.emoji)),
+    rocket, fuel);
   let stopGhost: () => void = () => undefined;
 
   const attempt = async (b: HTMLElement, w: Word, from: { x: number; y: number }) => {
@@ -308,22 +321,23 @@ export const rhymeRocket = async (ctx: Ctx, target: Word, answer: Word, distract
       b.classList.add('fly');
       b.style.transform = `translate(${m.left + m.width / 2 - (t.left + t.width / 2) + from.x}px, ${m.top + m.height / 2 - (t.top + t.height / 2) + from.y}px) scale(0.2)`;
       sfx.whoosh();
-      await wait(430);
-      fuel.classList.add('full');
       const index = celebrationCount('rhyme'); // the exit rotates through three variants by round; repeats are shorter
       const short = index > 0;
+      await wait(short ? 330 : 380);
+      fuel.classList.add('full');
       rocket.classList.add('charge'); // a gentle squash-and-rise, not a rattle
       praise();
       speak(`${target.text}, ${answer.text}`);
-      await wait(short ? 300 : 600);
+      await wait(short ? 200 : 340);
       sfx.launch();
+      sky.classList.add('launching'); // the vehicle may leave the little window and cross the card
       rocket.classList.remove('charge');
       rocket.classList.add('launch');
       celebrate(rocket, { game: 'rhyme', last: ctx.last });
       const leaving = vehicleExit(rocket, pack, index, short);
-      for (const at of short ? [260, 560] : [300, 650, 1000]) setTimeout(() => rocket.isConnected && emit(rocket, { level: 1, variant: index }), at); // a trail
+      for (const at of short ? [220, 480] : [260, 560, 860]) setTimeout(() => rocket.isConnected && emit(rocket, { level: 1, variant: index }), at); // a trail
       void leaving;
-      await skippableWait(short ? 800 : 1400);
+      await skippableWait(exitMs(pack, short) * 0.95);
       resolve({ firstTryCorrect: firstTry, choices: options.length });
     } else {
       firstTry = false;
@@ -364,11 +378,8 @@ export const rhymeRocket = async (ctx: Ctx, target: Word, answer: Word, distract
   });
   const picsRow = h('div', { class: 'row tiles', 'data-testid': 'pics' }, pics);
   const sceneEl = h('div', { class: 'scene rocketscene' },
-    caption(`Which one rhymes? Put it in the ${VEHICLE_NAME[pack]}!`),
-    h('div', { class: 'skypanel' },
-      h('button', { class: 'tile pic target', 'data-testid': 'rhyme-target', onClick: () => { tap(); speak(target.text); }, 'aria-label': 'hear the word' },
-        pictureEl(target.text, target.emoji)),
-      rocket, fuel),
+    caption(`Which one rhymes? Put it in the ${vehicleName(pack)}!`),
+    sky,
     picsRow,
   );
   mount(ctx.stage, sceneEl);
@@ -497,7 +508,7 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
             sfx.sparkle();
             waveFlag();
             celebrate(far, { game: 'bridge', last: ctx.last });
-            await skippableWait(index > 0 ? 250 : 750);
+            await skippableWait(index > 0 ? 130 : 600);
             resolve({ firstTryCorrect: firstTry, choices: options.length });
           } else {
             firstTry = false;
@@ -530,7 +541,7 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
     const first = slots[0]?.getBoundingClientRect();
     const plankY = first ? from.y + (first.top - feetOf()) + 2 : from.y;
     const n = short ? 3 : Math.max(2, slots.length + 1); // steps: after the first success of the session it is a quick hop-hop-hop
-    const D = short ? 1000 : 800 + n * 190;
+    const D = short ? 1000 : 760 + n * 160;
     const stepEvery = D / (n * 2);
     // plank dips and footsteps, timed to when the creature passes each plank
     const sx = slots.map((sl) => { const r = sl.getBoundingClientRect(); return r.left + r.width / 2 - (wr.left + wr.width / 2); });
@@ -546,17 +557,20 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
       kf.push({ transform: `translate(${x.toFixed(1)}px, ${(level + bob).toFixed(1)}px)`, offset: f });
     }
     const anim = hopper.animate(kf, { duration: D, easing: 'linear', fill: 'forwards' });
-    walker.animate(Array.from({ length: n * 2 + 1 }, (_, k) => ({ transform: k % 2 ? 'scale(0.96,1.05)' : 'scale(1.05,0.94)', offset: k / (n * 2) })), { duration: D, easing: 'ease-in-out' });
+    // weight: a squash on every landing, a lean from side to side in the air
+    walker.animate(Array.from({ length: n * 2 + 1 }, (_, k) => ({ transform: k % 2 ? `scale(0.95,1.07) rotate(${(k >> 1) % 2 ? -4 : 4}deg)` : 'scale(1.1,0.87) rotate(0deg)', offset: k / (n * 2) })), { duration: D, easing: 'ease-in-out' });
     slots.forEach((sl, j) => {
       const f = Math.min(0.98, Math.max(0.05, ((sx[j] ?? 0) - from.x) / (endX - from.x || 1)));
       let lo = 0, hi = 1; for (let it = 0; it < 14; it++) { const mid = (lo + hi) / 2; if (ease(mid) < f) lo = mid; else hi = mid; }
-      setTimeout(() => { sfx.step(); sl.animate([{ transform: 'translateY(0px)' }, { transform: 'translateY(6px)', offset: 0.4 }, { transform: 'translateY(0px)' }], { duration: 300, easing: 'ease-out' }); }, lo * D);
+      setTimeout(() => { sfx.step(); sl.animate([{ transform: 'translateY(0px) rotate(0deg)' }, { transform: `translateY(10px) rotate(${j % 2 ? -2 : 2}deg)`, offset: 0.35 }, { transform: 'translateY(-2px) rotate(0deg)', offset: 0.7 }, { transform: 'translateY(0px) rotate(0deg)' }], { duration: 340, easing: 'ease-out' }); }, lo * D);
     });
     const steps = setInterval(() => sfx.step(), stepEvery * 2);
     await anim.finished.then(() => undefined, () => undefined);
     clearInterval(steps);
     hopper.style.transform = `translate(${endX}px, 0px)`;
     anim.cancel();
+    walker.animate([{ transform: 'scale(1.12,0.84)' }, { transform: 'scale(0.97,1.05)', offset: 0.5 }, { transform: 'scale(1,1)' }], { duration: 320, easing: 'ease-out' }); // the last landing, heavier
+    await wait(short ? 50 : 200); // a beat before the cheer
   };
   const waveFlag = () => {
     const cloth = far.querySelector('.cloth');

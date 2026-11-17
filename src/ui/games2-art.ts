@@ -1,12 +1,24 @@
 // Per-world props for Beat the Drum, Sound Safari and Word Kitchen (inline SVG, original art). The world id is document.body.dataset.pack.
 // The props change how the games LOOK; their logic, test ids and sizes are identical in every world.
 
-export type World = 'dino' | 'dragon' | 'transport' | 'space' | 'ocean' | 'farm';
-const WORLDS: World[] = ['dino', 'dragon', 'transport', 'space', 'ocean', 'farm'];
-export const worldId = (): World => {
-  const p = document.body.dataset.pack as World | undefined;
-  return p && WORLDS.includes(p) ? p : 'dino';
+import { packById } from './themes';
+
+// DATA-DRIVEN per pack: each table below has hand-drawn entries for some packs; every other pack (the newer ones, or any added later) gets a
+// DEFAULT built from its own creature colours, so a pack with no themed props yet still shows a sensible, coloured drum, pot and cover
+// (never nothing, never an error).
+export type World = string;
+export const worldId = (): World => document.body.dataset.pack || 'dino';
+/** The pack's own colours (its first creature's main, dark and accent), with neutral fallbacks. Never throws. */
+export interface Tint { main: string; dark: string; accent: string }
+const NEUTRAL: Tint = { main: '#ef476f', dark: '#c2284f', accent: '#ffd166' };
+export const worldTint = (w: World = worldId()): Tint => {
+  try {
+    const c = packById(w).creatures[0];
+    return c ? { main: c.main || NEUTRAL.main, dark: c.dark || NEUTRAL.dark, accent: c.accent || NEUTRAL.accent } : NEUTRAL;
+  } catch { return NEUTRAL; }
 };
+/** True when the pack has hand-drawn game props (the six original worlds); others use the generated defaults. */
+export const hasThemedProps = (w: World = worldId()): boolean => w in DRUMS;
 
 // ---------------------------------------------------------------------------------------------------------------
 // Drums. viewBox 0 0 200 170; the skin (the part that is hit) is an ellipse.skin at (100,70) rx72 ry26; ellipse.ripple is the
@@ -16,7 +28,7 @@ const drumOpen = '<svg class="drum-art" viewBox="0 0 200 170" role="img" aria-hi
 const ripple = (c: string) => `<ellipse class="ripple" cx="100" cy="70" rx="72" ry="26" fill="none" stroke="${c}" stroke-width="6" opacity="0"/>`;
 const CYL = 'M28 70 L28 130 Q28 152 100 152 Q172 152 172 130 L172 70Z';
 
-const DRUMS: Record<World, string> = {
+const DRUMS: Record<string, string> = {
   // a stone drum with a hide stretched over it and a little moss
   dino: `${drumOpen}<path d="${CYL}" fill="#aaa192"/>
     <path d="M28 98 Q100 122 172 98 M28 124 Q100 148 172 124" fill="none" stroke="#857c6e" stroke-width="3.5"/>
@@ -70,7 +82,13 @@ const DRUMS: Record<World, string> = {
     <ellipse class="skin" cx="100" cy="70" rx="72" ry="26" fill="#fffdf3" stroke="#b9c4d4" stroke-width="5"/>
     <ellipse cx="100" cy="72" rx="44" ry="13" fill="none" stroke="#efe6c6" stroke-width="3"/>${ripple('#4cc3d9')}</svg>`,
 };
-export const drumArt = (w: World = worldId()): string => DRUMS[w];
+/** A default drum in the pack's colours: a coloured shell with accent stripes and a hide on top. */
+const defaultDrum = (t: Tint): string => `${drumOpen}<path d="${CYL}" fill="${t.main}"/>
+    <path d="M40 74 L60 148 M70 78 L90 152 M100 80 L100 152 M130 78 L110 152 M160 74 L140 148" stroke="${t.accent}" stroke-width="5" stroke-linecap="round" opacity=".9"/>
+    <path d="${CYL}" fill="none" stroke="${t.dark}" stroke-width="4"/>
+    <ellipse class="skin" cx="100" cy="70" rx="72" ry="26" fill="#fff5e0" stroke="#e0cfa8" stroke-width="5"/>
+    <ellipse cx="100" cy="70" rx="72" ry="26" fill="none" stroke="${t.accent}" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round" transform="translate(0 6)"/>${ripple(t.accent)}</svg>`;
+export const drumArt = (w: World = worldId()): string => DRUMS[w] ?? defaultDrum(worldTint(w));
 
 // ---------------------------------------------------------------------------------------------------------------
 // Cooking pots. viewBox 0 0 160 150; the rim is at y 56-70, the lid (class "lid") sits above it.
@@ -81,7 +99,7 @@ const rim = (fill: string, stroke: string) => `<rect x="8" y="56" width="144" he
 const shine = '<path d="M34 80 Q38 124 62 130" stroke="#fff" stroke-width="5" fill="none" opacity=".28" stroke-linecap="round"/>';
 const LID = 'M30 56 Q30 30 80 30 Q130 30 130 56Z';
 
-const POTS: Record<World, string> = {
+const POTS: Record<string, string> = {
   // a clay cooking pot with a leaf for a lid
   dino: `${potOpen}<path d="${BODY}" fill="#c9794a"/><path d="M30 92 l10 -8 l10 8 l10 -8 l10 8 l10 -8 l10 8 l10 -8 l10 8 l10 -8" stroke="#f3d9a8" stroke-width="4" fill="none" stroke-linejoin="round" stroke-linecap="round"/><path d="M34 110 h92" stroke="#f3d9a8" stroke-width="3" stroke-dasharray="2 8" stroke-linecap="round"/>
     <path d="${BODY}" fill="none" stroke="#8f4f2a" stroke-width="4"/>${shine}${rim('#d98f5b', '#8f4f2a')}
@@ -113,7 +131,11 @@ const POTS: Record<World, string> = {
     <path d="${BODY}" fill="none" stroke="#a02838" stroke-width="4"/>${shine}${rim('#fff', '#a02838')}
     <g class="lid"><path d="${LID}" fill="#e04f5f" stroke="#a02838" stroke-width="4"/><circle cx="80" cy="26" r="7" fill="#a77a3a" stroke="#6b4a1d" stroke-width="3"/></g></svg>`,
 };
-export const potArt = (w: World = worldId()): string => POTS[w];
+/** A default pot in the pack's colours with a matching lid (the lid still pops off). */
+const defaultPot = (t: Tint): string => `${potOpen}<path d="${BODY}" fill="${t.main}"/><path d="M30 94 Q80 110 130 94" stroke="${t.accent}" stroke-width="5" fill="none" stroke-linecap="round" opacity=".9"/>
+    <path d="${BODY}" fill="none" stroke="${t.dark}" stroke-width="4"/>${shine}${rim(t.accent, t.dark)}
+    <g class="lid"><path d="${LID}" fill="${t.main}" stroke="${t.dark}" stroke-width="4"/><circle cx="80" cy="26" r="7" fill="${t.accent}" stroke="${t.dark}" stroke-width="3"/></g></svg>`;
+export const potArt = (w: World = worldId()): string => POTS[w] ?? defaultPot(worldTint(w));
 
 // ---------------------------------------------------------------------------------------------------------------
 // Sound Safari covers. Each safari cell is a square: a BACK layer (a hole, a crater, a window... behind the picture) and a
@@ -132,7 +154,7 @@ const brick = (y0: number, y1: number, c: string) => {
 };
 
 interface Cover { back: string; front: string }
-const COVERS: Record<World, Cover[]> = {
+const COVERS: Record<string, Cover[]> = {
   dino: [
     { back: cov('<ellipse cx="50" cy="82" rx="40" ry="14" fill="#2f6e3b" opacity=".35"/>', 'back'),
       front: cov(`${fern([-64, -40, -18, 0, 18, 40, 64], '#4caf5d', '#2f8a47')}<ellipse cx="50" cy="102" rx="48" ry="13" fill="#2a7a3d"/>`, 'front') },
@@ -172,8 +194,13 @@ const COVERS: Record<World, Cover[]> = {
       front: cov('<g fill="#3f9b52"><circle cx="20" cy="89" r="18"/><circle cx="46" cy="82" r="20"/><circle cx="72" cy="88" r="19"/><circle cx="90" cy="95" r="14"/></g><g fill="#5cc26b"><circle cx="16" cy="85" r="11"/><circle cx="46" cy="76" r="13"/><circle cx="72" cy="83" r="12"/></g><rect x="0" y="92" width="100" height="10" fill="#3f9b52"/><circle cx="30" cy="91" r="3" fill="#ff6b9a"/><circle cx="60" cy="86" r="3" fill="#ffd166"/><circle cx="84" cy="96" r="3" fill="#ff6b9a"/>', 'front') },
   ],
 };
+/** A default cover: leafy bushes (neutral green) with a few flowers in the pack's accent colour. */
+const defaultCovers = (t: Tint): Cover[] => [0, 1].map((v) => ({
+  back: cov('<ellipse cx="50" cy="88" rx="42" ry="9" fill="#5a8a3a" opacity=".3"/>', 'back'),
+  front: cov(`<g fill="#3f9b52"><circle cx="${v ? 24 : 20}" cy="89" r="18"/><circle cx="46" cy="${v ? 80 : 82}" r="20"/><circle cx="72" cy="88" r="19"/><circle cx="90" cy="95" r="14"/></g><g fill="#5cc26b"><circle cx="${v ? 24 : 16}" cy="85" r="11"/><circle cx="46" cy="76" r="13"/><circle cx="72" cy="83" r="12"/></g><rect x="0" y="92" width="100" height="10" fill="#3f9b52"/><circle cx="30" cy="91" r="3.2" fill="${t.accent}"/><circle cx="60" cy="${v ? 80 : 86}" r="3.2" fill="${t.main}"/><circle cx="84" cy="96" r="3.2" fill="${t.accent}"/>`, 'front'),
+}));
 export const coverFor = (w: World, i: number): Cover => {
-  const list = COVERS[w];
+  const list = COVERS[w] ?? defaultCovers(worldTint(w));
   return list[i % list.length] as Cover;
 };
 
@@ -187,8 +214,8 @@ export const sticksArt = (hand: string): string => `<svg class="sticks" viewBox=
 // World flavour for the sound-friend that appears when a letter is traced: a glow in the world's colour and a small medal with the
 // world's emblem (a leaf, a flame, a star, a ringed planet, a shell, an ear of wheat), so the friend feels like it belongs to this world.
 // ---------------------------------------------------------------------------------------------------------------
-export const WORLD_GLOW: Record<World, string> = { dino: '#b5e46a', dragon: '#ffb36b', transport: '#ffd166', space: '#b7a2ff', ocean: '#8fe0f7', farm: '#ffd98a' };
-const EMBLEM: Record<World, string> = {
+const WORLD_GLOW: Record<string, string> = { dino: '#b5e46a', dragon: '#ffb36b', transport: '#ffd166', space: '#b7a2ff', ocean: '#8fe0f7', farm: '#ffd98a' };
+const EMBLEM: Record<string, string> = {
   dino: '<path d="M0 -13 C12 -9 12 8 0 14 C-12 8 -12 -9 0 -13Z" fill="#5cb85c"/><path d="M0 -9 V11" stroke="#2f7d3a" stroke-width="2"/>',
   dragon: '<path d="M0 -14 C9 -4 11 5 0 13 C-11 5 -9 -4 0 -14Z" fill="#ff9f43"/><path d="M0 -3 C4 2 4 7 0 10 C-4 7 -4 2 0 -3Z" fill="#ffe27a"/>',
   transport: '<path d="M0 -14 L4 -4.5 L14 -4.5 L6 2 L9 12 L0 6 L-9 12 L-6 2 L-14 -4.5 L-4 -4.5Z" fill="#ffc233"/>',
@@ -196,5 +223,8 @@ const EMBLEM: Record<World, string> = {
   ocean: '<path d="M0 12 L-13 -2 Q-12 -13 0 -12 Q12 -13 13 -2Z" fill="#ff9fb4"/><path d="M0 12 L-7 -10 M0 12 L0 -12 M0 12 L7 -10" stroke="#e0577a" stroke-width="1.8" fill="none"/>',
   farm: '<path d="M0 14 V-10" stroke="#c98f2a" stroke-width="2.4"/><g fill="#f2cf63"><ellipse cx="-4.5" cy="-8" rx="3" ry="5.5" transform="rotate(-25 -4.5 -8)"/><ellipse cx="4.5" cy="-8" rx="3" ry="5.5" transform="rotate(25 4.5 -8)"/><ellipse cx="-4.5" cy="-1" rx="3" ry="5.5" transform="rotate(-25 -4.5 -1)"/><ellipse cx="4.5" cy="-1" rx="3" ry="5.5" transform="rotate(25 4.5 -1)"/><ellipse cx="0" cy="-13" rx="3" ry="5"/></g>',
 };
+/** The glow colour for a pack: hand-picked for the original six, otherwise the pack's own accent. */
+export const worldGlow = (w: World = worldId()): string => WORLD_GLOW[w] ?? worldTint(w).accent;
+const STAR_EMBLEM = '<path d="M0 -14 L4 -4.5 L14 -4.5 L6 2 L9 12 L0 6 L-9 12 L-6 2 L-14 -4.5 L-4 -4.5Z" fill="#ffc233"/>';
 export const worldBadge = (w: World = worldId()): string =>
-  `<svg class="world-badge" viewBox="-20 -20 40 40" aria-hidden="true" focusable="false"><circle r="18" fill="#fff" stroke="${WORLD_GLOW[w]}" stroke-width="3.5"/>${EMBLEM[w]}</svg>`;
+  `<svg class="world-badge" viewBox="-20 -20 40 40" aria-hidden="true" focusable="false"><circle r="18" fill="#fff" stroke="${worldGlow(w)}" stroke-width="3.5"/>${EMBLEM[w] ?? STAR_EMBLEM}</svg>`;

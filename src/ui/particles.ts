@@ -6,13 +6,19 @@
 // Particles live in their own fixed layer (#fxp) and remove themselves; `clearParticles()` removes whatever is still in flight.
 import { h, reducedMotion } from './dom';
 
+/** The six STYLE FAMILIES that have a full set of hand-made reactions, vehicles and props. Every other world (jungle, robot, pirate, fairy, music, arctic,
+ *  and any pack added later) maps to the nearest family through FAMILY, and can override single entries (particles, props, skins) by its own id. */
 export type PackId = 'dino' | 'dragon' | 'transport' | 'space' | 'ocean' | 'farm';
 export const PACK_IDS: PackId[] = ['dino', 'dragon', 'transport', 'space', 'ocean', 'farm'];
-/** The world the app is showing right now. */
-export const currentPack = (): PackId => {
-  const p = document.body.dataset.pack as PackId | undefined;
-  return p && PACK_IDS.includes(p) ? p : 'dino';
-};
+const FAMILY: Record<string, PackId> = { jungle: 'dino', robot: 'space', pirate: 'ocean', fairy: 'dragon', music: 'farm', arctic: 'transport' };
+/** The style family of any world id (an unknown id gets the neutral default, 'dino'). Never throws. */
+export const familyOf = (id: string | null | undefined): PackId => (id && (PACK_IDS as string[]).includes(id) ? (id as PackId) : (id && FAMILY[id]) || 'dino');
+/** The raw world id on screen (e.g. 'jungle'), for the few tables that have their own entry for a newer world. */
+export const rawPack = (): string => document.body.dataset.pack || 'dino';
+/** Look an entry up by the world's own id, then by its family, then the neutral default: a data-driven table with overrides and a default. */
+export const pick = <T>(table: Partial<Record<string, T>>, id: string, fallback: T): T => table[id] ?? table[familyOf(id)] ?? fallback;
+/** The style family of the world the app is showing right now (what the six-family tables are keyed by). */
+export const currentPack = (): PackId => familyOf(document.body.dataset.pack);
 
 /** 1 = small (a first success), 2 = ordinary, 3 = finale. */
 export type Level = 1 | 2 | 3;
@@ -23,13 +29,15 @@ export const hash = (i: number, k = 0): number => {
   return x - Math.floor(x);
 };
 
-type Kind = 'leaf' | 'dust' | 'spark' | 'flame' | 'star' | 'steam' | 'twinkle' | 'ring' | 'bubble' | 'hay' | 'petal' | 'feather';
+type Kind = 'note' | 'snow' | 'leaf' | 'dust' | 'spark' | 'flame' | 'star' | 'steam' | 'twinkle' | 'ring' | 'bubble' | 'hay' | 'petal' | 'feather';
 
 const STAR4 = 'M0 -11 Q1.6 -1.6 11 0 Q1.6 1.6 0 11 Q-1.6 1.6 -11 0 Q-1.6 -1.6 0 -11Z';
 const STAR5 = 'M0 -11 L3.2 -3.4 L11 -3.4 L4.8 1.6 L7 10 L0 5.2 L-7 10 L-4.8 1.6 L-11 -3.4 L-3.2 -3.4Z';
 const svg = (inner: string, size = 24): string => `<svg viewBox="-12 -12 24 24" width="${Math.round(size * 1.35)}" height="${Math.round(size * 1.35)}">${inner}</svg>`;
 
 const COLOURS: Record<Kind, string[]> = {
+  note: ['#7b4fd1', '#ef476f', '#2f9bd6', '#e8a010'],
+  snow: ['#ffffff', '#e6f4ff'],
   leaf: ['#5cb85c', '#8ee27a', '#3f9e4d', '#b5e46a'],
   dust: ['#d9c294', '#cdb280'],
   spark: ['#ffc233', '#ff7eb6', '#a98bff', '#ffd966'],
@@ -47,6 +55,8 @@ const COLOURS: Record<Kind, string[]> = {
 const shape = (kind: Kind, i: number): string => {
   const c = COLOURS[kind][i % COLOURS[kind].length] as string;
   switch (kind) {
+    case 'note': return svg(`<ellipse cx="-3" cy="6" rx="4.6" ry="3.4" fill="${c}" transform="rotate(-20 -3 6)"/><path d="M1 5 L1 -9 Q8 -7 8 -1" stroke="${c}" stroke-width="2.4" fill="none" stroke-linecap="round"/>`, 24);
+    case 'snow': return svg(`<circle r="6.5" fill="${c}" stroke="#a9cde8" stroke-width="1.6"/>`, 22);
     case 'leaf': return svg(`<path d="M0 -11 C9 -8 9 6 0 12 C-9 6 -9 -8 0 -11Z" fill="${c}"/><path d="M0 -8 L0 9" stroke="#2f7d3a" stroke-width="1.6" opacity=".55"/>`);
     case 'dust': return svg(`<circle r="9" fill="${c}" opacity=".85"/>`, 26);
     case 'spark': return svg(`<path d="${STAR4}" fill="${c}" stroke="#0000001f" stroke-width="1"/>`, 26);
@@ -65,6 +75,8 @@ const shape = (kind: Kind, i: number): string => {
 /** How each kind moves. g = gravity px/s^2 (negative = buoyant), sway = side-to-side flutter, grow = scale at the end. */
 interface Motion { dur: number; speed: [number, number]; g: number; sway: number; spin: number; grow: number; fadeFrom: number; mode?: 'fan' | 'rise' | 'twinkle' | 'ring' | 'puff' }
 const MOTION: Record<Kind, Motion> = {
+  note: { dur: 1400, speed: [90, 170], g: -60, sway: 26, spin: 40, grow: 1.1, fadeFrom: 0.7, mode: 'rise' },
+  snow: { dur: 1700, speed: [90, 190], g: 120, sway: 30, spin: 60, grow: 0.9, fadeFrom: 0.75 },
   leaf: { dur: 1500, speed: [150, 250], g: 240, sway: 22, spin: 220, grow: 0.85, fadeFrom: 0.72 },
   dust: { dur: 700, speed: [60, 120], g: -30, sway: 0, spin: 0, grow: 2.0, fadeFrom: 0.1, mode: 'puff' },
   spark: { dur: 1000, speed: [150, 290], g: 150, sway: 0, spin: 120, grow: 0.3, fadeFrom: 0.55 },
@@ -88,6 +100,16 @@ const MIX: Record<PackId, Kind[]> = {
   ocean: ['bubble', 'bubble', 'bubble', 'bubble', 'bubble', 'bubble'],
   farm: ['hay', 'petal', 'feather', 'hay', 'petal', 'feather'],
 };
+/** Worlds with their own particle mix (the rest use their family's). */
+const MIX_OWN: Partial<Record<string, Kind[]>> = {
+  jungle: ['leaf', 'petal', 'leaf', 'feather', 'leaf', 'petal'],
+  robot: ['spark', 'ring', 'star', 'twinkle', 'spark', 'star'],
+  pirate: ['bubble', 'star', 'bubble', 'bubble', 'star', 'bubble'],
+  fairy: ['spark', 'petal', 'twinkle', 'spark', 'petal', 'spark'],
+  music: ['note', 'note', 'star', 'note', 'ring', 'note'],
+  arctic: ['snow', 'snow', 'twinkle', 'snow', 'bubble', 'snow'],
+};
+const mixOf = (id: string): Kind[] => MIX_OWN[id] ?? MIX[familyOf(id)] ?? MIX.dino;
 const COUNT: Record<Level, number> = { 1: 8, 2: 14, 3: 26 };
 
 let host: HTMLElement | null = null;
@@ -165,11 +187,10 @@ export interface EmitOptions {
 /** A burst of the world's particles from an element or a point. Nothing under Reduce Motion. */
 export const emit = (from: Element | { x: number; y: number }, o: EmitOptions = {}): void => {
   if (reducedMotion()) return;
-  const pack = o.pack ?? currentPack();
   const level = o.level ?? 2;
   const v = (o.variant ?? 0) % 3;
   const { x, y } = originOf(from);
-  const mix = MIX[pack];
+  const mix = mixOf(o.pack ?? rawPack());
   const n = COUNT[level];
   // a fan: variant 0 straight up, variant 1 leans left, variant 2 leans right (a little), always mostly upward
   const lean = (v - 1) * 0.35;
@@ -186,12 +207,13 @@ export const emit = (from: Element | { x: number; y: number }, o: EmitOptions = 
 /** A soft shower across the whole screen (the finale of a block, or the day). Leaves/hay/petals fall, bubbles and steam rise, twinkles blink. */
 export const showerAcross = (o: { pack?: PackId; n?: number } = {}): void => {
   if (reducedMotion()) return;
-  const pack = o.pack ?? currentPack();
+  const id = o.pack ?? rawPack();
   const n = o.n ?? 16;
   const W = window.innerWidth, H = window.innerHeight;
-  const rising = pack === 'ocean' || pack === 'transport' || pack === 'dragon';
+  const fam = familyOf(id);
+  const rising = (fam === 'ocean' || fam === 'transport' || fam === 'dragon' || id === 'music') && id !== 'arctic'; // snow falls
   for (let i = 0; i < n; i++) {
-    const mix = MIX[pack];
+    const mix = mixOf(id);
     let kind = mix[i % mix.length] as Kind;
     if (kind === 'dust') kind = 'leaf';
     if (kind === 'ring') kind = 'twinkle';
@@ -199,7 +221,7 @@ export const showerAcross = (o: { pack?: PackId; n?: number } = {}): void => {
     const y = rising ? H * (0.78 + hash(i, 10) * 0.2) : H * (0.05 + hash(i, 10) * 0.15);
     const ang = rising ? -Math.PI / 2 : Math.PI / 2;
     if (kind === 'twinkle') fire(kind, i, x, H * (0.12 + hash(i, 11) * 0.6), hash(i, 12) * 6.283, hash(i, 13) * 500, 0.9);
-    else fire(kind, i, x, y, ang + (hash(i, 14) - 0.5) * 0.6, hash(i, 13) * 500, kind === 'bubble' || kind === 'steam' ? 1 : 0.5);
+    else fire(kind, i, x, y, ang + (hash(i, 14) - 0.5) * 0.6, hash(i, 13) * 500, kind === 'bubble' || kind === 'steam' || kind === 'note' ? 1 : 0.5);
   }
 };
 

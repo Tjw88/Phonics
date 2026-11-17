@@ -256,8 +256,8 @@ export class App {
     const kind = (pack.creatures[chosen] as { id: string }).id;
     this.s.companion = { kind, name: names.value.trim() || defaultNameFor(kind) };
     // the egg (or crate, or capsule) wobbles, cracks or pops open; the friend springs out, waves and looks at the button (flow.ts)
-    const arrived = pack.arrival === 'egg' ? 'hatched' : 'arrived';
-    await hatchScene(this.stage, { packId: pack.id, kind, name: this.s.companion.name, nick, pet: companionEl(this.s, 'big'), arrived });
+    const arrived = /egg/i.test(pack.arrival) ? 'hatched' : 'arrived';
+    await hatchScene(this.stage, { packId: pack.id, kind, name: this.s.companion.name, nick, pet: companionEl(this.s, 'big'), arrived, arrival: pack.arrival });
     tap();
 
     // placement (band C only)

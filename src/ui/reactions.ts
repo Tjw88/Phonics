@@ -5,7 +5,7 @@
 // `.bodyg`. Everything is deterministic (variants are chosen by index, never by chance) and nothing moves under Reduce Motion: the face
 // (mood classes) and the sound still say "yes".
 import { h, reducedMotion, sleep } from './dom';
-import { currentPack, emit, emitKind, puffAt, showerAcross, type Level, type PackId } from './particles';
+import { currentPack, emit, emitKind, familyOf, puffAt, showerAcross, type Level, type PackId } from './particles';
 import { findCreature } from './themes';
 
 // ---- face: mood and eyes (moved here from games.ts, which re-exports them) --------------------------------------------------
@@ -26,10 +26,12 @@ export const lookAt = (el: Element, x: number | null, y: number | null): void =>
   });
 };
 
-/** Which world a creature belongs to (by its id, e.g. 'space-zip'); falls back to the world on screen. */
+/** The style family (one of the six hand-made reaction sets) of a creature's world (by its id, e.g. 'space-zip'); a world without its own set
+ *  (jungle, robot, pirate, fairy, music, arctic, or any later pack) gets its nearest family; falls back to the world on screen. Never throws. */
 export const packOfCreature = (kind?: string | null): PackId => {
-  const id = kind ? findCreature(kind)?.pack.id : undefined;
-  return (id as PackId | undefined) ?? currentPack();
+  let id: string | undefined;
+  try { id = kind ? findCreature(kind)?.pack.id : undefined; } catch { id = undefined; }
+  return id ? familyOf(id) : currentPack();
 };
 
 // ---- WAAPI helpers --------------------------------------------------------------------------------------------------------
@@ -146,7 +148,7 @@ const LEVEL_K: Record<Level, number> = { 1: 0.65, 2: 1, 3: 1.3 };
 
 /** Run the world's happy move number `variant` on the creature; dust puffs on landings for the heavy movers. Returns its length in ms. */
 const happyMove = (root: HTMLElement, pack: PackId, variant: number, level: Level, speed = 1): number => {
-  const prim = (HAPPY[pack][variant % 3] as (k: number) => Prim)(LEVEL_K[level]);
+  const prim = (((HAPPY[pack] ?? HAPPY.dino) as ((k: number) => Prim)[])[variant % 3] as (k: number) => Prim)(LEVEL_K[level]);
   const dur = prim.dur * speed;
   run(root, prim.kf, dur, 'cubic-bezier(0.3, 0.7, 0.4, 1)');
   if (pack === 'dino' && prim.dust) for (const f of prim.dust) setTimeout(() => puffAt(root, 3), f * dur);

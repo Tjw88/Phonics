@@ -7,8 +7,14 @@ import { pack as transport } from './packs/transport';
 import { pack as space } from './packs/space';
 import { pack as ocean } from './packs/ocean';
 import { pack as farm } from './packs/farm';
+import { pack as jungle } from './packs/jungle';
+import { pack as robot } from './packs/robot';
+import { pack as pirate } from './packs/pirate';
+import { pack as fairy } from './packs/fairy';
+import { pack as music } from './packs/music';
+import { pack as arctic } from './packs/arctic';
 
-export const PACKS: Pack[] = [dino, dragon, transport, space, ocean, farm];
+export const PACKS: Pack[] = [dino, dragon, transport, space, ocean, farm, jungle, robot, pirate, fairy, music, arctic];
 export const DEFAULT_THEME = 'dino';
 export const packById = (id: string): Pack => PACKS.find((p) => p.id === id) ?? (PACKS[0] as Pack);
 

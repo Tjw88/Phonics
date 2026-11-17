@@ -507,6 +507,38 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
   check(Object.keys(stC.sounds).join() === 's' && stC.adventureDays.length === 1, 'exactly one new sound (s) introduced and the adventure completed');
   check(errC.length === 0, 'no page errors on the from-scratch path');
 
+  log('FINALE LAYOUT (owner decision Q16: the "For the grown-up" header must be visible without scrolling)');
+  for (const [fw, fh, mob] of [[1180, 820, false], [1024, 768, false], [390, 844, true]]) {
+    const cF = await browser.newContext({ viewport: { width: fw, height: fh }, hasTouch: mob, isMobile: mob });
+    await cF.addInitScript(TOOLS);
+    // a child who has used up today's time: the adventure goes straight to the end-of-day screen (the layout is the same as after a full day)
+    await cF.addInitScript(() => {
+      try {
+        if (localStorage.getItem('soundling.proto.v1')) return;
+        const d = new Date().toISOString().slice(0, 10);
+        const sounds = {};
+        localStorage.setItem('soundling.proto.v1', JSON.stringify({ nickname: 'Fin', band: 'C', accent: 'rp', tracing: false, musicOn: false, easyTap: false, soundButtons: 'auto', theme: 'dino', companion: { kind: 'rexy', name: 'Dino' }, startSet: 1, sounds, words: {}, collection: [], adventureDays: [], lastIntroDay: null, dayOffset: 0, playMs: { [d]: 99999999 }, dailyLimitMin: 10, version: 1 }));
+      } catch { /* ignore */ }
+    });
+    const pF = await cF.newPage();
+    const errF = []; pF.on('pageerror', (e) => errF.push(String(e)));
+    await pF.goto(url);
+    await pF.waitForSelector('[data-testid=play]');
+    await pF.click('[data-testid=play]');
+    // day 1 from scratch: hello, the new-sound story, two single-tile Feed trials, then (time is up) the end-of-day screen
+    for (let k = 0; k < 60 && !(await pF.locator('[data-testid=mission-card]').count()); k++) {
+      if (await pF.locator('[data-testid=tile]').count()) await pF.locator('[data-testid=tile]').first().click().catch(() => {});
+      else for (const id of ['next', 'story-next']) if (await pF.locator(`[data-testid=${id}]`).count()) { await pF.click(`[data-testid=${id}]`).catch(() => {}); break; }
+      await pF.waitForTimeout(350);
+    }
+    await pF.waitForSelector('[data-testid=mission-card]', { timeout: 5000 });
+    await pF.waitForTimeout(400);
+    const mF = await pF.evaluate(() => { const e = document.querySelector('[data-testid=mission-card] strong'); const r = e.getBoundingClientRect(); return { text: e.textContent, top: r.top, bottom: r.bottom, ih: innerHeight }; });
+    check(/For the grown-up/.test(mF.text) && mF.top >= 0 && mF.bottom <= mF.ih, `end of day at ${fw}x${fh}: the "For the grown-up" header is above the fold (bottom ${Math.round(mF.bottom)} of ${mF.ih})`);
+    check(errF.length === 0, `no page errors on the finale at ${fw}x${fh}`);
+    await cF.close();
+  }
+
   log('REDUCE MOTION (spec: respect the OS setting)');
   const ctxRM = await browser.newContext({ viewport: { width: VW, height: VH }, reducedMotion: 'reduce' });
   const pageRM = await ctxRM.newPage();

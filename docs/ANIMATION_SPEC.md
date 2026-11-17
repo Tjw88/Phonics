@@ -104,3 +104,14 @@ The same engineers fixed the cycle-1 findings; the same independent reviewer the
 9. Day variety: the longest same-game run was 3 in a 14-day day; put a short non-Feed game between blocks; vary Kitchen's 5 s rounds.
 10. Small: Kitchen overflows a 390x844 phone by 10 px; the ghost hand sits on the letter to drag in Kitchen and over the rocket in Rhyme; a ghost frame lingers about 190 ms in the cross-fade.
 **Not judged:** audio sync, real children and touch, smooth motion curves (captured at about 7 fps), long-term novelty.
+
+## 10. Cycle 3 results (17 Nov 2026)
+
+Done by the three engineers (flow, games, games2), verified by the e2e (94 checks, all passing, including a measured Q16 block), `scripts/pack-smoke.cjs` (rewritten: every pack plays setup, placement, and one won round of each of the 8 free-play games; all 12 packs pass with no page or console errors; the failure path has not itself been tested by forcing an error) and frame sheets. **No independent third review has been run yet.**
+- Hatch follow-through: two big body waves then a look and nod toward Play. Not yet seen with the real new-pack containers in frames.
+- Home idle: a distinct small action per world, all 12 (stomp, sparks, honk, float, bubbles, chew, vine swing, beep, deck rock, petals, beats, shiver); a calm sway between; nothing under Reduce Motion.
+- Finale (Q16): "For the grown-up" header above the fold at 1180x820 (bottom edge 678), 1024x768 (660) and 390x844 (656).
+- First-success waits: Rhyme 2.45 s to ~1.8 s, Kitchen 2.9 s to ~1.8 s; repeats 1.3 to 1.5 s. Kitchen payoff rotates through three variants.
+- Rhyme vehicle ~1.5x with diagonal exits (three per vehicle); Bridge landings have weight; the robot lifts an arm per sound; ghost hand points from below; Kitchen phone overflow fixed (844 px); Safari wrong tap wobbles the item (not re-captured).
+- Fallbacks: every per-pack table now falls back (familyOf/pick); the twelve-world picker is six per row on desktop, four on a phone.
+- Not done: day variety (engine) check; distinct eat motions, vehicles and props for the six new packs (stage 2); real-device feel.

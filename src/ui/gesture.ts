@@ -122,9 +122,12 @@ export const ghostDrag = (host: HTMLElement, from: HTMLElement, to: HTMLElement,
     hand.textContent = '👆';
     hand.setAttribute('aria-hidden', 'true');
     host.append(hand);
+    // the fingertip (top-centre of the 👆) touches the BOTTOM EDGE of the thing, so the hand hangs below it and never covers the letter or the rocket
+    hand.style.margin = '0';
     const hr = host.getBoundingClientRect(), a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
-    const ax = a.left + a.width / 2 - hr.left, ay = a.top + a.height / 2 - hr.top;
-    const bx = b.left + b.width / 2 - hr.left, by = b.top + b.height / 2 - hr.top;
+    const HAND = 26; // half the width of the emoji
+    const ax = a.left + a.width / 2 - hr.left - HAND, ay = a.bottom - hr.top - 18;
+    const bx = b.left + b.width / 2 - hr.left - HAND, by = b.bottom - hr.top - 18;
     anim = hand.animate(
       [
         { transform: `translate(${ax}px, ${ay}px) scale(1)`, opacity: 0 },

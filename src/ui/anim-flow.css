@@ -34,7 +34,7 @@
 /* ---------- end of day: the picture comes alive, then the chest the child taps ---------- */
 .finale { gap: 10px; }
 .fin-stage { --cw: clamp(190px, 30vw, 240px); --pw: clamp(124px, 20vw, 164px); --ww: clamp(190px, 38vw, 280px);
-  position: relative; width: min(100%, 600px); height: clamp(300px, 46vh, 390px); }
+  position: relative; width: min(100%, 600px); height: clamp(230px, 36vh, 340px); }
 .finale .fin-word { position: absolute; left: 50%; top: 50%; width: var(--ww); margin: calc(var(--ww) / -2) 0 0 calc(var(--ww) / -2); z-index: 4; }
 .finale .alive-pic { animation: none; }
 .finale .alive-pic .pic-wrap { width: 78%; }
@@ -51,7 +51,7 @@
 .fin-star { font-size: 4.4rem; }
 .finale .treasure-name { font-size: 1.5rem; min-height: 1.5em; }
 @media (max-width: 600px) {
-  .fin-stage { --cw: clamp(140px, 42vw, 180px); --pw: clamp(92px, 26vw, 116px); height: clamp(280px, 44vh, 340px); }
+  .fin-stage { --cw: clamp(140px, 42vw, 180px); --pw: clamp(92px, 26vw, 116px); height: clamp(240px, 34vh, 300px); }
   .fin-chest, .fin-prize { left: calc(60% - var(--cw) / 2); } .fin-prize { left: calc(60% - var(--pw) / 2); }
   .fin-pet { width: clamp(80px, 24vw, 104px); }
 }
@@ -153,3 +153,15 @@ body.night #scene-bg::after { animation: shooting 13s linear infinite 2.5s; }
 }
 @keyframes nudge-down { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
 @media (prefers-reduced-motion: reduce) { .doors-more { animation: none; } }
+
+/* ---------- the world picker with twelve worlds: six to a row on a screen, four to a row on a phone, big targets, an obvious selection ---------- */
+.worlds { max-width: 640px; margin-inline: auto; gap: 8px; }
+.world { position: relative; width: 98px; min-height: 84px; border-width: 4px; transition: transform 0.12s; }
+.world.on { border-color: #ff8a00; background: #fff; transform: translateY(-3px); box-shadow: 0 6px 0 #ff8a0055, 0 8px 14px #0003; }
+.world.on::after { content: '✓'; position: absolute; top: -9px; right: -9px; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: #ff8a00; color: #fff; font-size: 16px; font-weight: 700; line-height: 1; box-shadow: 0 2px 0 #b35a00; }
+@media (max-width: 600px) {
+  .worlds { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; max-width: 100%; }
+  .world { width: auto; min-width: 0; padding: 3px; border-width: 3px; }
+  .world .wthumb { width: 100%; height: 44px; }
+  .world .wname { font-size: 11px; }
+}

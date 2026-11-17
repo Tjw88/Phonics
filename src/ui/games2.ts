@@ -10,9 +10,9 @@ import { h, reducedMotion, sleep } from './dom';
 import { mount, skippableWait } from './fx';
 import { ghostDrag, makeAssist, makeDraggable, springBack } from './gesture';
 import { companionEl, lookAt, setMood, type Ctx, type TrialResult } from './games';
-import { celebrate } from './celebrate';
+import { celebrate as celebrateReaction, type CelebrateOptions } from './celebrate';
 import { friendEl } from './friends';
-import { WORLD_GLOW, coverFor, drumArt, potArt, sticksArt, worldBadge, worldId } from './games2-art';
+import { coverFor, drumArt, hasThemedProps, potArt, sticksArt, worldBadge, worldGlow, worldId, worldTint } from './games2-art';
 import { creatureOf } from './themes';
 
 const BEAD_COLOURS = ['#ff6b9a', '#ffd166', '#4cc3d9', '#8ee27a', '#9b8bf0'];
@@ -22,6 +22,11 @@ const play = (el: Element, cls: string, ms = 600): void => {
   void (el as HTMLElement).offsetWidth;
   el.classList.add(cls);
   setTimeout(() => el.classList.remove(cls), ms);
+};
+
+/** The shared success reaction, but a pack whose reactions are not finished yet can never stop a game from moving on. */
+const celebrate = (el: Element, o: CelebrateOptions): void => {
+  try { celebrateReaction(el, o); } catch { /* the reaction library failed for this pack: the game's own motion and sound still play */ }
 };
 
 /** A Web Animations one-shot: transforms and opacity only; nothing at all under Reduce Motion (the state change still shows). */
@@ -229,7 +234,8 @@ export const soundSafari = async (ctx: Ctx, target: Grapheme, scene: { targets: 
   const tray = h('div', { class: 'row tray', 'data-testid': 'tray' }, slots);
   const pet = companionEl(ctx.s, 'safari-pet');
   const world = worldId();
-  const field = h('div', { class: `safari-field w-${world}`, 'data-testid': 'safari' });
+  // a pack without hand-drawn props gets the neutral board tinted with its own colour
+  const field = h('div', { class: `safari-field w-${hasThemedProps(world) ? world : 'other'}`, 'data-testid': 'safari', style: hasThemedProps(world) ? undefined : `--w:${worldTint(world).main}` });
   const cells: HTMLElement[] = [];
 
   /** The next unfound target (it gets a soft glint after a second miss). */
@@ -292,6 +298,7 @@ export const soundSafari = async (ctx: Ctx, target: Grapheme, scene: { targets: 
           { transform: 'translateY(0) rotate(0deg)' }, { transform: 'translateY(48%) rotate(-4deg)', offset: 0.3 }, { transform: 'translateY(42%) rotate(3deg)', offset: 0.48 },
           { transform: 'translateY(-5%) rotate(-1.5deg)', offset: 0.78 }, { transform: 'translateY(0) rotate(0deg)' },
         ], { duration: 820, easing: 'ease-in-out' });
+        play(b, 'wobble', 650);
         tiltPet(pet, timers, towardTray());
         glance();
         if (wrong >= 2) {
@@ -448,43 +455,58 @@ export const wordKitchen = async (ctx: Ctx, word: Word, tiles: string[]): Promis
   };
   const check = async () => {
     busy = true;
-    await sleep(350);
+    await sleep(250);
     const wrongSlots = word.graphemes.map((g, i) => (tiles[placed[i] as number] === g ? -1 : i)).filter((i) => i >= 0);
     if (wrongSlots.length === 0) {
-      // cook: the pot shivers and steams, then the lid hops and the picture pops out in a puff. The first time this session is the full
-      // show; after that steam is cut to about 0.5 s and the lid pop to about 0.7 s.
-      const short = kitchenRuns++ > 0;
+      // cook: a short shiver and steam, then the lid pops and the picture comes out. The FIRST cook of a session is the full show (about 1.9 s
+      // from the last tile); every later one is short (about 1.3 s). The payoff also changes with the round (deterministic: 0, 1, 2, 0...):
+      // the lid flies right, left or straight up, the picture arcs, spins or boings out, and the creature hops, spins or wiggles.
+      const run = kitchenRuns++;
+      const short = run > 0;
+      const v = run % 3;
       pot.classList.add('cooking');
       sfx.sizzle();
       setMood(pet, 'open'); // the creature leans in to smell it
-      puffs(short ? 3 : 5, false);
-      await sleep(short ? 500 : 900);
+      puffs(short ? 3 : 4, false);
+      await sleep(short ? 300 : 500);
       sfx.sparkle();
       praise();
       pot.classList.remove('cooking');
       play(pot, 'kpop', 600);
       puffs(short ? 4 : 6, true);
-      // the lid pops off and tumbles to the side, so the picture can come up out of the open pot
       pot.querySelectorAll<SVGElement>('.lid').forEach((lid) => {
-        const rest = 'translate(54px, 16px) rotate(32deg)';
-        anim(lid, [{ transform: 'translate(0px, 0px) rotate(0deg)' }, { transform: 'translate(20px, -62px) rotate(12deg)', offset: 0.4 }, { transform: rest }], { duration: short ? 380 : 520, easing: 'cubic-bezier(0.3, 0.6, 0.4, 1)' });
+        const rest = v === 1 ? 'translate(-54px, 16px) rotate(-32deg)' : v === 2 ? 'translate(0px, -90px) rotate(0deg)' : 'translate(54px, 16px) rotate(32deg)';
+        const up = v === 1 ? 'translate(-20px, -62px) rotate(-12deg)' : v === 2 ? 'translate(0px, -70px) rotate(0deg)' : 'translate(20px, -62px) rotate(12deg)';
+        anim(lid, [{ transform: 'translate(0px, 0px) rotate(0deg)', opacity: 1 }, { transform: up, opacity: 1, offset: 0.4 }, { transform: rest, opacity: v === 2 ? 0 : 1 }], { duration: short ? 380 : 480, easing: 'cubic-bezier(0.3, 0.6, 0.4, 1)' });
         lid.style.transform = rest;
+        if (v === 2) lid.style.opacity = '0'; // this round the lid flies off up out of sight
       });
-      const popMs = short ? 700 : 950;
+      const popMs = short ? 600 : 800;
       timers.later(() => potWrap.classList.add('front'), reducedMotion() ? 0 : popMs);
       dish.classList.add('out');
-      anim(dish, [
-        { transform: 'translate(-50%, 30%) scale(0.2) rotate(0deg)', opacity: 0 },
-        { transform: 'translate(-50%, -118%) scale(1.3) rotate(-8deg)', opacity: 1, offset: 0.45 },
-        { transform: 'translate(-50%, -58%) scale(0.94, 1.08) rotate(5deg)', opacity: 1, offset: 0.66 },
-        { transform: 'translate(-50%, -64%) scale(1.04, 0.97) rotate(-3deg)', opacity: 1, offset: 0.82 },
-        { transform: 'translate(-50%, -62%) scale(1) rotate(0deg)', opacity: 1 },
-      ], { duration: popMs, easing: 'ease-out' });
+      const IN = 'translate(-50%, 30%) scale(0.2) rotate(0deg)';
+      const FIN = 'translate(-50%, -62%) scale(1) rotate(0deg)';
+      const dishKeys: Keyframe[] = v === 1
+        ? [ // spins out
+          { transform: IN, opacity: 0 }, { transform: 'translate(-50%, -135%) scale(1.25) rotate(180deg)', opacity: 1, offset: 0.42 },
+          { transform: 'translate(-50%, -60%) scale(0.95, 1.08) rotate(340deg)', opacity: 1, offset: 0.72 }, { transform: 'translate(-50%, -62%) scale(1) rotate(360deg)', opacity: 1 },
+        ]
+        : v === 2
+          ? [ // boings out: up, then three little bounces
+            { transform: IN, opacity: 0 }, { transform: 'translate(-50%, -125%) scale(1.2) rotate(0deg)', opacity: 1, offset: 0.3 }, { transform: 'translate(-50%, -62%) scale(1.08, 0.88) rotate(0deg)', opacity: 1, offset: 0.5 },
+            { transform: 'translate(-50%, -86%) scale(0.97, 1.05) rotate(0deg)', opacity: 1, offset: 0.66 }, { transform: 'translate(-50%, -62%) scale(1.04, 0.94) rotate(0deg)', opacity: 1, offset: 0.82 }, { transform: FIN, opacity: 1 },
+          ]
+          : [ // arcs out with a wobble
+            { transform: IN, opacity: 0 }, { transform: 'translate(-50%, -118%) scale(1.3) rotate(-8deg)', opacity: 1, offset: 0.45 }, { transform: 'translate(-50%, -58%) scale(0.94, 1.08) rotate(5deg)', opacity: 1, offset: 0.66 },
+            { transform: 'translate(-50%, -64%) scale(1.04, 0.97) rotate(-3deg)', opacity: 1, offset: 0.82 }, { transform: FIN, opacity: 1 },
+          ];
+      anim(dish, dishKeys, { duration: popMs, easing: 'ease-out' });
       potWrap.classList.add('done');
       speak(word.text);
-      cheerPet(pet, timers, 1500); // it tastes it: a happy face and two hops
-      timers.later(() => celebrate(dish, { game: 'kitchen' }), short ? 300 : 430);
-      await skippableWait(short ? 1100 : 1600);
+      cheerPet(pet, timers, 1400); // it tastes it: a happy face and two hops...
+      if (v === 1) anim(pet, [{ transform: 'rotate(0deg)' }, { transform: 'rotate(360deg)' }], { duration: 700, delay: 120, easing: 'ease-in-out' }); // ...or a twirl
+      timers.later(() => celebrate(dish, { game: 'kitchen' }), short ? 280 : 380);
+      await skippableWait(short ? 700 : 900);
       timers.clear();
       resolve({ firstTryCorrect: firstTry, choices: tiles.length });
     } else {
@@ -618,7 +640,7 @@ export const traceTrail = async (ctx: Ctx, target: Grapheme): Promise<TrialResul
         // the finished letter melts into its sound-friend, who says the sound and hops
         const friend = friendEl(target.id, 'trace-friend');
         // ...in the world's colours: a glow behind it and a small medal with the world's emblem, so it belongs to this world
-        const glow = h('span', { class: 'trace-glow', style: `--glow:${WORLD_GLOW[worldId()]}` });
+        const glow = h('span', { class: 'trace-glow', style: `--glow:${worldGlow()}` });
         const badge = h('span', { class: 'trace-badge' });
         badge.innerHTML = worldBadge();
         const holder = h('div', { class: 'trace-friend-holder' }, glow, friend, badge);

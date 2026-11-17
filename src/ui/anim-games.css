@@ -25,7 +25,7 @@
 @keyframes hint-halo { 0%, 100% { opacity: 0; transform: scale(0.96); } 50% { opacity: 0.9; transform: scale(1); } }
 
 /* ---------- Robot Talk: calm. One rock when it starts to talk, a slow bulb, a still grill ---------- */
-.robotscene .robot.talking svg { animation: rock-once 1s ease-in-out 1; }
+.robotscene .robot.talking svg { animation: none; } /* the body moves with each sound instead (games.ts robotBeat) */
 .robotscene .robot.talking .bulb { fill: #ff6b6b; transform-box: fill-box; transform-origin: center; animation: bulb-slow 2s ease-in-out infinite; }
 .robotscene .robot.talking .grill rect { animation: none; }
 .robotscene .robot.shrug svg { animation: robot-shrug 0.9s ease-in-out 1; }
@@ -46,21 +46,22 @@
 .rocket .flame { animation-duration: 0.45s; }
 .rocket .prop { transform-box: fill-box; transform-origin: center; animation: prop 0.9s ease-in-out infinite alternate; }
 @keyframes prop { to { transform: scaleY(0.25); } }
-.rocket { width: 120px; } /* the vehicle is about 1.4x bigger than in cycle 1 */
-.rocket[data-vehicle=dino], .rocket[data-vehicle=dragon], .rocket[data-vehicle=transport] { width: 210px; }
-.rocket[data-vehicle=ocean] { width: 130px; }
-.rocket[data-vehicle=farm] { width: 112px; }
-.rocketscene .skypanel { min-height: 280px; }
+.rocket { width: 178px; position: relative; z-index: 6; } /* the vehicle is the star of the window: about 1.5x the cycle-2 size */
+.rocket[data-vehicle=dino], .rocket[data-vehicle=dragon], .rocket[data-vehicle=transport] { width: 300px; }
+.rocket[data-vehicle=ocean] { width: 190px; }
+.rocket[data-vehicle=farm] { width: 164px; }
+.rocketscene .skypanel { min-height: 340px; }
+.rocketscene .skypanel.launching { overflow: visible; } /* the take-off may cross the whole card */
 @media (max-width: 600px) {
-  .rocket { width: 92px; } .rocket[data-vehicle=dino], .rocket[data-vehicle=dragon], .rocket[data-vehicle=transport] { width: 150px; }
-  .rocket[data-vehicle=ocean] { width: 100px; } .rocket[data-vehicle=farm] { width: 86px; }
-  .rocketscene .skypanel { min-height: 230px; }
+  .rocket { width: 112px; } .rocket[data-vehicle=dino], .rocket[data-vehicle=dragon], .rocket[data-vehicle=transport] { width: 176px; }
+  .rocket[data-vehicle=ocean] { width: 116px; } .rocket[data-vehicle=farm] { width: 102px; }
+  .rocketscene .skypanel { min-height: 250px; }
 }
-[data-pack=dino] .skypanel { background: radial-gradient(ellipse at 50% 24%, #ffffffaa 0 9%, transparent 10%), radial-gradient(ellipse at 56% 27%, #ffffffaa 0 6%, transparent 7%), linear-gradient(#f4a259, #ffd6a0 62%, #8fcf6a 62.5%, #6fb85a); }
-[data-pack=dragon] .skypanel { background: radial-gradient(circle at 20% 24%, #fff 0 1.5px, transparent 2px), radial-gradient(circle at 78% 18%, #fff 0 1.5px, transparent 2px), radial-gradient(circle at 60% 40%, #fff 0 1px, transparent 2px), radial-gradient(circle at 56% 24%, #ffe9a8 0 6%, transparent 7%), linear-gradient(#3b2a78, #8a5fd0 68%, #e9a6d4); }
-[data-pack=transport] .skypanel { background: radial-gradient(ellipse at 24% 30%, #fff 0 9%, transparent 10%), radial-gradient(ellipse at 31% 33%, #fff 0 7%, transparent 8%), radial-gradient(ellipse at 76% 22%, #fff 0 8%, transparent 9%), linear-gradient(#5ec0f2, #cdeefc); }
-[data-pack=ocean] .skypanel { background: radial-gradient(circle at 18% 70%, #ffffff88 0 1.5%, transparent 2%), radial-gradient(circle at 70% 82%, #ffffff88 0 2%, transparent 2.6%), radial-gradient(circle at 86% 40%, #ffffff66 0 1.4%, transparent 2%), linear-gradient(#bdeeff, #4cc3d9 55%, #2a86b5); }
-[data-pack=farm] .skypanel { background: radial-gradient(ellipse at 22% 28%, #fff 0 8%, transparent 9%), radial-gradient(ellipse at 28% 31%, #fff 0 6%, transparent 7%), radial-gradient(ellipse at 74% 20%, #fff 0 7%, transparent 8%), linear-gradient(#b6e3ff 0 64%, #a3d86b 64.5%, #7fc14f); }
+[data-pack=dino] .skypanel, [data-pack=jungle] .skypanel { background: radial-gradient(ellipse at 50% 24%, #ffffffaa 0 9%, transparent 10%), radial-gradient(ellipse at 56% 27%, #ffffffaa 0 6%, transparent 7%), linear-gradient(#f4a259, #ffd6a0 62%, #8fcf6a 62.5%, #6fb85a); }
+[data-pack=dragon] .skypanel, [data-pack=fairy] .skypanel { background: radial-gradient(circle at 20% 24%, #fff 0 1.5px, transparent 2px), radial-gradient(circle at 78% 18%, #fff 0 1.5px, transparent 2px), radial-gradient(circle at 60% 40%, #fff 0 1px, transparent 2px), radial-gradient(circle at 56% 24%, #ffe9a8 0 6%, transparent 7%), linear-gradient(#3b2a78, #8a5fd0 68%, #e9a6d4); }
+[data-pack=transport] .skypanel, [data-pack=arctic] .skypanel { background: radial-gradient(ellipse at 24% 30%, #fff 0 9%, transparent 10%), radial-gradient(ellipse at 31% 33%, #fff 0 7%, transparent 8%), radial-gradient(ellipse at 76% 22%, #fff 0 8%, transparent 9%), linear-gradient(#5ec0f2, #cdeefc); }
+[data-pack=ocean] .skypanel, [data-pack=pirate] .skypanel { background: radial-gradient(circle at 18% 70%, #ffffff88 0 1.5%, transparent 2%), radial-gradient(circle at 70% 82%, #ffffff88 0 2%, transparent 2.6%), radial-gradient(circle at 86% 40%, #ffffff66 0 1.4%, transparent 2%), linear-gradient(#bdeeff, #4cc3d9 55%, #2a86b5); }
+[data-pack=farm] .skypanel, [data-pack=music] .skypanel { background: radial-gradient(ellipse at 22% 28%, #fff 0 8%, transparent 9%), radial-gradient(ellipse at 28% 31%, #fff 0 6%, transparent 7%), radial-gradient(ellipse at 74% 20%, #fff 0 7%, transparent 8%), linear-gradient(#b6e3ff 0 64%, #a3d86b 64.5%, #7fc14f); }
 /* the gauge keeps a good contrast on every sky */
 .fuel { border-color: #ffffffee; }
 
@@ -85,22 +86,29 @@
 .bridgescene .bridge .slot.filled { height: 30px; }
 
 /* logs (dino) */
-[data-pack=dino] .bridge .slot.filled { border: 3px solid #5a3a1c; border-radius: 15px; background: radial-gradient(circle at 11px 50%, #ecd0a0 0 5px, #c9975a 5px 8px, transparent 8.5px), repeating-linear-gradient(0deg, #8a5a2b 0 5px, #9c6a35 5px 9px); }
+[data-pack=dino] .bridge .slot.filled, [data-pack=jungle] .bridge .slot.filled { border: 3px solid #5a3a1c; border-radius: 15px; background: radial-gradient(circle at 11px 50%, #ecd0a0 0 5px, #c9975a 5px 8px, transparent 8.5px), repeating-linear-gradient(0deg, #8a5a2b 0 5px, #9c6a35 5px 9px); }
 /* moon stepping stones (space) */
 [data-pack=space] .bridge .slot.filled { border: 3px solid #6f7488; border-radius: 50%; background: radial-gradient(circle at 30% 36%, #7e8496 0 11%, transparent 12%), radial-gradient(circle at 68% 62%, #858b9c 0 9%, transparent 10%), radial-gradient(circle at 50% 30%, #c9ced9, #a3a9ba 70%); }
 [data-pack=space] .bridge .river { background: radial-gradient(circle at 14% 40%, #fff 0 1.5px, transparent 2px), radial-gradient(circle at 56% 60%, #fff 0 1.5px, transparent 2px), radial-gradient(circle at 86% 36%, #bfe 0 1.5px, transparent 2px), #1c2250; background-size: 120px 100%; animation: none; }
 /* shells (ocean) */
-[data-pack=ocean] .bridge .slot.filled { border: 3px solid #e58aa5; border-radius: 50% 50% 8px 8px / 100% 100% 8px 8px; background: repeating-conic-gradient(from -90deg at 50% 100%, #ffd9e2 0 11deg, #ffb7c9 11deg 22deg); }
-[data-pack=ocean] .bridge .river { background-color: #4cc3d9; opacity: 0.95; }
+[data-pack=ocean] .bridge .slot.filled, [data-pack=fairy] .bridge .slot.filled { border: 3px solid #e58aa5; border-radius: 50% 50% 8px 8px / 100% 100% 8px 8px; background: repeating-conic-gradient(from -90deg at 50% 100%, #ffd9e2 0 11deg, #ffb7c9 11deg 22deg); }
+[data-pack=ocean] .bridge .river, [data-pack=fairy] .bridge .river, [data-pack=pirate] .bridge .river { background-color: #4cc3d9; opacity: 0.95; }
 /* hay bales (farm) */
 [data-pack=farm] .bridge .slot.filled { border: 3px solid #a8761c; border-radius: 7px; background: linear-gradient(90deg, transparent 20%, #8d5a22 20% 25%, transparent 25% 75%, #8d5a22 75% 80%, transparent 80%), repeating-linear-gradient(90deg, #ebc05a 0 7px, #d9a93e 7px 9px); }
-[data-pack=farm] .bridge .river { background: repeating-linear-gradient(90deg, #7cc8e0 0 40px, #98d6ea 40px 80px); }
+[data-pack=farm] .bridge .river, [data-pack=jungle] .bridge .river { background: repeating-linear-gradient(90deg, #7cc8e0 0 40px, #98d6ea 40px 80px); }
 /* stone blocks (dragon) */
 [data-pack=dragon] .bridge .slot.filled { border: 3px solid #565a74; border-radius: 4px; background: linear-gradient(#b2b6cb 0 6px, transparent 6px), repeating-linear-gradient(90deg, #9fa3bb 0 17px, #7e829a 17px 19px); }
 [data-pack=dragon] .bridge .river { background: repeating-linear-gradient(90deg, #3a8f9a 0 40px, #4ca7b2 40px 80px); }
 /* road segments (transport) */
-[data-pack=transport] .bridge .slot.filled { border: 3px solid #2f3340; border-radius: 4px; background: linear-gradient(90deg, transparent 0 18%, #fff 18% 38%, transparent 38% 62%, #fff 62% 82%, transparent 82%) center / 100% 4px no-repeat, #4d525f; }
-[data-pack=transport] .bridge .river { background: repeating-linear-gradient(90deg, #9a8f7a 0 40px, #aa9f8a 40px 80px); }
+[data-pack=transport] .bridge .slot.filled, [data-pack=robot] .bridge .slot.filled { border: 3px solid #2f3340; border-radius: 4px; background: linear-gradient(90deg, transparent 0 18%, #fff 18% 38%, transparent 38% 62%, #fff 62% 82%, transparent 82%) center / 100% 4px no-repeat, #4d525f; }
+[data-pack=transport] .bridge .river, [data-pack=robot] .bridge .river { background: repeating-linear-gradient(90deg, #9a8f7a 0 40px, #aa9f8a 40px 80px); }
+
+/* pirate: wooden boards; music: piano keys; arctic: ice blocks */
+[data-pack=pirate] .bridge .slot.filled { border: 3px solid #5a3a1c; border-radius: 5px; background: radial-gradient(circle at 8px 50%, #3a2410 0 2.4px, transparent 3px), radial-gradient(circle at calc(100% - 8px) 50%, #3a2410 0 2.4px, transparent 3px), repeating-linear-gradient(0deg, #b5834a 0 6px, #a2733c 6px 8px); }
+[data-pack=music] .bridge .slot.filled { border: 3px solid #2b2b3a; border-radius: 4px 4px 9px 9px; background: linear-gradient(90deg, transparent 0 14%, #2b2b3a 14% 20%, transparent 20% 34%, #2b2b3a 34% 40%, transparent 40% 60%, #2b2b3a 60% 66%, transparent 66% 80%, #2b2b3a 80% 86%, transparent 86%) top / 100% 62% no-repeat, #fbfbff; }
+[data-pack=arctic] .bridge .slot.filled { border: 3px solid #7fb9dd; border-radius: 8px; background: linear-gradient(135deg, #ffffffaa 0 22%, transparent 23%), linear-gradient(#d6efff, #a9d8f5); }
+[data-pack=arctic] .bridge .river { background: repeating-linear-gradient(90deg, #5a9fc6 0 40px, #6fb0d4 40px 80px); }
+[data-pack=music] .bridge .river { background: repeating-linear-gradient(90deg, #7b4fd1 0 40px, #8d63df 40px 80px); }
 
 /* ---------- Reduce Motion: no particles, no flights; the creature's face and the sound still say yes ---------- */
 @media (prefers-reduced-motion: reduce) {

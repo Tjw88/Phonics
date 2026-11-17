@@ -61,3 +61,11 @@ A pack changes how the app **looks**, never what it teaches: sounds, words, game
 - Gus the goat sound-friend (g) is odd; not yet redrawn.
 - Pictures for the vowel-digraph words that still use none (seed, chain, paint, etc.) are print-only.
 - A human illustrator's review of every card before any release; this is AI-assisted vector art judged by AI.
+
+## Six more theme packs (17 Nov 2026, Q13)
+
+Jungle Safari, Robot Workshop, Pirate Cove, Fairy Garden, Music Band and Arctic Friends were added (twelve packs in all). Each was drawn by an artist agent, then reviewed by a fresh independent reviewer from rendered contact sheets (report: scratchpad `review_packs/REVIEW.md`), then sent back once for fixes. This is stage 1: creatures, arrival containers, backdrop (day and night) and island. **Stage 2 (not done):** themed props and reactions; until then the new packs use the nearest of the six hand-made reaction/particle/vehicle families (jungle to dino, robot to space, pirate to ocean, fairy to dragon, music to farm, arctic to transport) plus a few own entries.
+
+Review scores before fixes (clarity/charm/polish): Pirate 4/4/4, Robot 4/4/4, Jungle 4/4/3.5, Fairy 3.5/4/4, Arctic 4/4/3, Music 2/3/3. Fixes made: elephant trunk and pods (jungle); boxy robot recoloured purple so the red scarf shows, bolder thumbnail (robot); otter, gull and kitten redrawn, X made gold (pirate); ladybird head, picker order (fairy); bear outline, penguin first, distinct eggs (arctic); trumpet, maraca, cases redrawn (music).
+
+Still weak (unverified, no child has seen any of it): music trumpet reads as a horn or gramophone and the xylophone head is a blank dome; the arctic bear is pale; the pirate gull is pale on sand; look-alike colours across packs (elephant/xylophone/seal periwinkle). The picker thumbnail always shows `creatures[0]`; fairy and arctic were reordered for that, so switching world maps slots differently for those two (the friend keeps its slot, not its species). The fairy default name is still 'Petal' though the first creature is now the ladybird.

@@ -3,7 +3,7 @@
 // `vehicleExit` flies it away: the path rotates through THREE variants by round (deterministic), and repeats are shorter.
 import { rocketSVG } from './art';
 import { reducedMotion } from './dom';
-import type { PackId } from './particles';
+import { familyOf, type PackId } from './particles';
 
 const wrap = (cls: string, vb: string, inner: string): string =>
   `<svg class="rocket-art ${cls}" viewBox="${vb}" role="img" aria-hidden="true" focusable="false">${inner}</svg>`;
@@ -49,13 +49,15 @@ const balloon = (): string => wrap('v-balloon', '0 0 100 210', `
   <rect x="34" y="152" width="32" height="26" rx="5" fill="#c9893e" stroke="#8d5a22" stroke-width="4"/>
   <path d="M34 162 L66 162 M34 170 L66 170" stroke="#8d5a22" stroke-width="2"/>`);
 
-export const VEHICLE_NAME: Record<PackId, string> = {
+const NAMES: Record<PackId, string> = {
   dino: 'leaf glider', dragon: 'magic carpet', transport: 'aeroplane', space: 'rocket', ocean: 'bubble pod', farm: 'hot-air balloon',
 };
 
+/** What the vehicle is called in the caption (any world id; a world without its own gets its family's vehicle). */
+export const vehicleName = (id: string): string => NAMES[familyOf(id)];
 /** The vehicle's drawing for a world. */
-export const vehicleSVG = (pack: PackId): string => {
-  switch (pack) {
+export const vehicleSVG = (id: string): string => {
+  switch (familyOf(id)) {
     case 'dino': return leaf();
     case 'dragon': return carpet();
     case 'transport': return plane();
@@ -67,39 +69,76 @@ export const vehicleSVG = (pack: PackId): string => {
 
 // ---- the exit -------------------------------------------------------------------------------------------------------------------
 const smooth = (a: number, b: number, x: number): number => { const t = Math.max(0, Math.min(1, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+interface Pose { x: number; y: number; r: number; s: number; o: number }
 
-/** Position of the vehicle at progress f (0..1) for a world and a variant (0 straight up, 1 curves right, 2 curves left). */
-const pose = (pack: PackId, v: number, f: number): { x: number; y: number; r: number; s: number; o: number } => {
-  const e = pack === 'space' || pack === 'transport' ? f * f : pack === 'ocean' ? f : Math.pow(f, 1.35);
-  const dirX = v === 1 ? 1 : v === 2 ? -1 : 0;
-  let x = dirX * 230 * e;
-  let y = -350 * e;
-  let r = dirX * 22 * e;
-  let s = 1 - 0.38 * e;
-  if (f < 0.12) y += Math.sin((f / 0.12) * Math.PI) * 9; // a small dip: the wind-up before leaving
+/**
+ * Where the vehicle is at progress f (0..1). Every world leaves on a DIAGONAL across the card (the panel lets it out), and the three variants
+ * (by round, deterministic) differ per vehicle: rocket right / straight / left; plane climb / loop-the-loop / low swoop then climb;
+ * carpet S-wave right / left / spiral; leaf glide right / spiral / left; pod wobbles right / up / left and pops; balloon drifts right / up / left.
+ */
+const pose = (pack: PackId, v: number, f: number): Pose => {
+  const dirX = v === 0 ? 1 : v === 2 ? -1 : 0;
+  const wind = Math.sin((f / 0.12) * Math.PI) * 9 * (f < 0.12 ? 1 : 0); // a small dip first: the wind-up before leaving
+  let x = 0, y = 0, r = 0, s = 1 - 0.35 * f;
   switch (pack) {
-    case 'ocean': x += Math.sin(f * 9) * 18; s = 1 - 0.1 * f + 0.2 * smooth(0.85, 0.95, f); break; // wobbling up, a little swell before it pops
-    case 'farm': x += Math.sin(f * 5.5) * 16; r += Math.sin(f * 5.5) * 5; break;
-    case 'dragon': x += Math.sin(f * 8) * 38; r += Math.cos(f * 8) * 14; break;
-    case 'dino': x += Math.sin(f * 7) * 26; r += Math.sin(f * 7) * 18; break;
-    case 'transport': r += -16 * e; if (v === 2) r = -360 * smooth(0.25, 0.7, f) - 10 * e; break;
-    default: break;
+    case 'space': {
+      const e = Math.pow(f, 2);
+      const d = v === 1 ? 0 : dirX;
+      x = d * 330 * e; y = -400 * e; r = d * 38 * smooth(0, 0.2, f);
+      break;
+    }
+    case 'transport': { // the plane always flies right
+      const e = Math.pow(f, 1.6);
+      x = 440 * e; y = -300 * e; r = -22 * smooth(0, 0.25, f);
+      if (v === 1) { const th = Math.PI * 2 * smooth(0.18, 0.7, f); x += 58 * Math.sin(th); y -= 58 * (1 - Math.cos(th)); r = -22 - (th * 180) / Math.PI; }
+      if (v === 2) { y += 70 * Math.sin(Math.PI * Math.min(1, f * 2.2)) * (f < 0.46 ? 1 : 0); r = 8 * Math.sin(Math.PI * Math.min(1, f * 2.2)) - 24 * smooth(0.4, 0.7, f); }
+      s = 1 - 0.3 * f;
+      break;
+    }
+    case 'dragon': {
+      const e = Math.pow(f, 1.4);
+      const d = v === 2 ? -1 : v === 0 ? 1 : 0.2;
+      x = d * 320 * e + (v === 1 ? 70 * Math.sin(f * 12) : 40 * Math.sin(f * 8)); y = -380 * e; r = 15 * Math.cos(f * (v === 1 ? 12 : 8)) + d * 12;
+      break;
+    }
+    case 'dino': {
+      const e = Math.pow(f, 1.35);
+      if (v === 1) { x = 60 * e + 60 * Math.sin(f * 13); y = -380 * e - 24 * (1 - Math.cos(f * 13)) * 0.4; r = 38 * Math.sin(f * 13); }
+      else { const d = v === 0 ? 1 : -1; x = d * 300 * e + 26 * Math.sin(f * 7); y = -340 * e; r = d * 10 + 18 * Math.sin(f * 7); }
+      break;
+    }
+    case 'ocean': {
+      const e = f;
+      const d = dirX * 0.7;
+      x = d * 260 * e + Math.sin(f * 9) * (v === 1 ? 26 : 16); y = -360 * e; r = 0;
+      s = 1 - 0.1 * f + 0.28 * smooth(0.8, 0.93, f); // a swell, then it pops
+      break;
+    }
+    default: { // farm balloon: a slow drift
+      const e = Math.pow(f, 1.3);
+      const d = dirX * 0.7;
+      x = d * 280 * e + Math.sin(f * 5.5) * 16; y = -370 * e; r = Math.sin(f * 5.5) * 5 + d * 6;
+    }
   }
-  return { x, y, r, s, o: f < 0.78 ? 1 : 1 - (f - 0.78) / 0.22 };
+  const popped = pack === 'ocean' && f > 0.93;
+  return { x, y: y + wind, r, s: popped ? s * (1 - (f - 0.93) / 0.07) : s, o: popped ? 1 - (f - 0.93) / 0.07 : f < 0.8 ? 1 : 1 - (f - 0.8) / 0.2 };
 };
 
 const SPEED: Record<PackId, number> = { dino: 1.05, dragon: 1, transport: 0.95, space: 1, ocean: 1.1, farm: 1.1 };
+/** How long the exit takes, in ms (the games wait for about this long). */
+export const exitMs = (id: string, short: boolean): number => (short ? 800 : 1100) * SPEED[familyOf(id)];
 
-/** Fly the vehicle off the panel. `variant` is the round number (0, 1, 2, 0...), `short` shortens repeats. Resolves when it has gone. */
-export const vehicleExit = (el: HTMLElement, pack: PackId, variant: number, short: boolean): Promise<void> => {
+/** Fly the vehicle off across the card. `variant` is the round number (0, 1, 2, 0...), `short` shortens repeats. Resolves when it has gone. */
+export const vehicleExit = (el: HTMLElement, id: string, variant: number, short: boolean): Promise<void> => {
   if (reducedMotion()) { el.style.opacity = '0'; return Promise.resolve(); }
-  const dur = (short ? 850 : 1400) * SPEED[pack];
-  const N = 16;
+  const pack = familyOf(id);
+  const dur = exitMs(id, short);
+  const N = 22;
   const kf: Keyframe[] = [];
   for (let k = 0; k <= N; k++) {
     const f = k / N;
     const p = pose(pack, variant % 3, f);
-    kf.push({ transform: `translate(${p.x.toFixed(1)}px, ${p.y.toFixed(1)}px) rotate(${p.r.toFixed(1)}deg) scale(${p.s.toFixed(3)})`, opacity: p.o, offset: f });
+    kf.push({ transform: `translate(${p.x.toFixed(1)}px, ${p.y.toFixed(1)}px) rotate(${p.r.toFixed(1)}deg) scale(${Math.max(0.02, p.s).toFixed(3)})`, opacity: p.o, offset: f });
   }
   const a = el.animate(kf, { duration: dur, easing: 'linear', fill: 'forwards' });
   return a.finished.then(() => undefined, () => undefined);
@@ -127,9 +166,14 @@ const PROPS: Record<PackId, { back?: string; front?: string }> = {
     front: '<g transform="translate(22 0) rotate(10 80 30)"><path d="M54 34 L54 12 L66 24 L80 6 L94 24 L106 12 L106 34Z" fill="#ffd23f" stroke="#e0a100" stroke-width="3.5" stroke-linejoin="round"/><circle cx="80" cy="22" r="4" fill="#ef476f"/><circle cx="62" cy="26" r="2.6" fill="#4cc3d9"/><circle cx="98" cy="26" r="2.6" fill="#4cc3d9"/></g>',
   },
 };
-/** The robot's drawing with the world's prop on it. */
-export const robotWithProp = (svg: string, pack: PackId): string => {
-  const p = PROPS[pack];
+const PROPS_OWN: Partial<Record<string, { back?: string; front?: string }>> = {
+  music: { front: '<path d="M26 66 Q22 22 80 20 Q138 22 134 66" stroke="#7b4fd1" stroke-width="7" fill="none" stroke-linecap="round"/><rect x="14" y="54" width="20" height="30" rx="9" fill="#ef476f" stroke="#b3154f" stroke-width="3"/><rect x="126" y="54" width="20" height="30" rx="9" fill="#ef476f" stroke="#b3154f" stroke-width="3"/>' }, // headphones
+  arctic: { back: '<g transform="translate(-4 0)"><path d="M30 36 Q30 6 80 6 Q130 6 130 36Z" fill="#4cc3d9" stroke="#2a8fb8" stroke-width="4"/><rect x="26" y="30" width="108" height="12" rx="6" fill="#e6f4ff" stroke="#a9cde8" stroke-width="3"/><circle cx="80" cy="4" r="9" fill="#ffffff" stroke="#a9cde8" stroke-width="3"/></g>' }, // a woolly hat with a bobble
+  pirate: { back: '<g transform="translate(-4 0) rotate(-6 80 34)"><path d="M24 38 Q40 4 80 8 Q120 4 136 38Z" fill="#2f3340" stroke="#1d2230" stroke-width="4"/><rect x="26" y="30" width="108" height="8" rx="4" fill="#ffc21a" stroke="#e0a100" stroke-width="2.5"/></g>' }, // a pirate hat with a gold band (no skull)
+};
+/** The robot's drawing with the world's prop on it (a world's own prop, else its family's, else none: never throws). */
+export const robotWithProp = (svg: string, id: string): string => {
+  const p = PROPS_OWN[id] ?? PROPS[familyOf(id)] ?? {};
   let out = svg;
   if (p.back) out = out.replace('<line x1="80" y1="30"', `${p.back}<line x1="80" y1="30"`);
   if (p.front) out = out.replace('</svg>', `${p.front}</svg>`);
