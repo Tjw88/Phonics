@@ -144,7 +144,7 @@ export const buildFeedTrial = (s: ChildState, target: Grapheme, indexInSession: 
 export const PLACEMENT_SETS: readonly number[] = Array.from({ length: MAX_SET }, (_, i) => i + 1);
 export interface PlacementItem { set: number; target: Grapheme; options: Grapheme[] }
 
-const DOUBLES = ['ck', 'ff', 'll', 'ss'];
+const DOUBLES = ['ck', 'ff', 'll', 'ss', 'zz'];
 const isDouble = (g: Grapheme): boolean => DOUBLES.includes(g.id);
 const placementTargetOk = (g: Grapheme, inSet: Grapheme[]): boolean =>
   !isDouble(g) && !inSet.some((o) => o.id !== g.id && !isDouble(o) && o.phoneme === g.phoneme);
@@ -159,8 +159,11 @@ export const buildPlacement = (rng: Rng): PlacementItem[] =>
     const targets = shuffle(inSet.filter((g) => placementTargetOk(g, inSet)), rng).slice(0, 2);
     return targets.map((target) => {
       // one right answer, and nothing that sounds close to it (sh / ch, say)
-      const pool = inSet.filter((g) => g.phoneme !== target.phoneme && !soundsClose(g.phoneme, target.phoneme));
-      const distractors = shuffle(pool, rng).slice(0, 2);
+      const ok = (g: Grapheme) => g.phoneme !== target.phoneme && !soundsClose(g.phoneme, target.phoneme);
+      // distractors come from the same set; a tiny set (er is alone in set 12) is topped up from earlier sets so there is always a choice
+      const earlier = GRAPHEMES.filter((g) => g.set < set && !isDouble(g) && ok(g));
+      const pool = [...shuffle(inSet.filter(ok), rng), ...shuffle(earlier, rng)];
+      const distractors = pool.slice(0, 2);
       return { set, target, options: shuffle([target, ...distractors], rng) };
     });
   });
@@ -252,4 +255,37 @@ export const pickNeighbours = (pool: Word[], target: Word, n: number, rng: Rng):
     .sort((a, b) => b.s - a.s)
     .slice(0, n)
     .map((x) => x.w);
+};
+
+// ---- Feed block sequencing ---------------------------------------------------------------------------------------------
+export interface FeedItem { g: Grapheme; idx: number }
+export interface FeedBlocks {
+  /** warm-up before the new-sound story: earlier sounds the child found hardest (at most two sounds) */
+  warm: FeedItem[];
+  /** the first part of the day's Feed, right after the story / the no-new-sound note */
+  early: FeedItem[];
+  /** the rest, played AFTER the oral game so one mechanic never runs more than a handful of rounds in a row */
+  late: FeedItem[];
+}
+/**
+ * Split a day's Feed the Creature trials into three blocks (warm-up, early, late) so that the oral game sits between early and late.
+ * The trial INDEX keeps counting up exactly as before, so each sound's errorless ramp (1 -> 2 -> 3 choices) is unchanged; only the
+ * order of games changes. A day with only one known sound has nothing to choose between, so it gets two trials, not four.
+ * (Measured before this change: a later day ran about ten Feed trials back to back, and day 1 four identical single-tile trials.)
+ */
+export const feedBlocks = (plan: Pick<Plan, 'newSound' | 'review'>, introducedCount: number): FeedBlocks => {
+  const pairs = (gs: Grapheme[], idxs: readonly number[]): FeedItem[] => gs.flatMap((g) => idxs.map((idx) => ({ g, idx })));
+  if (plan.newSound) {
+    const trials = introducedCount <= 1 ? [0, 1] : [...NEW_SOUND_TRIALS];
+    const mine = trials.map((idx) => ({ g: plan.newSound as Grapheme, idx }));
+    const half = Math.ceil(mine.length / 2);
+    return {
+      warm: pairs(plan.review.slice(0, 2), REVIEW_SOUND_TRIALS),
+      early: mine.slice(0, half),
+      late: [...mine.slice(half), ...pairs(plan.review.slice(2), REVIEW_SOUND_TRIALS)],
+    };
+  }
+  const all = pairs(plan.review, [2, 3]);
+  const half = Math.ceil(all.length / 2);
+  return { warm: [], early: all.slice(0, half), late: all.slice(half) };
 };

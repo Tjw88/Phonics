@@ -40,16 +40,16 @@ to share with known people, not something to publicise. The workflow triggers on
 
 | Spec item | Status |
 |---|---|
-| Sets 1-5 in spec order, then set 6 (the consonant digraphs sh, ch, th, ng) and set 7 (the vowel digraphs ai, ee, oa, oo), one new sound per day; the next set opens when 3 of 4 sounds are secure and the 4th is carried forward | Built (changed from whole-set gating, see findings) |
+| Sets 1-5 in spec order, then set 6 (sh ch th ng), set 7 (ai ee oa oo), sets 8-9 (the consonants j v w x y z zz qu) and sets 10-12 (igh ar or ur | ow oi ear air | er), 48 sounds in all, one new sound per day; the next set opens when 3 of 4 sounds are secure and the 4th is carried forward | Built (changed from whole-set gating, see findings) |
 | Mastery gate (3 separate days), errorless 1→2→3 choices, spaced review of hardest sounds | Built, with a stricter definition of "right" (≥2 correct and ≥60% that day) |
 | Look and feel: drawn original characters, **six theme packs** (Dino Valley, Dragon Castle, Transport Town, Space Station, Ocean Reef, Farm Friends: four companions, a backdrop with day and night, and a home island each; chosen at setup, changeable in Settings; purely cosmetic), chunky buttons, sparkle bursts, game sound effects | Built (see "Look and feel") |
 | Companion grows with progress (an accessory per set secured) | Built |
 | Accent option (setup step + parent Settings): Southern British (RP) or Northern English | Built; northern pack least verified (see Accents) |
 | Audio | Neural-voice generated (not recorded, not listened to), every instruction spoken; see "Audio" |
-| Placement game → starting set | Built for sets 1-7, two questions per set, **stops at the first miss**; never grants mastery |
+| Placement game → starting set | Built for sets 1-12, two questions per set, **stops at the first miss**; never grants mastery |
 | 6-step daily adventure, goodnight, treasure, off-screen mission | Built |
 | All 8 MVP games: Feed the Creature, Robot Talk, Beat the Drum, Sound Safari, Word Kitchen, Bridge Builder, Rhyme Rocket, Trace Trail (optional, parent setting) | Built; Free Play is a menu of all of them |
-| Sound-friends: 31 original drawn characters, one per sound | Built |
+| Sound-friends: 48 original drawn characters, one per sound | Built |
 | Sound buttons (dot / bar), lower case, single-storey "a" typeface (Andika, bundled) | Built; confirmed in screenshots |
 | Sound Play for ages 2-3 (co-play, listening and rhythm only) | Built: copy the beat + find-it naming; needs real environmental sounds (see docs/AUDIT.md) |
 | Parent area behind a maths gate (a wrong answer locks it for 30 seconds; the prototype fast-forward tools and audio-engineering labels are hidden unless the page is opened once with `?tools=1`): today, **this week** (days played, new and secured sounds, words, what to practise, an off-screen activity), sound map, words read, watch-out flags, daily limit + 2-minute warning (a banner plus a generated voice) | Built |
@@ -62,7 +62,7 @@ to share with known people, not something to publicise. The workflow triggers on
 ## Look and feel
 
 All art is original inline SVG (no images, no third-party code, works offline): four baby-dino companions with
-blinking eyes and moods, 31 sound-friends (Sid the snake is bent like an s, Ollie the octopus has a round "o" mouth,
+blinking eyes and moods, 48 sound-friends (Sid the snake is bent like an s, Ollie the octopus has a round "o" mouth,
 Iggy the inchworm's head is the dot of the i), a robot, rocket, drum, cooking pot, treasure chest, and a calm Dino
 Valley backdrop that turns to night when the island sleeps.
 
@@ -202,13 +202,12 @@ accuracy. Real children are not like that, so read these as relative comparisons
 6. **Whole-set gating was a stall risk** (one stubborn sound held back all new content). Now decided and built: the
    next set opens at 3 of 4 secure, and the 4th is carried forward (still reviewed, can still become secure). 2 of 4
    is not enough. Tested.
-7. **Content runs out around day 48-57.** With sets 6 and 7 (the digraphs) there are 31 sounds. For a 90%-accurate daily
-   player in the simulator the last new sound arrives on day 48 and all 31 are secure on day 57 (95%: day 43 and 48).
-   That is about 4.5 new sounds a week, above the spec's 2-4 target for steady daily play. After that the daily
-   adventure has nothing new until the next stage (split digraphs, alternative spellings) is built. The "10 CVC words" target is
-   reached around day 16 in simulation, which is early enough that it may be too easy to be an informative threshold; that depends on my definition of
+7. **Content now lasts about four months of daily play.** With sets 8-12 added there are 48 sounds. For a 90%-accurate daily player
+   in the simulator the last new sound arrives on day 111 and all 48 are secure on day 123 (95%: day 99 and 109). That is about three new
+   sounds a week, inside the spec's 2-4 target for steady daily play (it was about 4.5 a week with 27-31 sounds). The "10 CVC words" target is
+   reached around day 20, early enough that it may be too easy to be an informative threshold; that depends on my definition of
    "word read" (first-try correct on 2 different days). A child playing 3 days a week had read 10 words by calendar day 37 and had not
-   secured all 31 sounds within 150 days. Simulated children are not real children.
+   secured all 48 sounds within 300 days. Simulated children are not real children.
 8. **c, k and ck share /k/.** Distractor sets never offer them together, otherwise there would be two right
    answers (tested over 200 random draws per sound).
 
@@ -223,6 +222,7 @@ accuracy. Real children are not like that, so read these as relative comparisons
 - **Sound Play uses a toddler word list** (24 everyday words, every one pictured) instead of every pictured word, after a review found it offering "push pin" and "gong" to a two-year-old. The list is my judgement of common first words, not a researched list. Printed-word choices use near-neighbour distractors (same first or last sound) so a child cannot guess by length.
 - **Sound buttons fade for confident readers.** Once a child has read 8 different words (each on two separate days), Bridge Builder skips the tap-each-sound step and goes straight to blending; the buttons stay faintly visible and tappable as help and come back in full after a wrong pick. The threshold of 8 is a prototype guess with no research behind it; a Settings option keeps the buttons always.
 - The goodnight screen now shows the off-screen mission in a labelled "For the grown-up" card (it was behind a lightbulb).
+- **Sets 8-12 (Q10 a and b).** j v w x | y z zz qu | igh ar or ur | ow oi ear air | er. x says /ks/ and qu says /kw/ as one letter group (as every programme teaches them); ow is /aʊ/ only (cow, never the /əʊ/ of snow); ear is /ɪə/ and not the /eə/ of bear or the /ɜː/ of early; er shares the sound of ur; `ure` is left out on purpose (in cure and pure it is /jʊə/, not one vowel sound). A test keeps the ambiguous spellings (bow, row, low, snow, bear, tear, wear, was, wasp, wind, what, cure, pure, sure) out of the bank. Sound-alikes (v/f, z/s, j/ch, ar/or/ur, igh/ai, ow/oa and others) are never offered together. **Audio finding:** the RP voice has ONE symbol for each diphthong (aɪ aʊ ɔɪ eɪ); spoken as two separate symbols (what I did first) the voice squeezed them into short vowels, and a speech recogniser understood 0 of 11 /igh/ words and 3 of 12 /ai/ words; with the single symbol 8 of 11 and 10 of 12. The Northern voice has no single symbols, so it keeps the split form (its audio is checked only by measurement). /v/ and word-final /zz/ are the weakest (a recogniser heard vat as fat and buzz as bus). **None of it has been heard by a person.**
 - **Vowel digraphs (set 7):** each is one long vowel. `oo` is the long sound of "moon" only; the short oo of "book" is not taught and none of those words is in the bank (a test enforces it). Placement covers sets 1-7. The /ai/ vowel in running words needed a length mark added to the phoneme string, because the voice squeezed the glide into a short vowel (a recogniser heard sail/tail/pain as cell/tell/pen); /oa/ did not need it.
 - The weekly parent summary reports only counts and the app's own graded answers, with no streaks or comparisons, and flags a sound as "worth a little practice" only after at least 4 answers in the week with under half right first time. It says plainly that this is a nudge, not a test result.
 - Rewards are deterministic: today's new sound's character, or a review sound on revision days.

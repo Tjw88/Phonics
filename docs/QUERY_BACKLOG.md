@@ -4,21 +4,15 @@ Standing instruction from Tom: **any question I ask that remains unanswered goes
 
 ## Open
 
-### Q12. Should Free Play be available before the day's adventure is done? (asked 17 Nov 2026)
-- **Context:** both reviewers flagged that Free Play is hidden until the adventure is finished, so a 4-year-old who wants to bang the drum or a 5-year-old who wants the Kitchen first cannot. The spec's "one adventure a day" rule and the pull-not-hook stance pull the other way.
-- **Options:** (a) keep it gated (current); (b) offer 2-3 themed Free Play doors on the home screen from the start, adventure still the primary button; (c) offer Free Play only after the story and first game.
-- **My default while open:** (a), unchanged.
+### Q14. Free Play from the start: is the "quiet Play again" right? (asked 17 Nov 2026)
+- **Context:** Free Play now appears on the home screen as soon as the child has met one sound, the adventure stays the big green button until it is done, and then "Play again" becomes a quiet button. It counts toward the daily limit and uses only sounds already met.
+- **Options:** (a) keep this; (b) also hide "Play again" once the day is done (Free Play only); (c) show the adventure and Free Play as equals.
+- **My default while open:** (a).
 
-### Q11. Are six theme packs enough, and which next? (asked 17 Nov 2026)
-- **Context:** Dino Valley, Dragon Castle, Transport Town, Space Station, Ocean Reef, Farm Friends. A new pack is about one artist-agent run plus tests.
-- **Options (not exclusive):** jungle/safari animals, fairies and flowers, pirates and treasure, construction site, superheroes (original), seasons/weather, bugs and garden, or your own list. Also: should themes eventually carry their own props (bridge, drum, rocket) and reactions? (I plan to do that in the animation cycle unless you say otherwise.)
-- **My default while open:** the six as built; themed props and reactions scheduled for the animation cycle.
-
-### Q10. What should the curriculum teach after set 7? (asked 17 Nov 2026)
-- **Context:** the practitioner review pointed out that many everyday words need j v w x y z zz qu, and the rest of the "long vowel" digraphs (igh, ar, or, ur, ow, oi, ear, air, ure, er). The app currently runs out of new content around day 48-57 for a daily player.
-- **Options:** (a) next the missing consonants (j v w x y z zz qu) as set 8, then the remaining vowel sounds; (b) the remaining vowel sounds first; (c) leave the curriculum here and spend the effort on engagement and the animation cycle.
-- **My recommendation:** (a), because it unlocks far more decodable words, then (b). Each new set costs about one round like set 7 (data, audio, pictures, tests).
-- **My default while open:** (c): no new curriculum until you choose.
+### Q13. Build the six recommended new theme packs? (asked 17 Nov 2026)
+- **Context:** `docs/THEME_PACKS_SPEC.md` recommends Jungle Safari, Robot Workshop, Pirate Cove, Fairy Garden, Music Band and Arctic Friends next (about one artist run each plus the props and reactions system from the animation cycle). Construction, Weather/Seasons, Bakery and Superhero City are second wave.
+- **Options:** (a) build all six; (b) build three first (say Jungle, Robot Workshop, Fairy Garden); (c) change the list.
+- **My default while open:** none built until the animation cycle's props and reactions are in (they make a pack cheaper and better).
 
 ### Q9. Hear the new sounds yourself, or a listening checklist for someone else? (asked 16 Nov 2026, still open)
 - **Context:** the 8 new sounds (sh, ch, th, ng, ai, ee, oa, oo) and ~120 new words are machine-generated and nobody has heard them. I cannot hear.
@@ -47,5 +41,8 @@ Standing instruction from Tom: **any question I ask that remains unanswered goes
 
 ## Answered
 
+- **Q10: what should the curriculum teach after set 7?** (asked 17 Nov) Answered 17 Nov 2026: **(a) then (b)**: the missing consonants as sets 8-9 (j v w x | y z zz qu), then the remaining vowel sounds as sets 10-12 (igh ar or ur | ow oi ear air | er). Built; `ure` was left out on purpose (in cure/pure it is /jʊə/, not one vowel sound).
+- **Q11: what pack options should there be?** (asked 17 Nov) Answered 17 Nov 2026: a full potential spec is in `docs/THEME_PACKS_SPEC.md` (selection criteria, 14 candidate packs with companions, world, arrival, scores and risks, the anatomy of a complete pack, the pack-system upgrades, quality bar and cost). The follow-up decision is Q13.
+- **Q12: should Free Play be available before the adventure is done?** (asked 17 Nov) Answered 17 Nov 2026: "I think so? what do you think?"; I recommended yes (it uses only met sounds, counts toward the daily limit, never adds a sound) and built it; the open sub-question is Q14.
 - **What next after the digraphs and weekly summary?** (asked 16 Nov) Answered 17 Nov 2026: **(a) vowel digraphs and (c) the goodnight mission card plus a fading-buttons challenge level**, then a full fun-ness and engagement review. Done in set 7, the goodnight "For the grown-up" card and big-reader mode; the review follows the art and theme work.
 - **How should I handle the sound-quality problem?** (asked 16 Nov) Answered in discussion: I explained that I have no speech engine of my own; the sounds come from the Piper neural voice, and a human recording remains the real fix.

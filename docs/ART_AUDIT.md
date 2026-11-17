@@ -51,6 +51,10 @@ A pack changes how the app **looks**, never what it teaches: sounds, words, game
 - Farm: the calf's pink muzzle resembles the piglet's snout; the lamb's grey-brown face is darker than a typical lamb and could look sad.
 - Pictures: feet (could be "soles" or "footprints"), lip ("mouth"), nose ("face"), sock ("legs"), hill ("mountain"), nut ("peanut", which is fine), boat/sail/ship (a child may call them all "boat": they are never offered together as answer and distractor).
 
+## Added in the sets 8-12 round
+
+17 new sound-friends (Jess the jet, Vic the van, Wiggle the worm, Axel the box, Yoyo the yak, Zippy the zebra, Fizzy the fizz, Queenie the queen, Lite the light, Starla the star, Norah the corn, Furry the fur ball, Howie the owl, Coco the coin, Earl the ear, Hairy the hairbrush, Fern the fern) and 41 new picture cards, drawn by three artist agents and reviewed by me on a contact sheet. Hairy was redrawn (first version read as a pink mushroom) and wig, wing, quilt, curl and hair were sent back once. Remaining weak spots (a child might misread): wing ("feather"), quilt ("bed"), hair ("ponytail" or "bow"), curl, air (wind or weather), Fern the friend ("cabbage" at 64 px), Hairy ("hand mirror").
+
 ## Remaining
 
 - Cow, goat, kangaroo, mop and nut were sent back for a second pass and I re-checked them: the mop (upright mop beside a bucket), kangaroo (clear face, joey in the pouch) and nut (one clear peanut) are now fine; the goat is acceptable but still stylised; **the cow is still the busiest card at 64 px** and could be simplified.

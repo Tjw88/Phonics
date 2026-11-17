@@ -29,6 +29,13 @@ export const GLYPHS: Record<string, Stroke[]> = {
   k: [{ d: 'M10 10 L10 100' }, { d: 'M46 50 L12 76 L50 100' }],
   l: [{ d: 'M30 10 L30 100' }],
   f: [{ d: 'M46 18 C36 8 28 14 28 28 L28 100' }, { d: 'M12 50 L44 50' }],
+  j: [{ d: 'M34 50 L34 126 C34 138 26 142 14 138' }, { d: 'M34 26 L34 33', dot: true }],
+  v: [{ d: 'M8 50 L30 100 L52 50' }],
+  w: [{ d: 'M4 50 L17 100 L30 62 L43 100 L56 50' }],
+  x: [{ d: 'M10 50 L50 100' }, { d: 'M50 50 L10 100' }],
+  y: [{ d: 'M8 50 L30 98' }, { d: 'M52 50 L26 118 C20 132 12 140 4 136' }],
+  z: [{ d: 'M10 50 L50 50 L10 100 L50 100' }],
+  q: [{ d: `M44 56 C40 52 35 50 30 50 ${O} C52 66 49 60 44 56` }, { d: 'M52 50 L52 140' }],
 };
 
 /** Shift every x coordinate of an absolute M/L/C path (used to lay a second letter beside the first). */
@@ -37,13 +44,11 @@ export const shiftPath = (d: string, dx: number): string => {
   return d.replace(/-?\d*\.?\d+/g, (n) => (i++ % 2 === 0 ? String(Number(n) + dx) : n));
 };
 
-/** Digraphs are traced as their two letters, one after the other. */
-export const strokesFor = (grapheme: string): Stroke[] => {
-  const letters = grapheme.length === 2 ? [grapheme[0]!, grapheme[1]!] : [grapheme];
-  return letters.flatMap((ch, i) => (GLYPHS[ch] ?? []).map((s) => ({ ...s, d: i === 0 ? s.d : shiftPath(s.d, 64) })));
-};
-/** Width of the glyph area for a grapheme (one letter or two side by side). */
-export const glyphWidth = (grapheme: string): number => (grapheme.length === 2 ? 124 : 60);
+/** A grapheme of any length (a, ck, igh) is traced as its letters, one after the other, side by side. */
+export const strokesFor = (grapheme: string): Stroke[] =>
+  [...grapheme].flatMap((ch, i) => (GLYPHS[ch] ?? []).map((s) => ({ ...s, d: i === 0 ? s.d : shiftPath(s.d, 64 * i) })));
+/** Width of the glyph area for a grapheme: 60 for one letter, 124 for two, 188 for three. */
+export const glyphWidth = (grapheme: string): number => 64 * [...grapheme].length - 4;
 
 /** Sample an absolute M/L/C path into points roughly `step` apart (pure, no DOM). */
 export const samplePath = (d: string, step = 4): Pt[] => {

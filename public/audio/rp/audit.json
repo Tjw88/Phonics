@@ -30,7 +30,22 @@
   "ai": "eɪ",
   "ee": "iː",
   "oa": "əʊ",
-  "oo": "uː"
+  "oo": "uː",
+  "j": "dʒ",
+  "v": "v",
+  "w": "w",
+  "x": "ks",
+  "y": "j",
+  "z": "z",
+  "qu": "kw",
+  "igh": "aɪ",
+  "ar": "ɑː",
+  "or": "ɔː",
+  "ur": "ɜː",
+  "ow": "aʊ",
+  "oi": "ɔɪ",
+  "ear": "ɪə",
+  "air": "ɛə"
  },
  "phonemes": {
   "s": {
@@ -875,34 +890,34 @@
     {
      "file": "rp/phonemes/ai_0.wav",
      "source": "piper:en_GB-cori-medium",
-     "method": "diphthong spoken slowly by the voice (glide kept), 522 ms",
+     "method": "diphthong spoken slowly by the voice (glide kept), 750 ms",
      "takes_needed": 1,
-     "ms": 522,
+     "ms": 750,
      "rms": 0.11,
-     "voiced_fraction": 0.92,
-     "centroid_hz": 462,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 522,
      "warnings": []
     },
     {
      "file": "rp/phonemes/ai_1.wav",
      "source": "piper:en_GB-cori-medium",
-     "method": "diphthong spoken slowly by the voice (glide kept), 750 ms",
+     "method": "diphthong spoken slowly by the voice (glide kept), 496 ms",
      "takes_needed": 1,
-     "ms": 750,
+     "ms": 496,
      "rms": 0.11,
-     "voiced_fraction": 0.88,
-     "centroid_hz": 422,
+     "voiced_fraction": 0.84,
+     "centroid_hz": 366,
      "warnings": []
     },
     {
      "file": "rp/phonemes/ai_2.wav",
      "source": "piper:en_GB-cori-medium",
-     "method": "diphthong spoken slowly by the voice (glide kept), 697 ms",
+     "method": "diphthong spoken slowly by the voice (glide kept), 536 ms",
      "takes_needed": 1,
-     "ms": 697,
+     "ms": 536,
      "rms": 0.11,
-     "voiced_fraction": 0.9,
-     "centroid_hz": 364,
+     "voiced_fraction": 0.93,
+     "centroid_hz": 481,
      "warnings": []
     }
    ]
@@ -1017,6 +1032,576 @@
      "rms": 0.11,
      "voiced_fraction": 0.98,
      "centroid_hz": 299,
+     "warnings": []
+    }
+   ]
+  },
+  "j": {
+   "expected_ipa": "dʒ",
+   "files": [
+    {
+     "file": "rp/phonemes/j_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "voiced affricate: the voice's own burst and buzz, 130 ms",
+     "takes_needed": 1,
+     "ms": 130,
+     "rms": 0.13,
+     "voiced_fraction": 0.0,
+     "centroid_hz": 3816,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/j_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "voiced affricate: the voice's own burst and buzz, 130 ms",
+     "takes_needed": 1,
+     "ms": 130,
+     "rms": 0.13,
+     "voiced_fraction": 0.05,
+     "centroid_hz": 3861,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/j_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "voiced affricate: the voice's own burst and buzz, 130 ms",
+     "takes_needed": 1,
+     "ms": 130,
+     "rms": 0.13,
+     "voiced_fraction": 0.18,
+     "centroid_hz": 3788,
+     "warnings": []
+    }
+   ]
+  },
+  "v": {
+   "expected_ipa": "v",
+   "files": [
+    {
+     "file": "rp/phonemes/v_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 70 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 347,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/v_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 218 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
+     "voiced_fraction": 0.98,
+     "centroid_hz": 898,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/v_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 70 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 253,
+     "warnings": []
+    }
+   ]
+  },
+  "w": {
+   "expected_ipa": "w",
+   "files": [
+    {
+     "file": "rp/phonemes/w_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 484,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/w_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 671,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/w_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 569,
+     "warnings": []
+    }
+   ]
+  },
+  "x": {
+   "expected_ipa": "ks",
+   "files": [
+    {
+     "file": "rp/phonemes/x_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "two sounds as one letter group: /k/ then /s/, joined, 448 ms",
+     "takes_needed": 1,
+     "ms": 448,
+     "rms": 0.12,
+     "voiced_fraction": 0.31,
+     "centroid_hz": 7077,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/x_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "two sounds as one letter group: /k/ then /s/, joined, 448 ms",
+     "takes_needed": 1,
+     "ms": 448,
+     "rms": 0.12,
+     "voiced_fraction": 0.27,
+     "centroid_hz": 7074,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/x_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "two sounds as one letter group: /k/ then /s/, joined, 448 ms",
+     "takes_needed": 1,
+     "ms": 448,
+     "rms": 0.12,
+     "voiced_fraction": 0.32,
+     "centroid_hz": 7104,
+     "warnings": []
+    }
+   ]
+  },
+  "y": {
+   "expected_ipa": "j",
+   "files": [
+    {
+     "file": "rp/phonemes/y_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 480,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/y_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 531,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/y_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 525,
+     "warnings": []
+    }
+   ]
+  },
+  "z": {
+   "expected_ipa": "z",
+   "files": [
+    {
+     "file": "rp/phonemes/z_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 113 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 2,
+     "ms": 430,
+     "rms": 0.13,
+     "voiced_fraction": 0.85,
+     "centroid_hz": 7507,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/z_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 143 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
+     "voiced_fraction": 0.8,
+     "centroid_hz": 7797,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/z_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "cut 148 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 2,
+     "ms": 430,
+     "rms": 0.13,
+     "voiced_fraction": 0.72,
+     "centroid_hz": 7103,
+     "warnings": []
+    }
+   ]
+  },
+  "qu": {
+   "expected_ipa": "kw",
+   "files": [
+    {
+     "file": "rp/phonemes/qu_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "two sounds as one letter group: /k/ then /w/, joined, 289 ms",
+     "takes_needed": 1,
+     "ms": 289,
+     "rms": 0.12,
+     "voiced_fraction": 0.94,
+     "centroid_hz": 562,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/qu_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "two sounds as one letter group: /k/ then /w/, joined, 289 ms",
+     "takes_needed": 1,
+     "ms": 289,
+     "rms": 0.12,
+     "voiced_fraction": 0.68,
+     "centroid_hz": 539,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/qu_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "two sounds as one letter group: /k/ then /w/, joined, 289 ms",
+     "takes_needed": 1,
+     "ms": 289,
+     "rms": 0.12,
+     "voiced_fraction": 0.57,
+     "centroid_hz": 627,
+     "warnings": []
+    }
+   ]
+  },
+  "igh": {
+   "expected_ipa": "aɪ",
+   "files": [
+    {
+     "file": "rp/phonemes/igh_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 695 ms",
+     "takes_needed": 1,
+     "ms": 695,
+     "rms": 0.11,
+     "voiced_fraction": 0.84,
+     "centroid_hz": 663,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/igh_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 750 ms",
+     "takes_needed": 1,
+     "ms": 750,
+     "rms": 0.11,
+     "voiced_fraction": 0.95,
+     "centroid_hz": 611,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/igh_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 552 ms",
+     "takes_needed": 1,
+     "ms": 552,
+     "rms": 0.11,
+     "voiced_fraction": 0.96,
+     "centroid_hz": 585,
+     "warnings": []
+    }
+   ]
+  },
+  "ar": {
+   "expected_ipa": "ɑː",
+   "files": [
+    {
+     "file": "rp/phonemes/ar_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.98,
+     "centroid_hz": 764,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/ar_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.96,
+     "centroid_hz": 868,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/ar_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.94,
+     "centroid_hz": 865,
+     "warnings": []
+    }
+   ]
+  },
+  "or": {
+   "expected_ipa": "ɔː",
+   "files": [
+    {
+     "file": "rp/phonemes/or_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.95,
+     "centroid_hz": 588,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/or_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.96,
+     "centroid_hz": 635,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/or_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.85,
+     "centroid_hz": 642,
+     "warnings": []
+    }
+   ]
+  },
+  "ur": {
+   "expected_ipa": "ɜː",
+   "files": [
+    {
+     "file": "rp/phonemes/ur_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.95,
+     "centroid_hz": 778,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/ur_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.96,
+     "centroid_hz": 805,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/ur_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.96,
+     "centroid_hz": 795,
+     "warnings": []
+    }
+   ]
+  },
+  "ow": {
+   "expected_ipa": "aʊ",
+   "files": [
+    {
+     "file": "rp/phonemes/ow_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 750 ms",
+     "takes_needed": 1,
+     "ms": 750,
+     "rms": 0.11,
+     "voiced_fraction": 0.85,
+     "centroid_hz": 795,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/ow_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 691 ms",
+     "takes_needed": 1,
+     "ms": 691,
+     "rms": 0.11,
+     "voiced_fraction": 0.83,
+     "centroid_hz": 699,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/ow_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 586 ms",
+     "takes_needed": 1,
+     "ms": 586,
+     "rms": 0.11,
+     "voiced_fraction": 0.89,
+     "centroid_hz": 704,
+     "warnings": []
+    }
+   ]
+  },
+  "oi": {
+   "expected_ipa": "ɔɪ",
+   "files": [
+    {
+     "file": "rp/phonemes/oi_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 622 ms",
+     "takes_needed": 1,
+     "ms": 622,
+     "rms": 0.11,
+     "voiced_fraction": 0.93,
+     "centroid_hz": 334,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/oi_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 459 ms",
+     "takes_needed": 3,
+     "ms": 459,
+     "rms": 0.11,
+     "voiced_fraction": 0.99,
+     "centroid_hz": 413,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/oi_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 514 ms",
+     "takes_needed": 3,
+     "ms": 514,
+     "rms": 0.11,
+     "voiced_fraction": 0.89,
+     "centroid_hz": 373,
+     "warnings": []
+    }
+   ]
+  },
+  "ear": {
+   "expected_ipa": "ɪə",
+   "files": [
+    {
+     "file": "rp/phonemes/ear_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 651 ms",
+     "takes_needed": 1,
+     "ms": 651,
+     "rms": 0.11,
+     "voiced_fraction": 0.95,
+     "centroid_hz": 607,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/ear_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 599 ms",
+     "takes_needed": 1,
+     "ms": 599,
+     "rms": 0.11,
+     "voiced_fraction": 0.97,
+     "centroid_hz": 564,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/ear_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 750 ms",
+     "takes_needed": 1,
+     "ms": 750,
+     "rms": 0.11,
+     "voiced_fraction": 0.99,
+     "centroid_hz": 597,
+     "warnings": []
+    }
+   ]
+  },
+  "air": {
+   "expected_ipa": "ɛə",
+   "files": [
+    {
+     "file": "rp/phonemes/air_0.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 691 ms",
+     "takes_needed": 2,
+     "ms": 691,
+     "rms": 0.11,
+     "voiced_fraction": 0.91,
+     "centroid_hz": 522,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/air_1.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 537 ms",
+     "takes_needed": 1,
+     "ms": 537,
+     "rms": 0.11,
+     "voiced_fraction": 0.91,
+     "centroid_hz": 559,
+     "warnings": []
+    },
+    {
+     "file": "rp/phonemes/air_2.wav",
+     "source": "piper:en_GB-cori-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 624 ms",
+     "takes_needed": 1,
+     "ms": 624,
+     "rms": 0.11,
+     "voiced_fraction": 0.95,
+     "centroid_hz": 786,
      "warnings": []
     }
    ]
@@ -1755,64 +2340,64 @@
    "ms": 434
   },
   "rain": {
-   "phonemes": "ɹˈeɪːn",
-   "ms": 421
+   "phonemes": "ɹˈeɪn",
+   "ms": 382
   },
   "snail": {
-   "phonemes": "snˈeɪːl",
-   "ms": 679
+   "phonemes": "snˈeɪl",
+   "ms": 588
   },
   "sail": {
-   "phonemes": "sˈeɪːl",
-   "ms": 472
+   "phonemes": "sˈeɪl",
+   "ms": 494
   },
   "chain": {
-   "phonemes": "tʃˈeɪːn",
-   "ms": 521
+   "phonemes": "tʃˈeɪn",
+   "ms": 474
   },
   "pain": {
-   "phonemes": "pˈeɪːn",
-   "ms": 540
+   "phonemes": "pˈeɪn",
+   "ms": 463
   },
   "main": {
-   "phonemes": "mˈeɪːn",
-   "ms": 441
+   "phonemes": "mˈeɪn",
+   "ms": 510
   },
   "gain": {
-   "phonemes": "ɡˈeɪːn",
-   "ms": 377
+   "phonemes": "ɡˈeɪn",
+   "ms": 378
   },
   "tail": {
-   "phonemes": "tˈeɪːl",
-   "ms": 495
+   "phonemes": "tˈeɪl",
+   "ms": 540
   },
   "mail": {
-   "phonemes": "mˈeɪːl",
-   "ms": 491
+   "phonemes": "mˈeɪl",
+   "ms": 501
   },
   "rail": {
-   "phonemes": "ɹˈeɪːl",
-   "ms": 483
+   "phonemes": "ɹˈeɪl",
+   "ms": 497
   },
   "fail": {
-   "phonemes": "fˈeɪːl",
-   "ms": 512
+   "phonemes": "fˈeɪl",
+   "ms": 485
   },
   "paint": {
-   "phonemes": "pˈeɪːnt",
-   "ms": 461
+   "phonemes": "pˈeɪnt",
+   "ms": 512
   },
   "bait": {
-   "phonemes": "bˈeɪːt",
-   "ms": 399
+   "phonemes": "bˈeɪt",
+   "ms": 411
   },
   "raid": {
-   "phonemes": "ɹˈeɪːd",
-   "ms": 374
+   "phonemes": "ɹˈeɪd",
+   "ms": 547
   },
   "maid": {
-   "phonemes": "mˈeɪːd",
-   "ms": 436
+   "phonemes": "mˈeɪd",
+   "ms": 580
   },
   "see": {
    "phonemes": "sˈiː",
@@ -2003,12 +2588,592 @@
    "ms": 392
   },
   "train": {
-   "phonemes": "tɹˈeɪːn",
-   "ms": 536
+   "phonemes": "tɹˈeɪn",
+   "ms": 598
   },
   "nail": {
-   "phonemes": "nˈeɪːl",
-   "ms": 530
+   "phonemes": "nˈeɪl",
+   "ms": 597
+  },
+  "jam": {
+   "phonemes": "dʒˈæm",
+   "ms": 542
+  },
+  "jet": {
+   "phonemes": "dʒˈɛt",
+   "ms": 463
+  },
+  "jug": {
+   "phonemes": "dʒˈʌɡ",
+   "ms": 366
+  },
+  "jog": {
+   "phonemes": "dʒˈɒɡ",
+   "ms": 397
+  },
+  "jump": {
+   "phonemes": "dʒˈʌmp",
+   "ms": 387
+  },
+  "job": {
+   "phonemes": "dʒˈɒb",
+   "ms": 343
+  },
+  "jack": {
+   "phonemes": "dʒˈæk",
+   "ms": 429
+  },
+  "van": {
+   "phonemes": "vˈæn",
+   "ms": 372
+  },
+  "vet": {
+   "phonemes": "vˈɛt",
+   "ms": 401
+  },
+  "vest": {
+   "phonemes": "vˈɛst",
+   "ms": 434
+  },
+  "vat": {
+   "phonemes": "vˈæt",
+   "ms": 458
+  },
+  "vent": {
+   "phonemes": "vˈɛnt",
+   "ms": 460
+  },
+  "web": {
+   "phonemes": "wˈɛb",
+   "ms": 385
+  },
+  "wig": {
+   "phonemes": "wˈɪɡ",
+   "ms": 412
+  },
+  "wet": {
+   "phonemes": "wˈɛt",
+   "ms": 428
+  },
+  "win": {
+   "phonemes": "wˈɪn",
+   "ms": 413
+  },
+  "wag": {
+   "phonemes": "wˈæɡ",
+   "ms": 582
+  },
+  "wax": {
+   "phonemes": "wˈæks",
+   "ms": 631
+  },
+  "wish": {
+   "phonemes": "wˈɪʃ",
+   "ms": 704
+  },
+  "wing": {
+   "phonemes": "wˈɪŋ",
+   "ms": 430
+  },
+  "swing": {
+   "phonemes": "swˈɪŋ",
+   "ms": 526
+  },
+  "well": {
+   "phonemes": "wˈɛl",
+   "ms": 382
+  },
+  "wick": {
+   "phonemes": "wˈɪk",
+   "ms": 339
+  },
+  "box": {
+   "phonemes": "bˈɒks",
+   "ms": 563
+  },
+  "six": {
+   "phonemes": "sˈɪks",
+   "ms": 565
+  },
+  "mix": {
+   "phonemes": "mˈɪks",
+   "ms": 483
+  },
+  "fix": {
+   "phonemes": "fˈɪks",
+   "ms": 596
+  },
+  "tax": {
+   "phonemes": "tˈæks",
+   "ms": 611
+  },
+  "next": {
+   "phonemes": "nˈɛkst",
+   "ms": 586
+  },
+  "ox": {
+   "phonemes": "ˈɒks",
+   "ms": 506
+  },
+  "yes": {
+   "phonemes": "jˈɛs",
+   "ms": 403
+  },
+  "yam": {
+   "phonemes": "jˈæm",
+   "ms": 288
+  },
+  "yum": {
+   "phonemes": "jˈʌm",
+   "ms": 344
+  },
+  "yack": {
+   "phonemes": "jˈæk",
+   "ms": 356
+  },
+  "yell": {
+   "phonemes": "jˈɛl",
+   "ms": 345
+  },
+  "yet": {
+   "phonemes": "jˈɛt",
+   "ms": 448
+  },
+  "yap": {
+   "phonemes": "jˈæp",
+   "ms": 391
+  },
+  "zip": {
+   "phonemes": "zˈɪp",
+   "ms": 399
+  },
+  "zap": {
+   "phonemes": "zˈæp",
+   "ms": 439
+  },
+  "zig": {
+   "phonemes": "zˈɪɡ",
+   "ms": 441
+  },
+  "zoo": {
+   "phonemes": "zˈuː",
+   "ms": 248
+  },
+  "zoom": {
+   "phonemes": "zˈuːm",
+   "ms": 408
+  },
+  "zest": {
+   "phonemes": "zˈɛst",
+   "ms": 553
+  },
+  "buzz": {
+   "phonemes": "bˈʌz",
+   "ms": 419
+  },
+  "fizz": {
+   "phonemes": "fˈɪz",
+   "ms": 532
+  },
+  "jazz": {
+   "phonemes": "dʒˈæz",
+   "ms": 610
+  },
+  "fuzz": {
+   "phonemes": "fˈʌz",
+   "ms": 586
+  },
+  "quit": {
+   "phonemes": "kwˈɪt",
+   "ms": 386
+  },
+  "quiz": {
+   "phonemes": "kwˈɪz",
+   "ms": 432
+  },
+  "quick": {
+   "phonemes": "kwˈɪk",
+   "ms": 387
+  },
+  "quack": {
+   "phonemes": "kwˈæk",
+   "ms": 467
+  },
+  "queen": {
+   "phonemes": "kwˈiːn",
+   "ms": 548
+  },
+  "quill": {
+   "phonemes": "kwˈɪl",
+   "ms": 464
+  },
+  "quilt": {
+   "phonemes": "kwˈɪlt",
+   "ms": 495
+  },
+  "quest": {
+   "phonemes": "kwˈɛst",
+   "ms": 483
+  },
+  "high": {
+   "phonemes": "hˈaɪ",
+   "ms": 480
+  },
+  "sigh": {
+   "phonemes": "sˈaɪ",
+   "ms": 401
+  },
+  "night": {
+   "phonemes": "nˈaɪt",
+   "ms": 540
+  },
+  "light": {
+   "phonemes": "lˈaɪt",
+   "ms": 506
+  },
+  "right": {
+   "phonemes": "ɹˈaɪt",
+   "ms": 508
+  },
+  "tight": {
+   "phonemes": "tˈaɪt",
+   "ms": 483
+  },
+  "might": {
+   "phonemes": "mˈaɪt",
+   "ms": 488
+  },
+  "sight": {
+   "phonemes": "sˈaɪt",
+   "ms": 478
+  },
+  "bright": {
+   "phonemes": "bɹˈaɪt",
+   "ms": 548
+  },
+  "flight": {
+   "phonemes": "flˈaɪt",
+   "ms": 624
+  },
+  "thigh": {
+   "phonemes": "θˈaɪ",
+   "ms": 395
+  },
+  "jar": {
+   "phonemes": "dʒˈɑː",
+   "ms": 495
+  },
+  "bar": {
+   "phonemes": "bˈɑː",
+   "ms": 457
+  },
+  "far": {
+   "phonemes": "fˈɑː",
+   "ms": 332
+  },
+  "arm": {
+   "phonemes": "ˈɑːm",
+   "ms": 451
+  },
+  "art": {
+   "phonemes": "ˈɑːt",
+   "ms": 424
+  },
+  "farm": {
+   "phonemes": "fˈɑːm",
+   "ms": 474
+  },
+  "barn": {
+   "phonemes": "bˈɑːn",
+   "ms": 450
+  },
+  "park": {
+   "phonemes": "pˈɑːk",
+   "ms": 481
+  },
+  "dark": {
+   "phonemes": "dˈɑːk",
+   "ms": 435
+  },
+  "shark": {
+   "phonemes": "ʃˈɑːk",
+   "ms": 494
+  },
+  "yard": {
+   "phonemes": "jˈɑːd",
+   "ms": 541
+  },
+  "card": {
+   "phonemes": "kˈɑːd",
+   "ms": 610
+  },
+  "for": {
+   "phonemes": "fˈɔː",
+   "ms": 338
+  },
+  "fork": {
+   "phonemes": "fˈɔːk",
+   "ms": 409
+  },
+  "corn": {
+   "phonemes": "kˈɔːn",
+   "ms": 443
+  },
+  "horn": {
+   "phonemes": "hˈɔːn",
+   "ms": 442
+  },
+  "born": {
+   "phonemes": "bˈɔːn",
+   "ms": 498
+  },
+  "storm": {
+   "phonemes": "stˈɔːm",
+   "ms": 586
+  },
+  "sort": {
+   "phonemes": "sˈɔːt",
+   "ms": 401
+  },
+  "short": {
+   "phonemes": "ʃˈɔːt",
+   "ms": 529
+  },
+  "north": {
+   "phonemes": "nˈɔːθ",
+   "ms": 566
+  },
+  "torch": {
+   "phonemes": "tˈɔːtʃ",
+   "ms": 731
+  },
+  "fort": {
+   "phonemes": "fˈɔːt",
+   "ms": 501
+  },
+  "cork": {
+   "phonemes": "kˈɔːk",
+   "ms": 416
+  },
+  "pork": {
+   "phonemes": "pˈɔːk",
+   "ms": 428
+  },
+  "sport": {
+   "phonemes": "spˈɔːt",
+   "ms": 480
+  },
+  "fur": {
+   "phonemes": "fˈɜː",
+   "ms": 423
+  },
+  "burn": {
+   "phonemes": "bˈɜːn",
+   "ms": 461
+  },
+  "turn": {
+   "phonemes": "tˈɜːn",
+   "ms": 577
+  },
+  "hurt": {
+   "phonemes": "hˈɜːt",
+   "ms": 459
+  },
+  "curl": {
+   "phonemes": "kˈɜːl",
+   "ms": 405
+  },
+  "surf": {
+   "phonemes": "sˈɜːf",
+   "ms": 498
+  },
+  "purr": {
+   "phonemes": "pˈɜːɹ",
+   "ms": 430
+  },
+  "church": {
+   "phonemes": "tʃˈɜːtʃ",
+   "ms": 669
+  },
+  "burst": {
+   "phonemes": "bˈɜːst",
+   "ms": 572
+  },
+  "now": {
+   "phonemes": "nˈaʊ",
+   "ms": 360
+  },
+  "how": {
+   "phonemes": "hˈaʊ",
+   "ms": 455
+  },
+  "wow": {
+   "phonemes": "wˈaʊ",
+   "ms": 449
+  },
+  "owl": {
+   "phonemes": "ˈaʊl",
+   "ms": 353
+  },
+  "down": {
+   "phonemes": "dˈaʊn",
+   "ms": 406
+  },
+  "town": {
+   "phonemes": "tˈaʊn",
+   "ms": 475
+  },
+  "clown": {
+   "phonemes": "klˈaʊn",
+   "ms": 559
+  },
+  "brown": {
+   "phonemes": "bɹˈaʊn",
+   "ms": 537
+  },
+  "crown": {
+   "phonemes": "kɹˈaʊn",
+   "ms": 487
+  },
+  "growl": {
+   "phonemes": "ɡɹˈaʊl",
+   "ms": 563
+  },
+  "oil": {
+   "phonemes": "ˈɔɪl",
+   "ms": 223
+  },
+  "coin": {
+   "phonemes": "kˈɔɪn",
+   "ms": 476
+  },
+  "boil": {
+   "phonemes": "bˈɔɪl",
+   "ms": 470
+  },
+  "soil": {
+   "phonemes": "sˈɔɪl",
+   "ms": 563
+  },
+  "join": {
+   "phonemes": "dʒˈɔɪn",
+   "ms": 564
+  },
+  "foil": {
+   "phonemes": "fˈɔɪl",
+   "ms": 616
+  },
+  "toil": {
+   "phonemes": "tˈɔɪl",
+   "ms": 529
+  },
+  "point": {
+   "phonemes": "pˈɔɪnt",
+   "ms": 496
+  },
+  "ear": {
+   "phonemes": "ˈɪə",
+   "ms": 406
+  },
+  "hear": {
+   "phonemes": "hˈɪə",
+   "ms": 288
+  },
+  "near": {
+   "phonemes": "nˈɪə",
+   "ms": 412
+  },
+  "dear": {
+   "phonemes": "dˈɪə",
+   "ms": 381
+  },
+  "fear": {
+   "phonemes": "fˈɪə",
+   "ms": 473
+  },
+  "gear": {
+   "phonemes": "ɡˈɪə",
+   "ms": 424
+  },
+  "rear": {
+   "phonemes": "ɹˈɪə",
+   "ms": 482
+  },
+  "year": {
+   "phonemes": "jˈɪə",
+   "ms": 421
+  },
+  "clear": {
+   "phonemes": "klˈɪə",
+   "ms": 491
+  },
+  "beard": {
+   "phonemes": "bˈɪəd",
+   "ms": 431
+  },
+  "spear": {
+   "phonemes": "spˈɪə",
+   "ms": 526
+  },
+  "air": {
+   "phonemes": "ˈɛə",
+   "ms": 249
+  },
+  "hair": {
+   "phonemes": "hˈɛə",
+   "ms": 380
+  },
+  "pair": {
+   "phonemes": "pˈɛə",
+   "ms": 258
+  },
+  "fair": {
+   "phonemes": "fˈɛə",
+   "ms": 481
+  },
+  "stair": {
+   "phonemes": "stˈɛə",
+   "ms": 492
+  },
+  "lair": {
+   "phonemes": "lˈɛə",
+   "ms": 437
+  },
+  "flair": {
+   "phonemes": "flˈɛə",
+   "ms": 606
+  },
+  "her": {
+   "phonemes": "hˈɜː",
+   "ms": 400
+  },
+  "fern": {
+   "phonemes": "fˈɜːn",
+   "ms": 455
+  },
+  "term": {
+   "phonemes": "tˈɜːm",
+   "ms": 536
+  },
+  "herd": {
+   "phonemes": "hˈɜːd",
+   "ms": 445
+  },
+  "verb": {
+   "phonemes": "vˈɜːb",
+   "ms": 407
+  },
+  "kerb": {
+   "phonemes": "kˈɜːb",
+   "ms": 323
+  },
+  "perch": {
+   "phonemes": "pˈɜːtʃ",
+   "ms": 542
+  },
+  "cow": {
+   "phonemes": "kˈaʊ",
+   "ms": 444
   }
  },
  "phrases": {
@@ -2231,7 +3396,22 @@
   "chick": "ok",
   "thumb": "ok",
   "thread": "ok",
-  "thunder": "ok"
+  "thunder": "ok",
+  "jet": "ok",
+  "jam": "ok",
+  "jug": "ok",
+  "van": "ok",
+  "vest": "ok",
+  "web": "ok",
+  "wig": "ok",
+  "wing": "ok",
+  "yak": "ok",
+  "yoyo": "ok",
+  "zip": "ok",
+  "zoo": "ok",
+  "zebra": "ok",
+  "queen": "ok",
+  "quilt": "ok"
  },
  "problems": [],
  "warnings": [],

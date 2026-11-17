@@ -29,6 +29,8 @@ MNEMONIC = {
     "e": "E", "u": "V", "r": "r-", "h": "h", "b": "b", "f": "f", "l": "l",
     "sh": "S", "ch": "tS", "th": "T", "ng": "N",
     "ai": "eI", "ee": "i:", "oa": "oU", "oo": "u:",
+    "j": "dZ", "v": "v", "w": "w", "x": "ks", "y": "j", "z": "z", "qu": "kw",
+    "igh": "aI", "ar": "A:", "or": "O:", "ur": "3:", "ow": "aU", "oi": "OI", "ear": "I@", "air": "E@",
 }
 # What each accent SHOULD teach, as IPA. Anything not listed here is the RP value below.
 BASE_IPA = {
@@ -36,13 +38,15 @@ BASE_IPA = {
     "e": "ɛ", "u": "ʌ", "r": "ɹ", "h": "h", "b": "b", "f": "f", "l": "l",
     "sh": "ʃ", "ch": "tʃ", "th": "θ", "ng": "ŋ",
     "ai": "eɪ", "ee": "iː", "oa": "əʊ", "oo": "uː",
+    "j": "dʒ", "v": "v", "w": "w", "x": "ks", "y": "j", "z": "z", "qu": "kw",
+    "igh": "aɪ", "ar": "ɑː", "or": "ɔː", "ur": "ɜː", "ow": "aʊ", "oi": "ɔɪ", "ear": "ɪə", "air": "ɛə",
 }
 ACCENTS = {
     "rp": {"label": "Southern British (RP)", "voice": "en-GB-x-rp", "ipa": {}},
     # FOOT-STRUT merger (cup = /kʊp/) and short /a/ in pass/bath: the two features that change what phonics teaches.
     # The engine's only northern voice is Lancashire; there is no Yorkshire voice.
     # (West Midlands, en-GB-x-gbcwmd, was rejected outright: it drops /h/ ("hill" -> /ɪl/), which would teach /h/ wrongly.)
-    "north": {"label": "Northern English", "voice": "en-GB-x-gbclan", "ipa": {"a": "a", "u": "ʊ"}},
+    "north": {"label": "Northern English", "voice": "en-GB-x-gbclan", "ipa": {"a": "a", "u": "ʊ", "air": "ɛː"}},
     # Scots /r/ is a tap: the engine's own isolated /r/ is a ~40 ms tap, so it is used instead of the formant approximant.
     "scotland": {"label": "Scottish", "voice": "en-GB-scotland", "ipa": {"a": "a", "r": "r"}, "espeak_r": True,
                  "enabled": False,
@@ -54,11 +58,13 @@ GRAPHEME_KEY = {  # grapheme -> phoneme key (digraphs share the single sound)
     "k": "k", "ck": "k", "e": "e", "u": "u", "r": "r", "h": "h", "b": "b", "f": "f", "ff": "f", "l": "l", "ll": "l",
     "ss": "s", "gg": "g", "sh": "sh", "ch": "ch", "th": "th", "ng": "ng",
     "ai": "ai", "ee": "ee", "oa": "oa", "oo": "oo",
+    "j": "j", "v": "v", "w": "w", "x": "x", "y": "y", "z": "z", "zz": "z", "qu": "qu",
+    "igh": "igh", "ar": "ar", "or": "or", "ur": "ur", "er": "ur", "ow": "ow", "oi": "oi", "ear": "ear", "air": "air",
 }
 STOPS = {"p", "t", "k", "b", "d", "g"}
 VOICELESS_STOPS = {"p", "t", "k"}
 MAX_MS = {"s": 420, "f": 420, "h": 380, "m": 380, "n": 380, "l": 380, "r": 380}
-VOWELS = {"a", "i", "o", "e", "u", "ai", "ee", "oa", "oo"}
+VOWELS = {"a", "i", "o", "e", "u", "ai", "ee", "oa", "oo", "igh", "ar", "or", "ur", "ow", "oi", "ear", "air"}
 FRICATIVE_LONG = {"s": "s:", "f": "f:", "h": "h:"}  # the engine's own lengthening works for these
 # espeak-ng renders a lone /b d g/ as SILENCE and a lone /m n l r/ as ~40 ms, so these seven come from formant.py
 WEAK_FORM_WORDS = {"an", "in", "it", "at", "am", "ad", "on", "up", "us", "if", "as", "is"}  # engine may reduce these

@@ -36,10 +36,11 @@ ACCENT_VOICES = {
               "Northern English male (OpenSLR 83), CC BY-SA 4.0"),
 }
 NORTH_MAP = {"ʌ": "ʊ", "æ": "a"}  # applied to Piper's own RP phonemisation of ordinary words (Safari words, phrases)
-VOWEL_SYMS = {"æ", "a", "ɪ", "ɒ", "ɛ", "ʌ", "ʊ", "eɪ", "iː", "əʊ", "uː"}
-DIPHTHONGS = {"ai", "oa"}  # a glide: keep the voice's own movement, do not loop it into a steady vowel
+VOWEL_SYMS = {"æ", "a", "ɪ", "ɒ", "ɛ", "ʌ", "ʊ", "eɪ", "iː", "əʊ", "uː", "aɪ", "ɑː", "ɔː", "ɜː", "aʊ", "ɔɪ", "ɪə", "ɛə", "ɛː"}
+DIPHTHONGS = {"ai", "oa", "igh", "ow", "oi", "ear", "air"}  # a glide: keep the voice's own movement, do not loop it into a steady vowel
 LS_WORD, NS, NW = 1.25, 0.5, 0.6  # slower than normal speech for children; steady (low noise) delivery
-CLASS = {"s": "fric", "f": "fric", "h": "fric", "sh": "fric", "th": "fric", "ch": "affr", "m": "sonor", "n": "sonor", "ng": "sonor", "l": "sonor", "r": "sonor",
+CLASS = {"v": "vfric", "z": "vfric", "j": "affrv", "w": "vstop1", "y": "vstop1", "x": "seq", "qu": "seq",
+         "s": "fric", "f": "fric", "h": "fric", "sh": "fric", "th": "fric", "ch": "affr", "m": "sonor", "n": "sonor", "ng": "sonor", "l": "sonor", "r": "sonor",
          "p": "vstop0", "t": "vstop0", "k": "vstop0", "b": "vstop1", "d": "vstop1", "g": "vstop1"}
 TARGET_MS = {"fric": 480, "sonor": 430, "vowel": 520}
 NASALS = ("m", "n", "ng")
@@ -170,7 +171,7 @@ def syms(s):
 
 
 def carrier(voice, c_sym, kind):
-    ls = {"fric": 3.0, "sonor": 3.5, "affr": 2.2}.get(kind, 1.4)
+    ls = {"fric": 3.0, "sonor": 3.5, "vfric": 3.0, "affr": 2.2, "affrv": 2.2}.get(kind, 1.4)
     return trim(speak_ids(voice, to_ids(voice, [*syms(c_sym), "ˈ", "ʌ"]), ls))
 
 
@@ -184,8 +185,29 @@ def lowfreq_ratio(a, hop, win_ms=20, cut_hz=700):
     return np.array(out)
 
 
+def render_seq(voice, key):
+    """x (/ks/) and qu (/kw/) are ONE letter group that says two sounds: join the first sound's clip to the second's, close together."""
+    parts = {"x": ("k", "s"), "qu": ("k", "w")}[key]
+    clips = []
+    for k2 in parts:
+        c2, _ = render_consonant(voice, k2, G.BASE_IPA[k2])
+        clips.append(c2)
+    first, second = clips
+    if key == "x":
+        first = first[: int(SR * 0.16)]
+        second = fade_out(second[: int(SR * 0.30)], 70)
+    else:
+        first = first[: int(SR * 0.13)]
+    xf = int(SR * 0.012)
+    first = fade_out(first, 10)
+    clip = np.concatenate([first[:-xf], first[-xf:] * np.linspace(1, 0, xf) + second[:xf] * np.linspace(0, 1, xf), second[xf:]])
+    return normalise(clip, 0.12), {"method": f"two sounds as one letter group: /{parts[0]}/ then /{parts[1]}/, joined, {len(clip) / SR * 1000:.0f} ms"}
+
+
 def render_consonant(voice, key, ipa_sym):
     kind = CLASS[key]
+    if kind == "seq":
+        return render_seq(voice, key)
     a = carrier(voice, ipa_sym, kind)
     env, h = env_of(a)
     peak = float(env.max()) or 1.0
@@ -197,7 +219,7 @@ def render_consonant(voice, key, ipa_sym):
         clip = sustain_noise(part, TARGET_MS["fric"])
         clip = fade_out(fade_in(clip, 25), 70)
         info["method"] = f"cut {len(part) / SR * 1000:.0f} ms of hiss before the vowel, granular resynthesis to {TARGET_MS['fric']} ms"
-    elif kind == "sonor":
+    elif kind in ("sonor", "vfric"):
         if key in NASALS:
             lr = lowfreq_ratio(a, h)
             first = next((i for i in range(len(lr)) if lr[i] > 0.8), 0)  # nasal murmur: energy almost all below 700 Hz
@@ -219,6 +241,12 @@ def render_consonant(voice, key, ipa_sym):
         clip = np.concatenate([head[:-xf], head[-xf:] * np.linspace(1, 0, xf) + hiss[:xf] * np.linspace(0, 1, xf), hiss[xf:]])
         clip = fade_out(clip, 60)
         info["method"] = f"affricate: natural burst + {len(part) / SR * 1000:.0f} ms of the voice's own frication, hiss lengthened to ~{len(clip) / SR * 1000:.0f} ms"
+    elif kind == "affrv":
+        # /j/ (dʒ) is a stop then VOICED friction: keep the voice's own burst and buzz up to the vowel (looping the hiss would lose the voicing)
+        on = next((i for i in range(len(v)) if v[i] and i < len(env) and env[i] > 0.3 * peak), len(env) // 2)
+        part = a[: max(int(SR * 0.13), on * h - int(SR * 0.01))]
+        clip = fade_out(part, 70)
+        info["method"] = f"voiced affricate: the voice's own burst and buzz, {len(clip) / SR * 1000:.0f} ms"
     elif kind == "vstop0":
         # /p t k/ are unvoiced: PURE sounds are allowed. Burst + a breathy (voiceless) release, no voiced vowel.
         st = next((i for i in range(len(env)) if env[i] > 0.10 * peak), 0)
@@ -242,11 +270,11 @@ def render_consonant(voice, key, ipa_sym):
 
 
 def render_vowel(voice, ipa_sym, key=None):
-    ids = ["ˈ", *syms(ipa_sym)]
+    ids = ["ˈ", ipa_sym] if ipa_sym in voice.config.phoneme_id_map else ["ˈ", *syms(ipa_sym)]  # one symbol where the voice has one
     if key in DIPHTHONGS:
         # a diphthong is a glide (e to i): looping its middle would flatten it into a steady vowel, so slow the voice down
         # until the whole glide is long enough to hear
-        for ls in (2.4, 3.0, 3.6, 4.2):
+        for ls in (2.4, 3.0, 3.6, 4.2, 5.0, 6.0):
             a = trim(speak_ids(voice, to_ids(voice, ids), ls))
             if len(a) >= int(SR * 0.52):
                 break
@@ -275,13 +303,17 @@ def checks_for(key, clip):
     kind = CLASS.get(key, "vowel")
     if rms < 0.04: warn.append("very quiet")
     if kind == "vowel" and vf < 0.6: warn.append("vowel not clearly voiced (this take is breathy or noisy)")
+    if kind == "vowel" and ms < 450: warn.append("vowel too short to hear")
     if kind == "fric" and ms < 300: warn.append("short")
     if kind == "sonor" and (ms < 300 or vf < 0.5): warn.append("short or not clearly voiced")
     if kind == "fric" and key == "s" and out["centroid_hz"] < 4000: warn.append("/s/ should be bright (centroid >4 kHz)")
     if key == "sh" and not (2200 <= out["centroid_hz"] <= 5200): warn.append("/sh/ should sit lower than /s/ (centroid about 2.5-5 kHz)")
-    if kind in ("fric", "affr") and out["voiced_fraction"] > 0.2: warn.append("should be voiceless (this take has a voiced murmur)")
+    if kind in ("fric", "affr") and key not in ("v", "z", "j") and out["voiced_fraction"] > 0.2: warn.append("should be voiceless (this take has a voiced murmur)")
     if key == "th" and out["centroid_hz"] < 3500: warn.append("/th/ should be a bright, flat hiss (centroid > 3.5 kHz)")
     if kind == "affr" and not (150 <= ms <= 450): warn.append("affricate length odd")
+    if kind == "affrv" and not (110 <= ms <= 450): warn.append("voiced affricate length odd")
+    if kind == "vfric" and (ms < 300 or vf < 0.3): warn.append("voiced fricative short or not voiced")
+    if kind == "seq" and not (250 <= ms <= 700): warn.append("two-sound letter group length odd")
     if kind == "sonor" and key in NASALS and out["centroid_hz"] > 1800: warn.append("nasal looks too bright")
     if kind.startswith("vstop") and not (130 <= ms <= 320): warn.append("stop length odd")
     out["warnings"] = warn
@@ -289,18 +321,24 @@ def checks_for(key, clip):
 
 
 # ---- words / phrases -------------------------------------------------------------------------------------------
-def word_phonemes(graphemes, ipa):
+def word_phonemes(graphemes, ipa, voice=None):
+    """The phoneme string for a word. A diphthong is ONE symbol where the voice has one (RP: aɪ aʊ ɔɪ eɪ): spoken as two separate
+    symbols ("a" then "ɪ") the voice squeezes it into a short vowel (a recogniser heard night as knit, cow as coo; understood 0/11 igh words
+    that way and 8/11 with the single symbol). A voice with no such symbol (the Northern one) gets the two symbols, plus a length mark after
+    eɪ, which helped there."""
+    have = voice.config.phoneme_id_map if voice is not None else {}
     syms, done = [], False
     for g in graphemes:
         s = ipa[G.GRAPHEME_KEY[g]]
         if s in VOWEL_SYMS and not done:
             syms.append("ˈ")
             done = True
-        syms.extend(list(s))
-        # In running words the voice squeezes the glide of /eɪ/ into a short, flat vowel (a recogniser heard sail/tail/pain as cell/tell/pen:
-        # 2/12 understood). A length mark after it keeps the glide (8/12). /əʊ/ did not need it (15/16 without, 13/16 with), so it is left alone.
-        if s == "eɪ":
-            syms.append("ː")
+        if s in have:
+            syms.append(s)
+        else:
+            syms.extend(list(s))
+            if s == "eɪ":
+                syms.append("ː")
     return syms
 
 
@@ -403,7 +441,7 @@ def generate(accent, bank, shared_unused):
         if have(rel):
             manifest["words"][text] = rel
             continue
-        ph = word_phonemes(gr, ipa)
+        ph = word_phonemes(gr, ipa, voice)
         a = normalise(trim(speak_ids(voice, to_ids(voice, ph))), 0.1)
         write(rel, a)
         manifest["words"][text] = rel
@@ -457,7 +495,7 @@ def generate(accent, bank, shared_unused):
         for w in bank["words"]:
             if w["text"] in removed:
                 continue
-            ph = word_phonemes(w["graphemes"], ipa)
+            ph = word_phonemes(w["graphemes"], ipa, voice)
             lead = text_phonemes(voice, "The word is", accent)[0]
             a = speak_sentences(voice, [lead, ph])
             got = asr_check.transcribe(a, SR)

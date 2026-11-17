@@ -201,7 +201,7 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
       if (shot && !seen.has('cross')) { seen.add('cross'); await page.waitForTimeout(800); await page.screenshot({ path: `${shots}/${shot}-crossing.png` }); }
       await scenePast(page, sid); // wait for the scene to change, not a fixed sleep
     } else {
-      for (const id of ['story-next', 'alive-next', 'goodnight', 'sleep-next', 'next']) {
+      for (const id of ['story-next', 'alive-next', 'treasure', 'goodnight', 'sleep-next', 'next']) {
         if (await has(id)) {
           if (shot && id === 'story-next' && !seen.has('story')) { seen.add('story'); await page.screenshot({ path: `${shots}/${shot}-story.png` }); }
           if (id === 'goodnight' && !seen.has('mission')) {
@@ -327,7 +327,7 @@ async function playAdventure(page, { wrongFirst = false, shot, start = true, sto
   await page.click('[data-testid=parent-btn]');
   await passGate(page);
   await page.click('[data-testid=tab-sounds]');
-  check((await page.locator('[data-testid=mapcell]').count()) === 31, 'sound map shows all 31 sounds (sets 1-7)');
+  check((await page.locator('[data-testid=mapcell]').count()) === 48, 'sound map shows all 48 sounds (sets 1-12)');
   const cell = await page.locator('[data-testid=mapcell][data-id=i]').getAttribute('data-status');
   check(cell === 'learning', 'new sound shows as learning (not secure after one day)');
   await page.screenshot({ path: `${shots}/parent-sounds.png` });

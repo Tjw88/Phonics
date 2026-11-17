@@ -1,0 +1,120 @@
+/* animation cycle: styles for the flow and scenes area (hatch, scene cross-fade, end of day, goodnight, home idle, Free Play doors).
+   Imported by app.ts after style.css, so these win over the older rules. Transforms and opacity only; every loop is slow;
+   Reduce Motion is handled by the rules at the end of this file and by reducedMotion() in the scripts. */
+
+/* ---------- scene cross-fade (see mount() in fx.ts: the old card is frozen in place as a ghost and fades out under the new one) ---------- */
+#stage { position: relative; }
+.scene { animation: none; z-index: 1; }       /* the entrance is a Web Animation started by mount(), not this CSS */
+.scene.scene-ghost { z-index: 0; pointer-events: none; }
+.scene-ghost * { pointer-events: none !important; animation-play-state: paused; }
+
+/* ---------- hatch / arrival ---------- */
+.hatch-stage { position: relative; width: clamp(200px, 34vw, 280px); aspect-ratio: 200 / 238; margin: 6px auto 0; }
+.hs-wob { position: absolute; inset: 0; }
+.hs-pet { position: absolute; inset: 0; opacity: 0; z-index: 1; transform-origin: 50% 100%; }
+.hs-pet .companion { width: 100%; }
+.hs-pet .companion .dino { animation: none; }
+.hs-arr { position: absolute; left: 19%; width: 62%; bottom: 3%; aspect-ratio: 120 / 150; }
+.hs-layer { position: absolute; inset: 0; line-height: 0; }
+.hs-layer svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.hs-bot { z-index: 2; transform-origin: 50% 100%; }
+.hs-crack { z-index: 3; pointer-events: none; }
+.hs-top { z-index: 4; transform-origin: 50% 85%; }
+.hs-glow { position: absolute; left: 50%; top: 42%; width: 130%; aspect-ratio: 1; margin: -65% 0 0 -65%; border-radius: 50%; opacity: 0; z-index: 0;
+  background: radial-gradient(circle, #fffbd0 0, #ffe27acc 30%, #ffe27a33 52%, transparent 70%); }
+.hs-capsule ~ .hs-glow { background: radial-gradient(circle, #e6fbff 0, #9ae6ffcc 30%, transparent 68%); }
+.ck polyline { fill: none; stroke: #26303f; stroke-width: 3.4; stroke-linejoin: round; stroke-linecap: round; opacity: 0.75; }
+.ck { transform: scaleX(0); transform-box: fill-box; }
+.ck-r { transform-origin: 0% 50%; } .ck-l { transform-origin: 100% 50%; }
+.seam { fill: #fff3a0; opacity: 0; }
+.hs-capsule .seam { fill: #9ae6ff; }
+.hatch-scene .caption { min-height: 2.9em; }
+.hatch-scene .btn.go { min-width: 120px; }
+
+/* ---------- end of day: the picture comes alive, then the chest the child taps ---------- */
+.finale { gap: 10px; }
+.fin-stage { --cw: clamp(190px, 30vw, 240px); --pw: clamp(124px, 20vw, 164px); --ww: clamp(190px, 38vw, 280px);
+  position: relative; width: min(100%, 600px); height: clamp(300px, 46vh, 390px); }
+.finale .fin-word { position: absolute; left: 50%; top: 50%; width: var(--ww); margin: calc(var(--ww) / -2) 0 0 calc(var(--ww) / -2); z-index: 4; }
+.finale .alive-pic { animation: none; }
+.finale .alive-pic .pic-wrap { width: 78%; }
+.fin-pet { position: absolute; left: 0; bottom: 2px; width: clamp(104px, 21vw, 170px); z-index: 2; }
+.fin-pet .companion { width: 100%; }
+.fin-chest { position: absolute; bottom: 0; width: var(--cw); left: calc(58% - var(--cw) / 2); z-index: 3; padding: 0; border: 0; background: none; line-height: 0;
+  cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.fin-chest:focus-visible { outline: 5px solid #1b6ef3; outline-offset: 6px; border-radius: 24px; }
+.fin-chest .chest { width: 100%; }
+.fin-glow { position: absolute; left: 50%; top: 22%; width: 170%; aspect-ratio: 1; margin: -85% 0 0 -85%; border-radius: 50%; opacity: 0; pointer-events: none; z-index: -1;
+  background: radial-gradient(circle, #fff6b8d9 0, #ffd166aa 26%, #ffd16633 48%, transparent 64%); }
+.fin-prize { position: absolute; width: var(--pw); left: calc(58% - var(--pw) / 2 + var(--cw) * 0.07); bottom: calc(var(--cw) * 0.82); z-index: 2; opacity: 0; line-height: 1; }
+.fin-prize .friend-wrap { width: 100%; }
+.fin-star { font-size: 4.4rem; }
+.finale .treasure-name { font-size: 1.5rem; min-height: 1.5em; }
+@media (max-width: 600px) {
+  .fin-stage { --cw: clamp(140px, 42vw, 180px); --pw: clamp(92px, 26vw, 116px); height: clamp(280px, 44vh, 340px); }
+  .fin-chest, .fin-prize { left: calc(60% - var(--cw) / 2); } .fin-prize { left: calc(60% - var(--pw) / 2); }
+  .fin-pet { width: clamp(80px, 24vw, 104px); }
+}
+
+/* ---------- goodnight: breathing, drifting Zs, a shooting star ---------- */
+.sleep-pet { position: relative; display: inline-block; width: clamp(150px, 30vw, 260px); }
+.sleep-pet .companion { width: 100%; }
+@keyframes breathe { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(0.992, 1.022); } }
+@keyframes breathe-deep { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(0.985, 1.04); } }
+@keyframes snore-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
+.sleep-pet .dino, .island-pet.asleep .dino { transform-origin: 50% 100%; animation: breathe-deep 5.4s ease-in-out infinite; }
+.sleep-pet .dino .zzz, .island-pet.asleep .dino .zzz { display: none; }   /* the drifting Zs below replace the drawn ones */
+.island-pet.asleep .companion { animation: snore-bob 5.4s ease-in-out infinite; }
+.island-pet:not(.asleep) .companion .dino { transform-origin: 50% 100%; animation: breathe 4.2s ease-in-out infinite; }
+.zs { position: absolute; left: 60%; top: 2%; width: 40%; height: 55%; pointer-events: none; }
+.zs i { position: absolute; left: 0; bottom: 0; font-style: normal; font-weight: 700; font-size: clamp(1.7rem, 4vw, 2.7rem); color: #4a5fa8; opacity: 0; animation: zdrift 6.6s ease-in-out infinite; }
+.zs i:nth-child(2) { animation-delay: 2.2s; font-size: clamp(1.2rem, 3vw, 2rem); } .zs i:nth-child(3) { animation-delay: 4.4s; }
+@keyframes zdrift {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.6) rotate(0); }
+  18% { opacity: 0.95; }
+  60% { opacity: 0.8; transform: translate(26px, -46px) scale(1) rotate(-6deg); }
+  100% { opacity: 0; transform: translate(50px, -96px) scale(1.25) rotate(8deg); }
+}
+body.night .island-pet .zs i { color: #d6defc; text-shadow: 0 0 8px #8fa6ff88; }   /* on the open night sky; on the white goodnight card they stay dark blue */
+.island-pet .zs { left: 64%; top: -2%; }
+.sleepscene { gap: 14px; }
+.btn.go.exit { min-width: 128px; min-height: 104px; font-size: 3rem; padding: 10px 30px; }
+/* a shooting star crosses the night sky now and then (13 s cycle: about 1 s of streak, the rest of the cycle nothing) */
+#scene-bg::after { content: ''; position: absolute; left: 10%; top: 8%; width: 150px; height: 3px; border-radius: 3px; opacity: 0; pointer-events: none;
+  background: linear-gradient(90deg, transparent, #ffffffcc 70%, #fff); box-shadow: 0 0 8px 1px #ffffff88; transform: rotate(24deg); }
+body.night #scene-bg::after { animation: shooting 13s linear infinite 2.5s; }
+@keyframes shooting {
+  0%, 91% { opacity: 0; transform: translate(0, 0) rotate(24deg); }
+  92% { opacity: 1; }
+  98% { opacity: 0.9; }
+  100% { opacity: 0; transform: translate(460px, 205px) rotate(24deg); }
+}
+
+/* ---------- Free Play doors ---------- */
+.gamegrid.doors { grid-template-columns: repeat(auto-fit, minmax(clamp(148px, 20vw, 200px), 1fr)); gap: 20px 18px; width: min(100%, 900px); }
+.door { min-height: clamp(190px, 30vh, 246px); padding: 14px 8px 14px; gap: 6px; border-radius: 96px 96px 26px 26px; background: linear-gradient(var(--tint), #ffffff 85%);
+  box-shadow: 0 8px 0 #1d355730, inset 0 0 0 5px var(--edge); animation: door-in 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) backwards; animation-delay: calc(var(--i, 0) * 60ms); }
+.door:active { transform: translateY(5px); box-shadow: 0 3px 0 #1d355730, inset 0 0 0 5px var(--edge); }
+.door:focus-visible { outline: 5px solid #1b6ef3; outline-offset: 3px; }
+.door .door-art { flex: 1; display: grid; place-items: center; width: 100%; min-height: 108px; padding-top: 16px; transition: transform 0.15s; }
+.door:active .door-art { transform: scale(1.06); }
+.door .door-art > svg { height: clamp(88px, 14vw, 124px); width: auto; max-width: 92%; display: block; overflow: visible; }
+.door .gname { font-size: clamp(1rem, 2.1vw, 1.2rem); line-height: 1.15; }
+.door .da-feed { position: relative; display: inline-block; line-height: 0; }
+.door .da-feed .dino { width: auto; height: clamp(92px, 14vw, 126px); }
+.door .da-letter { position: absolute; right: -16px; top: 30%; padding: 0 9px; font-size: 1.7rem; font-weight: 700; line-height: 1.25; color: var(--ink); background: #fff; border-radius: 12px; box-shadow: 0 3px 0 #1d355733, inset 0 0 0 3px #ff8fab; }
+.door .da-rocket { display: inline-block; line-height: 0; transform: rotate(24deg); }
+.door .da-rocket svg { height: clamp(96px, 15vw, 130px); width: auto; display: block; overflow: visible; }
+.door .da-rocket .flame { animation: none; }
+.door .robot-art, .door .drum-art, .door .pot-art { height: clamp(88px, 14vw, 124px); }
+.door .pot-art .steam { opacity: 0.9; }
+@keyframes door-in { from { opacity: 0; transform: translateY(18px) scale(0.92); } to { opacity: 1; transform: none; } }
+
+/* ---------- Reduce Motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  #scene-bg::after { display: none; }
+  .zs i { animation: none !important; opacity: 0.8; transform: none; }
+  .zs i:nth-child(1) { transform: translate(6px, -8px); } .zs i:nth-child(2) { transform: translate(22px, -30px); } .zs i:nth-child(3) { transform: translate(40px, -56px); }
+  .sleep-pet .dino, .island-pet .companion, .island-pet .companion .dino, .island-pet.asleep .companion { animation: none !important; }
+  .door { animation: none; }
+}

@@ -96,21 +96,35 @@ export const makeDraggable = (el: HTMLElement, o: DragOptions): void => {
   });
 };
 
-/** A ghost hand that shows how to drag `from` to `to` (a hint, never a requirement). Returns a function that removes it. */
-export const ghostDrag = (host: HTMLElement, from: HTMLElement, to: HTMLElement): (() => void) => {
+/** How many times the ghost hand has played in each scene (host element): a round shows it at most twice. */
+const ghostShown = new WeakMap<HTMLElement, number>();
+export const GHOST_MAX = 2;
+
+/**
+ * A ghost hand that shows how to drag `from` to `to` (a hint, never a requirement). It appears after about 2 s of nothing happening
+ * (`delay`), plays once, and may come back once more after a longer pause: at most TWICE per round (per `host`), then it is gone for good.
+ * Returns a function that removes it (call it on the first touch).
+ */
+export const ghostDrag = (host: HTMLElement, from: HTMLElement, to: HTMLElement, o: { delay?: number } = {}): (() => void) => {
   if (reducedMotion()) return () => undefined;
-  const hand = document.createElement('div');
-  hand.className = 'ghost-hand';
-  hand.textContent = '👆';
-  hand.setAttribute('aria-hidden', 'true');
-  host.append(hand);
   let alive = true;
   let anim: Animation | null = null;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  let hand: HTMLElement | null = null;
+  const stop = () => { alive = false; clearTimeout(timer); anim?.cancel(); hand?.remove(); hand = null; };
   const run = () => {
-    if (!alive || !from.isConnected || !to.isConnected) return;
-    const h = host.getBoundingClientRect(), a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
-    const ax = a.left + a.width / 2 - h.left, ay = a.top + a.height / 2 - h.top;
-    const bx = b.left + b.width / 2 - h.left, by = b.top + b.height / 2 - h.top;
+    if (!alive || !from.isConnected || !to.isConnected) return stop();
+    const used = ghostShown.get(host) ?? 0;
+    if (used >= GHOST_MAX) return stop();
+    ghostShown.set(host, used + 1);
+    hand = document.createElement('div');
+    hand.className = 'ghost-hand';
+    hand.textContent = '👆';
+    hand.setAttribute('aria-hidden', 'true');
+    host.append(hand);
+    const hr = host.getBoundingClientRect(), a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
+    const ax = a.left + a.width / 2 - hr.left, ay = a.top + a.height / 2 - hr.top;
+    const bx = b.left + b.width / 2 - hr.left, by = b.top + b.height / 2 - hr.top;
     anim = hand.animate(
       [
         { transform: `translate(${ax}px, ${ay}px) scale(1)`, opacity: 0 },
@@ -120,8 +134,13 @@ export const ghostDrag = (host: HTMLElement, from: HTMLElement, to: HTMLElement)
       ],
       { duration: 1800, easing: 'ease-in-out' },
     );
-    anim.onfinish = () => { if (alive) setTimeout(run, 4500); };
+    anim.onfinish = () => {
+      hand?.remove();
+      hand = null;
+      if (alive && (ghostShown.get(host) ?? 0) < GHOST_MAX) timer = setTimeout(run, 6000);
+      else alive = false;
+    };
   };
-  const first = setTimeout(run, 3500);
-  return () => { alive = false; clearTimeout(first); anim?.cancel(); hand.remove(); };
+  timer = setTimeout(run, o.delay ?? 2000);
+  return stop;
 };

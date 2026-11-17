@@ -30,7 +30,24 @@
   "ai": "Rainy the raindrop splashes down.",
   "ee": "Bea the bee buzzes by.",
   "oa": "Boa the boat toots her horn.",
-  "oo": "Moony the moon sings softly."
+  "oo": "Moony the moon sings softly.",
+  "j": "Jess the jet zooms past.",
+  "v": "Vic the van drives by.",
+  "w": "Wiggle the worm wobbles.",
+  "x": "Axel the box clicks open.",
+  "y": "Yoyo the yak yips.",
+  "z": "Zippy the zebra zooms.",
+  "zz": "Fizzy the fizz bubbles up.",
+  "qu": "Queenie the queen speaks.",
+  "igh": "Lite the light shines bright.",
+  "ar": "Starla the star twinkles.",
+  "or": "Norah the corn crunches.",
+  "ur": "Furry the fur ball purrs.",
+  "ow": "Howie the owl hoots.",
+  "oi": "Coco the coin spins.",
+  "ear": "Earl the ear listens.",
+  "air": "Hairy the hairbrush swishes.",
+  "er": "Fern the fern sways."
  },
  "safari": [
   {
@@ -424,6 +441,66 @@
   {
    "word": "thunder",
    "p": "th"
+  },
+  {
+   "word": "jet",
+   "p": "j"
+  },
+  {
+   "word": "jam",
+   "p": "j"
+  },
+  {
+   "word": "jug",
+   "p": "j"
+  },
+  {
+   "word": "van",
+   "p": "v"
+  },
+  {
+   "word": "vest",
+   "p": "v"
+  },
+  {
+   "word": "web",
+   "p": "w"
+  },
+  {
+   "word": "wig",
+   "p": "w"
+  },
+  {
+   "word": "wing",
+   "p": "w"
+  },
+  {
+   "word": "yak",
+   "p": "y"
+  },
+  {
+   "word": "yoyo",
+   "p": "y"
+  },
+  {
+   "word": "zip",
+   "p": "z"
+  },
+  {
+   "word": "zoo",
+   "p": "z"
+  },
+  {
+   "word": "zebra",
+   "p": "z"
+  },
+  {
+   "word": "queen",
+   "p": "qu"
+  },
+  {
+   "word": "quilt",
+   "p": "qu"
   }
  ],
  "graphemes": [
@@ -581,6 +658,91 @@
    "id": "oo",
    "set": 7,
    "phoneme": "oo"
+  },
+  {
+   "id": "j",
+   "set": 8,
+   "phoneme": "j"
+  },
+  {
+   "id": "v",
+   "set": 8,
+   "phoneme": "v"
+  },
+  {
+   "id": "w",
+   "set": 8,
+   "phoneme": "w"
+  },
+  {
+   "id": "x",
+   "set": 8,
+   "phoneme": "x"
+  },
+  {
+   "id": "y",
+   "set": 9,
+   "phoneme": "y"
+  },
+  {
+   "id": "z",
+   "set": 9,
+   "phoneme": "z"
+  },
+  {
+   "id": "zz",
+   "set": 9,
+   "phoneme": "z"
+  },
+  {
+   "id": "qu",
+   "set": 9,
+   "phoneme": "qu"
+  },
+  {
+   "id": "igh",
+   "set": 10,
+   "phoneme": "igh"
+  },
+  {
+   "id": "ar",
+   "set": 10,
+   "phoneme": "ar"
+  },
+  {
+   "id": "or",
+   "set": 10,
+   "phoneme": "or"
+  },
+  {
+   "id": "ur",
+   "set": 10,
+   "phoneme": "ur"
+  },
+  {
+   "id": "ow",
+   "set": 11,
+   "phoneme": "ow"
+  },
+  {
+   "id": "oi",
+   "set": 11,
+   "phoneme": "oi"
+  },
+  {
+   "id": "ear",
+   "set": 11,
+   "phoneme": "ear"
+  },
+  {
+   "id": "air",
+   "set": 11,
+   "phoneme": "air"
+  },
+  {
+   "id": "er",
+   "set": 12,
+   "phoneme": "ur"
   }
  ],
  "words": [
@@ -2860,6 +3022,1321 @@
     "l",
     "oo",
     "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "jam",
+   "graphemes": [
+    "j",
+    "a",
+    "m"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "jet",
+   "graphemes": [
+    "j",
+    "e",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "jug",
+   "graphemes": [
+    "j",
+    "u",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "jog",
+   "graphemes": [
+    "j",
+    "o",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "jump",
+   "graphemes": [
+    "j",
+    "u",
+    "m",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "job",
+   "graphemes": [
+    "j",
+    "o",
+    "b"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "jack",
+   "graphemes": [
+    "j",
+    "a",
+    "ck"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "van",
+   "graphemes": [
+    "v",
+    "a",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "vet",
+   "graphemes": [
+    "v",
+    "e",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "vest",
+   "graphemes": [
+    "v",
+    "e",
+    "s",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "vat",
+   "graphemes": [
+    "v",
+    "a",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "vent",
+   "graphemes": [
+    "v",
+    "e",
+    "n",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "web",
+   "graphemes": [
+    "w",
+    "e",
+    "b"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "wig",
+   "graphemes": [
+    "w",
+    "i",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "wet",
+   "graphemes": [
+    "w",
+    "e",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "win",
+   "graphemes": [
+    "w",
+    "i",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "wag",
+   "graphemes": [
+    "w",
+    "a",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "wax",
+   "graphemes": [
+    "w",
+    "a",
+    "x"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "wish",
+   "graphemes": [
+    "w",
+    "i",
+    "sh"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "wing",
+   "graphemes": [
+    "w",
+    "i",
+    "ng"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "swing",
+   "graphemes": [
+    "s",
+    "w",
+    "i",
+    "ng"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "well",
+   "graphemes": [
+    "w",
+    "e",
+    "ll"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "wick",
+   "graphemes": [
+    "w",
+    "i",
+    "ck"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fox",
+   "graphemes": [
+    "f",
+    "o",
+    "x"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "box",
+   "graphemes": [
+    "b",
+    "o",
+    "x"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "six",
+   "graphemes": [
+    "s",
+    "i",
+    "x"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "mix",
+   "graphemes": [
+    "m",
+    "i",
+    "x"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fix",
+   "graphemes": [
+    "f",
+    "i",
+    "x"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "tax",
+   "graphemes": [
+    "t",
+    "a",
+    "x"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "next",
+   "graphemes": [
+    "n",
+    "e",
+    "x",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "ox",
+   "graphemes": [
+    "o",
+    "x"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "yes",
+   "graphemes": [
+    "y",
+    "e",
+    "s"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "yam",
+   "graphemes": [
+    "y",
+    "a",
+    "m"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "yum",
+   "graphemes": [
+    "y",
+    "u",
+    "m"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "yack",
+   "graphemes": [
+    "y",
+    "a",
+    "ck"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "yell",
+   "graphemes": [
+    "y",
+    "e",
+    "ll"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "yet",
+   "graphemes": [
+    "y",
+    "e",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "yap",
+   "graphemes": [
+    "y",
+    "a",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "zip",
+   "graphemes": [
+    "z",
+    "i",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "zap",
+   "graphemes": [
+    "z",
+    "a",
+    "p"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "zig",
+   "graphemes": [
+    "z",
+    "i",
+    "g"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "zoo",
+   "graphemes": [
+    "z",
+    "oo"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "zoom",
+   "graphemes": [
+    "z",
+    "oo",
+    "m"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "zest",
+   "graphemes": [
+    "z",
+    "e",
+    "s",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "buzz",
+   "graphemes": [
+    "b",
+    "u",
+    "zz"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fizz",
+   "graphemes": [
+    "f",
+    "i",
+    "zz"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "jazz",
+   "graphemes": [
+    "j",
+    "a",
+    "zz"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fuzz",
+   "graphemes": [
+    "f",
+    "u",
+    "zz"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "quit",
+   "graphemes": [
+    "qu",
+    "i",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "quiz",
+   "graphemes": [
+    "qu",
+    "i",
+    "z"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "quick",
+   "graphemes": [
+    "qu",
+    "i",
+    "ck"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "quack",
+   "graphemes": [
+    "qu",
+    "a",
+    "ck"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "queen",
+   "graphemes": [
+    "qu",
+    "ee",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "quill",
+   "graphemes": [
+    "qu",
+    "i",
+    "ll"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "quilt",
+   "graphemes": [
+    "qu",
+    "i",
+    "l",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "quest",
+   "graphemes": [
+    "qu",
+    "e",
+    "s",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "high",
+   "graphemes": [
+    "h",
+    "igh"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "sigh",
+   "graphemes": [
+    "s",
+    "igh"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "night",
+   "graphemes": [
+    "n",
+    "igh",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "light",
+   "graphemes": [
+    "l",
+    "igh",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "right",
+   "graphemes": [
+    "r",
+    "igh",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "tight",
+   "graphemes": [
+    "t",
+    "igh",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "might",
+   "graphemes": [
+    "m",
+    "igh",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "sight",
+   "graphemes": [
+    "s",
+    "igh",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "bright",
+   "graphemes": [
+    "b",
+    "r",
+    "igh",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "flight",
+   "graphemes": [
+    "f",
+    "l",
+    "igh",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "thigh",
+   "graphemes": [
+    "th",
+    "igh"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "car",
+   "graphemes": [
+    "c",
+    "ar"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "jar",
+   "graphemes": [
+    "j",
+    "ar"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "bar",
+   "graphemes": [
+    "b",
+    "ar"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "far",
+   "graphemes": [
+    "f",
+    "ar"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "star",
+   "graphemes": [
+    "s",
+    "t",
+    "ar"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "arm",
+   "graphemes": [
+    "ar",
+    "m"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "art",
+   "graphemes": [
+    "ar",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "farm",
+   "graphemes": [
+    "f",
+    "ar",
+    "m"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "barn",
+   "graphemes": [
+    "b",
+    "ar",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "park",
+   "graphemes": [
+    "p",
+    "ar",
+    "k"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "dark",
+   "graphemes": [
+    "d",
+    "ar",
+    "k"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "shark",
+   "graphemes": [
+    "sh",
+    "ar",
+    "k"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "yard",
+   "graphemes": [
+    "y",
+    "ar",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "card",
+   "graphemes": [
+    "c",
+    "ar",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "for",
+   "graphemes": [
+    "f",
+    "or"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fork",
+   "graphemes": [
+    "f",
+    "or",
+    "k"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "corn",
+   "graphemes": [
+    "c",
+    "or",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "horn",
+   "graphemes": [
+    "h",
+    "or",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "born",
+   "graphemes": [
+    "b",
+    "or",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "storm",
+   "graphemes": [
+    "s",
+    "t",
+    "or",
+    "m"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "sort",
+   "graphemes": [
+    "s",
+    "or",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "short",
+   "graphemes": [
+    "sh",
+    "or",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "north",
+   "graphemes": [
+    "n",
+    "or",
+    "th"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "torch",
+   "graphemes": [
+    "t",
+    "or",
+    "ch"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fort",
+   "graphemes": [
+    "f",
+    "or",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "cork",
+   "graphemes": [
+    "c",
+    "or",
+    "k"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "pork",
+   "graphemes": [
+    "p",
+    "or",
+    "k"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "sport",
+   "graphemes": [
+    "s",
+    "p",
+    "or",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fur",
+   "graphemes": [
+    "f",
+    "ur"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "burn",
+   "graphemes": [
+    "b",
+    "ur",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "turn",
+   "graphemes": [
+    "t",
+    "ur",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "hurt",
+   "graphemes": [
+    "h",
+    "ur",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "curl",
+   "graphemes": [
+    "c",
+    "ur",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "surf",
+   "graphemes": [
+    "s",
+    "ur",
+    "f"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "purr",
+   "graphemes": [
+    "p",
+    "ur",
+    "r"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "church",
+   "graphemes": [
+    "ch",
+    "ur",
+    "ch"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "burst",
+   "graphemes": [
+    "b",
+    "ur",
+    "s",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "cow",
+   "graphemes": [
+    "c",
+    "ow"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "now",
+   "graphemes": [
+    "n",
+    "ow"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "how",
+   "graphemes": [
+    "h",
+    "ow"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "wow",
+   "graphemes": [
+    "w",
+    "ow"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "owl",
+   "graphemes": [
+    "ow",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "down",
+   "graphemes": [
+    "d",
+    "ow",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "town",
+   "graphemes": [
+    "t",
+    "ow",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "clown",
+   "graphemes": [
+    "c",
+    "l",
+    "ow",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "brown",
+   "graphemes": [
+    "b",
+    "r",
+    "ow",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "crown",
+   "graphemes": [
+    "c",
+    "r",
+    "ow",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "growl",
+   "graphemes": [
+    "g",
+    "r",
+    "ow",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "oil",
+   "graphemes": [
+    "oi",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "coin",
+   "graphemes": [
+    "c",
+    "oi",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "boil",
+   "graphemes": [
+    "b",
+    "oi",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "soil",
+   "graphemes": [
+    "s",
+    "oi",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "join",
+   "graphemes": [
+    "j",
+    "oi",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "foil",
+   "graphemes": [
+    "f",
+    "oi",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "toil",
+   "graphemes": [
+    "t",
+    "oi",
+    "l"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "point",
+   "graphemes": [
+    "p",
+    "oi",
+    "n",
+    "t"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "ear",
+   "graphemes": [
+    "ear"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "hear",
+   "graphemes": [
+    "h",
+    "ear"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "near",
+   "graphemes": [
+    "n",
+    "ear"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "dear",
+   "graphemes": [
+    "d",
+    "ear"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fear",
+   "graphemes": [
+    "f",
+    "ear"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "gear",
+   "graphemes": [
+    "g",
+    "ear"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "rear",
+   "graphemes": [
+    "r",
+    "ear"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "year",
+   "graphemes": [
+    "y",
+    "ear"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "clear",
+   "graphemes": [
+    "c",
+    "l",
+    "ear"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "beard",
+   "graphemes": [
+    "b",
+    "ear",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "spear",
+   "graphemes": [
+    "s",
+    "p",
+    "ear"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "air",
+   "graphemes": [
+    "air"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "hair",
+   "graphemes": [
+    "h",
+    "air"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "pair",
+   "graphemes": [
+    "p",
+    "air"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fair",
+   "graphemes": [
+    "f",
+    "air"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "stair",
+   "graphemes": [
+    "s",
+    "t",
+    "air"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "lair",
+   "graphemes": [
+    "l",
+    "air"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "flair",
+   "graphemes": [
+    "f",
+    "l",
+    "air"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "her",
+   "graphemes": [
+    "h",
+    "er"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "fern",
+   "graphemes": [
+    "f",
+    "er",
+    "n"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "term",
+   "graphemes": [
+    "t",
+    "er",
+    "m"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "herd",
+   "graphemes": [
+    "h",
+    "er",
+    "d"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "verb",
+   "graphemes": [
+    "v",
+    "er",
+    "b"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "kerb",
+   "graphemes": [
+    "k",
+    "er",
+    "b"
+   ],
+   "oralOnly": false
+  },
+  {
+   "text": "perch",
+   "graphemes": [
+    "p",
+    "er",
+    "ch"
    ],
    "oralOnly": false
   }

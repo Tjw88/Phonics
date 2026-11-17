@@ -1,0 +1,126 @@
+/* animation cycle: styles owned by the area that imports this file (games2.ts): Beat the Drum, Sound Safari, Word Kitchen, Trace Trail,
+   and the Sound Play games (copy the beat, find it). Per-world skins use [data-pack="space"] etc. (art lives in games2-art.ts).
+   Motion is transforms and opacity only; every loop is slow and stops when it stops being useful. */
+
+/* ---------- Beat the Drum (and Copy the beat): a drummer creature behind a themed drum ---------- */
+.drum-row { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: center; gap: 26px; }
+.drum-stage { position: relative; width: min(58vw, 262px); margin-top: 92px; }
+.drum-stage .drum { position: relative; z-index: 1; display: block; width: 100%; }
+.drum-stage .drummer-pet { position: absolute; z-index: 0; width: 124px; left: calc(50% - 62px); bottom: 69%; transform-origin: 50% 100%; }
+.drum-stage .drum svg { overflow: visible; transition: none; }
+.drum-stage .drum .drum-art { transform-origin: 50% 92%; }
+.drum-stage .drum .sticks { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.drum-stage .drum .stick.sl { transform-origin: 56px 6px; transform: rotate(-13deg); }
+.drum-stage .drum .stick.sr { transform-origin: 144px 6px; transform: rotate(13deg); }
+.drum-stage .drum .ripple { transform-box: fill-box; transform-origin: center; }
+/* the old whole-drum keyframe is replaced by the squash and stretch done in the code (so it can never fight with it) */
+.drum-stage .drum.hit svg { animation: none; }
+.drum-stage .drum.hit .skin { fill: var(--flash, #fff); }
+[data-pack="transport"] .drum-stage .drum.hit .skin { --flash: #7f8aa3; }
+[data-pack="space"] .drum-stage .drum.hit .skin { --flash: #36498f; }
+[data-pack="farm"] .drum-stage .drum.hit .skin { --flash: #e3f6ff; }
+.drum-stage .drum:focus-visible { outline: 5px solid #1b6ef3; outline-offset: 6px; border-radius: 40px; }
+.drumscene .beads { gap: 24px; }
+
+/* ---------- Sound Safari: things peek out of the world's cover ---------- */
+.safari-top { gap: 14px; }
+.safari-top .safari-pet { width: clamp(70px, 12vw, 96px); }
+.safari-field { position: relative; gap: 10px; padding: 16px; }
+.safari-field .safari-item {
+  position: relative; overflow: hidden; display: flex; align-items: flex-start; justify-content: center; padding: 0;
+  border-radius: 22px; box-shadow: none; animation: none;
+  background: radial-gradient(circle at 50% 42%, #ffffffd9 0 46%, #ffffff00 74%);
+}
+.safari-field .safari-item:focus-visible { outline: 5px solid #1b6ef3; outline-offset: 2px; }
+.safari-field .safari-item .pic-wrap {
+  position: relative; z-index: 1; width: 64%; margin-top: 9%;
+  /* the picture rises from behind the cover, one after another; then each UNFOUND one gives a small slow sway every few seconds */
+  animation: peek-up 0.65s cubic-bezier(0.2, 1.45, 0.4, 1) var(--peek, 0ms) backwards, sway 8s ease-in-out calc(var(--peek, 0ms) + 1.2s + var(--sway, 0s)) infinite;
+}
+.safari-field .safari-item .emoji { animation: none; font-size: clamp(2.4rem, 7vw, 3.6rem); }
+.safari-field .safari-item .cover-layer { position: absolute; inset: 0; z-index: 0; line-height: 0; pointer-events: none; }
+.safari-field .safari-item .cover-layer.front { z-index: 2; }
+.safari-field .safari-item .cover-layer svg { display: block; width: 100%; height: 100%; }
+.safari-field .safari-item .cover-layer.flip svg { transform: scaleX(-1); }
+@keyframes peek-up { from { transform: translateY(96%); } to { transform: none; } }
+@keyframes sway { 0%, 30%, 100% { transform: none; } 9% { transform: translateY(-4px) rotate(-3deg); } 19% { transform: translateY(-5px) rotate(3deg); } 26% { transform: translateY(-2px) rotate(-1.2deg); } }
+/* found: the picture leaves (it flies to the tray), the hole shows a gold star, and nothing sways any more */
+.safari-field .safari-item.found { animation: none; background: radial-gradient(circle at 50% 42%, #fff1a8aa 0 46%, #fff1a800 74%); }
+.safari-field .safari-item.found .pic-wrap { visibility: hidden; animation: none; }
+.safari-field .safari-item.found::after {
+  content: '★'; position: absolute; z-index: 3; left: 0; right: 0; top: 14%; text-align: center; font-size: clamp(2.2rem, 7vw, 3.4rem); line-height: 1; color: #ffc933; text-shadow: 0 3px 0 #c99a1e;
+  animation: star-in 0.55s cubic-bezier(0.2, 1.8, 0.4, 1) 0.45s backwards;
+}
+@keyframes star-in { from { transform: scale(0.2) rotate(-40deg); opacity: 0; } to { transform: none; opacity: 1; } }
+.safari-field .safari-item.wobble { animation: wobble-soft 0.65s ease-in-out; }
+.safari-field .safari-item.hint, .tile.hint { animation: hint-pulse 1.2s ease-in-out 3; }
+@keyframes hint-pulse { 50% { transform: scale(1.07); } }
+@keyframes wobble-soft { 20% { transform: rotate(-2.6deg) scale(1.02); } 50% { transform: rotate(2.2deg); } 80% { transform: rotate(-1deg); } }
+
+/* the world's board behind the covers */
+.safari-field.w-dino { background: radial-gradient(circle at 0% 100%, #5fb36a 0 64px, transparent 66px), radial-gradient(circle at 100% 0%, #7cc87a 0 54px, transparent 56px), linear-gradient(#d3f0c2, #b0e098); box-shadow: inset 0 0 0 5px #7fc06a; }
+.safari-field.w-dragon { background: repeating-linear-gradient(0deg, #b3acd2 0 2px, transparent 2px 38px), repeating-linear-gradient(90deg, #b3acd255 0 2px, transparent 2px 64px), linear-gradient(#e2def3, #c8c2e4); box-shadow: inset 0 0 0 5px #9a90c4; }
+.safari-field.w-transport { background: repeating-linear-gradient(0deg, #a8604e 0 2px, transparent 2px 18px), #c9806a; box-shadow: inset 0 0 0 5px #8f4d3e; }
+.safari-field.w-transport .safari-item { border-radius: 10px 10px 6px 6px; background: linear-gradient(#cdeaff, #fff1d2); box-shadow: inset 0 0 0 6px #7a879b, 0 4px 0 #6c4034aa; }
+.safari-field.w-transport .safari-item.found { background: linear-gradient(#fff1a8, #fff1d2); }
+.safari-field.w-space { background: radial-gradient(circle at 18% 22%, #fff 0 1.6px, transparent 2.4px), radial-gradient(circle at 72% 14%, #fff 0 1.4px, transparent 2.2px), radial-gradient(circle at 90% 64%, #fff 0 1.6px, transparent 2.4px), radial-gradient(circle at 40% 80%, #fff 0 1.2px, transparent 2px), radial-gradient(circle at 8% 70%, #ffd166 0 1.6px, transparent 2.4px), linear-gradient(#171c4a, #3f3b8a); box-shadow: inset 0 0 0 5px #6a63c9; }
+.safari-field.w-ocean { background: radial-gradient(circle at 12% 30%, #ffffff55 0 7px, transparent 8px), radial-gradient(circle at 88% 50%, #ffffff55 0 9px, transparent 10px), radial-gradient(circle at 60% 12%, #ffffff44 0 5px, transparent 6px), linear-gradient(#b4ecf8, #4cb5d6); box-shadow: inset 0 0 0 5px #2b8fa3; }
+.safari-field.w-farm { background: linear-gradient(#d4effa 0 22%, #c3e58e 22%, #93d063); box-shadow: inset 0 0 0 5px #6aae3f; }
+
+/* ---------- Word Kitchen ---------- */
+.kitchenscene .pot svg { transform-origin: 50% 100%; }
+.kitchenscene .pot.cooking svg { animation: kshiver 0.36s ease-in-out 3; } /* a short shiver, not an endless shake */
+.kitchenscene .pot.cooking .lid { animation: lidhop 0.3s ease-in-out infinite alternate; transform-box: fill-box; }
+.kitchenscene .pot.cooking .steam { animation: none; opacity: 0; }
+.kitchenscene .pot.kpop svg { animation: kpop 0.55s ease-out; }
+.kitchenscene .pot .flame { transform-box: fill-box; transform-origin: 50% 100%; }
+.kitchenscene .pot.cooking .flame { animation: flicker 0.25s ease-in-out infinite alternate; }
+@keyframes kshiver { 25% { transform: rotate(-2.2deg) translateX(-1px); } 75% { transform: rotate(2.2deg) translateX(1px); } }
+@keyframes kpop { 0% { transform: scale(1, 1); } 22% { transform: scale(1.1, 0.88); } 52% { transform: scale(0.96, 1.07); } 78% { transform: scale(1.02, 0.99); } 100% { transform: scale(1, 1); } }
+.kitchenscene .dish { transition: none; z-index: 0; }
+.kitchenscene .dish.out { transform: translate(-50%, -62%) scale(1); opacity: 1; z-index: 0; }
+.kitchenscene .pot-wrap.front .dish.out { z-index: 3; }  /* the picture rises from BEHIND the pot's rim, then steps in front */
+.kitchenscene .pot { position: relative; z-index: 1; }
+.kitchenscene .pot .lid { transform-box: fill-box; transform-origin: 50% 100%; }
+.steam-puff {
+  position: absolute; left: 50%; top: 10%; z-index: 4; width: 34px; height: 34px; border-radius: 50%; opacity: 0; pointer-events: none;
+  background: radial-gradient(circle at 35% 35%, #fff 0 30%, #dbe6f3 78%); box-shadow: 0 0 0 2px #c3d3e6;
+}
+.steam-puff.big { width: 50px; height: 50px; }
+.kslot.settle { animation: ksettle 0.42s ease-out; }
+.kslot.landing { color: transparent; }
+@keyframes ksettle { 0% { transform: scale(1.18, 0.8); } 42% { transform: scale(0.94, 1.09); } 72% { transform: scale(1.03, 0.97); } 100% { transform: none; } }
+/* a copy of a tile or picture in flight (drag lift and entry animations must not leak onto it) */
+.fly-clone, .tile.fly-clone { animation: none !important; transition: none !important; z-index: 70; pointer-events: none; opacity: 1; }
+.fly-clone.dragging { box-shadow: 0 8px 0 var(--edge, #1d355744), inset 0 0 0 5px var(--rim, #1d355722); }
+
+/* ---------- Trace Trail ---------- */
+.trace-board { position: relative; }
+.trace-friend-layer { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+.trace-friend-layer .trace-friend { width: min(54%, 230px); }
+/* guide dots stay calm: the start dot breathes slowly, the firefly glides ahead and glows softly */
+.trace-svg .startdot { animation: dotbreathe 2.8s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.trace-svg .firefly { animation: fireglow 2.4s ease-in-out infinite; transition: transform 0.32s ease-out; }
+@keyframes dotbreathe { 50% { transform: scale(1.22); } }
+@keyframes fireglow { 50% { opacity: 0.6; } }
+
+/* ---------- Sound Play (age 2-3): find it, copy the beat ---------- */
+.findscene { gap: 22px; }
+.find-head { flex-wrap: nowrap; gap: 16px; }
+.find-head .find-pet { width: clamp(84px, 15vw, 128px); flex: none; }
+.find-cards { gap: clamp(12px, 3vw, 30px); }
+.find-cards .tile.pic { min-width: clamp(104px, 27vw, 214px); min-height: clamp(104px, 27vw, 214px); border-radius: 42px; }
+.find-cards .tile.pic .pic-wrap { width: clamp(84px, 21vw, 170px); }
+.find-cards .tile.pic.dim { opacity: 0.45; }
+
+@media (max-width: 600px) {
+  .drum-stage { margin-top: 80px; }
+  .drum-stage .drummer-pet { width: 108px; left: calc(50% - 54px); }
+}
+
+/* Reduce Motion: nothing travels or loops; success still shows through the creature's face, the star in the hole and the sound */
+@media (prefers-reduced-motion: reduce) {
+  .safari-field .safari-item .pic-wrap, .safari-field .safari-item.found::after, .safari-field .safari-item.hint, .tile.hint,
+  .trace-svg .startdot, .trace-svg .firefly, .kitchenscene .pot.cooking svg, .kslot.settle { animation: none !important; }
+  .trace-svg .firefly { transition: none; }
+}

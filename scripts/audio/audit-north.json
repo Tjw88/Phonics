@@ -30,7 +30,22 @@
   "ai": "eɪ",
   "ee": "iː",
   "oa": "əʊ",
-  "oo": "uː"
+  "oo": "uː",
+  "j": "dʒ",
+  "v": "v",
+  "w": "w",
+  "x": "ks",
+  "y": "j",
+  "z": "z",
+  "qu": "kw",
+  "igh": "aɪ",
+  "ar": "ɑː",
+  "or": "ɔː",
+  "ur": "ɜː",
+  "ow": "aʊ",
+  "oi": "ɔɪ",
+  "ear": "ɪə",
+  "air": "ɛː"
  },
  "phonemes": {
   "s": {
@@ -1017,6 +1032,578 @@
      "rms": 0.11,
      "voiced_fraction": 0.92,
      "centroid_hz": 379,
+     "warnings": []
+    }
+   ]
+  },
+  "j": {
+   "expected_ipa": "dʒ",
+   "files": [
+    {
+     "file": "north/phonemes/j_0.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "voiced affricate: the voice's own burst and buzz, 130 ms",
+     "takes_needed": 1,
+     "ms": 130,
+     "rms": 0.13,
+     "voiced_fraction": 0.05,
+     "centroid_hz": 4976,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/j_1.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "voiced affricate: the voice's own burst and buzz, 130 ms",
+     "takes_needed": 1,
+     "ms": 130,
+     "rms": 0.13,
+     "voiced_fraction": 0.18,
+     "centroid_hz": 5189,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/j_2.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "voiced affricate: the voice's own burst and buzz, 130 ms",
+     "takes_needed": 1,
+     "ms": 130,
+     "rms": 0.13,
+     "voiced_fraction": 0.0,
+     "centroid_hz": 4195,
+     "warnings": []
+    }
+   ]
+  },
+  "v": {
+   "expected_ipa": "v",
+   "files": [
+    {
+     "file": "north/phonemes/v_0.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "cut 70 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
+     "voiced_fraction": 0.89,
+     "centroid_hz": 6187,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/v_1.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "cut 133 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
+     "voiced_fraction": 0.95,
+     "centroid_hz": 446,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/v_2.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "cut 70 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
+     "voiced_fraction": 0.46,
+     "centroid_hz": 716,
+     "warnings": []
+    }
+   ]
+  },
+  "w": {
+   "expected_ipa": "w",
+   "files": [
+    {
+     "file": "north/phonemes/w_0.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 0.9,
+     "centroid_hz": 492,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/w_1.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 0.9,
+     "centroid_hz": 453,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/w_2.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 0.87,
+     "centroid_hz": 480,
+     "warnings": []
+    }
+   ]
+  },
+  "x": {
+   "expected_ipa": "ks",
+   "files": [
+    {
+     "file": "north/phonemes/x_0.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "two sounds as one letter group: /k/ then /s/, joined, 448 ms",
+     "takes_needed": 1,
+     "ms": 448,
+     "rms": 0.117,
+     "voiced_fraction": 0.0,
+     "centroid_hz": 6697,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/x_1.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "two sounds as one letter group: /k/ then /s/, joined, 448 ms",
+     "takes_needed": 1,
+     "ms": 448,
+     "rms": 0.116,
+     "voiced_fraction": 0.0,
+     "centroid_hz": 6544,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/x_2.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "two sounds as one letter group: /k/ then /s/, joined, 448 ms",
+     "takes_needed": 1,
+     "ms": 448,
+     "rms": 0.113,
+     "voiced_fraction": 0.0,
+     "centroid_hz": 6615,
+     "warnings": []
+    }
+   ]
+  },
+  "y": {
+   "expected_ipa": "j",
+   "files": [
+    {
+     "file": "north/phonemes/y_0.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 305,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/y_1.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 1.0,
+     "centroid_hz": 300,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/y_2.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "voiced stop: burst + a small faded vowel (the Reading Framework allows this for /b d g/)",
+     "takes_needed": 1,
+     "ms": 171,
+     "rms": 0.13,
+     "voiced_fraction": 0.97,
+     "centroid_hz": 306,
+     "warnings": []
+    }
+   ]
+  },
+  "z": {
+   "expected_ipa": "z",
+   "files": [
+    {
+     "file": "north/phonemes/z_0.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "cut 183 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 1,
+     "ms": 430,
+     "rms": 0.13,
+     "voiced_fraction": 0.77,
+     "centroid_hz": 6945,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/z_1.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "cut 203 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 6,
+     "ms": 430,
+     "rms": 0.13,
+     "voiced_fraction": 0.0,
+     "centroid_hz": 6860,
+     "warnings": [
+      "voiced fricative short or not voiced"
+     ]
+    },
+    {
+     "file": "north/phonemes/z_2.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "cut 208 ms before the vowel, pitch-synchronous loop to 430 ms",
+     "takes_needed": 2,
+     "ms": 430,
+     "rms": 0.13,
+     "voiced_fraction": 0.83,
+     "centroid_hz": 6572,
+     "warnings": []
+    }
+   ]
+  },
+  "qu": {
+   "expected_ipa": "kw",
+   "files": [
+    {
+     "file": "north/phonemes/qu_0.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "two sounds as one letter group: /k/ then /w/, joined, 289 ms",
+     "takes_needed": 1,
+     "ms": 289,
+     "rms": 0.12,
+     "voiced_fraction": 0.53,
+     "centroid_hz": 1186,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/qu_1.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "two sounds as one letter group: /k/ then /w/, joined, 289 ms",
+     "takes_needed": 1,
+     "ms": 289,
+     "rms": 0.12,
+     "voiced_fraction": 0.51,
+     "centroid_hz": 1036,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/qu_2.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "two sounds as one letter group: /k/ then /w/, joined, 289 ms",
+     "takes_needed": 1,
+     "ms": 289,
+     "rms": 0.12,
+     "voiced_fraction": 0.51,
+     "centroid_hz": 942,
+     "warnings": []
+    }
+   ]
+  },
+  "igh": {
+   "expected_ipa": "aɪ",
+   "files": [
+    {
+     "file": "north/phonemes/igh_0.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 624 ms",
+     "takes_needed": 1,
+     "ms": 624,
+     "rms": 0.11,
+     "voiced_fraction": 0.92,
+     "centroid_hz": 416,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/igh_1.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 591 ms",
+     "takes_needed": 1,
+     "ms": 591,
+     "rms": 0.11,
+     "voiced_fraction": 0.95,
+     "centroid_hz": 493,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/igh_2.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 607 ms",
+     "takes_needed": 1,
+     "ms": 607,
+     "rms": 0.11,
+     "voiced_fraction": 0.91,
+     "centroid_hz": 500,
+     "warnings": []
+    }
+   ]
+  },
+  "ar": {
+   "expected_ipa": "ɑː",
+   "files": [
+    {
+     "file": "north/phonemes/ar_0.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.95,
+     "centroid_hz": 555,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/ar_1.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.87,
+     "centroid_hz": 538,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/ar_2.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.73,
+     "centroid_hz": 547,
+     "warnings": []
+    }
+   ]
+  },
+  "or": {
+   "expected_ipa": "ɔː",
+   "files": [
+    {
+     "file": "north/phonemes/or_0.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.79,
+     "centroid_hz": 410,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/or_1.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.82,
+     "centroid_hz": 415,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/or_2.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.86,
+     "centroid_hz": 448,
+     "warnings": []
+    }
+   ]
+  },
+  "ur": {
+   "expected_ipa": "ɜː",
+   "files": [
+    {
+     "file": "north/phonemes/ur_0.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.77,
+     "centroid_hz": 472,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/ur_1.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.89,
+     "centroid_hz": 475,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/ur_2.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "lone vowel from the voice, steady middle extended to ~520 ms",
+     "takes_needed": 1,
+     "ms": 520,
+     "rms": 0.11,
+     "voiced_fraction": 0.89,
+     "centroid_hz": 515,
+     "warnings": []
+    }
+   ]
+  },
+  "ow": {
+   "expected_ipa": "aʊ",
+   "files": [
+    {
+     "file": "north/phonemes/ow_0.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 623 ms",
+     "takes_needed": 1,
+     "ms": 623,
+     "rms": 0.11,
+     "voiced_fraction": 0.89,
+     "centroid_hz": 566,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/ow_1.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 542 ms",
+     "takes_needed": 1,
+     "ms": 542,
+     "rms": 0.11,
+     "voiced_fraction": 0.84,
+     "centroid_hz": 538,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/ow_2.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 561 ms",
+     "takes_needed": 1,
+     "ms": 561,
+     "rms": 0.11,
+     "voiced_fraction": 0.84,
+     "centroid_hz": 570,
+     "warnings": []
+    }
+   ]
+  },
+  "oi": {
+   "expected_ipa": "ɔɪ",
+   "files": [
+    {
+     "file": "north/phonemes/oi_0.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 704 ms",
+     "takes_needed": 1,
+     "ms": 704,
+     "rms": 0.11,
+     "voiced_fraction": 0.92,
+     "centroid_hz": 428,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/oi_1.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 743 ms",
+     "takes_needed": 1,
+     "ms": 743,
+     "rms": 0.11,
+     "voiced_fraction": 0.92,
+     "centroid_hz": 393,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/oi_2.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 747 ms",
+     "takes_needed": 1,
+     "ms": 747,
+     "rms": 0.11,
+     "voiced_fraction": 0.92,
+     "centroid_hz": 377,
+     "warnings": []
+    }
+   ]
+  },
+  "ear": {
+   "expected_ipa": "ɪə",
+   "files": [
+    {
+     "file": "north/phonemes/ear_0.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 585 ms",
+     "takes_needed": 1,
+     "ms": 585,
+     "rms": 0.11,
+     "voiced_fraction": 0.9,
+     "centroid_hz": 520,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/ear_1.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 616 ms",
+     "takes_needed": 1,
+     "ms": 616,
+     "rms": 0.11,
+     "voiced_fraction": 0.96,
+     "centroid_hz": 516,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/ear_2.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 591 ms",
+     "takes_needed": 1,
+     "ms": 591,
+     "rms": 0.11,
+     "voiced_fraction": 0.95,
+     "centroid_hz": 527,
+     "warnings": []
+    }
+   ]
+  },
+  "air": {
+   "expected_ipa": "ɛː",
+   "files": [
+    {
+     "file": "north/phonemes/air_0.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 593 ms",
+     "takes_needed": 1,
+     "ms": 593,
+     "rms": 0.11,
+     "voiced_fraction": 0.92,
+     "centroid_hz": 499,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/air_1.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 524 ms",
+     "takes_needed": 1,
+     "ms": 524,
+     "rms": 0.11,
+     "voiced_fraction": 0.89,
+     "centroid_hz": 489,
+     "warnings": []
+    },
+    {
+     "file": "north/phonemes/air_2.wav",
+     "source": "piper:en_GB-northern_english_male-medium",
+     "method": "diphthong spoken slowly by the voice (glide kept), 534 ms",
+     "takes_needed": 1,
+     "ms": 534,
+     "rms": 0.11,
+     "voiced_fraction": 0.92,
+     "centroid_hz": 481,
      "warnings": []
     }
    ]
@@ -2010,6 +2597,582 @@
   "nail": {
    "phonemes": "nˈeɪːl",
    "ms": 479
+  },
+  "jam": {
+   "phonemes": "dʒˈam",
+   "ms": 349
+  },
+  "jet": {
+   "phonemes": "dʒˈɛt",
+   "ms": 207
+  },
+  "jug": {
+   "phonemes": "dʒˈʊɡ",
+   "ms": 245
+  },
+  "jog": {
+   "phonemes": "dʒˈɒɡ",
+   "ms": 323
+  },
+  "jump": {
+   "phonemes": "dʒˈʊmp",
+   "ms": 265
+  },
+  "job": {
+   "phonemes": "dʒˈɒb",
+   "ms": 261
+  },
+  "jack": {
+   "phonemes": "dʒˈak",
+   "ms": 249
+  },
+  "van": {
+   "phonemes": "vˈan",
+   "ms": 381
+  },
+  "vet": {
+   "phonemes": "vˈɛt",
+   "ms": 220
+  },
+  "vest": {
+   "phonemes": "vˈɛst",
+   "ms": 388
+  },
+  "vat": {
+   "phonemes": "vˈat",
+   "ms": 214
+  },
+  "vent": {
+   "phonemes": "vˈɛnt",
+   "ms": 281
+  },
+  "web": {
+   "phonemes": "wˈɛb",
+   "ms": 295
+  },
+  "wig": {
+   "phonemes": "wˈɪɡ",
+   "ms": 215
+  },
+  "wet": {
+   "phonemes": "wˈɛt",
+   "ms": 326
+  },
+  "win": {
+   "phonemes": "wˈɪn",
+   "ms": 307
+  },
+  "wag": {
+   "phonemes": "wˈaɡ",
+   "ms": 253
+  },
+  "wax": {
+   "phonemes": "wˈaks",
+   "ms": 421
+  },
+  "wish": {
+   "phonemes": "wˈɪʃ",
+   "ms": 400
+  },
+  "wing": {
+   "phonemes": "wˈɪŋ",
+   "ms": 315
+  },
+  "swing": {
+   "phonemes": "swˈɪŋ",
+   "ms": 430
+  },
+  "well": {
+   "phonemes": "wˈɛl",
+   "ms": 326
+  },
+  "wick": {
+   "phonemes": "wˈɪk",
+   "ms": 349
+  },
+  "box": {
+   "phonemes": "bˈɒks",
+   "ms": 443
+  },
+  "six": {
+   "phonemes": "sˈɪks",
+   "ms": 398
+  },
+  "mix": {
+   "phonemes": "mˈɪks",
+   "ms": 460
+  },
+  "fix": {
+   "phonemes": "fˈɪks",
+   "ms": 448
+  },
+  "tax": {
+   "phonemes": "tˈaks",
+   "ms": 465
+  },
+  "next": {
+   "phonemes": "nˈɛkst",
+   "ms": 439
+  },
+  "ox": {
+   "phonemes": "ˈɒks",
+   "ms": 428
+  },
+  "yes": {
+   "phonemes": "jˈɛs",
+   "ms": 420
+  },
+  "yam": {
+   "phonemes": "jˈam",
+   "ms": 369
+  },
+  "yum": {
+   "phonemes": "jˈʊm",
+   "ms": 448
+  },
+  "yack": {
+   "phonemes": "jˈak",
+   "ms": 247
+  },
+  "yell": {
+   "phonemes": "jˈɛl",
+   "ms": 409
+  },
+  "yet": {
+   "phonemes": "jˈɛt",
+   "ms": 230
+  },
+  "yap": {
+   "phonemes": "jˈap",
+   "ms": 240
+  },
+  "zip": {
+   "phonemes": "zˈɪp",
+   "ms": 393
+  },
+  "zap": {
+   "phonemes": "zˈap",
+   "ms": 266
+  },
+  "zig": {
+   "phonemes": "zˈɪɡ",
+   "ms": 361
+  },
+  "zoo": {
+   "phonemes": "zˈuː",
+   "ms": 366
+  },
+  "zoom": {
+   "phonemes": "zˈuːm",
+   "ms": 368
+  },
+  "zest": {
+   "phonemes": "zˈɛst",
+   "ms": 335
+  },
+  "buzz": {
+   "phonemes": "bˈʊz",
+   "ms": 372
+  },
+  "fizz": {
+   "phonemes": "fˈɪz",
+   "ms": 271
+  },
+  "jazz": {
+   "phonemes": "dʒˈaz",
+   "ms": 383
+  },
+  "fuzz": {
+   "phonemes": "fˈʊz",
+   "ms": 278
+  },
+  "quit": {
+   "phonemes": "kwˈɪt",
+   "ms": 222
+  },
+  "quiz": {
+   "phonemes": "kwˈɪz",
+   "ms": 277
+  },
+  "quick": {
+   "phonemes": "kwˈɪk",
+   "ms": 267
+  },
+  "quack": {
+   "phonemes": "kwˈak",
+   "ms": 252
+  },
+  "queen": {
+   "phonemes": "kwˈiːn",
+   "ms": 408
+  },
+  "quill": {
+   "phonemes": "kwˈɪl",
+   "ms": 456
+  },
+  "quilt": {
+   "phonemes": "kwˈɪlt",
+   "ms": 293
+  },
+  "quest": {
+   "phonemes": "kwˈɛst",
+   "ms": 409
+  },
+  "high": {
+   "phonemes": "hˈaɪ",
+   "ms": 332
+  },
+  "sigh": {
+   "phonemes": "sˈaɪ",
+   "ms": 464
+  },
+  "night": {
+   "phonemes": "nˈaɪt",
+   "ms": 320
+  },
+  "light": {
+   "phonemes": "lˈaɪt",
+   "ms": 257
+  },
+  "right": {
+   "phonemes": "ɹˈaɪt",
+   "ms": 278
+  },
+  "tight": {
+   "phonemes": "tˈaɪt",
+   "ms": 260
+  },
+  "might": {
+   "phonemes": "mˈaɪt",
+   "ms": 269
+  },
+  "sight": {
+   "phonemes": "sˈaɪt",
+   "ms": 359
+  },
+  "bright": {
+   "phonemes": "bɹˈaɪt",
+   "ms": 281
+  },
+  "flight": {
+   "phonemes": "flˈaɪt",
+   "ms": 297
+  },
+  "thigh": {
+   "phonemes": "θˈaɪ",
+   "ms": 374
+  },
+  "jar": {
+   "phonemes": "dʒˈɑː",
+   "ms": 382
+  },
+  "bar": {
+   "phonemes": "bˈɑː",
+   "ms": 309
+  },
+  "far": {
+   "phonemes": "fˈɑː",
+   "ms": 387
+  },
+  "arm": {
+   "phonemes": "ˈɑːm",
+   "ms": 372
+  },
+  "art": {
+   "phonemes": "ˈɑːt",
+   "ms": 308
+  },
+  "farm": {
+   "phonemes": "fˈɑːm",
+   "ms": 432
+  },
+  "barn": {
+   "phonemes": "bˈɑːn",
+   "ms": 373
+  },
+  "park": {
+   "phonemes": "pˈɑːk",
+   "ms": 353
+  },
+  "dark": {
+   "phonemes": "dˈɑːk",
+   "ms": 279
+  },
+  "shark": {
+   "phonemes": "ʃˈɑːk",
+   "ms": 292
+  },
+  "yard": {
+   "phonemes": "jˈɑːd",
+   "ms": 356
+  },
+  "card": {
+   "phonemes": "kˈɑːd",
+   "ms": 358
+  },
+  "for": {
+   "phonemes": "fˈɔː",
+   "ms": 388
+  },
+  "fork": {
+   "phonemes": "fˈɔːk",
+   "ms": 322
+  },
+  "corn": {
+   "phonemes": "kˈɔːn",
+   "ms": 441
+  },
+  "horn": {
+   "phonemes": "hˈɔːn",
+   "ms": 446
+  },
+  "born": {
+   "phonemes": "bˈɔːn",
+   "ms": 404
+  },
+  "storm": {
+   "phonemes": "stˈɔːm",
+   "ms": 485
+  },
+  "sort": {
+   "phonemes": "sˈɔːt",
+   "ms": 395
+  },
+  "short": {
+   "phonemes": "ʃˈɔːt",
+   "ms": 346
+  },
+  "north": {
+   "phonemes": "nˈɔːθ",
+   "ms": 441
+  },
+  "torch": {
+   "phonemes": "tˈɔːtʃ",
+   "ms": 540
+  },
+  "fort": {
+   "phonemes": "fˈɔːt",
+   "ms": 384
+  },
+  "cork": {
+   "phonemes": "kˈɔːk",
+   "ms": 345
+  },
+  "pork": {
+   "phonemes": "pˈɔːk",
+   "ms": 290
+  },
+  "sport": {
+   "phonemes": "spˈɔːt",
+   "ms": 417
+  },
+  "fur": {
+   "phonemes": "fˈɜː",
+   "ms": 402
+  },
+  "burn": {
+   "phonemes": "bˈɜːn",
+   "ms": 441
+  },
+  "turn": {
+   "phonemes": "tˈɜːn",
+   "ms": 469
+  },
+  "hurt": {
+   "phonemes": "hˈɜːt",
+   "ms": 348
+  },
+  "curl": {
+   "phonemes": "kˈɜːl",
+   "ms": 416
+  },
+  "surf": {
+   "phonemes": "sˈɜːf",
+   "ms": 462
+  },
+  "purr": {
+   "phonemes": "pˈɜːɹ",
+   "ms": 424
+  },
+  "church": {
+   "phonemes": "tʃˈɜːtʃ",
+   "ms": 611
+  },
+  "burst": {
+   "phonemes": "bˈɜːst",
+   "ms": 483
+  },
+  "now": {
+   "phonemes": "nˈaʊ",
+   "ms": 381
+  },
+  "how": {
+   "phonemes": "hˈaʊ",
+   "ms": 311
+  },
+  "wow": {
+   "phonemes": "wˈaʊ",
+   "ms": 325
+  },
+  "owl": {
+   "phonemes": "ˈaʊl",
+   "ms": 430
+  },
+  "down": {
+   "phonemes": "dˈaʊn",
+   "ms": 378
+  },
+  "town": {
+   "phonemes": "tˈaʊn",
+   "ms": 488
+  },
+  "clown": {
+   "phonemes": "klˈaʊn",
+   "ms": 428
+  },
+  "brown": {
+   "phonemes": "bɹˈaʊn",
+   "ms": 379
+  },
+  "crown": {
+   "phonemes": "kɹˈaʊn",
+   "ms": 450
+  },
+  "growl": {
+   "phonemes": "ɡɹˈaʊl",
+   "ms": 435
+  },
+  "oil": {
+   "phonemes": "ˈɔɪl",
+   "ms": 463
+  },
+  "coin": {
+   "phonemes": "kˈɔɪn",
+   "ms": 430
+  },
+  "boil": {
+   "phonemes": "bˈɔɪl",
+   "ms": 430
+  },
+  "soil": {
+   "phonemes": "sˈɔɪl",
+   "ms": 488
+  },
+  "join": {
+   "phonemes": "dʒˈɔɪn",
+   "ms": 364
+  },
+  "foil": {
+   "phonemes": "fˈɔɪl",
+   "ms": 401
+  },
+  "toil": {
+   "phonemes": "tˈɔɪl",
+   "ms": 468
+  },
+  "point": {
+   "phonemes": "pˈɔɪnt",
+   "ms": 256
+  },
+  "ear": {
+   "phonemes": "ˈɪə",
+   "ms": 371
+  },
+  "hear": {
+   "phonemes": "hˈɪə",
+   "ms": 362
+  },
+  "near": {
+   "phonemes": "nˈɪə",
+   "ms": 404
+  },
+  "dear": {
+   "phonemes": "dˈɪə",
+   "ms": 335
+  },
+  "fear": {
+   "phonemes": "fˈɪə",
+   "ms": 332
+  },
+  "gear": {
+   "phonemes": "ɡˈɪə",
+   "ms": 352
+  },
+  "rear": {
+   "phonemes": "ɹˈɪə",
+   "ms": 397
+  },
+  "year": {
+   "phonemes": "jˈɪə",
+   "ms": 383
+  },
+  "clear": {
+   "phonemes": "klˈɪə",
+   "ms": 452
+  },
+  "beard": {
+   "phonemes": "bˈɪəd",
+   "ms": 358
+  },
+  "spear": {
+   "phonemes": "spˈɪə",
+   "ms": 513
+  },
+  "air": {
+   "phonemes": "ˈɛː",
+   "ms": 238
+  },
+  "hair": {
+   "phonemes": "hˈɛː",
+   "ms": 324
+  },
+  "pair": {
+   "phonemes": "pˈɛː",
+   "ms": 370
+  },
+  "fair": {
+   "phonemes": "fˈɛː",
+   "ms": 413
+  },
+  "stair": {
+   "phonemes": "stˈɛː",
+   "ms": 389
+  },
+  "lair": {
+   "phonemes": "lˈɛː",
+   "ms": 322
+  },
+  "flair": {
+   "phonemes": "flˈɛː",
+   "ms": 428
+  },
+  "her": {
+   "phonemes": "hˈɜː",
+   "ms": 381
+  },
+  "fern": {
+   "phonemes": "fˈɜːn",
+   "ms": 429
+  },
+  "term": {
+   "phonemes": "tˈɜːm",
+   "ms": 445
+  },
+  "herd": {
+   "phonemes": "hˈɜːd",
+   "ms": 355
+  },
+  "verb": {
+   "phonemes": "vˈɜːb",
+   "ms": 323
+  },
+  "kerb": {
+   "phonemes": "kˈɜːb",
+   "ms": 318
+  },
+  "perch": {
+   "phonemes": "pˈɜːtʃ",
+   "ms": 530
   }
  },
  "phrases": {
@@ -2232,10 +3395,27 @@
   "chick": "ok",
   "thumb": "ok",
   "thread": "ok",
-  "thunder": "ok"
+  "thunder": "ok",
+  "jet": "ok",
+  "jam": "ok",
+  "jug": "ok",
+  "van": "ok",
+  "vest": "ok",
+  "web": "ok",
+  "wig": "ok",
+  "wing": "ok",
+  "yak": "ok",
+  "yoyo": "ok",
+  "zip": "ok",
+  "zoo": "ok",
+  "zebra": "ok",
+  "queen": "ok",
+  "quilt": "ok"
  },
  "problems": [],
- "warnings": [],
+ "warnings": [
+  "[north] /z/ v1: voiced fricative short or not voiced"
+ ],
  "asr": {
   "understood": 59,
   "of": 254,

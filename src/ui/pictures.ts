@@ -3,6 +3,9 @@
 import { K, PICTURES, add, c, e, eye, p, r, s, shadow, type Col } from './pictureKit';
 import { install as installRedrawA } from './pictures_redraw_a';
 import { install as installRedrawB } from './pictures_redraw_b';
+import { install as installSet8 } from './pictures_set8';
+import { install as installSet10 } from './pictures_set10';
+import { install as installSet11 } from './pictures_set11';
 export { PICTURES };
 
 // ===== ANIMALS =====================================================================================================
@@ -270,6 +273,9 @@ add('boot', shadow(95, 38) + p('M30 28 Q30 10 42 10 Q54 10 54 28' , 'none', `str
 // Redrawn cards replace the earlier drawings of the same word (they run last on purpose).
 installRedrawA();
 installRedrawB();
+installSet8();
+installSet10();
+installSet11();
 
 export const hasPicture = (word: string): boolean => word in PICTURES;
 import { h } from './dom';

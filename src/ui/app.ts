@@ -1,23 +1,24 @@
-import { ACCENTS, GRAPHEMES, MAX_SET, MNEMONICS, STORY_SAY, TODDLER_WORDS, bankFor, type AccentId } from '../engine/data';
+import './anim-flow.css';
+import { ACCENTS, GRAPHEMES, MAX_SET, MNEMONICS, STORY_SAY, TODDLER_WORDS, bankFor, type AccentId, type Word } from '../engine/data';
 import { seeded, shuffle } from '../engine/dates';
 import { strugglingSounds } from '../engine/review';
 import { weekActivity, weekLines, weeklySummary } from '../engine/summary';
 import {
-  NEW_SOUND_TRIALS, REVIEW_SOUND_TRIALS, applyPlacement, buildPlacement, decodableWords,
+  applyPlacement, feedBlocks, buildPlacement, decodableWords,
   missionFor, phonemeOf, pickDistractors, pickWords, printBlendOpen, scorePlacement, slashed, startAdventure, type Plan,
 } from '../engine/session';
 import { playDay } from '../engine/simulate';
 import {
   MASTERY_DAYS, newChild, statusOf, unlockedSet, wordsRead, type ChildState,
 } from '../engine/state';
-import { audioSource, blip, initAudio, praise, sayPhrase, saySeq, setMuted, setMusicOn, sfx, speak, tap, unlockAudio } from './audio';
+import { audioSource, blip, initAudio, sayPhrase, saySeq, setMuted, setMusicOn, sfx, speak, tap, unlockAudio } from './audio';
 import { friendEl } from './friends';
 import { pictureEl } from './pictures';
 import { copyBeat, findIt } from './games2';
-import { GAME_LABEL, availableGames, safariLearned, roundBridge, roundDrum, roundFeed, roundKitchen, roundRhyme, roundRobot, roundSafari, roundTrace, type GameKind } from './rounds';
-import { chestSVG } from './art';
+import { availableGames, safariLearned, roundBridge, roundDrum, roundFeed, roundKitchen, roundRhyme, roundRobot, roundSafari, roundTrace, type GameKind } from './rounds';
 import { PACKS, arrivalSVG, companionSVG, defaultNameFor, packById, sameSlotIn } from './themes';
-import { burst, mount, setNight } from './fx';
+import { mount, setNight } from './fx';
+import { doorGrid, finaleScene, hatchScene, homeIdle, sleepScene, zsEl } from './flow';
 import { bigButton, h, sleep } from './dom';
 import {
   companionEl, placementTrial, type Ctx,
@@ -78,6 +79,7 @@ export class App {
   /** Paint the current theme pack's backdrop (and its first creature's arrival on the logo). Cosmetic only. */
   private applyTheme(): void {
     const pack = packById(this.s.theme);
+    document.body.dataset.pack = pack.id; // lets the stylesheet skin props (bridge planks, drum, rocket...) per world
     this.bg.innerHTML = pack.scene();
     this.logoEl.innerHTML = `${arrivalSVG((pack.creatures[0] as { id: string }).id)}<span>Soundling</span>`;
   }
@@ -253,18 +255,10 @@ export class App {
     const pack = packById(this.s.theme);
     const kind = (pack.creatures[chosen] as { id: string }).id;
     this.s.companion = { kind, name: names.value.trim() || defaultNameFor(kind) };
-    // the egg (or crate, or capsule) wobbles, opens and the friend pops out
-    const arrives = pack.arrival === 'egg' ? 'hatching' : 'arriving';
-    const hatchEgg = h('div', { class: 'hatch-egg' });
-    hatchEgg.innerHTML = arrivalSVG(kind);
-    mount(this.stage, h('div', { class: 'scene' }, hatchEgg, h('p', { class: 'caption' }, `Something is ${arrives}…`)));
-    sfx.boing();
-    await sleep(900);
-    sfx.pop();
-    burst(hatchEgg, 'confetti', 18);
-    praise();
-    const hatched = companionEl(this.s, 'big hatching');
-    await this.interlude([hatched, h('p', { class: 'caption' }, `${this.s.companion.name} ${pack.arrival === 'egg' ? 'hatched' : 'arrived'}! Hello, ${nick}!`)]);
+    // the egg (or crate, or capsule) wobbles, cracks or pops open; the friend springs out, waves and looks at the button (flow.ts)
+    const arrived = pack.arrival === 'egg' ? 'hatched' : 'arrived';
+    await hatchScene(this.stage, { packId: pack.id, kind, name: this.s.companion.name, nick, pet: companionEl(this.s, 'big'), arrived });
+    tap();
 
     // placement (band C only)
     if (band === 'C') {
@@ -305,7 +299,7 @@ export class App {
       ...s.collection.slice(0, SPOTS.length).map((id, i) =>
         h('span', { class: 'prize', title: MNEMONICS[id]?.name ?? id, style: `left:${SPOTS[i]![0]}%;top:${SPOTS[i]![1]}%;animation-delay:${(i % 5) * 0.4}s` }, friendEl(id))),
       (() => {
-        const pet = h('div', { class: 'island-pet', 'data-testid': 'island-pet' }, companionEl(s, `big ${asleep ? 'sleepy' : ''}`, 'companion'));
+        const pet = h('div', { class: `island-pet${asleep ? ' asleep' : ''}`, 'data-testid': 'island-pet' }, companionEl(s, `big ${asleep ? 'sleepy' : ''}`, 'companion'), asleep ? zsEl() : null);
         // touching the character is the first thing a small child tries: it answers (a wiggle and a pop; a sleepy one gives a snore-wiggle)
         pet.addEventListener('pointerdown', () => { tap(); sfx.pop(); pet.classList.remove('wiggle'); void pet.offsetWidth; pet.classList.add('wiggle'); });
         return pet;
@@ -314,10 +308,12 @@ export class App {
     );
     setNight(asleep);
     const playLabel = s.band === 'B' ? 'Play together' : done ? 'Play again' : 'Play';
-    const play = bigButton(`▶ ${playLabel}`, 'play', 'go');
+    const play = bigButton(`▶ ${playLabel}`, 'play', done ? 'quiet' : 'go'); // once today's adventure is done, "play again" is a quiet option, not a big green invitation
     play.el.setAttribute('aria-label', playLabel);
     play.el.addEventListener('pointerdown', () => sayPhrase(s.band === 'B' ? 'play_together' : done ? 'play_again' : 'play', playLabel));
     const free = bigButton('Free play', 'freeplay', 'quiet');
+    // Free Play uses only sounds already met, counts against the daily limit and never adds a new sound, so it is offered from the start
+    const hasLearned = Object.keys(s.sounds).length > 0;
     mount(this.stage, 
       h('div', { class: 'scene home' },
         h('p', { class: 'caption', 'data-testid': 'greeting' },
@@ -325,9 +321,10 @@ export class App {
             ? `${name} is sleepy. See you tomorrow, ${s.nickname}!`
             : `Hello ${s.nickname}! ${last ? `Yesterday we learned ${slashed(last[0])}.` : `I’m ${name}. Let’s find some sounds!`}`),
         island,
-        h('div', { class: 'row' }, play.el, done && s.band === 'C' && !this.overLimit() ? free.el : null),
+        h('div', { class: 'row' }, play.el, s.band === 'C' && hasLearned && !this.overLimit() ? free.el : null),
       ),
     );
+    homeIdle(island.querySelector('.island-pet') as HTMLElement, play.el, asleep); // a slow glance at the Play button now and then (breathing and blinking are CSS)
     const which = await Promise.race([play.pressed.then(() => 'play' as const), free.pressed.then(() => 'free' as const)]);
     if (which === 'free') await this.freePlay();
     else if (s.band === 'B') await this.soundPlay();
@@ -343,7 +340,6 @@ export class App {
     const plan = startAdventure(s, today, seeded((Date.now() & 0xffff) ^ s.dayOffset));
     this.persist();
     const ctx = this.ctx();
-    const name = s.companion?.name ?? 'Dino';
 
     // 1. Hello
     void sayPhrase('hello', 'Hello!');
@@ -353,12 +349,14 @@ export class App {
       h('p', { class: 'caption' }, `Hello ${s.nickname}! ${lastSound ? `Yesterday: ${slashed(lastSound[0])}.` : ''} Let’s play!`),
     ]);
 
+    // The Feed trials are split into blocks with the oral game between them, so one mechanic never runs for ten rounds in a row
+    // (see feedBlocks): warm-up -> story -> early Feed -> oral game -> late Feed -> printed game -> make it real.
+    const blocks = feedBlocks(plan, Object.keys(s.sounds).length);
+
     // 2. Warm-up: earlier sounds the child found hardest
-    for (const g of plan.review) {
-      for (const idx of REVIEW_SOUND_TRIALS) {
-        await roundFeed(ctx, g, idx);
-        this.persist();
-      }
+    for (const it of blocks.warm) {
+      await roundFeed(ctx, it.g, it.idx);
+      this.persist();
     }
     if (this.overLimit()) return this.goodnight(plan);
 
@@ -376,12 +374,8 @@ export class App {
       await this.interlude([h('p', { class: 'caption' }, `No new sound today, ${s.nickname}. Let’s make our sounds strong!`)]);
     }
 
-    // 4. Practice: three games, rising in difficulty (Feed the Creature, then one listening game, then one print/rhyme game)
-    if (plan.newSound) {
-      for (const idx of NEW_SOUND_TRIALS) await roundFeed(ctx, plan.newSound, idx);
-    } else {
-      for (const g of plan.review) for (const idx of [2, 3]) await roundFeed(ctx, g, idx);
-    }
+    // 4. Practice: Feed, then one listening game, then the rest of the Feed, then one print/rhyme game (rising difficulty overall)
+    for (const it of blocks.early) await roundFeed(ctx, it.g, it.idx);
     this.persist();
     if (this.overLimit()) return this.goodnight(plan);
 
@@ -391,29 +385,28 @@ export class App {
     this.persist();
     if (this.overLimit()) return this.goodnight(plan);
 
-    if (plan.third === 'bridge') for (const w of plan.bridgeWords) await roundBridge(ctx, w);
+    for (const it of blocks.late) await roundFeed(ctx, it.g, it.idx);
+    this.persist();
+    if (this.overLimit()) return this.goodnight(plan);
+
+    // the printed-word block is two rounds plus the "make it real" word (three Bridge rounds in all, not four)
+    if (plan.third === 'bridge') for (const w of plan.bridgeWords.slice(0, 2)) await roundBridge(ctx, w);
     else if (plan.third === 'kitchen') for (const w of plan.kitchenWords) await roundKitchen(ctx, w);
     else for (let i = 0; i < 2; i++) await roundRhyme(ctx);
     this.persist();
 
-    // 5. Make it real: the decoded word comes alive
+    // 5. Make it real, then ONE end-of-day celebration: the decoded word comes alive, then the chest the child taps (flow.ts)
+    let alive: Word | null = null;
     if (plan.makeItReal) {
       const { word, mode } = plan.makeItReal;
       if (mode === 'print') await roundBridge(ctx, word);
       else await roundRobot(ctx, word, 1);
-      const aliveEl = h('div', { class: 'alive-word', 'data-testid': 'alive' }, h('span', { class: 'alive-rays' }), h('span', { class: 'alive-pic' }, pictureEl(word.text, word.emoji ?? '✨')));
-      setTimeout(() => { burst(aliveEl, 'confetti', 20); sfx.sparkle(); speak(word.text); }, 350);
-      await this.interlude([
-        aliveEl,
-        h('p', { class: 'caption' }, `${word.text}!${name ? ` ${name} cheers.` : ''}`),
-      ], '▶', 'alive-next');
+      alive = word;
     }
-
-    // 6. Treasure and goodnight
-    await this.goodnight(plan);
+    await this.goodnight(plan, alive);
   }
 
-  private async goodnight(plan: Plan): Promise<void> {
+  private async goodnight(plan: Plan, alive: Word | null = null): Promise<void> {
     const s = this.s;
     const today = this.today();
     const prize = plan.newSound?.id ?? plan.review[0]?.id ?? null;
@@ -434,24 +427,18 @@ export class App {
         if (plan.makeItReal) speak(plan.makeItReal.word.text);
       },
     }, 'Show a grown-up');
-    // The chest always holds the sound's own friend (known in advance, never random). It opens by itself, so there is nothing to miss.
-    const chest = h('div', { class: 'chest' });
-    chest.innerHTML = chestSVG();
-    const prizeEl = h('div', { class: 'treasure', 'data-testid': 'treasure' }, prize ? friendEl(prize) : '⭐');
-    mount(this.stage,
-      h('div', { class: 'scene' },
-        h('p', { class: 'caption' }, 'You found a treasure!'),
-        h('div', { class: 'chest-wrap' }, chest, prizeEl),
-        h('p', { class: 'treasure-name' }, m?.name ?? ''),
-        h('div', { class: 'row' }, show, shown.el),
-        // the off-screen mission, in plain sight for the grown-up who is usually next to the child at this point (it was behind a lightbulb)
-        h('div', { class: 'grownup-card', 'data-testid': 'mission-card' }, h('strong', {}, 'For the grown-up'), plan.mission)),
-    );
-    void sayPhrase('treasure', 'You found a treasure!');
-    setTimeout(() => { chest.classList.add('open'); sfx.chest(); burst(prizeEl, 'stars', 16); praise(); }, 900);
+    // The chest always holds the sound's own friend (known in advance, never random). The child taps it to open it (it also opens by itself
+    // after a few seconds, so nobody is ever stuck); the decoded word comes alive first, in the same continuous celebration.
+    const card = h('div', { class: 'grownup-card', 'data-testid': 'mission-card' }, h('strong', {}, 'For the grown-up'), plan.mission); // the off-screen mission, in plain sight
+    finaleScene(this.stage, {
+      pet: companionEl(s, 'big'),
+      word: alive ? { text: alive.text, pic: pictureEl(alive.text, alive.emoji ?? '✨') } : null,
+      friendId: prize, friendName: m?.name ?? '', phoneme: prize ? phonemeOf(prize) : null,
+      goodnight: shown.el, show, card,
+    });
     await shown.pressed; // goodnight is a celebration, not a cut-off: the child chooses to close the day
     setNight(true);
-    await this.interlude([companionEl(s, 'big sleepy'), h('p', { class: 'caption' }, 'Zzz… the island is asleep.')], '🏝️', 'sleep-next');
+    await sleepScene(this.stage, { pet: companionEl(s, 'big sleepy'), caption: 'Zzz… the island is asleep.', label: 'Back to my island', testid: 'sleep-next', icon: '🏝️' });
   }
 
   // ----- free play (mastered sounds only, up to the parent-set limit) -----
@@ -486,9 +473,7 @@ export class App {
       const pick = await race(new Promise<GameKind>((resolve) => {
         mount(this.stage, h('div', { class: 'scene' },
           h('p', { class: 'caption' }, 'What shall we play?'),
-          h('div', { class: 'gamegrid', 'data-testid': 'gamegrid' }, games.map((k) =>
-            h('button', { class: 'gamebtn', 'data-testid': `fp-${k}`, 'aria-label': GAME_LABEL[k].name, onClick: () => { tap(); sfx.pop(); resolve(k); } },
-              h('span', { class: 'gicon' }, GAME_LABEL[k].icon), h('span', { class: 'gname' }, GAME_LABEL[k].name))))));
+          doorGrid(games, s.companion?.kind ?? 'rexy', (k) => { tap(); sfx.pop(); resolve(k); })));
       }));
       if (!pick) break;
       const rounds = Number(new URLSearchParams(location.search).get('fpRounds')) || 3; // (tests use 1)
@@ -523,7 +508,7 @@ export class App {
     if (!this.s.adventureDays.includes(this.today())) this.s.adventureDays.push(this.today()); // so the grown-up's Today and This week show that Sound Play happened
     this.persist();
     setNight(true);
-    await this.interlude([companionEl(this.s, 'big sleepy'), h('p', { class: 'caption' }, 'Goodnight! See you tomorrow.')], '🏝️');
+    await sleepScene(this.stage, { pet: companionEl(this.s, 'big sleepy'), caption: 'Goodnight! See you tomorrow.', label: 'Back to my island', testid: 'next', icon: '🏝️' });
   }
 
   // ----- parent area (behind a gate) -----

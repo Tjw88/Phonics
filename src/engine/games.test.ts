@@ -33,6 +33,16 @@ describe('Trace Trail glyphs', () => {
     expect(second.x - first.x).toBeCloseTo(64, 0);
     expect(shiftPath('M10 20 L30 40', 5)).toBe('M15 20 L35 40');
   });
+  it('a three-letter grapheme is traced as three letters side by side', () => {
+    expect(glyphWidth('igh')).toBe(188);
+    expect(glyphWidth('ow')).toBe(124);
+    expect(glyphWidth('a')).toBe(60);
+    expect(strokesFor('igh').length).toBe(GLYPHS.i!.length + GLYPHS.g!.length + GLYPHS.h!.length);
+    const all = strokesFor('igh').flatMap((s) => samplePath(s.d));
+    expect(Math.min(...all.map((p) => p.x))).toBeGreaterThanOrEqual(-1);
+    expect(Math.max(...all.map((p) => p.x))).toBeGreaterThan(150); // the third letter really sits in the third slot
+    expect(Math.max(...all.map((p) => p.x))).toBeLessThanOrEqual(189);
+  });
   it('tracing in order from the start dot completes; scribbling or going backwards does not', () => {
     const pts = samplePath(GLYPHS.l![0]!.d);
     let r = -1;
@@ -62,7 +72,7 @@ describe('Sound Safari', () => {
     expect(new Set(SAFARI.map((i) => i.emoji)).size).toBe(SAFARI.length);
   });
   it('every single-letter sound has at least two things that start with that letter', () => {
-    for (const g of GRAPHEMES.filter((x) => x.id.length === 1)) expect(SAFARI.filter((i) => i.g === g.id).length, g.id).toBeGreaterThanOrEqual(2);
+    for (const g of GRAPHEMES.filter((x) => x.id.length === 1 && x.id !== 'x')) expect(SAFARI.filter((i) => i.g === g.id).length, g.id).toBeGreaterThanOrEqual(2); // x never starts a /ks/ word
   });
   it('a "k" scene never contains cat (or anything else spelled with c), and a "c" scene never contains kite', () => {
     const s = newChild();
@@ -109,7 +119,7 @@ describe('Sound Safari', () => {
     }
   });
   it('letters that no word starts with (ck, ff, ll, ss) never get a Safari scene', () => {
-    for (const id of ['ck', 'ff', 'll', 'ss', 'ng', 'ai', 'ee', 'oa', 'oo']) expect(safariGraphemes('rp')).not.toContain(id);
+    for (const id of ['ck', 'ff', 'll', 'ss', 'zz', 'ng', 'ai', 'ee', 'oa', 'oo', 'x', 'igh', 'ar', 'or', 'ur', 'ow', 'oi', 'ear', 'air', 'er']) expect(safariGraphemes('rp')).not.toContain(id);
   });
 });
 

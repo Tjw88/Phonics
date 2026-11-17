@@ -21,9 +21,18 @@ export const GRAPHEMES: Grapheme[] = [
   // set 7: four vowel digraphs, each ONE long vowel sound. oo is the LONG sound of "moon" only: the short sound of "book" is a second
   // sound for the same letters, so it is neither taught nor used (a test keeps book, look, good, foot out of the bank).
   g('ai', 7), g('ee', 7), g('oa', 7), g('oo', 7),
+  // sets 8-9: the consonants the first sets left out (j v w x | y z zz qu). x says two sounds (/ks/) and qu says two (/kw/) as ONE letter group,
+  // as every programme teaches them; zz is a word-end double of z.
+  g('j', 8), g('v', 8), g('w', 8), g('x', 8),
+  g('y', 9), g('z', 9), g('zz', 9, 'z'), g('qu', 9),
+  // sets 10-12: the remaining vowel sounds. Each is ONE sound: igh /aɪ/, ar /ɑː/, or /ɔː/, ur /ɜː/; ow is /aʊ/ only (cow, not the /əʊ/ of snow), oi /ɔɪ/,
+  // ear /ɪə/, air /ɛə/; er shares the sound of ur (her, fern). "ure" is left out on purpose: in cure/pure it is /jʊə/, not one vowel sound.
+  g('igh', 10), g('ar', 10), g('or', 10), g('ur', 10),
+  g('ow', 11), g('oi', 11), g('ear', 11), g('air', 11),
+  g('er', 12, 'ur'),
 ];
 
-export const MAX_SET = 7;
+export const MAX_SET = 12;
 export const GRAPHEME_BY_ID = new Map(GRAPHEMES.map((x) => [x.id, x]));
 export const graphemesInSet = (set: number) => GRAPHEMES.filter((x) => x.set === set);
 
@@ -61,6 +70,23 @@ export const MNEMONICS: Record<string, Mnemonic> = {
   ee: { name: 'Bea the bee', emoji: '🐝', line: 'Bea buzzes ee, ee, ee.' },
   oa: { name: 'Boa the boat', emoji: '⛵', line: 'Boa toots oa, oa, oa as she sails.' },
   oo: { name: 'Moony the moon', emoji: '🌙', line: 'Moony sings oo, oo, oo at night.' },
+  j: { name: 'Jess the jet', emoji: '🛩️', line: 'Jess zooms j, j, j.' },
+  v: { name: 'Vic the van', emoji: '🚐', line: 'Vic vrooms vvv.' },
+  w: { name: 'Wiggle the worm', emoji: '🪱', line: 'Wiggle wobbles www.' },
+  x: { name: 'Axel the box', emoji: '📦', line: 'Axel clicks ks, ks, ks.' },
+  y: { name: 'Yoyo the yak', emoji: '🪀', line: 'Yoyo yips y, y, y.' },
+  z: { name: 'Zippy the zebra', emoji: '🦓', line: 'Zippy zooms zzz.' },
+  zz: { name: 'Fizzy the fizz', emoji: '🥤', line: 'Fizzy fizzes zz at the end.' },
+  qu: { name: 'Queenie the queen', emoji: '👑', line: 'Queenie says qu, qu, qu.' },
+  igh: { name: 'Lite the light', emoji: '💡', line: 'Lite shines igh, igh, igh.' },
+  ar: { name: 'Starla the star', emoji: '⭐', line: 'Starla says ar, ar, ar.' },
+  or: { name: 'Norah the corn', emoji: '🌽', line: 'Norah crunches or, or, or.' },
+  ur: { name: 'Furry the fur ball', emoji: '🐾', line: 'Furry purrs ur, ur, ur.' },
+  ow: { name: 'Howie the owl', emoji: '🦉', line: 'Howie hoots ow, ow, ow.' },
+  oi: { name: 'Coco the coin', emoji: '🪙', line: 'Coco spins oi, oi, oi.' },
+  ear: { name: 'Earl the ear', emoji: '👂', line: 'Earl listens: ear, ear, ear.' },
+  air: { name: 'Hairy the hairbrush', emoji: '🪮', line: 'Hairy brushes air, air, air.' },
+  er: { name: 'Fern the fern', emoji: '🍃', line: 'Fern says er, er, er.' },
 };
 
 export interface Word {
@@ -122,6 +148,28 @@ const rows: Row[] = [
   ['l-oa-d'], ['c-oa-ch'], ['f-l-oa-t'], ['c-l-oa-k'], ['m-oa-t'], ['c-oa-l'],
   ['m-oo-n', '🌙'], ['s-p-oo-n', '🥄'], ['b-oo-t', '👢'], ['m-oo'], ['t-oo'], ['b-oo'], ['s-oo-n'], ['n-oo-n'], ['p-oo-l'], ['c-oo-l'], ['t-oo-l'], ['f-oo-d'], ['m-oo-d'],
   ['h-oo-t'], ['t-oo-t'], ['b-oo-m'], ['d-oo-m'], ['l-oo-p'],
+  // set 8 (j v w x). "was", "wasp" (not /w ɒ/ as spelled), "with" (voiced th) and "wind" (said two ways) stay out.
+  ['j-a-m', '🍓'], ['j-e-t', '🛩️'], ['j-u-g', '🏺'], ['j-o-g'], ['j-u-m-p'], ['j-o-b'], ['j-a-ck'],
+  ['v-a-n', '🚐'], ['v-e-t'], ['v-e-s-t', '🦺'], ['v-a-t'], ['v-e-n-t'],
+  ['w-e-b', '🕸️'], ['w-i-g', '💇'], ['w-e-t'], ['w-i-n'], ['w-a-g'], ['w-a-x'], ['w-i-sh'], ['w-i-ng', '🪽'], ['s-w-i-ng'], ['w-e-ll'], ['w-i-ck'],
+  ['f-o-x', '🦊'], ['b-o-x', '📦'], ['s-i-x'], ['m-i-x'], ['f-i-x'], ['t-a-x'], ['n-e-x-t'], ['o-x'],
+  // set 9 (y z zz qu)
+  ['y-e-s'], ['y-a-m'], ['y-u-m'], ['y-a-ck'], ['y-e-ll'], ['y-e-t'], ['y-a-p'],
+  ['z-i-p', '🤐'], ['z-a-p'], ['z-i-g'], ['z-oo', '🦒'], ['z-oo-m'], ['z-e-s-t'],
+  ['b-u-zz'], ['f-i-zz'], ['j-a-zz'], ['f-u-zz'],
+  ['qu-i-t'], ['qu-i-z'], ['qu-i-ck'], ['qu-a-ck'], ['qu-ee-n', '👸'], ['qu-i-ll'], ['qu-i-l-t', '🧶'], ['qu-e-s-t'],
+  // set 10 (igh ar or ur)
+  ['h-igh'], ['s-igh'], ['n-igh-t', '🌃'], ['l-igh-t', '💡'], ['r-igh-t'], ['t-igh-t'], ['m-igh-t'], ['s-igh-t'], ['b-r-igh-t'], ['f-l-igh-t'], ['th-igh'],
+  ['c-ar'], ['j-ar', '🫙'], ['b-ar'], ['f-ar'], ['s-t-ar'], ['ar-m', '💪'], ['ar-t'], ['f-ar-m', '🚜'], ['b-ar-n', '🌾'], ['p-ar-k'], ['d-ar-k'], ['sh-ar-k', '🦈'], ['y-ar-d'], ['c-ar-d', '🃏'],
+  ['f-or'], ['f-or-k', '🍴'], ['c-or-n', '🌽'], ['h-or-n', '📯'], ['b-or-n'], ['s-t-or-m'], ['s-or-t'], ['sh-or-t'], ['n-or-th'], ['t-or-ch', '🔦'], ['f-or-t'], ['c-or-k'], ['p-or-k'], ['s-p-or-t'],
+  ['f-ur'], ['b-ur-n'], ['t-ur-n'], ['h-ur-t'], ['c-ur-l', '🌀'], ['s-ur-f', '🏄'], ['p-ur-r'], ['ch-ur-ch'], ['b-ur-s-t'],
+  // set 11 (ow oi ear air)
+  ['c-ow'], ['n-ow'], ['h-ow'], ['w-ow'], ['ow-l', '🦉'], ['d-ow-n'], ['t-ow-n'], ['c-l-ow-n', '🤡'], ['b-r-ow-n'], ['c-r-ow-n', '👑'], ['g-r-ow-l'],
+  ['oi-l', '🛢️'], ['c-oi-n', '🪙'], ['b-oi-l'], ['s-oi-l'], ['j-oi-n'], ['f-oi-l'], ['t-oi-l'], ['p-oi-n-t'],
+  ['ear', '👂'], ['h-ear'], ['n-ear'], ['d-ear'], ['f-ear'], ['g-ear'], ['r-ear'], ['y-ear'], ['c-l-ear'], ['b-ear-d'], ['s-p-ear'],
+  ['air', '🌬️'], ['h-air', '💇‍♀️'], ['p-air', '👯'], ['f-air'], ['s-t-air', '🪜'], ['l-air'], ['f-l-air'],
+  // set 12 (er: the sound of ur)
+  ['h-er'], ['f-er-n', '🍃'], ['t-er-m'], ['h-er-d'], ['v-er-b'], ['k-er-b'], ['p-er-ch'],
 ];
 
 export const BANK: Word[] = rows.map(([seg, emoji, flags = '']) => ({
@@ -187,6 +235,13 @@ export const SAFARI: SafariItem[] = [
   ...sf('sh', [['ship', '🚢'], ['shell', '🐚'], ['sheep', '🐑'], ['shoe', '👟']], 'sh'),
   ...sf('ch', [['chair', '🪑'], ['cheese', '🧀'], ['chick', '🐥']], 'ch'),
   ...sf('th', [['thumb', '👍'], ['thread', '🧵'], ['thunder', '⛈️']], 'th'),
+  // sets 8-9 (x never starts a /ks/ word: xylophone starts with /z/, so it has no scene)
+  ...sf('j', [['jet', '🛩️'], ['jam', '🍓'], ['jug', '🏺']]),
+  ...sf('v', [['van', '🚐'], ['vest', '🦺']]),
+  ...sf('w', [['web', '🕸️'], ['wig', '💇'], ['wing', '🪽']]),
+  ...sf('y', [['yak', '🦬'], ['yoyo', '🪀']]),
+  ...sf('z', [['zip', '🤐'], ['zoo', '🦒'], ['zebra', '🦓']]),
+  ...sf('qu', [['queen', '👸'], ['quilt', '🧶']], 'qu'),
 ];
 /** Safari items dropped per accent when the audio audit found the engine says them with a different first sound. */
 export const SAFARI_EXCLUDE: Record<AccentId, readonly string[]> = { rp: [], north: [] };
@@ -197,7 +252,8 @@ export const safariFor = (accent: AccentId): SafariItem[] => SAFARI.filter((i) =
  * show these together as the answer and a distractor, because the picture, not the child, would be at fault.
  */
 export const CONFUSABLE: readonly (readonly [string, string])[] = [['mug', 'cup'], ['pan', 'pot'], ['cat', 'tiger'], ['chick', 'duck'], ['sheep', 'ram'],
-  ['boat', 'ship'], ['sail', 'boat'], ['sail', 'ship'], ['goat', 'sheep'], ['rain', 'thunder']];
+  ['boat', 'ship'], ['sail', 'boat'], ['sail', 'ship'], ['goat', 'sheep'], ['rain', 'thunder'],
+  ['jar', 'jam'], ['jug', 'jar'], ['jug', 'mug'], ['barn', 'farm'], ['crown', 'queen'], ['owl', 'hen'], ['torch', 'light'], ['coin', 'ring'], ['hair', 'wig'], ['fern', 'leaf']];
 export const isConfusable = (a: string, b: string): boolean => CONFUSABLE.some(([x, y]) => (a === x && b === y) || (a === y && b === x));
 
 /**
@@ -206,7 +262,10 @@ export const isConfusable = (a: string, b: string): boolean => CONFUSABLE.some((
  */
 export const CLOSE_SOUNDS: readonly (readonly [string, string])[] = [['s', 'sh'], ['t', 'th'], ['f', 'th'], ['sh', 'ch'], ['t', 'ch'], ['n', 'ng'], ['k', 'ng'],
   // a long vowel next to the short one it is built on (a/ai, e/ai, e/ee, i/ee, o/oa, u/oo): easy to blur, especially in a synthetic voice
-  ['a', 'ai'], ['e', 'ai'], ['e', 'ee'], ['i', 'ee'], ['o', 'oa'], ['u', 'oo']];
+  ['a', 'ai'], ['e', 'ai'], ['e', 'ee'], ['i', 'ee'], ['o', 'oa'], ['u', 'oo'],
+  // voiced / unvoiced and neighbouring consonants (j/ch, v/f, z/s, v/b, qu/k, x/k), and the vowel sounds that blur into each other
+  ['j', 'ch'], ['v', 'f'], ['z', 's'], ['v', 'b'], ['qu', 'k'], ['x', 'k'], ['j', 'sh'], ['w', 'y'],
+  ['ar', 'or'], ['or', 'ur'], ['ar', 'ur'], ['igh', 'ai'], ['ow', 'oa'], ['ow', 'oi'], ['ear', 'air'], ['air', 'ai'], ['ear', 'ee'], ['or', 'o'], ['ur', 'u'], ['ar', 'a'], ['oi', 'or'], ['igh', 'i'], ['air', 'e']];
 export const soundsClose = (a: string, b: string): boolean => CLOSE_SOUNDS.some(([x, y]) => (a === x && b === y) || (a === y && b === x));
 
 /** What a sound-friend SAYS when introduced. Written without letter names on purpose (a voice reading "t" would say "tee");
@@ -220,6 +279,10 @@ export const STORY_SAY: Record<string, string> = {
   l: 'Lulu the lamb licks her lips.', ll: 'Bella the bell rings.', ss: 'Moss hisses.',
   sh: 'Shelly the shell whispers.', ch: 'Choo-Choo the train chugs along.', th: 'Theo the thumb sticks his tongue out.', ng: 'Gong the gong rings out.',
   ai: 'Rainy the raindrop splashes down.', ee: 'Bea the bee buzzes by.', oa: 'Boa the boat toots her horn.', oo: 'Moony the moon sings softly.',
+  j: 'Jess the jet zooms past.', v: 'Vic the van drives by.', w: 'Wiggle the worm wobbles.', x: 'Axel the box clicks open.',
+  y: 'Yoyo the yak yips.', z: 'Zippy the zebra zooms.', zz: 'Fizzy the fizz bubbles up.', qu: 'Queenie the queen speaks.',
+  igh: 'Lite the light shines bright.', ar: 'Starla the star twinkles.', or: 'Norah the corn crunches.', ur: 'Furry the fur ball purrs.',
+  ow: 'Howie the owl hoots.', oi: 'Coco the coin spins.', ear: 'Earl the ear listens.', air: 'Hairy the hairbrush swishes.', er: 'Fern the fern sways.',
 };
 
 /**

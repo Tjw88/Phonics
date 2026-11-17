@@ -1,17 +1,10 @@
+import { cheeks, eyes, face, smile } from './friendKit';
+import { FRIENDS_SET8 } from './friends_set8';
+import { FRIENDS_SET10 } from './friends_set10';
+import { FRIENDS_SET11 } from './friends_set11';
 // The sound-friends: one original character per sound (spec: original mnemonics, must not copy any programme's
 // artwork; each character's shape or action evokes its letter). Hand-drawn inline SVG, same style as the companion:
 // big eyes, soft round shapes, nothing scary. viewBox is 0 0 120 120 for all of them.
-
-const eyes = (x1: number, x2: number, y: number, r = 7): string =>
-  `<g class="eyes"><circle cx="${x1}" cy="${y}" r="${r}" fill="#fff"/><circle cx="${x2}" cy="${y}" r="${r}" fill="#fff"/>` +
-  `<circle cx="${x1 + r * 0.15}" cy="${y + r * 0.1}" r="${r * 0.55}" fill="#26303f"/><circle cx="${x2 + r * 0.15}" cy="${y + r * 0.1}" r="${r * 0.55}" fill="#26303f"/>` +
-  `<circle cx="${x1 + r * 0.35}" cy="${y - r * 0.25}" r="${r * 0.2}" fill="#fff"/><circle cx="${x2 + r * 0.35}" cy="${y - r * 0.25}" r="${r * 0.2}" fill="#fff"/></g>`;
-const smile = (cx: number, y: number, w = 12): string =>
-  `<path d="M${cx - w} ${y} Q${cx} ${y + w * 0.9} ${cx + w} ${y}" fill="none" stroke="#3b2030" stroke-width="3.2" stroke-linecap="round"/>`;
-const cheeks = (x1: number, x2: number, y: number, r = 5): string =>
-  `<circle cx="${x1}" cy="${y}" r="${r}" fill="#ff8fa3" opacity=".5"/><circle cx="${x2}" cy="${y}" r="${r}" fill="#ff8fa3" opacity=".5"/>`;
-const face = (cx: number, cy: number, s = 1): string =>
-  eyes(cx - 10 * s, cx + 10 * s, cy, 6.5 * s) + cheeks(cx - 17 * s, cx + 17 * s, cy + 9 * s, 4.5 * s) + smile(cx, cy + 10 * s, 8 * s);
 
 const BODY: Record<string, string> = {
   // s: Sid the snake, bent like the letter
@@ -179,6 +172,8 @@ const BODY: Record<string, string> = {
      <circle cx="64" cy="22" r="2.6" fill="#fff"/><circle cx="110" cy="52" r="2.2" fill="#fff"/>`,
 };
 
+// the friends of later sets are drawn in their own files and merged in here
+Object.assign(BODY, FRIENDS_SET8, FRIENDS_SET10, FRIENDS_SET11);
 export const FRIEND_IDS = Object.keys(BODY);
 export const friendSVG = (id: string): string =>
   BODY[id] ? `<svg class="friend" viewBox="0 -6 120 130" role="img" aria-hidden="true" focusable="false">${BODY[id]}</svg>` : '';

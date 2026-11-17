@@ -62,10 +62,94 @@ export const skippableWait = (ms: number): Promise<void> =>
     setTimeout(finish, Math.min(ms, 2800)); // spec: celebrations stay under 3 seconds
   });
 
-/** Replace the stage contents and tag the scene with a counter, so tests (and animations) can tell scenes apart. */
+// ---------------------------------------------------------------------------------------------------------------------------
+// Scene lifecycle: everything a screen starts (timers, loops, one-shot animations) registers a cleanup here, and mount() runs them
+// when the next scene arrives, so a screen can never keep chattering, blinking or playing sounds after the child has moved on.
+const leaveHooks: (() => void)[] = [];
+/** Run `fn` when the current scene is left (the next mount). */
+export const onLeave = (fn: () => void): void => { leaveHooks.push(fn); };
+/** setTimeout that is cancelled when the scene is left. */
+export const later = (fn: () => void, ms: number): void => {
+  const t = window.setTimeout(fn, ms);
+  onLeave(() => clearTimeout(t));
+};
+/** setInterval that stops when the scene is left. */
+export const every = (fn: () => void, ms: number): void => {
+  const t = window.setInterval(fn, ms);
+  onLeave(() => clearInterval(t));
+};
+/**
+ * Play a Web Animation (transform / opacity only) that is cancelled when the scene is left. Under Reduce Motion it jumps straight to its
+ * last frame, so callers write the keyframes so that the LAST frame is the resting state they want (the success stays visible, just still).
+ */
+export const anim = (el: Element, frames: Keyframe[], opts: KeyframeAnimationOptions & { origin?: string } = {}): Animation => {
+  const { origin, ...o } = opts;
+  if (origin) (el as HTMLElement).style.transformOrigin = origin;
+  const a = el.animate(frames, reducedMotion() ? { ...o, duration: 1, delay: 0, iterations: 1, fill: 'forwards' } : o);
+  onLeave(() => { try { a.cancel(); } catch { /* already gone */ } });
+  return a;
+};
+const runLeave = (): void => { for (const fn of leaveHooks.splice(0)) { try { fn(); } catch { /* a dead element is fine */ } } };
+
+const XFADE_IN = 280, XFADE_OUT = 240;
+/**
+ * Replace the stage contents and tag the scene with a counter, so tests (and animations) can tell scenes apart.
+ * The new card CROSS-FADES in while the old one fades out (no blank landscape between rounds), and when the child's creature is on both
+ * screens it glides from where it stood to where it stands now instead of popping out and back in.
+ */
 export const mount = (stage: HTMLElement, ...kids: Node[]): void => {
+  runLeave();
+  stage.querySelectorAll(':scope > .scene-ghost').forEach((g) => g.remove());
+  const old = stage.querySelector<HTMLElement>(':scope > .scene');
+  const motion = !reducedMotion();
+  let ghost: HTMLElement | null = null;
+  let oldPet: DOMRect | null = null;
+  if (old && motion && old.isConnected) {
+    const r = old.getBoundingClientRect(), sr = stage.getBoundingClientRect();
+    if (r.width > 0 && r.height > 0) {
+      const pet = old.querySelector('.companion');
+      oldPet = pet ? pet.getBoundingClientRect() : null;
+      ghost = old;
+      // freeze the old card exactly where it was, take it out of the layout and strip everything a test or a finger could find
+      ghost.style.cssText += `;position:absolute;margin:0;left:${r.left - sr.left - stage.clientLeft}px;top:${r.top - sr.top - stage.clientTop}px;width:${r.width}px;height:${r.height}px`;
+      ghost.classList.add('scene-ghost');
+      ghost.setAttribute('aria-hidden', 'true');
+      ghost.setAttribute('inert', '');
+      ghost.querySelectorAll('[data-testid],[data-answer],[id]').forEach((n) => { n.removeAttribute('data-testid'); n.removeAttribute('data-answer'); n.removeAttribute('id'); });
+      ghost.removeAttribute('data-testid');
+    }
+  }
   stage.dataset.scene = String(Number(stage.dataset.scene ?? '0') + 1);
-  stage.replaceChildren(...kids);
+  stage.replaceChildren(...kids, ...(ghost ? [ghost] : []));
+  if (!motion) return;
+  const fresh = kids.find((k): k is HTMLElement => k instanceof HTMLElement && k.classList.contains('scene'));
+  if (ghost) {
+    const g = ghost;
+    const newPet = fresh?.querySelector<HTMLElement>('.companion') ?? null;
+    if (oldPet && newPet) {
+      const nr = newPet.getBoundingClientRect();
+      if (nr.width > 0 && oldPet.width > 0) {
+        // the creature stays: hide the old copy and glide the new one from the old spot (feet to feet), with a little hop on the way
+        g.querySelector<HTMLElement>('.companion')!.style.visibility = 'hidden';
+        const dx = oldPet.left + oldPet.width / 2 - (nr.left + nr.width / 2);
+        const dy = oldPet.bottom - nr.bottom;
+        const sc = oldPet.width / nr.width;
+        const far = Math.abs(dx) + Math.abs(dy) > 6 || Math.abs(sc - 1) > 0.03;
+        if (far) {
+          const hop = Math.min(26, 8 + (Math.abs(dx) + Math.abs(dy)) / 14);
+          newPet.animate([
+            { transform: `translate(${dx}px, ${dy}px) scale(${sc})`, transformOrigin: '50% 100%', easing: 'cubic-bezier(0.3, 0.6, 0.4, 1)' },
+            { transform: `translate(${dx * 0.45}px, ${dy * 0.45 - hop}px) scale(${(1 + sc) / 2 * 1.02}, ${(1 + sc) / 2 * 1.05})`, transformOrigin: '50% 100%', offset: 0.5, easing: 'cubic-bezier(0.5, 0, 0.7, 1)' },
+            { transform: 'translate(0, 0) scale(1.03, 0.96)', transformOrigin: '50% 100%', offset: 0.86 },
+            { transform: 'none', transformOrigin: '50% 100%' },
+          ], { duration: 460 });
+        }
+      }
+    }
+    g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: XFADE_OUT, easing: 'ease-in', fill: 'forwards' });
+    window.setTimeout(() => g.remove(), XFADE_OUT + 40);
+  }
+  fresh?.animate([{ opacity: 0 }, { opacity: 1 }], { duration: XFADE_IN, easing: 'cubic-bezier(0.2, 0.8, 0.3, 1)', fill: 'backwards' });
 };
 
 export const setNight = (night: boolean): void => {
