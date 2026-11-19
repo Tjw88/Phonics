@@ -190,7 +190,7 @@ export const UNSUITABLE = new Set([
 // The curriculum (grapheme order, sets, mastery) is the SAME in every accent and progress is keyed by letter, so
 // switching accent keeps a child's progress. What changes per accent: the audio pack, and which words are usable
 // (a word is excluded when the accent says it with a different vowel from the one the letter teaches).
-export type AccentId = 'rp' | 'north';
+export type AccentId = 'rp' | 'north' | 'azure-rp';
 export interface Accent { id: AccentId; label: string; note: string }
 export const ACCENTS: Accent[] = [
   { id: 'rp', label: 'Southern British (RP)', note: '“bus” and “put” have different vowels; “pass” has a long a, so it is left out.' },
@@ -198,10 +198,14 @@ export const ACCENTS: Accent[] = [
     id: 'north', label: 'Northern English',
     note: '“bus” and “put” share the same vowel and “pass” has a short a. Voice is Lancashire; there is no Yorkshire-specific voice yet.',
   },
+  {
+    id: 'azure-rp', label: 'Southern English (new voice, trial)',
+    note: 'Same words and vowels as Southern British (RP), spoken by a different computer voice (Microsoft Azure). A trial: the grown-up decides which sounds better.',
+  },
 ];
 export const DEFAULT_ACCENT: AccentId = 'rp';
 /** Words dropped per accent. Must equal the generated audio's `removed_words` (a test enforces it). */
-export const ACCENT_EXCLUDE: Record<AccentId, readonly string[]> = { rp: ['pass'], north: [] };
+export const ACCENT_EXCLUDE: Record<AccentId, readonly string[]> = { rp: ['pass'], north: [], 'azure-rp': ['pass'] };
 export const bankFor = (accent: AccentId): Word[] => BANK.filter((w) => !ACCENT_EXCLUDE[accent].includes(w.text));
 
 // ---- Sound Safari: things to hunt for by their FIRST sound (listening only; no letters) --------------------------
@@ -244,7 +248,7 @@ export const SAFARI: SafariItem[] = [
   ...sf('qu', [['queen', '👸'], ['quilt', '🧶']], 'qu'),
 ];
 /** Safari items dropped per accent when the audio audit found the engine says them with a different first sound. */
-export const SAFARI_EXCLUDE: Record<AccentId, readonly string[]> = { rp: [], north: [] };
+export const SAFARI_EXCLUDE: Record<AccentId, readonly string[]> = { rp: [], north: [], 'azure-rp': [] };
 export const safariFor = (accent: AccentId): SafariItem[] => SAFARI.filter((i) => !SAFARI_EXCLUDE[accent].includes(i.word));
 
 /**

@@ -15,6 +15,15 @@
    "credit": "Northern English male (OpenSLR 83), CC BY-SA 4.0",
    "removed_words": [],
    "removed_safari": []
+  },
+  "azure-rp": {
+   "label": "Southern English (Azure voice)",
+   "voice": "en-GB-SoniaNeural",
+   "credit": "Microsoft Azure AI Speech neural voice en-GB-SoniaNeural (prebuilt standard neural voice), synthetic speech generated 2026-11-19. Terms unverified: see CREDITS.txt",
+   "removed_words": [
+    "pass"
+   ],
+   "removed_safari": []
   }
  }
 }

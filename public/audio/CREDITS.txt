@@ -11,3 +11,12 @@ Generated audio is a stand-in for recordings by trained voice talent. Nobody has
 
 Note on the Northern English pack: its /th/ sound (the hiss of "thin") is taken from the Southern British voice above, because the
 Northern voice could not produce a voiceless /th/. See public/audio/north/manifest.json ("sources") for the exact files.
+
+TRIAL VOICE (accent 'azure-rp', "Southern English (new voice, trial)"): spoken by a Microsoft Azure AI Speech neural voice
+(en-GB-SoniaNeural, a prebuilt standard voice), generated with scripts/audio/gen_azure.py on 2026-11-19. It is SYNTHETIC speech.
+Microsoft's Code of Conduct recommends telling users a voice is synthetic: the accent note in the app says so. Whether Microsoft's
+terms allow shipping this pre-generated audio inside a distributed app has NOT been verified (the pages read did not say either way);
+the repository and site are public, so committing it redistributes it. Do not promote this pack publicly until the terms are checked.
+Three /z/ clips fall back to the Southern British (RP) Piper clips (see public/audio/azure-rp/manifest.json "fallbacks"). Nobody has
+listened to this audio; the checks are measurements (duration, level, clipping, silence) and a speech-recogniser pass that is a biased
+intelligibility proxy only (it understood 406 of 466 words; the misses are mostly homophones such as dad/that and mail/male).

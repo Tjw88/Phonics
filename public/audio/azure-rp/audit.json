@@ -1,0 +1,6503 @@
+{
+ "accent": "azure-rp",
+ "label": "Southern English (Azure voice)",
+ "voice": "en-GB-SoniaNeural",
+ "engine": "Azure AI Speech neural TTS (prebuilt standard voice)",
+ "output_format_requested": "riff-48khz-16bit-mono-pcm",
+ "stored_as": "WAV PCM 16-bit mono 22050 Hz",
+ "expected_ipa": {
+  "s": "s",
+  "a": "æ",
+  "t": "t",
+  "p": "p",
+  "i": "ɪ",
+  "n": "n",
+  "m": "m",
+  "d": "d",
+  "g": "ɡ",
+  "o": "ɒ",
+  "k": "k",
+  "e": "ɛ",
+  "u": "ʌ",
+  "r": "ɹ",
+  "h": "h",
+  "b": "b",
+  "f": "f",
+  "l": "l",
+  "sh": "ʃ",
+  "ch": "tʃ",
+  "th": "θ",
+  "ng": "ŋ",
+  "ai": "eɪ",
+  "ee": "iː",
+  "oa": "əʊ",
+  "oo": "uː",
+  "j": "dʒ",
+  "v": "v",
+  "w": "w",
+  "x": "ks",
+  "y": "j",
+  "z": "z",
+  "qu": "kw",
+  "igh": "aɪ",
+  "ar": "ɑː",
+  "or": "ɔː",
+  "ur": "ɜː",
+  "ow": "aʊ",
+  "oi": "ɔɪ",
+  "ear": "ɪə",
+  "air": "ɛə"
+ },
+ "phonemes": {
+  "s": {
+   "expected_ipa": "s",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/s_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "s",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "lone phoneme at x-slow, steady hiss kept (480 ms)",
+     "ms": 480,
+     "rms": 0.1,
+     "peak": 0.477,
+     "raw_peak": 0.175,
+     "centroid_hz": 8151,
+     "voiced_fraction": 0.02,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "sin",
+      "heard": "in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/s_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "s",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "lone phoneme at x-slow, steady hiss kept (480 ms)",
+     "ms": 480,
+     "rms": 0.1,
+     "peak": 0.497,
+     "raw_peak": 0.1732,
+     "centroid_hz": 8371,
+     "voiced_fraction": 0.01,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "sin",
+      "heard": "in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/s_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "s",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "lone phoneme at x-slow, steady hiss kept (480 ms)",
+     "ms": 480,
+     "rms": 0.1,
+     "peak": 0.481,
+     "raw_peak": 0.1789,
+     "centroid_hz": 7791,
+     "voiced_fraction": 0.01,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "sin",
+      "heard": "in",
+      "ok": false
+     }
+    }
+   ]
+  },
+  "a": {
+   "expected_ipa": "æ",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/a_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "æ",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.436,
+     "raw_peak": 0.5351,
+     "centroid_hz": 456,
+     "voiced_fraction": 0.81,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/a_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "æ",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.433,
+     "raw_peak": 0.5321,
+     "centroid_hz": 481,
+     "voiced_fraction": 0.84,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/a_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "æ",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.448,
+     "raw_peak": 0.5507,
+     "centroid_hz": 436,
+     "voiced_fraction": 0.87,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "t": {
+   "expected_ipa": "t",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/t_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "t",
+     "rate": "medium",
+     "pitch": "+0%",
+     "method": "lone phoneme (stop), 150 ms",
+     "ms": 150,
+     "rms": 0.13,
+     "peak": 0.665,
+     "raw_peak": 0.1297,
+     "centroid_hz": 6167,
+     "voiced_fraction": 0.0,
+     "lead_silence_ms": 5,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "tin",
+      "heard": "in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/t_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "t",
+     "rate": "medium",
+     "pitch": "+5%",
+     "method": "lone phoneme (stop), 150 ms",
+     "ms": 150,
+     "rms": 0.13,
+     "peak": 0.704,
+     "raw_peak": 0.1333,
+     "centroid_hz": 6366,
+     "voiced_fraction": 0.0,
+     "lead_silence_ms": 5,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "tin",
+      "heard": "in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/t_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "t",
+     "rate": "medium",
+     "pitch": "-5%",
+     "method": "lone phoneme (stop), 160 ms",
+     "ms": 160,
+     "rms": 0.13,
+     "peak": 0.697,
+     "raw_peak": 0.1315,
+     "centroid_hz": 5998,
+     "voiced_fraction": 0.0,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "tin",
+      "heard": "in",
+      "ok": false
+     }
+    }
+   ]
+  },
+  "p": {
+   "expected_ipa": "p",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/p_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "p",
+     "rate": "medium",
+     "pitch": "+0%",
+     "method": "unvoiced stop: burst + 28 ms of aspiration lengthened to a breathy release, voiced vowel dropped (148 ms)",
+     "ms": 148,
+     "rms": 0.13,
+     "peak": 0.728,
+     "raw_peak": 0.0698,
+     "centroid_hz": 360,
+     "voiced_fraction": 0.84,
+     "lead_silence_ms": 0,
+     "trail_silence_ms": 0,
+     "hard_failures": [],
+     "notes": [
+      "should be voiceless but has a voiced murmur"
+     ],
+     "frame_test": {
+      "expected": "pin",
+      "heard": "in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/p_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "p",
+     "rate": "medium",
+     "pitch": "+5%",
+     "method": "unvoiced stop: burst + 28 ms of aspiration lengthened to a breathy release, voiced vowel dropped (148 ms)",
+     "ms": 148,
+     "rms": 0.13,
+     "peak": 0.742,
+     "raw_peak": 0.0654,
+     "centroid_hz": 425,
+     "voiced_fraction": 0.84,
+     "lead_silence_ms": 0,
+     "trail_silence_ms": 0,
+     "hard_failures": [],
+     "notes": [
+      "should be voiceless but has a voiced murmur"
+     ],
+     "frame_test": {
+      "expected": "pin",
+      "heard": "in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/p_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "p",
+     "rate": "medium",
+     "pitch": "-5%",
+     "method": "unvoiced stop: burst + 28 ms of aspiration lengthened to a breathy release, voiced vowel dropped (148 ms)",
+     "ms": 148,
+     "rms": 0.124,
+     "peak": 0.92,
+     "raw_peak": 0.0689,
+     "centroid_hz": 657,
+     "voiced_fraction": 0.16,
+     "lead_silence_ms": 0,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "pin",
+      "heard": "in",
+      "ok": false
+     }
+    }
+   ]
+  },
+  "i": {
+   "expected_ipa": "ɪ",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/i_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɪ",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.305,
+     "raw_peak": 0.4608,
+     "centroid_hz": 246,
+     "voiced_fraction": 0.94,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 20,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/i_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɪ",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.311,
+     "raw_peak": 0.4703,
+     "centroid_hz": 259,
+     "voiced_fraction": 0.95,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 20,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/i_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɪ",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.306,
+     "raw_peak": 0.4628,
+     "centroid_hz": 235,
+     "voiced_fraction": 0.92,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 20,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "n": {
+   "expected_ipa": "n",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/n_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "n",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "lone phoneme at x-slow, steady part kept (430 ms)",
+     "ms": 430,
+     "rms": 0.13,
+     "peak": 0.337,
+     "raw_peak": 0.4226,
+     "centroid_hz": 194,
+     "voiced_fraction": 0.99,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/n_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "n",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "lone phoneme at x-slow, steady part kept (430 ms)",
+     "ms": 430,
+     "rms": 0.13,
+     "peak": 0.335,
+     "raw_peak": 0.4216,
+     "centroid_hz": 204,
+     "voiced_fraction": 0.98,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/n_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "n",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "lone phoneme at x-slow, steady part kept (430 ms)",
+     "ms": 430,
+     "rms": 0.13,
+     "peak": 0.336,
+     "raw_peak": 0.422,
+     "centroid_hz": 185,
+     "voiced_fraction": 0.96,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "m": {
+   "expected_ipa": "m",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/m_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "m",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "lone phoneme at x-slow, steady part kept (430 ms)",
+     "ms": 430,
+     "rms": 0.13,
+     "peak": 0.337,
+     "raw_peak": 0.3539,
+     "centroid_hz": 201,
+     "voiced_fraction": 0.96,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/m_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "m",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "lone phoneme at x-slow, steady part kept (430 ms)",
+     "ms": 430,
+     "rms": 0.13,
+     "peak": 0.336,
+     "raw_peak": 0.3536,
+     "centroid_hz": 211,
+     "voiced_fraction": 0.98,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/m_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "m",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "lone phoneme at x-slow, steady part kept (430 ms)",
+     "ms": 430,
+     "rms": 0.13,
+     "peak": 0.334,
+     "raw_peak": 0.3534,
+     "centroid_hz": 190,
+     "voiced_fraction": 0.98,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "d": {
+   "expected_ipa": "d",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/d_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "d",
+     "rate": "medium",
+     "pitch": "+0%",
+     "method": "lone phoneme (stop), 160 ms",
+     "ms": 160,
+     "rms": 0.13,
+     "peak": 0.777,
+     "raw_peak": 0.1876,
+     "centroid_hz": 1088,
+     "voiced_fraction": 0.26,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 20,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "din",
+      "heard": "the inn",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/d_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "d",
+     "rate": "medium",
+     "pitch": "+5%",
+     "method": "lone phoneme (stop), 170 ms",
+     "ms": 170,
+     "rms": 0.13,
+     "peak": 0.799,
+     "raw_peak": 0.186,
+     "centroid_hz": 1175,
+     "voiced_fraction": 0.21,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 20,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "din",
+      "heard": "the inn",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/d_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "d",
+     "rate": "medium",
+     "pitch": "-5%",
+     "method": "lone phoneme (stop), 150 ms",
+     "ms": 150,
+     "rms": 0.13,
+     "peak": 0.764,
+     "raw_peak": 0.1883,
+     "centroid_hz": 936,
+     "voiced_fraction": 0.24,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 20,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "din",
+      "heard": "the in",
+      "ok": false
+     }
+    }
+   ]
+  },
+  "g": {
+   "expected_ipa": "ɡ",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/g_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɡ",
+     "rate": "medium",
+     "pitch": "+0%",
+     "method": "lone phoneme (stop), 180 ms",
+     "ms": 180,
+     "rms": 0.13,
+     "peak": 0.51,
+     "raw_peak": 0.3576,
+     "centroid_hz": 268,
+     "voiced_fraction": 0.65,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 25,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "gin",
+      "heard": "in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/g_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɡ",
+     "rate": "medium",
+     "pitch": "+5%",
+     "method": "lone phoneme (stop), 180 ms",
+     "ms": 180,
+     "rms": 0.13,
+     "peak": 0.52,
+     "raw_peak": 0.3561,
+     "centroid_hz": 281,
+     "voiced_fraction": 0.65,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 20,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "gin",
+      "heard": "the in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/g_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɡ",
+     "rate": "medium",
+     "pitch": "-5%",
+     "method": "lone phoneme (stop), 170 ms",
+     "ms": 170,
+     "rms": 0.13,
+     "peak": 0.511,
+     "raw_peak": 0.3517,
+     "centroid_hz": 253,
+     "voiced_fraction": 0.62,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 20,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "gin",
+      "heard": "in",
+      "ok": false
+     }
+    }
+   ]
+  },
+  "o": {
+   "expected_ipa": "ɒ",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/o_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɒ",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "lone vowel at x-slow, cut to 519 ms",
+     "ms": 519,
+     "rms": 0.11,
+     "peak": 0.436,
+     "raw_peak": 0.4706,
+     "centroid_hz": 339,
+     "voiced_fraction": 0.79,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 45,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/o_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɒ",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "lone vowel at x-slow, cut to 519 ms",
+     "ms": 519,
+     "rms": 0.11,
+     "peak": 0.437,
+     "raw_peak": 0.4704,
+     "centroid_hz": 357,
+     "voiced_fraction": 0.82,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 45,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/o_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɒ",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "lone vowel at x-slow, cut to 519 ms",
+     "ms": 519,
+     "rms": 0.11,
+     "peak": 0.435,
+     "raw_peak": 0.4692,
+     "centroid_hz": 324,
+     "voiced_fraction": 0.77,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 45,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "k": {
+   "expected_ipa": "k",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/k_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "k",
+     "rate": "medium",
+     "pitch": "+0%",
+     "method": "lone phoneme (stop), 170 ms",
+     "ms": 170,
+     "rms": 0.13,
+     "peak": 0.803,
+     "raw_peak": 0.0346,
+     "centroid_hz": 3157,
+     "voiced_fraction": 0.0,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 15,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "kin",
+      "heard": "in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/k_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "k",
+     "rate": "medium",
+     "pitch": "+5%",
+     "method": "lone phoneme (stop), 170 ms",
+     "ms": 170,
+     "rms": 0.13,
+     "peak": 0.83,
+     "raw_peak": 0.0342,
+     "centroid_hz": 2831,
+     "voiced_fraction": 0.03,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 15,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "kin",
+      "heard": "in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/k_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "k",
+     "rate": "medium",
+     "pitch": "-5%",
+     "method": "lone phoneme (stop), 160 ms",
+     "ms": 160,
+     "rms": 0.13,
+     "peak": 0.757,
+     "raw_peak": 0.0341,
+     "centroid_hz": 3098,
+     "voiced_fraction": 0.0,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "kin",
+      "heard": "in",
+      "ok": false
+     }
+    }
+   ]
+  },
+  "e": {
+   "expected_ipa": "ɛ",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/e_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɛ",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.379,
+     "raw_peak": 0.5201,
+     "centroid_hz": 390,
+     "voiced_fraction": 0.84,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 25,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/e_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɛ",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.38,
+     "raw_peak": 0.5221,
+     "centroid_hz": 410,
+     "voiced_fraction": 0.87,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 25,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/e_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɛ",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.362,
+     "raw_peak": 0.4979,
+     "centroid_hz": 373,
+     "voiced_fraction": 0.83,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 25,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "u": {
+   "expected_ipa": "ʌ",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/u_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ʌ",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.543,
+     "raw_peak": 0.6264,
+     "centroid_hz": 518,
+     "voiced_fraction": 0.78,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/u_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ʌ",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.551,
+     "raw_peak": 0.6351,
+     "centroid_hz": 544,
+     "voiced_fraction": 0.76,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/u_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ʌ",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.553,
+     "raw_peak": 0.6347,
+     "centroid_hz": 489,
+     "voiced_fraction": 0.75,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "r": {
+   "expected_ipa": "ɹ",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/r_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɹ",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "lone phoneme at x-slow, steady part kept (430 ms)",
+     "ms": 430,
+     "rms": 0.13,
+     "peak": 0.37,
+     "raw_peak": 0.4799,
+     "centroid_hz": 247,
+     "voiced_fraction": 0.91,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/r_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɹ",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "lone phoneme at x-slow, steady part kept (430 ms)",
+     "ms": 430,
+     "rms": 0.13,
+     "peak": 0.367,
+     "raw_peak": 0.4785,
+     "centroid_hz": 259,
+     "voiced_fraction": 0.95,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/r_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɹ",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "lone phoneme at x-slow, steady part kept (430 ms)",
+     "ms": 430,
+     "rms": 0.13,
+     "peak": 0.37,
+     "raw_peak": 0.4821,
+     "centroid_hz": 236,
+     "voiced_fraction": 0.96,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 15,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "h": {
+   "expected_ipa": "h",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/h_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "hɑ",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "hiss cut from carrier /hɑ/ before the vowel (120 ms), granular lengthening to 480 ms",
+     "ms": 480,
+     "rms": 0.1,
+     "peak": 0.42,
+     "raw_peak": 0.1602,
+     "centroid_hz": 2200,
+     "voiced_fraction": 0.07,
+     "lead_silence_ms": 5,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/h_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "hɑ",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "hiss cut from carrier /hɑ/ before the vowel (115 ms), granular lengthening to 480 ms",
+     "ms": 480,
+     "rms": 0.1,
+     "peak": 0.388,
+     "raw_peak": 0.1539,
+     "centroid_hz": 2319,
+     "voiced_fraction": 0.01,
+     "lead_silence_ms": 5,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/h_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "hɑ",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "hiss cut from carrier /hɑ/ before the vowel (115 ms), granular lengthening to 480 ms",
+     "ms": 480,
+     "rms": 0.1,
+     "peak": 0.373,
+     "raw_peak": 0.15,
+     "centroid_hz": 2068,
+     "voiced_fraction": 0.0,
+     "lead_silence_ms": 5,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "b": {
+   "expected_ipa": "b",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/b_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "bə",
+     "rate": "slow",
+     "pitch": "+0%",
+     "method": "voiced stop: burst of /bə/ + a small faded vowel (as in the existing packs), 165 ms",
+     "ms": 165,
+     "rms": 0.13,
+     "peak": 0.461,
+     "raw_peak": 0.5125,
+     "centroid_hz": 496,
+     "voiced_fraction": 0.86,
+     "lead_silence_ms": 5,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "bin",
+      "heard": "back in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/b_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "bə",
+     "rate": "slow",
+     "pitch": "+5%",
+     "method": "voiced stop: burst of /bə/ + a small faded vowel (as in the existing packs), 165 ms",
+     "ms": 165,
+     "rms": 0.13,
+     "peak": 0.46,
+     "raw_peak": 0.5125,
+     "centroid_hz": 517,
+     "voiced_fraction": 0.9,
+     "lead_silence_ms": 5,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "bin",
+      "heard": "back in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/b_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "bə",
+     "rate": "slow",
+     "pitch": "-5%",
+     "method": "voiced stop: burst of /bə/ + a small faded vowel (as in the existing packs), 165 ms",
+     "ms": 165,
+     "rms": 0.13,
+     "peak": 0.463,
+     "raw_peak": 0.5116,
+     "centroid_hz": 473,
+     "voiced_fraction": 0.86,
+     "lead_silence_ms": 5,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "bin",
+      "heard": "back in",
+      "ok": false
+     }
+    }
+   ]
+  },
+  "f": {
+   "expected_ipa": "f",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/f_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "fɑ",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "hiss cut from carrier /fɑ/ before the vowel (210 ms), granular lengthening to 480 ms",
+     "ms": 480,
+     "rms": 0.1,
+     "peak": 0.463,
+     "raw_peak": 0.1032,
+     "centroid_hz": 5398,
+     "voiced_fraction": 0.0,
+     "lead_silence_ms": 5,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "fin",
+      "heard": "in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/f_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "fɑ",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "hiss cut from carrier /fɑ/ before the vowel (210 ms), granular lengthening to 480 ms",
+     "ms": 480,
+     "rms": 0.1,
+     "peak": 0.437,
+     "raw_peak": 0.0941,
+     "centroid_hz": 5403,
+     "voiced_fraction": 0.0,
+     "lead_silence_ms": 5,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "fin",
+      "heard": "in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/f_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "fɑ",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "hiss cut from carrier /fɑ/ before the vowel (210 ms), granular lengthening to 480 ms",
+     "ms": 480,
+     "rms": 0.1,
+     "peak": 0.483,
+     "raw_peak": 0.1096,
+     "centroid_hz": 5252,
+     "voiced_fraction": 0.0,
+     "lead_silence_ms": 5,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "fin",
+      "heard": "in",
+      "ok": false
+     }
+    }
+   ]
+  },
+  "l": {
+   "expected_ipa": "l",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/l_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "l",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "lone phoneme at x-slow, steady part kept (430 ms)",
+     "ms": 430,
+     "rms": 0.13,
+     "peak": 0.461,
+     "raw_peak": 0.5265,
+     "centroid_hz": 280,
+     "voiced_fraction": 0.94,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/l_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "l",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "lone phoneme at x-slow, steady part kept (430 ms)",
+     "ms": 430,
+     "rms": 0.13,
+     "peak": 0.46,
+     "raw_peak": 0.5255,
+     "centroid_hz": 294,
+     "voiced_fraction": 0.94,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/l_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "l",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "lone phoneme at x-slow, steady part kept (430 ms)",
+     "ms": 430,
+     "rms": 0.13,
+     "peak": 0.461,
+     "raw_peak": 0.5272,
+     "centroid_hz": 267,
+     "voiced_fraction": 0.93,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "sh": {
+   "expected_ipa": "ʃ",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/sh_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ʃɑ",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "hiss cut from carrier /ʃɑ/ before the vowel (259 ms), granular lengthening to 480 ms",
+     "ms": 480,
+     "rms": 0.1,
+     "peak": 0.499,
+     "raw_peak": 0.4329,
+     "centroid_hz": 5571,
+     "voiced_fraction": 0.0,
+     "lead_silence_ms": 5,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": [
+      "/sh/ centroid outside 2.2-5.2 kHz"
+     ],
+     "frame_test": {
+      "expected": "shin",
+      "heard": "in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/sh_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ʃɑ",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "hiss cut from carrier /ʃɑ/ before the vowel (264 ms), granular lengthening to 480 ms",
+     "ms": 480,
+     "rms": 0.1,
+     "peak": 0.496,
+     "raw_peak": 0.4267,
+     "centroid_hz": 5767,
+     "voiced_fraction": 0.0,
+     "lead_silence_ms": 5,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": [
+      "/sh/ centroid outside 2.2-5.2 kHz"
+     ],
+     "frame_test": {
+      "expected": "shin",
+      "heard": "in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/sh_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ʃɑ",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "hiss cut from carrier /ʃɑ/ before the vowel (259 ms), granular lengthening to 480 ms",
+     "ms": 480,
+     "rms": 0.1,
+     "peak": 0.484,
+     "raw_peak": 0.4252,
+     "centroid_hz": 5319,
+     "voiced_fraction": 0.0,
+     "lead_silence_ms": 5,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": [
+      "/sh/ centroid outside 2.2-5.2 kHz"
+     ],
+     "frame_test": {
+      "expected": "shin",
+      "heard": "in",
+      "ok": false
+     }
+    }
+   ]
+  },
+  "ch": {
+   "expected_ipa": "tʃ",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/ch_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "tʃ",
+     "rate": "medium",
+     "pitch": "+0%",
+     "method": "lone phoneme (affr), 239 ms",
+     "ms": 239,
+     "rms": 0.13,
+     "peak": 0.701,
+     "raw_peak": 0.2135,
+     "centroid_hz": 5041,
+     "voiced_fraction": 0.0,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 20,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "chin",
+      "heard": "in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/ch_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "tʃ",
+     "rate": "medium",
+     "pitch": "+5%",
+     "method": "lone phoneme (affr), 249 ms",
+     "ms": 249,
+     "rms": 0.13,
+     "peak": 0.722,
+     "raw_peak": 0.2162,
+     "centroid_hz": 5263,
+     "voiced_fraction": 0.0,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 20,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "chin",
+      "heard": "in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/ch_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "tʃ",
+     "rate": "medium",
+     "pitch": "-5%",
+     "method": "lone phoneme (affr), 239 ms",
+     "ms": 239,
+     "rms": 0.13,
+     "peak": 0.643,
+     "raw_peak": 0.1891,
+     "centroid_hz": 4810,
+     "voiced_fraction": 0.0,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 15,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "chin",
+      "heard": "in",
+      "ok": false
+     }
+    }
+   ]
+  },
+  "th": {
+   "expected_ipa": "θ",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/th_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "θ",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "lone phoneme at x-slow, steady hiss kept (480 ms)",
+     "ms": 480,
+     "rms": 0.1,
+     "peak": 0.834,
+     "raw_peak": 0.1042,
+     "centroid_hz": 5302,
+     "voiced_fraction": 0.07,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "thin",
+      "heard": "in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/th_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "θ",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "lone phoneme at x-slow, steady hiss kept (480 ms)",
+     "ms": 480,
+     "rms": 0.1,
+     "peak": 0.758,
+     "raw_peak": 0.0924,
+     "centroid_hz": 5033,
+     "voiced_fraction": 0.1,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 15,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "thin",
+      "heard": "in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/th_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "θ",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "lone phoneme at x-slow, steady hiss kept (480 ms)",
+     "ms": 480,
+     "rms": 0.1,
+     "peak": 0.793,
+     "raw_peak": 0.1038,
+     "centroid_hz": 5133,
+     "voiced_fraction": 0.13,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 15,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "thin",
+      "heard": "in",
+      "ok": false
+     }
+    }
+   ]
+  },
+  "ng": {
+   "expected_ipa": "ŋ",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/ng_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ŋ",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "lone phoneme at x-slow, steady part kept (430 ms)",
+     "ms": 430,
+     "rms": 0.13,
+     "peak": 0.343,
+     "raw_peak": 0.3922,
+     "centroid_hz": 207,
+     "voiced_fraction": 0.98,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/ng_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ŋ",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "lone phoneme at x-slow, steady part kept (430 ms)",
+     "ms": 430,
+     "rms": 0.13,
+     "peak": 0.343,
+     "raw_peak": 0.3937,
+     "centroid_hz": 217,
+     "voiced_fraction": 0.98,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/ng_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ŋ",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "lone phoneme at x-slow, steady part kept (430 ms)",
+     "ms": 430,
+     "rms": 0.13,
+     "peak": 0.343,
+     "raw_peak": 0.3941,
+     "centroid_hz": 196,
+     "voiced_fraction": 0.95,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "ai": {
+   "expected_ipa": "eɪ",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/ai_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "eɪ",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (659 ms)",
+     "ms": 659,
+     "rms": 0.11,
+     "peak": 0.444,
+     "raw_peak": 0.5097,
+     "centroid_hz": 371,
+     "voiced_fraction": 0.84,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 40,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/ai_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "eɪ",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (649 ms)",
+     "ms": 649,
+     "rms": 0.11,
+     "peak": 0.428,
+     "raw_peak": 0.4973,
+     "centroid_hz": 390,
+     "voiced_fraction": 0.9,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 35,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/ai_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "eɪ",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (659 ms)",
+     "ms": 659,
+     "rms": 0.11,
+     "peak": 0.429,
+     "raw_peak": 0.4939,
+     "centroid_hz": 356,
+     "voiced_fraction": 0.86,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 40,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "ee": {
+   "expected_ipa": "iː",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/ee_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "iː",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.272,
+     "raw_peak": 0.4293,
+     "centroid_hz": 245,
+     "voiced_fraction": 0.97,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/ee_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "iː",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.275,
+     "raw_peak": 0.4356,
+     "centroid_hz": 255,
+     "voiced_fraction": 0.97,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/ee_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "iː",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.271,
+     "raw_peak": 0.4284,
+     "centroid_hz": 232,
+     "voiced_fraction": 0.97,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "oa": {
+   "expected_ipa": "əʊ",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/oa_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "əʊ",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (748 ms)",
+     "ms": 748,
+     "rms": 0.11,
+     "peak": 0.458,
+     "raw_peak": 0.484,
+     "centroid_hz": 312,
+     "voiced_fraction": 0.79,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 35,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/oa_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "əʊ",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (750 ms)",
+     "ms": 750,
+     "rms": 0.11,
+     "peak": 0.46,
+     "raw_peak": 0.4864,
+     "centroid_hz": 328,
+     "voiced_fraction": 0.83,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 35,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/oa_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "əʊ",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (750 ms)",
+     "ms": 750,
+     "rms": 0.11,
+     "peak": 0.458,
+     "raw_peak": 0.4834,
+     "centroid_hz": 299,
+     "voiced_fraction": 0.77,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 30,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "oo": {
+   "expected_ipa": "uː",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/oo_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "uː",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.345,
+     "raw_peak": 0.5835,
+     "centroid_hz": 269,
+     "voiced_fraction": 0.79,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/oo_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "uː",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.348,
+     "raw_peak": 0.5901,
+     "centroid_hz": 282,
+     "voiced_fraction": 0.81,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/oo_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "uː",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.349,
+     "raw_peak": 0.5908,
+     "centroid_hz": 254,
+     "voiced_fraction": 0.77,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "j": {
+   "expected_ipa": "dʒ",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/j_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "dʒ",
+     "rate": "slow",
+     "pitch": "+0%",
+     "method": "lone phoneme (affrv), 259 ms",
+     "ms": 259,
+     "rms": 0.13,
+     "peak": 0.781,
+     "raw_peak": 0.07,
+     "centroid_hz": 5136,
+     "voiced_fraction": 0.0,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 25,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/j_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "dʒ",
+     "rate": "slow",
+     "pitch": "+5%",
+     "method": "lone phoneme (affrv), 249 ms",
+     "ms": 249,
+     "rms": 0.13,
+     "peak": 0.698,
+     "raw_peak": 0.0623,
+     "centroid_hz": 5246,
+     "voiced_fraction": 0.0,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 15,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/j_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "dʒ",
+     "rate": "slow",
+     "pitch": "-5%",
+     "method": "lone phoneme (affrv), 249 ms",
+     "ms": 249,
+     "rms": 0.13,
+     "peak": 0.664,
+     "raw_peak": 0.0614,
+     "centroid_hz": 4847,
+     "voiced_fraction": 0.0,
+     "lead_silence_ms": 5,
+     "trail_silence_ms": 25,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "v": {
+   "expected_ipa": "v",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/v_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "v",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "lone phoneme at x-slow, steady part kept (430 ms)",
+     "ms": 430,
+     "rms": 0.13,
+     "peak": 0.57,
+     "raw_peak": 0.1608,
+     "centroid_hz": 1304,
+     "voiced_fraction": 0.43,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/v_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "v",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "lone phoneme at x-slow, steady part kept (430 ms)",
+     "ms": 430,
+     "rms": 0.13,
+     "peak": 0.575,
+     "raw_peak": 0.1624,
+     "centroid_hz": 1245,
+     "voiced_fraction": 0.5,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/v_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "v",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "lone phoneme at x-slow, steady part kept (430 ms)",
+     "ms": 430,
+     "rms": 0.13,
+     "peak": 0.571,
+     "raw_peak": 0.1606,
+     "centroid_hz": 1254,
+     "voiced_fraction": 0.45,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 15,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "w": {
+   "expected_ipa": "w",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/w_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "w",
+     "rate": "medium",
+     "pitch": "+0%",
+     "method": "glide, lone phoneme, 290 ms",
+     "ms": 290,
+     "rms": 0.13,
+     "peak": 0.344,
+     "raw_peak": 0.6604,
+     "centroid_hz": 248,
+     "voiced_fraction": 0.93,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "win",
+      "heard": "ooh in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/w_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "w",
+     "rate": "medium",
+     "pitch": "+5%",
+     "method": "glide, lone phoneme, 290 ms",
+     "ms": 290,
+     "rms": 0.13,
+     "peak": 0.347,
+     "raw_peak": 0.6601,
+     "centroid_hz": 256,
+     "voiced_fraction": 0.94,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "win",
+      "heard": "ooh in",
+      "ok": false
+     }
+    },
+    {
+     "file": "azure-rp/phonemes/w_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "w",
+     "rate": "medium",
+     "pitch": "-5%",
+     "method": "glide, lone phoneme, 290 ms",
+     "ms": 290,
+     "rms": 0.13,
+     "peak": 0.345,
+     "raw_peak": 0.6607,
+     "centroid_hz": 233,
+     "voiced_fraction": 0.93,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 5,
+     "hard_failures": [],
+     "notes": [],
+     "frame_test": {
+      "expected": "win",
+      "heard": "ooh in",
+      "ok": false
+     }
+    }
+   ]
+  },
+  "x": {
+   "expected_ipa": "ks",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/x_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "method": "two sounds as one letter group: /k/ then /s/, joined, 448 ms",
+     "ms": 448,
+     "rms": 0.12,
+     "peak": 0.856,
+     "raw_peak": 0.8026,
+     "centroid_hz": 6873,
+     "voiced_fraction": 0.01,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 0,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/x_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "method": "two sounds as one letter group: /k/ then /s/, joined, 448 ms",
+     "ms": 448,
+     "rms": 0.12,
+     "peak": 0.886,
+     "raw_peak": 0.8298,
+     "centroid_hz": 6831,
+     "voiced_fraction": 0.02,
+     "lead_silence_ms": 5,
+     "trail_silence_ms": 0,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/x_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "method": "two sounds as one letter group: /k/ then /s/, joined, 448 ms",
+     "ms": 448,
+     "rms": 0.12,
+     "peak": 0.82,
+     "raw_peak": 0.7574,
+     "centroid_hz": 6735,
+     "voiced_fraction": 0.01,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 0,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "y": {
+   "expected_ipa": "j",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/y_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "j",
+     "rate": "medium",
+     "pitch": "+0%",
+     "method": "glide, lone phoneme, 269 ms",
+     "ms": 269,
+     "rms": 0.13,
+     "peak": 0.446,
+     "raw_peak": 0.4888,
+     "centroid_hz": 254,
+     "voiced_fraction": 0.78,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 20,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/y_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "j",
+     "rate": "medium",
+     "pitch": "+5%",
+     "method": "glide, lone phoneme, 269 ms",
+     "ms": 269,
+     "rms": 0.13,
+     "peak": 0.44,
+     "raw_peak": 0.4883,
+     "centroid_hz": 265,
+     "voiced_fraction": 0.8,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 20,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/y_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "j",
+     "rate": "medium",
+     "pitch": "-5%",
+     "method": "glide, lone phoneme, 269 ms",
+     "ms": 269,
+     "rms": 0.13,
+     "peak": 0.442,
+     "raw_peak": 0.4874,
+     "centroid_hz": 240,
+     "voiced_fraction": 0.8,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 25,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "z": {
+   "expected_ipa": "z",
+   "files": [
+    {
+     "file": "rp/phonemes/z_0.wav",
+     "source": "fallback:rp (Piper cori)",
+     "azure_failed": {
+      "ms": 317,
+      "rms": 0.13,
+      "peak": 0.491,
+      "raw_peak": 0.1234,
+      "centroid_hz": 7998,
+      "voiced_fraction": 0.0,
+      "lead_silence_ms": 0,
+      "trail_silence_ms": 15,
+      "hard_failures": [
+       "too short (317 ms < 380)"
+      ],
+      "notes": []
+     },
+     "ssml_ph": "ɑz",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "voiced hiss cut from the end of carrier /ɑz/ (317 ms)",
+     "ms": 317,
+     "rms": 0.13
+    },
+    {
+     "file": "rp/phonemes/z_1.wav",
+     "source": "fallback:rp (Piper cori)",
+     "azure_failed": {
+      "ms": 8,
+      "rms": 0.12,
+      "peak": 0.92,
+      "raw_peak": 0.0025,
+      "centroid_hz": 6630,
+      "voiced_fraction": 0.0,
+      "lead_silence_ms": 0,
+      "trail_silence_ms": 0,
+      "hard_failures": [
+       "silent / empty",
+       "too short (8 ms < 380)"
+      ],
+      "notes": []
+     },
+     "ssml_ph": "ɑz",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "voiced hiss cut from the end of carrier /ɑz/ (8 ms)",
+     "ms": 8,
+     "rms": 0.13
+    },
+    {
+     "file": "rp/phonemes/z_2.wav",
+     "source": "fallback:rp (Piper cori)",
+     "azure_failed": {
+      "ms": 8,
+      "rms": 0.11,
+      "peak": 0.92,
+      "raw_peak": 0.0028,
+      "centroid_hz": 6648,
+      "voiced_fraction": 0.0,
+      "lead_silence_ms": 0,
+      "trail_silence_ms": 0,
+      "hard_failures": [
+       "silent / empty",
+       "too short (8 ms < 380)"
+      ],
+      "notes": []
+     },
+     "ssml_ph": "ɑz",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "voiced hiss cut from the end of carrier /ɑz/ (8 ms)",
+     "ms": 8,
+     "rms": 0.13
+    }
+   ]
+  },
+  "qu": {
+   "expected_ipa": "kw",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/qu_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "kw",
+     "rate": "medium",
+     "pitch": "+0%",
+     "method": "lone phoneme (seq), 369 ms",
+     "ms": 369,
+     "rms": 0.12,
+     "peak": 0.479,
+     "raw_peak": 0.5635,
+     "centroid_hz": 307,
+     "voiced_fraction": 0.77,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 15,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/qu_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "kw",
+     "rate": "medium",
+     "pitch": "+5%",
+     "method": "lone phoneme (seq), 379 ms",
+     "ms": 379,
+     "rms": 0.12,
+     "peak": 0.475,
+     "raw_peak": 0.5605,
+     "centroid_hz": 319,
+     "voiced_fraction": 0.76,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 20,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/qu_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "kw",
+     "rate": "medium",
+     "pitch": "-5%",
+     "method": "lone phoneme (seq), 369 ms",
+     "ms": 369,
+     "rms": 0.12,
+     "peak": 0.488,
+     "raw_peak": 0.5649,
+     "centroid_hz": 292,
+     "voiced_fraction": 0.75,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 15,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "igh": {
+   "expected_ipa": "aɪ",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/igh_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "aɪ",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (718 ms)",
+     "ms": 718,
+     "rms": 0.11,
+     "peak": 0.469,
+     "raw_peak": 0.4549,
+     "centroid_hz": 394,
+     "voiced_fraction": 0.88,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 40,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/igh_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "aɪ",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (718 ms)",
+     "ms": 718,
+     "rms": 0.11,
+     "peak": 0.48,
+     "raw_peak": 0.4644,
+     "centroid_hz": 409,
+     "voiced_fraction": 0.88,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 40,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/igh_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "aɪ",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (718 ms)",
+     "ms": 718,
+     "rms": 0.11,
+     "peak": 0.478,
+     "raw_peak": 0.4641,
+     "centroid_hz": 376,
+     "voiced_fraction": 0.84,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 40,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "ar": {
+   "expected_ipa": "ɑː",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/ar_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɑː",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.39,
+     "raw_peak": 0.4856,
+     "centroid_hz": 494,
+     "voiced_fraction": 0.88,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/ar_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɑː",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.39,
+     "raw_peak": 0.485,
+     "centroid_hz": 516,
+     "voiced_fraction": 0.89,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/ar_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɑː",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.388,
+     "raw_peak": 0.4819,
+     "centroid_hz": 468,
+     "voiced_fraction": 0.83,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 15,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "or": {
+   "expected_ipa": "ɔː",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/or_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɔː",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.331,
+     "raw_peak": 0.5703,
+     "centroid_hz": 317,
+     "voiced_fraction": 0.96,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/or_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɔː",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.332,
+     "raw_peak": 0.5704,
+     "centroid_hz": 332,
+     "voiced_fraction": 0.95,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/or_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɔː",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.331,
+     "raw_peak": 0.5708,
+     "centroid_hz": 301,
+     "voiced_fraction": 0.94,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "ur": {
+   "expected_ipa": "ɜː",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/ur_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɜː",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.388,
+     "raw_peak": 0.5769,
+     "centroid_hz": 394,
+     "voiced_fraction": 0.9,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/ur_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɜː",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.391,
+     "raw_peak": 0.5817,
+     "centroid_hz": 415,
+     "voiced_fraction": 0.9,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/ur_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɜː",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "lone vowel at x-slow, cut to 520 ms",
+     "ms": 520,
+     "rms": 0.11,
+     "peak": 0.393,
+     "raw_peak": 0.5877,
+     "centroid_hz": 371,
+     "voiced_fraction": 0.88,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 10,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "ow": {
+   "expected_ipa": "aʊ",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/ow_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "aʊ",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (750 ms)",
+     "ms": 750,
+     "rms": 0.11,
+     "peak": 0.544,
+     "raw_peak": 0.5588,
+     "centroid_hz": 409,
+     "voiced_fraction": 0.79,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 25,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/ow_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "aʊ",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (750 ms)",
+     "ms": 750,
+     "rms": 0.11,
+     "peak": 0.543,
+     "raw_peak": 0.5575,
+     "centroid_hz": 421,
+     "voiced_fraction": 0.77,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 25,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/ow_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "aʊ",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (750 ms)",
+     "ms": 750,
+     "rms": 0.11,
+     "peak": 0.539,
+     "raw_peak": 0.5543,
+     "centroid_hz": 381,
+     "voiced_fraction": 0.75,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 25,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "oi": {
+   "expected_ipa": "ɔɪ",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/oi_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɔɪ",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (750 ms)",
+     "ms": 750,
+     "rms": 0.11,
+     "peak": 0.436,
+     "raw_peak": 0.6836,
+     "centroid_hz": 264,
+     "voiced_fraction": 0.97,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 20,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/oi_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɔɪ",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (750 ms)",
+     "ms": 750,
+     "rms": 0.11,
+     "peak": 0.436,
+     "raw_peak": 0.6847,
+     "centroid_hz": 278,
+     "voiced_fraction": 0.97,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 15,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/oi_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɔɪ",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (750 ms)",
+     "ms": 750,
+     "rms": 0.11,
+     "peak": 0.435,
+     "raw_peak": 0.6854,
+     "centroid_hz": 249,
+     "voiced_fraction": 0.97,
+     "lead_silence_ms": 10,
+     "trail_silence_ms": 20,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "ear": {
+   "expected_ipa": "ɪə",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/ear_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɪə",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (688 ms)",
+     "ms": 688,
+     "rms": 0.11,
+     "peak": 0.415,
+     "raw_peak": 0.573,
+     "centroid_hz": 267,
+     "voiced_fraction": 0.81,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 45,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/ear_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɪə",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (688 ms)",
+     "ms": 688,
+     "rms": 0.11,
+     "peak": 0.414,
+     "raw_peak": 0.5744,
+     "centroid_hz": 278,
+     "voiced_fraction": 0.83,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 45,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/ear_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɪə",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (688 ms)",
+     "ms": 688,
+     "rms": 0.11,
+     "peak": 0.413,
+     "raw_peak": 0.5704,
+     "centroid_hz": 254,
+     "voiced_fraction": 0.81,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 45,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  },
+  "air": {
+   "expected_ipa": "ɛə",
+   "files": [
+    {
+     "file": "azure-rp/phonemes/air_0.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɛə",
+     "rate": "x-slow",
+     "pitch": "+0%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (748 ms)",
+     "ms": 748,
+     "rms": 0.11,
+     "peak": 0.567,
+     "raw_peak": 0.5652,
+     "centroid_hz": 458,
+     "voiced_fraction": 0.68,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 55,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/air_1.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɛə",
+     "rate": "x-slow",
+     "pitch": "+5%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (748 ms)",
+     "ms": 748,
+     "rms": 0.11,
+     "peak": 0.567,
+     "raw_peak": 0.5641,
+     "centroid_hz": 483,
+     "voiced_fraction": 0.7,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 55,
+     "hard_failures": [],
+     "notes": []
+    },
+    {
+     "file": "azure-rp/phonemes/air_2.wav",
+     "source": "azure:en-GB-SoniaNeural",
+     "ssml_ph": "ɛə",
+     "rate": "x-slow",
+     "pitch": "-5%",
+     "method": "diphthong, lone phoneme at x-slow, whole glide kept (738 ms)",
+     "ms": 738,
+     "rms": 0.11,
+     "peak": 0.561,
+     "raw_peak": 0.5645,
+     "centroid_hz": 439,
+     "voiced_fraction": 0.68,
+     "lead_silence_ms": 15,
+     "trail_silence_ms": 45,
+     "hard_failures": [],
+     "notes": []
+    }
+   ]
+  }
+ },
+ "words": {
+  "pass": {
+   "status": "excluded in this accent (BATH vowel), same as the rp pack"
+  },
+  "at": {
+   "ms": 443,
+   "rms": 0.1,
+   "peak": 0.568,
+   "source": "plain text"
+  },
+  "sat": {
+   "ms": 583,
+   "rms": 0.1,
+   "peak": 0.704,
+   "source": "plain text"
+  },
+  "pat": {
+   "ms": 533,
+   "rms": 0.1,
+   "peak": 0.681,
+   "source": "plain text"
+  },
+  "tap": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.546,
+   "source": "plain text"
+  },
+  "sap": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.728,
+   "source": "plain text"
+  },
+  "in": {
+   "ms": 353,
+   "rms": 0.1,
+   "peak": 0.362,
+   "source": "plain text"
+  },
+  "it": {
+   "ms": 383,
+   "rms": 0.1,
+   "peak": 0.468,
+   "source": "plain text"
+  },
+  "an": {
+   "ms": 353,
+   "rms": 0.1,
+   "peak": 0.401,
+   "source": "plain text",
+   "asr_miss": "the word is n."
+  },
+  "am": {
+   "ms": 383,
+   "rms": 0.1,
+   "peak": 0.494,
+   "source": "phoneme tag /ˈæm/ (plain text was misheard as 'is m')"
+  },
+  "ad": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.488,
+   "source": "plain text",
+   "asr_miss": "the word is, add."
+  },
+  "sit": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.603,
+   "source": "plain text"
+  },
+  "sip": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.517,
+   "source": "plain text"
+  },
+  "tip": {
+   "ms": 443,
+   "rms": 0.1,
+   "peak": 0.504,
+   "source": "plain text"
+  },
+  "tin": {
+   "ms": 423,
+   "rms": 0.1,
+   "peak": 0.399,
+   "source": "plain text"
+  },
+  "pin": {
+   "ms": 413,
+   "rms": 0.1,
+   "peak": 0.378,
+   "source": "plain text"
+  },
+  "pit": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.578,
+   "source": "plain text"
+  },
+  "pan": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.432,
+   "source": "plain text"
+  },
+  "man": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.4,
+   "source": "plain text"
+  },
+  "map": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.428,
+   "source": "plain text"
+  },
+  "mat": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.481,
+   "source": "plain text",
+   "asr_miss": "the word is, matte."
+  },
+  "mad": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.413,
+   "source": "plain text"
+  },
+  "sad": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.64,
+   "source": "plain text"
+  },
+  "dad": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.655,
+   "source": "plain text",
+   "asr_miss": "the word is that"
+  },
+  "did": {
+   "ms": 453,
+   "rms": 0.1,
+   "peak": 0.463,
+   "source": "plain text"
+  },
+  "dip": {
+   "ms": 443,
+   "rms": 0.1,
+   "peak": 0.486,
+   "source": "plain text"
+  },
+  "nap": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.386,
+   "source": "plain text"
+  },
+  "nip": {
+   "ms": 443,
+   "rms": 0.1,
+   "peak": 0.356,
+   "source": "plain text"
+  },
+  "tan": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.442,
+   "source": "plain text"
+  },
+  "pad": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.468,
+   "source": "plain text"
+  },
+  "dam": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.43,
+   "source": "plain text",
+   "asr_miss": "the word is, damn."
+  },
+  "dog": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.584,
+   "source": "plain text"
+  },
+  "dig": {
+   "ms": 453,
+   "rms": 0.1,
+   "peak": 0.413,
+   "source": "plain text"
+  },
+  "dot": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.684,
+   "source": "plain text",
+   "asr_miss": "the word is ."
+  },
+  "got": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.649,
+   "source": "plain text"
+  },
+  "gap": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.681,
+   "source": "plain text"
+  },
+  "cat": {
+   "ms": 533,
+   "rms": 0.1,
+   "peak": 0.587,
+   "source": "plain text"
+  },
+  "cap": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.604,
+   "source": "plain text"
+  },
+  "can": {
+   "ms": 453,
+   "rms": 0.1,
+   "peak": 0.438,
+   "source": "plain text"
+  },
+  "cot": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.62,
+   "source": "plain text"
+  },
+  "kid": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.477,
+   "source": "plain text"
+  },
+  "kit": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.499,
+   "source": "plain text"
+  },
+  "pig": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.413,
+   "source": "plain text"
+  },
+  "pot": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.544,
+   "source": "plain text"
+  },
+  "pop": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.498,
+   "source": "plain text"
+  },
+  "top": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.618,
+   "source": "plain text"
+  },
+  "mop": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.38,
+   "source": "plain text"
+  },
+  "not": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.424,
+   "source": "plain text"
+  },
+  "nod": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.375,
+   "source": "plain text",
+   "asr_miss": "the word is, not."
+  },
+  "pod": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.505,
+   "source": "plain text",
+   "asr_miss": "the word is, pot."
+  },
+  "on": {
+   "ms": 403,
+   "rms": 0.1,
+   "peak": 0.366,
+   "source": "plain text"
+  },
+  "rock": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.556,
+   "source": "plain text"
+  },
+  "sock": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.741,
+   "source": "plain text",
+   "asr_miss": "the word is soc."
+  },
+  "pack": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.613,
+   "source": "plain text"
+  },
+  "tack": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.656,
+   "source": "plain text",
+   "asr_miss": "the word is tac."
+  },
+  "neck": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.423,
+   "source": "plain text"
+  },
+  "peck": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.58,
+   "source": "plain text",
+   "asr_miss": "the word is, pec."
+  },
+  "deck": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.703,
+   "source": "plain text"
+  },
+  "pen": {
+   "ms": 453,
+   "rms": 0.1,
+   "peak": 0.428,
+   "source": "plain text"
+  },
+  "ten": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.424,
+   "source": "plain text",
+   "asr_miss": "the word is, 10."
+  },
+  "net": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.423,
+   "source": "plain text"
+  },
+  "pet": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.705,
+   "source": "plain text"
+  },
+  "men": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.324,
+   "source": "plain text"
+  },
+  "red": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.523,
+   "source": "plain text"
+  },
+  "run": {
+   "ms": 443,
+   "rms": 0.1,
+   "peak": 0.44,
+   "source": "plain text"
+  },
+  "rat": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.536,
+   "source": "plain text"
+  },
+  "rip": {
+   "ms": 403,
+   "rms": 0.1,
+   "peak": 0.431,
+   "source": "plain text"
+  },
+  "rid": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.45,
+   "source": "plain text",
+   "asr_miss": "the word is, read."
+  },
+  "ram": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.508,
+   "source": "plain text"
+  },
+  "rug": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.478,
+   "source": "plain text",
+   "asr_miss": "the word is, ruck."
+  },
+  "rub": {
+   "ms": 423,
+   "rms": 0.1,
+   "peak": 0.495,
+   "source": "plain text"
+  },
+  "sun": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.526,
+   "source": "plain text"
+  },
+  "mud": {
+   "ms": 453,
+   "rms": 0.1,
+   "peak": 0.412,
+   "source": "plain text"
+  },
+  "mug": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.39,
+   "source": "plain text"
+  },
+  "mum": {
+   "ms": 453,
+   "rms": 0.1,
+   "peak": 0.351,
+   "source": "plain text"
+  },
+  "cup": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.653,
+   "source": "plain text"
+  },
+  "pup": {
+   "ms": 453,
+   "rms": 0.1,
+   "peak": 0.668,
+   "source": "plain text"
+  },
+  "up": {
+   "ms": 403,
+   "rms": 0.1,
+   "peak": 0.597,
+   "source": "plain text"
+  },
+  "us": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.545,
+   "source": "plain text"
+  },
+  "cut": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.621,
+   "source": "plain text"
+  },
+  "nut": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.451,
+   "source": "plain text",
+   "asr_miss": "the word is, not."
+  },
+  "gum": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.428,
+   "source": "plain text"
+  },
+  "tug": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.578,
+   "source": "plain text"
+  },
+  "dug": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.549,
+   "source": "plain text",
+   "asr_miss": "the word is, duck."
+  },
+  "egg": {
+   "ms": 403,
+   "rms": 0.1,
+   "peak": 0.426,
+   "source": "plain text"
+  },
+  "hat": {
+   "ms": 533,
+   "rms": 0.1,
+   "peak": 0.634,
+   "source": "plain text"
+  },
+  "hot": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.613,
+   "source": "plain text"
+  },
+  "hit": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.636,
+   "source": "plain text"
+  },
+  "hen": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.431,
+   "source": "plain text"
+  },
+  "hug": {
+   "ms": 453,
+   "rms": 0.1,
+   "peak": 0.555,
+   "source": "plain text"
+  },
+  "hut": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.665,
+   "source": "plain text"
+  },
+  "bed": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.626,
+   "source": "plain text",
+   "asr_miss": "the word is, bad."
+  },
+  "big": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.404,
+   "source": "plain text"
+  },
+  "bag": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.559,
+   "source": "plain text",
+   "asr_miss": "the word is, back."
+  },
+  "bus": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.551,
+   "source": "plain text"
+  },
+  "bug": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.527,
+   "source": "plain text"
+  },
+  "bun": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.407,
+   "source": "plain text"
+  },
+  "bat": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.697,
+   "source": "plain text"
+  },
+  "bit": {
+   "ms": 443,
+   "rms": 0.1,
+   "peak": 0.505,
+   "source": "plain text"
+  },
+  "bib": {
+   "ms": 403,
+   "rms": 0.1,
+   "peak": 0.408,
+   "source": "plain text"
+  },
+  "fan": {
+   "ms": 533,
+   "rms": 0.1,
+   "peak": 0.556,
+   "source": "plain text"
+  },
+  "fun": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.516,
+   "source": "plain text"
+  },
+  "fit": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.592,
+   "source": "plain text"
+  },
+  "fog": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.684,
+   "source": "plain text",
+   "asr_miss": "the word is, fuck."
+  },
+  "off": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.439,
+   "source": "plain text"
+  },
+  "puff": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.596,
+   "source": "plain text"
+  },
+  "huff": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.582,
+   "source": "plain text"
+  },
+  "cuff": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.597,
+   "source": "plain text"
+  },
+  "fill": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.474,
+   "source": "plain text"
+  },
+  "fell": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.443,
+   "source": "plain text"
+  },
+  "bell": {
+   "ms": 403,
+   "rms": 0.1,
+   "peak": 0.495,
+   "source": "plain text"
+  },
+  "doll": {
+   "ms": 413,
+   "rms": 0.1,
+   "peak": 0.41,
+   "source": "plain text"
+  },
+  "hill": {
+   "ms": 403,
+   "rms": 0.1,
+   "peak": 0.438,
+   "source": "plain text"
+  },
+  "pill": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.448,
+   "source": "plain text"
+  },
+  "mill": {
+   "ms": 443,
+   "rms": 0.1,
+   "peak": 0.331,
+   "source": "plain text"
+  },
+  "tell": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.428,
+   "source": "plain text"
+  },
+  "sell": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.489,
+   "source": "plain text"
+  },
+  "bill": {
+   "ms": 393,
+   "rms": 0.1,
+   "peak": 0.334,
+   "source": "plain text"
+  },
+  "lip": {
+   "ms": 423,
+   "rms": 0.1,
+   "peak": 0.462,
+   "source": "plain text"
+  },
+  "lap": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.453,
+   "source": "plain text"
+  },
+  "leg": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.44,
+   "source": "plain text",
+   "asr_miss": "the word is, like"
+  },
+  "log": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.441,
+   "source": "plain text"
+  },
+  "let": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.45,
+   "source": "plain text"
+  },
+  "lid": {
+   "ms": 453,
+   "rms": 0.1,
+   "peak": 0.464,
+   "source": "plain text"
+  },
+  "lit": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.488,
+   "source": "plain text"
+  },
+  "mess": {
+   "ms": 563,
+   "rms": 0.1,
+   "peak": 0.454,
+   "source": "plain text"
+  },
+  "miss": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.4,
+   "source": "plain text"
+  },
+  "kiss": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.495,
+   "source": "plain text"
+  },
+  "hiss": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.564,
+   "source": "plain text",
+   "asr_miss": "the word is his."
+  },
+  "moss": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.423,
+   "source": "plain text"
+  },
+  "boss": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.492,
+   "source": "plain text"
+  },
+  "fuss": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.554,
+   "source": "plain text"
+  },
+  "less": {
+   "ms": 533,
+   "rms": 0.1,
+   "peak": 0.432,
+   "source": "plain text"
+  },
+  "mass": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.544,
+   "source": "plain text"
+  },
+  "ship": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.492,
+   "source": "plain text"
+  },
+  "shop": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.557,
+   "source": "plain text"
+  },
+  "shed": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.533,
+   "source": "plain text"
+  },
+  "shell": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.484,
+   "source": "plain text"
+  },
+  "shut": {
+   "ms": 593,
+   "rms": 0.1,
+   "peak": 0.724,
+   "source": "plain text"
+  },
+  "shock": {
+   "ms": 563,
+   "rms": 0.1,
+   "peak": 0.625,
+   "source": "plain text"
+  },
+  "shin": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.421,
+   "source": "plain text"
+  },
+  "shack": {
+   "ms": 573,
+   "rms": 0.1,
+   "peak": 0.631,
+   "source": "plain text"
+  },
+  "fish": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.557,
+   "source": "plain text"
+  },
+  "dish": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.382,
+   "source": "plain text"
+  },
+  "cash": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.491,
+   "source": "plain text",
+   "asr_miss": "the word is, cache."
+  },
+  "dash": {
+   "ms": 273,
+   "rms": 0.1,
+   "peak": 0.428,
+   "source": "plain text",
+   "asr_miss": "the word is, eh."
+  },
+  "rush": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.506,
+   "source": "plain text"
+  },
+  "bash": {
+   "ms": 443,
+   "rms": 0.1,
+   "peak": 0.504,
+   "source": "plain text"
+  },
+  "mash": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.548,
+   "source": "plain text"
+  },
+  "hush": {
+   "ms": 453,
+   "rms": 0.1,
+   "peak": 0.525,
+   "source": "plain text"
+  },
+  "gush": {
+   "ms": 443,
+   "rms": 0.1,
+   "peak": 0.52,
+   "source": "plain text"
+  },
+  "chip": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.515,
+   "source": "plain text"
+  },
+  "chick": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.549,
+   "source": "plain text"
+  },
+  "chin": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.385,
+   "source": "plain text"
+  },
+  "chop": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.578,
+   "source": "plain text"
+  },
+  "chat": {
+   "ms": 573,
+   "rms": 0.1,
+   "peak": 0.671,
+   "source": "plain text"
+  },
+  "chap": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.582,
+   "source": "plain text"
+  },
+  "chess": {
+   "ms": 533,
+   "rms": 0.1,
+   "peak": 0.588,
+   "source": "plain text"
+  },
+  "check": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.638,
+   "source": "plain text"
+  },
+  "chug": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.571,
+   "source": "plain text"
+  },
+  "rich": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.505,
+   "source": "plain text"
+  },
+  "much": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.445,
+   "source": "plain text"
+  },
+  "such": {
+   "ms": 593,
+   "rms": 0.1,
+   "peak": 0.862,
+   "source": "plain text"
+  },
+  "thin": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.405,
+   "source": "plain text"
+  },
+  "thick": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.562,
+   "source": "plain text"
+  },
+  "thud": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.582,
+   "source": "plain text",
+   "asr_miss": "the word is that"
+  },
+  "thump": {
+   "ms": 563,
+   "rms": 0.1,
+   "peak": 0.463,
+   "source": "plain text"
+  },
+  "thing": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.421,
+   "source": "plain text"
+  },
+  "moth": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.388,
+   "source": "plain text"
+  },
+  "ring": {
+   "ms": 413,
+   "rms": 0.1,
+   "peak": 0.382,
+   "source": "plain text"
+  },
+  "king": {
+   "ms": 393,
+   "rms": 0.1,
+   "peak": 0.387,
+   "source": "plain text"
+  },
+  "gong": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.407,
+   "source": "plain text"
+  },
+  "song": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.463,
+   "source": "plain text"
+  },
+  "sing": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.443,
+   "source": "plain text"
+  },
+  "ping": {
+   "ms": 403,
+   "rms": 0.1,
+   "peak": 0.382,
+   "source": "plain text"
+  },
+  "ding": {
+   "ms": 393,
+   "rms": 0.1,
+   "peak": 0.353,
+   "source": "plain text"
+  },
+  "bang": {
+   "ms": 403,
+   "rms": 0.1,
+   "peak": 0.452,
+   "source": "plain text"
+  },
+  "hang": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.508,
+   "source": "plain text"
+  },
+  "fang": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.571,
+   "source": "plain text"
+  },
+  "gang": {
+   "ms": 413,
+   "rms": 0.1,
+   "peak": 0.445,
+   "source": "plain text"
+  },
+  "hung": {
+   "ms": 443,
+   "rms": 0.1,
+   "peak": 0.47,
+   "source": "plain text"
+  },
+  "lung": {
+   "ms": 453,
+   "rms": 0.1,
+   "peak": 0.449,
+   "source": "plain text"
+  },
+  "rung": {
+   "ms": 443,
+   "rms": 0.1,
+   "peak": 0.412,
+   "source": "plain text"
+  },
+  "sung": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.558,
+   "source": "plain text"
+  },
+  "long": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.37,
+   "source": "plain text"
+  },
+  "rain": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.392,
+   "source": "plain text"
+  },
+  "snail": {
+   "ms": 613,
+   "rms": 0.1,
+   "peak": 0.388,
+   "source": "plain text"
+  },
+  "sail": {
+   "ms": 563,
+   "rms": 0.1,
+   "peak": 0.521,
+   "source": "plain text",
+   "asr_miss": "the word is, sale."
+  },
+  "train": {
+   "ms": 563,
+   "rms": 0.1,
+   "peak": 0.418,
+   "source": "plain text"
+  },
+  "nail": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.336,
+   "source": "plain text"
+  },
+  "chain": {
+   "ms": 533,
+   "rms": 0.1,
+   "peak": 0.386,
+   "source": "plain text"
+  },
+  "pain": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.382,
+   "source": "plain text"
+  },
+  "main": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.408,
+   "source": "plain text"
+  },
+  "gain": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.38,
+   "source": "plain text"
+  },
+  "tail": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.44,
+   "source": "plain text"
+  },
+  "mail": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.361,
+   "source": "plain text",
+   "asr_miss": "the word is, male."
+  },
+  "rail": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.423,
+   "source": "plain text"
+  },
+  "fail": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.491,
+   "source": "plain text"
+  },
+  "paint": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.427,
+   "source": "plain text"
+  },
+  "bait": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.623,
+   "source": "plain text"
+  },
+  "raid": {
+   "ms": 533,
+   "rms": 0.1,
+   "peak": 0.474,
+   "source": "plain text"
+  },
+  "maid": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.444,
+   "source": "plain text",
+   "asr_miss": "the word is, made."
+  },
+  "bee": {
+   "ms": 413,
+   "rms": 0.1,
+   "peak": 0.417,
+   "source": "plain text",
+   "asr_miss": "the word is be"
+  },
+  "see": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.358,
+   "source": "plain text"
+  },
+  "tree": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.359,
+   "source": "plain text"
+  },
+  "feet": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.541,
+   "source": "plain text"
+  },
+  "seed": {
+   "ms": 583,
+   "rms": 0.1,
+   "peak": 0.438,
+   "source": "plain text"
+  },
+  "need": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.362,
+   "source": "plain text"
+  },
+  "feel": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.376,
+   "source": "plain text"
+  },
+  "keep": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.412,
+   "source": "plain text"
+  },
+  "deep": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.424,
+   "source": "plain text"
+  },
+  "sleep": {
+   "ms": 643,
+   "rms": 0.1,
+   "peak": 0.498,
+   "source": "plain text"
+  },
+  "meet": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.375,
+   "source": "plain text"
+  },
+  "sheep": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.421,
+   "source": "plain text"
+  },
+  "cheek": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.398,
+   "source": "plain text"
+  },
+  "peel": {
+   "ms": 443,
+   "rms": 0.1,
+   "peak": 0.312,
+   "source": "plain text"
+  },
+  "seek": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.428,
+   "source": "plain text"
+  },
+  "heel": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.335,
+   "source": "plain text",
+   "asr_miss": "the word is, heal."
+  },
+  "deed": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.4,
+   "source": "plain text"
+  },
+  "boat": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.703,
+   "source": "plain text"
+  },
+  "coat": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.547,
+   "source": "plain text"
+  },
+  "goat": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.67,
+   "source": "plain text"
+  },
+  "soap": {
+   "ms": 593,
+   "rms": 0.1,
+   "peak": 0.621,
+   "source": "plain text"
+  },
+  "toast": {
+   "ms": 603,
+   "rms": 0.1,
+   "peak": 0.538,
+   "source": "plain text"
+  },
+  "road": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.442,
+   "source": "plain text"
+  },
+  "toad": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.438,
+   "source": "plain text"
+  },
+  "foam": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.45,
+   "source": "plain text"
+  },
+  "loaf": {
+   "ms": 563,
+   "rms": 0.1,
+   "peak": 0.486,
+   "source": "plain text"
+  },
+  "moan": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.339,
+   "source": "plain text"
+  },
+  "goal": {
+   "ms": 443,
+   "rms": 0.1,
+   "peak": 0.377,
+   "source": "plain text"
+  },
+  "load": {
+   "ms": 563,
+   "rms": 0.1,
+   "peak": 0.421,
+   "source": "plain text"
+  },
+  "coach": {
+   "ms": 573,
+   "rms": 0.1,
+   "peak": 0.644,
+   "source": "plain text"
+  },
+  "float": {
+   "ms": 633,
+   "rms": 0.1,
+   "peak": 0.451,
+   "source": "plain text"
+  },
+  "cloak": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.468,
+   "source": "plain text"
+  },
+  "moat": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.453,
+   "source": "plain text"
+  },
+  "coal": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.419,
+   "source": "plain text"
+  },
+  "moon": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.311,
+   "source": "plain text"
+  },
+  "spoon": {
+   "ms": 643,
+   "rms": 0.1,
+   "peak": 0.349,
+   "source": "plain text"
+  },
+  "boot": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.446,
+   "source": "plain text"
+  },
+  "moo": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.319,
+   "source": "plain text",
+   "asr_miss": "the word is, move."
+  },
+  "too": {
+   "ms": 453,
+   "rms": 0.1,
+   "peak": 0.373,
+   "source": "plain text",
+   "asr_miss": "the word is to"
+  },
+  "boo": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.417,
+   "source": "plain text",
+   "asr_miss": "the word is, who?"
+  },
+  "soon": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.344,
+   "source": "plain text"
+  },
+  "noon": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.31,
+   "source": "plain text"
+  },
+  "pool": {
+   "ms": 443,
+   "rms": 0.1,
+   "peak": 0.398,
+   "source": "plain text",
+   "asr_miss": "the word is, pull."
+  },
+  "cool": {
+   "ms": 453,
+   "rms": 0.1,
+   "peak": 0.367,
+   "source": "plain text"
+  },
+  "tool": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.348,
+   "source": "plain text"
+  },
+  "food": {
+   "ms": 573,
+   "rms": 0.1,
+   "peak": 0.422,
+   "source": "plain text"
+  },
+  "mood": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.319,
+   "source": "plain text"
+  },
+  "hoot": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.442,
+   "source": "plain text"
+  },
+  "toot": {
+   "ms": 533,
+   "rms": 0.1,
+   "peak": 0.447,
+   "source": "plain text"
+  },
+  "boom": {
+   "ms": 443,
+   "rms": 0.1,
+   "peak": 0.293,
+   "source": "plain text"
+  },
+  "doom": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.306,
+   "source": "plain text"
+  },
+  "loop": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.418,
+   "source": "plain text"
+  },
+  "jam": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.428,
+   "source": "plain text"
+  },
+  "jet": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.659,
+   "source": "plain text"
+  },
+  "jug": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.575,
+   "source": "plain text"
+  },
+  "jog": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.474,
+   "source": "plain text",
+   "asr_miss": "the word is, jock."
+  },
+  "jump": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.469,
+   "source": "plain text"
+  },
+  "job": {
+   "ms": 453,
+   "rms": 0.1,
+   "peak": 0.479,
+   "source": "plain text"
+  },
+  "jack": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.655,
+   "source": "plain text"
+  },
+  "van": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.537,
+   "source": "plain text"
+  },
+  "vet": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.676,
+   "source": "plain text"
+  },
+  "vest": {
+   "ms": 603,
+   "rms": 0.1,
+   "peak": 0.646,
+   "source": "plain text"
+  },
+  "vat": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.611,
+   "source": "plain text",
+   "asr_miss": "the word is that"
+  },
+  "vent": {
+   "ms": 573,
+   "rms": 0.1,
+   "peak": 0.436,
+   "source": "plain text"
+  },
+  "web": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.541,
+   "source": "plain text"
+  },
+  "wig": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.398,
+   "source": "plain text",
+   "asr_miss": "the word is, wick."
+  },
+  "wet": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.695,
+   "source": "plain text"
+  },
+  "win": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.37,
+   "source": "plain text"
+  },
+  "wag": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.568,
+   "source": "plain text",
+   "asr_miss": "the word is, wack."
+  },
+  "wax": {
+   "ms": 613,
+   "rms": 0.1,
+   "peak": 0.589,
+   "source": "plain text"
+  },
+  "wish": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.482,
+   "source": "plain text"
+  },
+  "wing": {
+   "ms": 443,
+   "rms": 0.1,
+   "peak": 0.354,
+   "source": "plain text"
+  },
+  "swing": {
+   "ms": 573,
+   "rms": 0.1,
+   "peak": 0.405,
+   "source": "plain text"
+  },
+  "well": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.478,
+   "source": "plain text"
+  },
+  "wick": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.485,
+   "source": "plain text"
+  },
+  "fox": {
+   "ms": 672,
+   "rms": 0.1,
+   "peak": 0.72,
+   "source": "plain text"
+  },
+  "box": {
+   "ms": 583,
+   "rms": 0.1,
+   "peak": 0.706,
+   "source": "plain text"
+  },
+  "six": {
+   "ms": 633,
+   "rms": 0.1,
+   "peak": 0.672,
+   "source": "plain text",
+   "asr_miss": "the word is 6."
+  },
+  "mix": {
+   "ms": 573,
+   "rms": 0.1,
+   "peak": 0.452,
+   "source": "plain text"
+  },
+  "fix": {
+   "ms": 593,
+   "rms": 0.1,
+   "peak": 0.609,
+   "source": "plain text"
+  },
+  "tax": {
+   "ms": 643,
+   "rms": 0.1,
+   "peak": 0.684,
+   "source": "plain text"
+  },
+  "next": {
+   "ms": 643,
+   "rms": 0.1,
+   "peak": 0.513,
+   "source": "plain text"
+  },
+  "ox": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.554,
+   "source": "plain text"
+  },
+  "yes": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.544,
+   "source": "plain text"
+  },
+  "yam": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.512,
+   "source": "plain text"
+  },
+  "yum": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.456,
+   "source": "plain text"
+  },
+  "yack": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.636,
+   "source": "plain text",
+   "asr_miss": "the word is yak."
+  },
+  "yell": {
+   "ms": 443,
+   "rms": 0.1,
+   "peak": 0.46,
+   "source": "plain text"
+  },
+  "yet": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.624,
+   "source": "plain text"
+  },
+  "yap": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.539,
+   "source": "plain text"
+  },
+  "zip": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.529,
+   "source": "plain text"
+  },
+  "zap": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.634,
+   "source": "plain text"
+  },
+  "zig": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.482,
+   "source": "plain text"
+  },
+  "zoo": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.356,
+   "source": "plain text"
+  },
+  "zoom": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.317,
+   "source": "plain text"
+  },
+  "zest": {
+   "ms": 643,
+   "rms": 0.1,
+   "peak": 0.659,
+   "source": "plain text"
+  },
+  "buzz": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.631,
+   "source": "plain text"
+  },
+  "fizz": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.469,
+   "source": "plain text"
+  },
+  "jazz": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.566,
+   "source": "plain text"
+  },
+  "fuzz": {
+   "ms": 533,
+   "rms": 0.1,
+   "peak": 0.617,
+   "source": "plain text"
+  },
+  "quit": {
+   "ms": 533,
+   "rms": 0.1,
+   "peak": 0.578,
+   "source": "plain text"
+  },
+  "quiz": {
+   "ms": 563,
+   "rms": 0.1,
+   "peak": 0.475,
+   "source": "plain text"
+  },
+  "quick": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.53,
+   "source": "plain text"
+  },
+  "quack": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.611,
+   "source": "plain text"
+  },
+  "queen": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.348,
+   "source": "plain text"
+  },
+  "quill": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.43,
+   "source": "plain text"
+  },
+  "quilt": {
+   "ms": 603,
+   "rms": 0.1,
+   "peak": 0.444,
+   "source": "plain text"
+  },
+  "quest": {
+   "ms": 633,
+   "rms": 0.1,
+   "peak": 0.632,
+   "source": "plain text"
+  },
+  "high": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.531,
+   "source": "plain text",
+   "asr_miss": "the word is, hi."
+  },
+  "sigh": {
+   "ms": 573,
+   "rms": 0.1,
+   "peak": 0.486,
+   "source": "plain text"
+  },
+  "night": {
+   "ms": 563,
+   "rms": 0.1,
+   "peak": 0.477,
+   "source": "plain text"
+  },
+  "light": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.4,
+   "source": "plain text"
+  },
+  "right": {
+   "ms": 533,
+   "rms": 0.1,
+   "peak": 0.53,
+   "source": "plain text"
+  },
+  "tight": {
+   "ms": 573,
+   "rms": 0.1,
+   "peak": 0.481,
+   "source": "plain text"
+  },
+  "might": {
+   "ms": 533,
+   "rms": 0.1,
+   "peak": 0.458,
+   "source": "plain text"
+  },
+  "sight": {
+   "ms": 613,
+   "rms": 0.1,
+   "peak": 0.772,
+   "source": "plain text"
+  },
+  "bright": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.513,
+   "source": "plain text"
+  },
+  "flight": {
+   "ms": 643,
+   "rms": 0.1,
+   "peak": 0.538,
+   "source": "plain text"
+  },
+  "thigh": {
+   "ms": 533,
+   "rms": 0.1,
+   "peak": 0.53,
+   "source": "plain text",
+   "asr_miss": "the word is thai."
+  },
+  "car": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.541,
+   "source": "plain text"
+  },
+  "jar": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.515,
+   "source": "plain text"
+  },
+  "bar": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.607,
+   "source": "plain text"
+  },
+  "far": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.549,
+   "source": "plain text"
+  },
+  "star": {
+   "ms": 613,
+   "rms": 0.1,
+   "peak": 0.534,
+   "source": "plain text"
+  },
+  "arm": {
+   "ms": 453,
+   "rms": 0.1,
+   "peak": 0.363,
+   "source": "plain text",
+   "asr_miss": "the word is um"
+  },
+  "art": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.526,
+   "source": "plain text"
+  },
+  "farm": {
+   "ms": 563,
+   "rms": 0.1,
+   "peak": 0.445,
+   "source": "plain text"
+  },
+  "barn": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.401,
+   "source": "plain text"
+  },
+  "park": {
+   "ms": 573,
+   "rms": 0.1,
+   "peak": 0.491,
+   "source": "plain text"
+  },
+  "dark": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.622,
+   "source": "plain text"
+  },
+  "shark": {
+   "ms": 633,
+   "rms": 0.1,
+   "peak": 0.59,
+   "source": "plain text",
+   "asr_miss": "the word is, shock."
+  },
+  "yard": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.52,
+   "source": "plain text"
+  },
+  "card": {
+   "ms": 573,
+   "rms": 0.1,
+   "peak": 0.534,
+   "source": "plain text"
+  },
+  "for": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.451,
+   "source": "plain text"
+  },
+  "fork": {
+   "ms": 563,
+   "rms": 0.1,
+   "peak": 0.522,
+   "source": "plain text"
+  },
+  "corn": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.399,
+   "source": "plain text"
+  },
+  "horn": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.406,
+   "source": "plain text"
+  },
+  "born": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.356,
+   "source": "plain text"
+  },
+  "storm": {
+   "ms": 662,
+   "rms": 0.1,
+   "peak": 0.371,
+   "source": "plain text"
+  },
+  "sort": {
+   "ms": 593,
+   "rms": 0.1,
+   "peak": 0.549,
+   "source": "plain text"
+  },
+  "short": {
+   "ms": 623,
+   "rms": 0.1,
+   "peak": 0.488,
+   "source": "plain text"
+  },
+  "north": {
+   "ms": 533,
+   "rms": 0.1,
+   "peak": 0.339,
+   "source": "plain text"
+  },
+  "torch": {
+   "ms": 603,
+   "rms": 0.1,
+   "peak": 0.447,
+   "source": "plain text"
+  },
+  "fort": {
+   "ms": 593,
+   "rms": 0.1,
+   "peak": 0.546,
+   "source": "plain text",
+   "asr_miss": "the word is, fought."
+  },
+  "cork": {
+   "ms": 533,
+   "rms": 0.1,
+   "peak": 0.438,
+   "source": "plain text"
+  },
+  "pork": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.488,
+   "source": "plain text"
+  },
+  "sport": {
+   "ms": 702,
+   "rms": 0.1,
+   "peak": 0.525,
+   "source": "plain text"
+  },
+  "fur": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.453,
+   "source": "plain text",
+   "asr_miss": "the word is, fair."
+  },
+  "burn": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.422,
+   "source": "plain text"
+  },
+  "turn": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.428,
+   "source": "plain text"
+  },
+  "hurt": {
+   "ms": 583,
+   "rms": 0.1,
+   "peak": 0.669,
+   "source": "plain text"
+  },
+  "curl": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.433,
+   "source": "plain text"
+  },
+  "surf": {
+   "ms": 653,
+   "rms": 0.1,
+   "peak": 0.615,
+   "source": "plain text",
+   "asr_miss": "the word is, self."
+  },
+  "purr": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.48,
+   "source": "plain text",
+   "asr_miss": "the word is, per."
+  },
+  "church": {
+   "ms": 613,
+   "rms": 0.1,
+   "peak": 0.6,
+   "source": "plain text"
+  },
+  "burst": {
+   "ms": 623,
+   "rms": 0.1,
+   "peak": 0.591,
+   "source": "plain text"
+  },
+  "cow": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.668,
+   "source": "plain text"
+  },
+  "now": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.356,
+   "source": "plain text"
+  },
+  "how": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.51,
+   "source": "plain text"
+  },
+  "wow": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.411,
+   "source": "plain text"
+  },
+  "owl": {
+   "ms": 453,
+   "rms": 0.1,
+   "peak": 0.378,
+   "source": "plain text"
+  },
+  "down": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.413,
+   "source": "plain text"
+  },
+  "town": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.402,
+   "source": "plain text"
+  },
+  "clown": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.394,
+   "source": "plain text"
+  },
+  "brown": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.417,
+   "source": "plain text"
+  },
+  "crown": {
+   "ms": 563,
+   "rms": 0.1,
+   "peak": 0.424,
+   "source": "plain text"
+  },
+  "growl": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.415,
+   "source": "plain text"
+  },
+  "oil": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.385,
+   "source": "plain text"
+  },
+  "coin": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.386,
+   "source": "plain text"
+  },
+  "boil": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.432,
+   "source": "plain text"
+  },
+  "soil": {
+   "ms": 633,
+   "rms": 0.1,
+   "peak": 0.447,
+   "source": "plain text"
+  },
+  "join": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.339,
+   "source": "plain text"
+  },
+  "foil": {
+   "ms": 583,
+   "rms": 0.1,
+   "peak": 0.494,
+   "source": "plain text"
+  },
+  "toil": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.366,
+   "source": "plain text"
+  },
+  "point": {
+   "ms": 563,
+   "rms": 0.1,
+   "peak": 0.431,
+   "source": "plain text"
+  },
+  "ear": {
+   "ms": 423,
+   "rms": 0.1,
+   "peak": 0.372,
+   "source": "plain text",
+   "asr_miss": "the word is e"
+  },
+  "hear": {
+   "ms": 453,
+   "rms": 0.1,
+   "peak": 0.519,
+   "source": "plain text",
+   "asr_miss": "the word is here."
+  },
+  "near": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.336,
+   "source": "plain text"
+  },
+  "dear": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.392,
+   "source": "plain text"
+  },
+  "fear": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.502,
+   "source": "plain text"
+  },
+  "gear": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.488,
+   "source": "plain text"
+  },
+  "rear": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.424,
+   "source": "plain text"
+  },
+  "year": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.445,
+   "source": "plain text",
+   "asr_miss": "the word is, yeah."
+  },
+  "clear": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.452,
+   "source": "plain text"
+  },
+  "beard": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.535,
+   "source": "plain text",
+   "asr_miss": "the word is be it"
+  },
+  "spear": {
+   "ms": 623,
+   "rms": 0.1,
+   "peak": 0.507,
+   "source": "plain text",
+   "asr_miss": "the word is speer."
+  },
+  "air": {
+   "ms": 453,
+   "rms": 0.1,
+   "peak": 0.549,
+   "source": "plain text"
+  },
+  "hair": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.541,
+   "source": "plain text"
+  },
+  "pair": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.513,
+   "source": "plain text"
+  },
+  "fair": {
+   "ms": 543,
+   "rms": 0.1,
+   "peak": 0.555,
+   "source": "plain text"
+  },
+  "stair": {
+   "ms": 613,
+   "rms": 0.1,
+   "peak": 0.529,
+   "source": "plain text",
+   "asr_miss": "the word is, stare."
+  },
+  "lair": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.372,
+   "source": "plain text",
+   "asr_miss": "the word is, layer."
+  },
+  "flair": {
+   "ms": 573,
+   "rms": 0.1,
+   "peak": 0.436,
+   "source": "plain text",
+   "asr_miss": "the word is, flare."
+  },
+  "her": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.463,
+   "source": "phoneme tag /ˈhɜː/ (plain text was misheard as 'is ha')"
+  },
+  "fern": {
+   "ms": 593,
+   "rms": 0.1,
+   "peak": 0.47,
+   "source": "plain text"
+  },
+  "term": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.443,
+   "source": "plain text"
+  },
+  "herd": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.606,
+   "source": "plain text",
+   "asr_miss": "the word is, heard."
+  },
+  "verb": {
+   "ms": 573,
+   "rms": 0.1,
+   "peak": 0.539,
+   "source": "plain text"
+  },
+  "kerb": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.505,
+   "source": "plain text",
+   "asr_miss": "the word is, curb."
+  },
+  "perch": {
+   "ms": 613,
+   "rms": 0.1,
+   "peak": 0.566,
+   "source": "plain text"
+  },
+  "snake": {
+   "ms": 633,
+   "rms": 0.1,
+   "peak": 0.467,
+   "source": "plain text"
+  },
+  "ant": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.48,
+   "source": "plain text"
+  },
+  "apple": {
+   "ms": 533,
+   "rms": 0.1,
+   "peak": 0.497,
+   "source": "plain text"
+  },
+  "alligator": {
+   "ms": 882,
+   "rms": 0.1,
+   "peak": 0.431,
+   "source": "plain text"
+  },
+  "axe": {
+   "ms": 563,
+   "rms": 0.1,
+   "peak": 0.757,
+   "source": "plain text"
+  },
+  "tiger": {
+   "ms": 613,
+   "rms": 0.1,
+   "peak": 0.42,
+   "source": "plain text"
+  },
+  "tent": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.543,
+   "source": "plain text"
+  },
+  "turtle": {
+   "ms": 633,
+   "rms": 0.1,
+   "peak": 0.444,
+   "source": "plain text"
+  },
+  "tooth": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.389,
+   "source": "plain text"
+  },
+  "pizza": {
+   "ms": 643,
+   "rms": 0.1,
+   "peak": 0.377,
+   "source": "plain text"
+  },
+  "panda": {
+   "ms": 593,
+   "rms": 0.1,
+   "peak": 0.333,
+   "source": "plain text"
+  },
+  "parrot": {
+   "ms": 672,
+   "rms": 0.1,
+   "peak": 0.484,
+   "source": "plain text"
+  },
+  "pear": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.505,
+   "source": "plain text",
+   "asr_miss": "the word is, pair."
+  },
+  "igloo": {
+   "ms": 573,
+   "rms": 0.1,
+   "peak": 0.35,
+   "source": "plain text"
+  },
+  "ink": {
+   "ms": 433,
+   "rms": 0.1,
+   "peak": 0.392,
+   "source": "plain text",
+   "asr_miss": "the word is, inc."
+  },
+  "nest": {
+   "ms": 583,
+   "rms": 0.1,
+   "peak": 0.419,
+   "source": "plain text"
+  },
+  "nose": {
+   "ms": 583,
+   "rms": 0.1,
+   "peak": 0.423,
+   "source": "plain text"
+  },
+  "mouse": {
+   "ms": 583,
+   "rms": 0.1,
+   "peak": 0.454,
+   "source": "plain text"
+  },
+  "monkey": {
+   "ms": 623,
+   "rms": 0.1,
+   "peak": 0.368,
+   "source": "plain text"
+  },
+  "milk": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.358,
+   "source": "plain text"
+  },
+  "drum": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.398,
+   "source": "plain text"
+  },
+  "duck": {
+   "ms": 473,
+   "rms": 0.1,
+   "peak": 0.627,
+   "source": "plain text"
+  },
+  "door": {
+   "ms": 443,
+   "rms": 0.1,
+   "peak": 0.36,
+   "source": "plain text"
+  },
+  "dolphin": {
+   "ms": 662,
+   "rms": 0.1,
+   "peak": 0.485,
+   "source": "plain text"
+  },
+  "grapes": {
+   "ms": 662,
+   "rms": 0.1,
+   "peak": 0.52,
+   "source": "plain text"
+  },
+  "gift": {
+   "ms": 523,
+   "rms": 0.1,
+   "peak": 0.487,
+   "source": "plain text"
+  },
+  "guitar": {
+   "ms": 662,
+   "rms": 0.1,
+   "peak": 0.418,
+   "source": "plain text"
+  },
+  "octopus": {
+   "ms": 852,
+   "rms": 0.1,
+   "peak": 0.609,
+   "source": "plain text"
+  },
+  "orange": {
+   "ms": 672,
+   "rms": 0.1,
+   "peak": 0.373,
+   "source": "plain text"
+  },
+  "camel": {
+   "ms": 533,
+   "rms": 0.1,
+   "peak": 0.338,
+   "source": "plain text"
+  },
+  "cake": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.493,
+   "source": "plain text"
+  },
+  "kite": {
+   "ms": 563,
+   "rms": 0.1,
+   "peak": 0.507,
+   "source": "plain text"
+  },
+  "key": {
+   "ms": 423,
+   "rms": 0.1,
+   "peak": 0.336,
+   "source": "plain text"
+  },
+  "kiwi": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.326,
+   "source": "plain text"
+  },
+  "kangaroo": {
+   "ms": 742,
+   "rms": 0.1,
+   "peak": 0.339,
+   "source": "plain text"
+  },
+  "elephant": {
+   "ms": 772,
+   "rms": 0.1,
+   "peak": 0.47,
+   "source": "plain text"
+  },
+  "envelope": {
+   "ms": 802,
+   "rms": 0.1,
+   "peak": 0.331,
+   "source": "plain text"
+  },
+  "umbrella": {
+   "ms": 752,
+   "rms": 0.1,
+   "peak": 0.287,
+   "source": "plain text"
+  },
+  "rabbit": {
+   "ms": 672,
+   "rms": 0.1,
+   "peak": 0.471,
+   "source": "plain text"
+  },
+  "rainbow": {
+   "ms": 712,
+   "rms": 0.1,
+   "peak": 0.307,
+   "source": "plain text"
+  },
+  "robot": {
+   "ms": 722,
+   "rms": 0.1,
+   "peak": 0.377,
+   "source": "plain text"
+  },
+  "rocket": {
+   "ms": 712,
+   "rms": 0.1,
+   "peak": 0.535,
+   "source": "plain text"
+  },
+  "horse": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.479,
+   "source": "plain text"
+  },
+  "house": {
+   "ms": 563,
+   "rms": 0.1,
+   "peak": 0.52,
+   "source": "plain text"
+  },
+  "hippo": {
+   "ms": 583,
+   "rms": 0.1,
+   "peak": 0.479,
+   "source": "plain text"
+  },
+  "heart": {
+   "ms": 573,
+   "rms": 0.1,
+   "peak": 0.593,
+   "source": "plain text"
+  },
+  "ball": {
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.307,
+   "source": "plain text"
+  },
+  "banana": {
+   "ms": 623,
+   "rms": 0.1,
+   "peak": 0.303,
+   "source": "plain text"
+  },
+  "frog": {
+   "ms": 553,
+   "rms": 0.1,
+   "peak": 0.522,
+   "source": "plain text"
+  },
+  "flower": {
+   "ms": 653,
+   "rms": 0.1,
+   "peak": 0.442,
+   "source": "plain text"
+  },
+  "feather": {
+   "ms": 563,
+   "rms": 0.1,
+   "peak": 0.418,
+   "source": "plain text"
+  },
+  "fire": {
+   "ms": 583,
+   "rms": 0.1,
+   "peak": 0.39,
+   "source": "plain text"
+  },
+  "lion": {
+   "ms": 583,
+   "rms": 0.1,
+   "peak": 0.309,
+   "source": "plain text"
+  },
+  "leaf": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.387,
+   "source": "plain text"
+  },
+  "lemon": {
+   "ms": 533,
+   "rms": 0.1,
+   "peak": 0.305,
+   "source": "plain text"
+  },
+  "lollipop": {
+   "ms": 872,
+   "rms": 0.1,
+   "peak": 0.399,
+   "source": "plain text"
+  },
+  "shoe": {
+   "ms": 513,
+   "rms": 0.1,
+   "peak": 0.355,
+   "source": "plain text"
+  },
+  "chair": {
+   "ms": 493,
+   "rms": 0.1,
+   "peak": 0.55,
+   "source": "plain text"
+  },
+  "cheese": {
+   "ms": 583,
+   "rms": 0.1,
+   "peak": 0.368,
+   "source": "plain text"
+  },
+  "thumb": {
+   "ms": 503,
+   "rms": 0.1,
+   "peak": 0.456,
+   "source": "plain text"
+  },
+  "thread": {
+   "ms": 573,
+   "rms": 0.1,
+   "peak": 0.507,
+   "source": "plain text"
+  },
+  "thunder": {
+   "ms": 633,
+   "rms": 0.1,
+   "peak": 0.313,
+   "source": "plain text"
+  },
+  "yak": {
+   "ms": 483,
+   "rms": 0.1,
+   "peak": 0.58,
+   "source": "plain text"
+  },
+  "yoyo": {
+   "ms": 563,
+   "rms": 0.1,
+   "peak": 0.322,
+   "source": "plain text",
+   "asr_miss": "the word is yo yo"
+  },
+  "zebra": {
+   "ms": 662,
+   "rms": 0.1,
+   "peak": 0.497,
+   "source": "plain text"
+  }
+ },
+ "phrases": {
+  "play": {
+   "text": "Play",
+   "ms": 413,
+   "rms": 0.1,
+   "peak": 0.387,
+   "asr_words_found": "1/1",
+   "asr_heard": "play"
+  },
+  "play_again": {
+   "text": "Play again",
+   "ms": 742,
+   "rms": 0.1,
+   "peak": 0.365,
+   "asr_words_found": "2/2",
+   "asr_heard": "play again"
+  },
+  "play_together": {
+   "text": "Play together",
+   "ms": 852,
+   "rms": 0.1,
+   "peak": 0.43,
+   "asr_words_found": "2/2",
+   "asr_heard": "play together"
+  },
+  "next": {
+   "text": "Next",
+   "ms": 583,
+   "rms": 0.1,
+   "peak": 0.515,
+   "asr_words_found": "1/1",
+   "asr_heard": "next"
+  },
+  "goodnight": {
+   "text": "Goodnight",
+   "ms": 662,
+   "rms": 0.1,
+   "peak": 0.38,
+   "asr_words_found": "0/1",
+   "asr_heard": "good night"
+  },
+  "hello": {
+   "text": "Hello!",
+   "ms": 463,
+   "rms": 0.1,
+   "peak": 0.398,
+   "asr_words_found": "1/1",
+   "asr_heard": "hello"
+  },
+  "two_minutes": {
+   "text": "Two more minutes, then it's sleepy time.",
+   "ms": 2299,
+   "rms": 0.1,
+   "peak": 0.391,
+   "asr_words_found": "7/7",
+   "asr_heard": "two more minutes then it's sleepy time"
+  },
+  "find_grownup": {
+   "text": "Find a grown-up to play with you!",
+   "ms": 1800,
+   "rms": 0.1,
+   "peak": 0.401,
+   "asr_words_found": "8/8",
+   "asr_heard": "find a grown up to play with you"
+  },
+  "treasure": {
+   "text": "You found a treasure!",
+   "ms": 1131,
+   "rms": 0.1,
+   "peak": 0.361,
+   "asr_words_found": "4/4",
+   "asr_heard": "you found a treasure"
+  },
+  "island_asleep": {
+   "text": "Zzz. The island is asleep.",
+   "ms": 2808,
+   "rms": 0.1,
+   "peak": 0.456,
+   "asr_words_found": "5/5",
+   "asr_heard": "zzz the island is asleep"
+  },
+  "listen_robot": {
+   "text": "Listen to the robot.",
+   "ms": 1361,
+   "rms": 0.1,
+   "peak": 0.352,
+   "asr_words_found": "4/4",
+   "asr_heard": "listen to the robot"
+  },
+  "which_rhymes": {
+   "text": "Which one rhymes?",
+   "ms": 1141,
+   "rms": 0.1,
+   "peak": 0.354,
+   "asr_words_found": "3/3",
+   "asr_heard": "which one rhymes"
+  },
+  "tap_sounds": {
+   "text": "Tap each sound, in order.",
+   "ms": 1720,
+   "rms": 0.1,
+   "peak": 0.438,
+   "asr_words_found": "5/5",
+   "asr_heard": "tap each sound in order"
+  },
+  "blend_it": {
+   "text": "Now blend them. Which word is it?",
+   "ms": 2518,
+   "rms": 0.1,
+   "peak": 0.465,
+   "asr_words_found": "7/7",
+   "asr_heard": "now blend them which word is it"
+  },
+  "again": {
+   "text": "Let's tap the sounds again.",
+   "ms": 1511,
+   "rms": 0.1,
+   "peak": 0.435,
+   "asr_words_found": "5/5",
+   "asr_heard": "let's tap the sounds again"
+  },
+  "hungry_for": {
+   "text": "I'm hungry for",
+   "ms": 1072,
+   "rms": 0.1,
+   "peak": 0.295,
+   "asr_words_found": "3/3",
+   "asr_heard": "i'm hungry for"
+  },
+  "find_the": {
+   "text": "Find the",
+   "ms": 722,
+   "rms": 0.1,
+   "peak": 0.327,
+   "asr_words_found": "2/2",
+   "asr_heard": "find the"
+  },
+  "your_turn": {
+   "text": "Your turn!",
+   "ms": 672,
+   "rms": 0.1,
+   "peak": 0.399,
+   "asr_words_found": "2/2",
+   "asr_heard": "your turn"
+  },
+  "copy_me": {
+   "text": "Copy me!",
+   "ms": 633,
+   "rms": 0.1,
+   "peak": 0.346,
+   "asr_words_found": "2/2",
+   "asr_heard": "copy me"
+  },
+  "which_letter": {
+   "text": "Which letter says",
+   "ms": 1151,
+   "rms": 0.1,
+   "peak": 0.466,
+   "asr_words_found": "3/3",
+   "asr_heard": "which letter says"
+  },
+  "well_done": {
+   "text": "Well done!",
+   "ms": 672,
+   "rms": 0.1,
+   "peak": 0.39,
+   "asr_words_found": "2/2",
+   "asr_heard": "well done"
+  },
+  "slide_blend": {
+   "text": "Slide your finger across to blend.",
+   "ms": 2119,
+   "rms": 0.1,
+   "peak": 0.4,
+   "asr_words_found": "6/6",
+   "asr_heard": "slide your finger across to blend"
+  },
+  "hello_friend": {
+   "text": "Hello, friend!",
+   "ms": 1231,
+   "rms": 0.1,
+   "peak": 0.409,
+   "asr_words_found": "2/2",
+   "asr_heard": "hello friend"
+  },
+  "drum_prompt": {
+   "text": "Beat the drum once for each sound.",
+   "ms": 1980,
+   "rms": 0.1,
+   "peak": 0.471,
+   "asr_words_found": "7/7",
+   "asr_heard": "beat the drum once for each sound"
+  },
+  "safari_prompt": {
+   "text": "Find things that start with the sound.",
+   "ms": 2139,
+   "rms": 0.1,
+   "peak": 0.484,
+   "asr_words_found": "7/7",
+   "asr_heard": "find things that start with the sound"
+  },
+  "kitchen_prompt": {
+   "text": "Build the word.",
+   "ms": 932,
+   "rms": 0.1,
+   "peak": 0.372,
+   "asr_words_found": "3/3",
+   "asr_heard": "build the word"
+  },
+  "trace_prompt": {
+   "text": "Trace the letter. Start at the green dot.",
+   "ms": 2877,
+   "rms": 0.1,
+   "peak": 0.477,
+   "asr_words_found": "8/8",
+   "asr_heard": "trace the letter start at the green dot"
+  },
+  "pick_egg": {
+   "text": "Pick an egg.",
+   "ms": 702,
+   "rms": 0.1,
+   "peak": 0.42,
+   "asr_words_found": "3/3",
+   "asr_heard": "pick an egg"
+  },
+  "pick_friend": {
+   "text": "Pick a friend.",
+   "ms": 812,
+   "rms": 0.1,
+   "peak": 0.448,
+   "asr_words_found": "3/3",
+   "asr_heard": "pick a friend"
+  },
+  "tap_chest": {
+   "text": "Tap the chest!",
+   "ms": 932,
+   "rms": 0.1,
+   "peak": 0.531,
+   "asr_words_found": "3/3",
+   "asr_heard": "tap the chest"
+  },
+  "show_grownup": {
+   "text": "Show a grown-up",
+   "ms": 1072,
+   "rms": 0.1,
+   "peak": 0.344,
+   "asr_words_found": "4/4",
+   "asr_heard": "show a grown up"
+  },
+  "story_s": {
+   "text": "Sid the snake hisses.",
+   "ms": 1381,
+   "rms": 0.1,
+   "peak": 0.44,
+   "asr_words_found": "2/4",
+   "asr_heard": "sit the snake kisses"
+  },
+  "story_a": {
+   "text": "Annie the ant climbs up.",
+   "ms": 1501,
+   "rms": 0.1,
+   "peak": 0.379,
+   "asr_words_found": "4/5",
+   "asr_heard": "annie the aunt climbs up"
+  },
+  "story_t": {
+   "text": "Tessa the tap drips.",
+   "ms": 1391,
+   "rms": 0.1,
+   "peak": 0.544,
+   "asr_words_found": "4/4",
+   "asr_heard": "tessa the tap drips"
+  },
+  "story_p": {
+   "text": "Pip the penguin pops up.",
+   "ms": 1550,
+   "rms": 0.1,
+   "peak": 0.487,
+   "asr_words_found": "5/5",
+   "asr_heard": "pip the penguin pops up"
+  },
+  "story_i": {
+   "text": "Iggy the inchworm wriggles.",
+   "ms": 1670,
+   "rms": 0.1,
+   "peak": 0.346,
+   "asr_words_found": "3/4",
+   "asr_heard": "iggy the inchworm riggles"
+  },
+  "story_n": {
+   "text": "Nutmeg the nut hums.",
+   "ms": 1491,
+   "rms": 0.1,
+   "peak": 0.402,
+   "asr_words_found": "3/4",
+   "asr_heard": "nut make the nut hums"
+  },
+  "story_m": {
+   "text": "Mabel the mouse munches.",
+   "ms": 1531,
+   "rms": 0.1,
+   "peak": 0.326,
+   "asr_words_found": "4/4",
+   "asr_heard": "mabel the mouse munches"
+  },
+  "story_d": {
+   "text": "Dot the dino beats her drum.",
+   "ms": 1660,
+   "rms": 0.1,
+   "peak": 0.422,
+   "asr_words_found": "6/6",
+   "asr_heard": "dot the dino beats her drum"
+  },
+  "story_g": {
+   "text": "Gus the goat gulps.",
+   "ms": 1281,
+   "rms": 0.1,
+   "peak": 0.563,
+   "asr_words_found": "4/4",
+   "asr_heard": "gus the goat gulps"
+  },
+  "story_o": {
+   "text": "Ollie the octopus opens wide.",
+   "ms": 1960,
+   "rms": 0.1,
+   "peak": 0.375,
+   "asr_words_found": "5/5",
+   "asr_heard": "ollie the octopus opens wide"
+  },
+  "story_c": {
+   "text": "Cora the cat coughs.",
+   "ms": 1371,
+   "rms": 0.1,
+   "peak": 0.447,
+   "asr_words_found": "4/4",
+   "asr_heard": "cora the cat coughs"
+  },
+  "story_k": {
+   "text": "Kit the kite kicks up high.",
+   "ms": 1650,
+   "rms": 0.1,
+   "peak": 0.572,
+   "asr_words_found": "6/6",
+   "asr_heard": "kit the kite kicks up high"
+  },
+  "story_ck": {
+   "text": "Rocky the rock clicks.",
+   "ms": 1481,
+   "rms": 0.1,
+   "peak": 0.446,
+   "asr_words_found": "4/4",
+   "asr_heard": "rocky the rock clicks"
+  },
+  "story_e": {
+   "text": "Ed the egg wobbles.",
+   "ms": 1271,
+   "rms": 0.1,
+   "peak": 0.44,
+   "asr_words_found": "3/4",
+   "asr_heard": "add the egg wobbles"
+  },
+  "story_u": {
+   "text": "Uma the umbrella goes up.",
+   "ms": 1610,
+   "rms": 0.1,
+   "peak": 0.319,
+   "asr_words_found": "5/5",
+   "asr_heard": "uma the umbrella goes up"
+  },
+  "story_r": {
+   "text": "Rosie the rabbit races.",
+   "ms": 1660,
+   "rms": 0.1,
+   "peak": 0.399,
+   "asr_words_found": "4/4",
+   "asr_heard": "rosie the rabbit races"
+  },
+  "story_h": {
+   "text": "Hattie the hen huffs.",
+   "ms": 1331,
+   "rms": 0.1,
+   "peak": 0.4,
+   "asr_words_found": "3/4",
+   "asr_heard": "hatty the hen huffs"
+  },
+  "story_b": {
+   "text": "Bo the bug bounces.",
+   "ms": 1301,
+   "rms": 0.1,
+   "peak": 0.562,
+   "asr_words_found": "3/4",
+   "asr_heard": "both the bug bounces"
+  },
+  "story_f": {
+   "text": "Fenn the fox flicks his tail.",
+   "ms": 1770,
+   "rms": 0.1,
+   "peak": 0.413,
+   "asr_words_found": "6/6",
+   "asr_heard": "fenn the fox flicks his tail"
+  },
+  "story_ff": {
+   "text": "Fluffy the cloud puffs.",
+   "ms": 1610,
+   "rms": 0.1,
+   "peak": 0.516,
+   "asr_words_found": "4/4",
+   "asr_heard": "fluffy the cloud puffs"
+  },
+  "story_l": {
+   "text": "Lulu the lamb licks her lips.",
+   "ms": 1830,
+   "rms": 0.1,
+   "peak": 0.332,
+   "asr_words_found": "6/6",
+   "asr_heard": "lulu the lamb licks her lips"
+  },
+  "story_ll": {
+   "text": "Bella the bell rings.",
+   "ms": 1291,
+   "rms": 0.1,
+   "peak": 0.401,
+   "asr_words_found": "4/4",
+   "asr_heard": "bella the bell rings"
+  },
+  "story_ss": {
+   "text": "Moss hisses.",
+   "ms": 942,
+   "rms": 0.1,
+   "peak": 0.442,
+   "asr_words_found": "2/2",
+   "asr_heard": "moss hisses"
+  },
+  "story_sh": {
+   "text": "Shelly the shell whispers.",
+   "ms": 1550,
+   "rms": 0.1,
+   "peak": 0.397,
+   "asr_words_found": "4/4",
+   "asr_heard": "shelly the shell whispers"
+  },
+  "story_ch": {
+   "text": "Choo-Choo the train chugs along.",
+   "ms": 1850,
+   "rms": 0.1,
+   "peak": 0.372,
+   "asr_words_found": "6/6",
+   "asr_heard": "choo choo the train chugs along"
+  },
+  "story_th": {
+   "text": "Theo the thumb sticks his tongue out.",
+   "ms": 2099,
+   "rms": 0.1,
+   "peak": 0.406,
+   "asr_words_found": "7/7",
+   "asr_heard": "theo the thumb sticks his tongue out"
+  },
+  "story_ng": {
+   "text": "Gong the gong rings out.",
+   "ms": 1431,
+   "rms": 0.1,
+   "peak": 0.355,
+   "asr_words_found": "5/5",
+   "asr_heard": "gong the gong rings out"
+  },
+  "story_ai": {
+   "text": "Rainy the raindrop splashes down.",
+   "ms": 2059,
+   "rms": 0.1,
+   "peak": 0.386,
+   "asr_words_found": "5/5",
+   "asr_heard": "rainy the raindrop splashes down"
+  },
+  "story_ee": {
+   "text": "Bea the bee buzzes by.",
+   "ms": 1720,
+   "rms": 0.1,
+   "peak": 0.351,
+   "asr_words_found": "3/5",
+   "asr_heard": "b a the b buzzes by"
+  },
+  "story_oa": {
+   "text": "Boa the boat toots her horn.",
+   "ms": 1740,
+   "rms": 0.1,
+   "peak": 0.395,
+   "asr_words_found": "6/6",
+   "asr_heard": "boa the boat toots her horn"
+  },
+  "story_oo": {
+   "text": "Moony the moon sings softly.",
+   "ms": 1840,
+   "rms": 0.1,
+   "peak": 0.3,
+   "asr_words_found": "4/5",
+   "asr_heard": "mooney the moon sings softly"
+  },
+  "story_j": {
+   "text": "Jess the jet zooms past.",
+   "ms": 1680,
+   "rms": 0.1,
+   "peak": 0.516,
+   "asr_words_found": "4/5",
+   "asr_heard": "just the jet zooms past"
+  },
+  "story_v": {
+   "text": "Vic the van drives by.",
+   "ms": 1590,
+   "rms": 0.1,
+   "peak": 0.483,
+   "asr_words_found": "5/5",
+   "asr_heard": "vic the van drives by"
+  },
+  "story_w": {
+   "text": "Wiggle the worm wobbles.",
+   "ms": 1491,
+   "rms": 0.1,
+   "peak": 0.361,
+   "asr_words_found": "4/4",
+   "asr_heard": "wiggle the worm wobbles"
+  },
+  "story_x": {
+   "text": "Axel the box clicks open.",
+   "ms": 1770,
+   "rms": 0.1,
+   "peak": 0.467,
+   "asr_words_found": "4/5",
+   "asr_heard": "axle the box clicks open"
+  },
+  "story_y": {
+   "text": "Yoyo the yak yips.",
+   "ms": 1421,
+   "rms": 0.1,
+   "peak": 0.377,
+   "asr_words_found": "1/4",
+   "asr_heard": "yo yo the yack hips"
+  },
+  "story_z": {
+   "text": "Zippy the zebra zooms.",
+   "ms": 1511,
+   "rms": 0.1,
+   "peak": 0.363,
+   "asr_words_found": "4/4",
+   "asr_heard": "zippy the zebra zooms"
+  },
+  "story_zz": {
+   "text": "Fizzy the fizz bubbles up.",
+   "ms": 1700,
+   "rms": 0.1,
+   "peak": 0.459,
+   "asr_words_found": "5/5",
+   "asr_heard": "fizzy the fizz bubbles up"
+  },
+  "story_qu": {
+   "text": "Queenie the queen speaks.",
+   "ms": 1461,
+   "rms": 0.1,
+   "peak": 0.339,
+   "asr_words_found": "4/4",
+   "asr_heard": "queenie the queen speaks"
+  },
+  "story_igh": {
+   "text": "Lite the light shines bright.",
+   "ms": 1700,
+   "rms": 0.1,
+   "peak": 0.434,
+   "asr_words_found": "4/5",
+   "asr_heard": "light the light shines bright"
+  },
+  "story_ar": {
+   "text": "Starla the star twinkles.",
+   "ms": 1760,
+   "rms": 0.1,
+   "peak": 0.478,
+   "asr_words_found": "3/4",
+   "asr_heard": "starler the star twinkles"
+  },
+  "story_or": {
+   "text": "Norah the corn crunches.",
+   "ms": 1600,
+   "rms": 0.1,
+   "peak": 0.348,
+   "asr_words_found": "3/4",
+   "asr_heard": "nor are the corn crunches"
+  },
+  "story_ur": {
+   "text": "Furry the fur ball purrs.",
+   "ms": 1730,
+   "rms": 0.1,
+   "peak": 0.43,
+   "asr_words_found": "3/5",
+   "asr_heard": "furry the furball purrs"
+  },
+  "story_ow": {
+   "text": "Howie the owl hoots.",
+   "ms": 1411,
+   "rms": 0.1,
+   "peak": 0.377,
+   "asr_words_found": "4/4",
+   "asr_heard": "howie the owl hoots"
+  },
+  "story_oi": {
+   "text": "Coco the coin spins.",
+   "ms": 1521,
+   "rms": 0.1,
+   "peak": 0.387,
+   "asr_words_found": "4/4",
+   "asr_heard": "coco the coin spins"
+  },
+  "story_ear": {
+   "text": "Earl the ear listens.",
+   "ms": 1431,
+   "rms": 0.1,
+   "peak": 0.447,
+   "asr_words_found": "3/4",
+   "asr_heard": "oh the ear listens"
+  },
+  "story_air": {
+   "text": "Hairy the hairbrush swishes.",
+   "ms": 1780,
+   "rms": 0.1,
+   "peak": 0.373,
+   "asr_words_found": "3/4",
+   "asr_heard": "harry the hairbrush swishes"
+  },
+  "story_er": {
+   "text": "Fern the fern sways.",
+   "ms": 1431,
+   "rms": 0.1,
+   "peak": 0.367,
+   "asr_words_found": "4/4",
+   "asr_heard": "fern the fern sways"
+  }
+ },
+ "safari": {},
+ "problems": [],
+ "warnings": [
+  "/p/ take 0: should be voiceless but has a voiced murmur",
+  "/p/ take 1: should be voiceless but has a voiced murmur",
+  "/sh/ take 0: /sh/ centroid outside 2.2-5.2 kHz",
+  "/sh/ take 1: /sh/ centroid outside 2.2-5.2 kHz",
+  "/sh/ take 2: /sh/ centroid outside 2.2-5.2 kHz"
+ ],
+ "fallbacks": [
+  {
+   "item": "/z/ take 0",
+   "why": [
+    "too short (317 ms < 380)"
+   ],
+   "used": "rp/phonemes/z_0.wav"
+  },
+  {
+   "item": "/z/ take 1",
+   "why": [
+    "silent / empty",
+    "too short (8 ms < 380)"
+   ],
+   "used": "rp/phonemes/z_1.wav"
+  },
+  {
+   "item": "/z/ take 2",
+   "why": [
+    "silent / empty",
+    "too short (8 ms < 380)"
+   ],
+   "used": "rp/phonemes/z_2.wav"
+  }
+ ],
+ "asr": {
+  "words_variant_used": [
+   "am",
+   "her"
+  ],
+  "words": {
+   "understood": 406,
+   "of": 466,
+   "missed": [
+    [
+     "an",
+     "n."
+    ],
+    [
+     "ad",
+     ", add."
+    ],
+    [
+     "mat",
+     ", matte."
+    ],
+    [
+     "dad",
+     "that"
+    ],
+    [
+     "dam",
+     ", damn."
+    ],
+    [
+     "dot",
+     "."
+    ],
+    [
+     "nod",
+     ", not."
+    ],
+    [
+     "pod",
+     ", pot."
+    ],
+    [
+     "sock",
+     "soc."
+    ],
+    [
+     "tack",
+     "tac."
+    ],
+    [
+     "peck",
+     ", pec."
+    ],
+    [
+     "ten",
+     ", 10."
+    ],
+    [
+     "rid",
+     ", read."
+    ],
+    [
+     "rug",
+     ", ruck."
+    ],
+    [
+     "nut",
+     ", not."
+    ],
+    [
+     "dug",
+     ", duck."
+    ],
+    [
+     "bed",
+     ", bad."
+    ],
+    [
+     "bag",
+     ", back."
+    ],
+    [
+     "fog",
+     ", fuck."
+    ],
+    [
+     "leg",
+     ", like"
+    ],
+    [
+     "hiss",
+     "his."
+    ],
+    [
+     "cash",
+     ", cache."
+    ],
+    [
+     "dash",
+     ", eh."
+    ],
+    [
+     "thud",
+     "that"
+    ],
+    [
+     "sail",
+     ", sale."
+    ],
+    [
+     "mail",
+     ", male."
+    ],
+    [
+     "maid",
+     ", made."
+    ],
+    [
+     "bee",
+     "be"
+    ],
+    [
+     "heel",
+     ", heal."
+    ],
+    [
+     "moo",
+     ", move."
+    ],
+    [
+     "too",
+     "to"
+    ],
+    [
+     "boo",
+     ", who?"
+    ],
+    [
+     "pool",
+     ", pull."
+    ],
+    [
+     "jog",
+     ", jock."
+    ],
+    [
+     "vat",
+     "that"
+    ],
+    [
+     "wig",
+     ", wick."
+    ],
+    [
+     "wag",
+     ", wack."
+    ],
+    [
+     "six",
+     "6."
+    ],
+    [
+     "yack",
+     "yak."
+    ],
+    [
+     "high",
+     ", hi."
+    ],
+    [
+     "thigh",
+     "thai."
+    ],
+    [
+     "arm",
+     "um"
+    ],
+    [
+     "shark",
+     ", shock."
+    ],
+    [
+     "fort",
+     ", fought."
+    ],
+    [
+     "fur",
+     ", fair."
+    ],
+    [
+     "surf",
+     ", self."
+    ],
+    [
+     "purr",
+     ", per."
+    ],
+    [
+     "ear",
+     "e"
+    ],
+    [
+     "hear",
+     "here."
+    ],
+    [
+     "year",
+     ", yeah."
+    ],
+    [
+     "beard",
+     "be it"
+    ],
+    [
+     "spear",
+     "speer."
+    ],
+    [
+     "stair",
+     ", stare."
+    ],
+    [
+     "lair",
+     ", layer."
+    ],
+    [
+     "flair",
+     ", flare."
+    ],
+    [
+     "herd",
+     ", heard."
+    ],
+    [
+     "kerb",
+     ", curb."
+    ],
+    [
+     "pear",
+     ", pair."
+    ],
+    [
+     "ink",
+     ", inc."
+    ],
+    [
+     "yoyo",
+     "yo yo"
+    ]
+   ],
+   "note": "faster-whisper base.en on 'The word is X.' (lead-in synthesised by the same voice); biased proxy, 'miss' means 'listen to this one'"
+  },
+  "phrases": {
+   "clips": 79,
+   "with_missing_words": [
+    "goodnight",
+    "story_s",
+    "story_a",
+    "story_i",
+    "story_n",
+    "story_e",
+    "story_h",
+    "story_b",
+    "story_ee",
+    "story_oo",
+    "story_j",
+    "story_x",
+    "story_y",
+    "story_igh",
+    "story_ar",
+    "story_or",
+    "story_ur",
+    "story_ear",
+    "story_air"
+   ],
+   "note": "whole clip transcribed, expected words looked up in the transcript; proxy only"
+  },
+  "consonant_frame_test": {
+   "ok": 0,
+   "of": 36,
+   "note": "lone sound spliced in front of the voice's own 'in'; crude, biased, advisory only"
+  }
+ },
+ "caveats": [
+  "Nobody has listened to this audio. All checks are measurements.",
+  "faster-whisper base.en is a biased intelligibility proxy only. It is not a naturalness measure and it cannot tell whether a sound teaches the right phoneme to a child."
+ ],
+ "requests": {
+  "live_http_attempts_total_incl_experiments": 729,
+  "this_run": {
+   "http_attempts": 139,
+   "synth_ok": 139,
+   "cache_hits": 1258,
+   "retries_429": 0,
+   "retries_5xx": 0,
+   "auth_fail": 0,
+   "billed_chars": 24544
+  },
+  "budget": 1500,
+  "note": "cache hits are free; the total includes earlier experiments (counter file in the cache dir)"
+ }
+}
