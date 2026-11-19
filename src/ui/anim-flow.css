@@ -180,3 +180,25 @@ body.night #scene-bg::after { animation: shooting 13s linear infinite 2.5s; }
 @media (max-width: 600px) {
   .top .btn.quiet, .top .corner { box-shadow: inset 0 0 0 3px #1d3557cc, 0 4px 0 #1d355733; border-color: #fff; }
 }
+
+/* ---------- the grown-up gear inside an activity: small and quiet (the gate and the menu are behind it) ---------- */
+.in-game .parentbtn { min-width: 52px; min-height: 52px; width: 52px; height: 52px; font-size: 1.3rem; opacity: 0.82; box-shadow: inset 0 0 0 2px #1d355744, 0 3px 0 #1d355722; }
+.in-game .parentbtn:hover, .in-game .parentbtn:focus-visible { opacity: 1; }
+
+/* ---------- the grown-up menu (after the parent gate): large labelled buttons ---------- */
+.gmenu { align-items: start; }
+.gm-card { width: min(100%, 720px); margin: auto; gap: 12px; align-items: stretch; text-align: center; }
+.gm-card h2 { margin: 0; font-size: 1.6rem; }
+.gm-now { margin: 0; font-size: 1.05rem; }
+.gm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
+.gm-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 72px; padding: 10px 16px; font-size: 1.25rem; line-height: 1.15; }
+.gm-btn .gm-t { font-weight: 700; } .gm-btn .gm-s { font-size: 0.9rem; font-weight: 400; opacity: 0.8; }
+.gm-btn.go { min-height: 84px; font-size: 1.7rem; min-width: 0; text-shadow: none; }
+.gm-toggle { background: #fff8d6; box-shadow: 0 6px 0 #c99a1e55, inset 0 0 0 3px #ffd166; }
+.gm-act { background: #eaf6ff; box-shadow: 0 6px 0 #1d355722, inset 0 0 0 3px #4cc3d9; }
+.gm-worlds { max-width: 100%; }
+.gm-friends { gap: 12px; flex-wrap: nowrap; }
+.gm-friend { min-width: 0; min-height: 0; flex: 1 1 0; padding: 10px 6px; font-size: 1rem; }
+.gm-friend svg { width: 100%; max-width: 120px; height: auto; display: block; margin: 0 auto; }
+.gm-friend.on { background: #fff8dd; --rim: var(--sun); }
+@media (max-width: 600px) { .gm-grid { grid-template-columns: 1fr; } .gm-card { padding: 16px; } .gm-friends { gap: 6px; } .gm-btn.go { font-size: 1.5rem; } }

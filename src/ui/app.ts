@@ -11,13 +11,15 @@ import { playDay } from '../engine/simulate';
 import {
   MASTERY_DAYS, newChild, statusOf, unlockedSet, wordsRead, type ChildState,
 } from '../engine/state';
-import { audioSource, blip, initAudio, sayPhrase, saySeq, setMuted, setMusicOn, sfx, speak, tap, unlockAudio } from './audio';
+import { audioSource, blip, cancelSpeech, initAudio, sayPhrase, saySeq, setMuted, setMusicOn, sfx, speak, tap, unlockAudio } from './audio';
 import { friendEl } from './friends';
 import { pictureEl } from './pictures';
 import { copyBeat, findIt } from './games2';
 import { availableGames, safariLearned, roundBridge, roundDrum, roundFeed, roundKitchen, roundRhyme, roundRobot, roundSafari, roundTrace, type GameKind } from './rounds';
 import { PACKS, arrivalSVG, companionSVG, defaultNameFor, packById, sameSlotIn } from './themes';
 import { mount, setNight } from './fx';
+import { clearParticles } from './particles';
+import { grownupMenu, type Activity } from './menu';
 import { doorGrid, doorsHint, emptyNest, finaleScene, hatchScene, homeIdle, sleepScene, zsEl } from './flow';
 import { bigButton, h, sleep } from './dom';
 import {
@@ -25,6 +27,8 @@ import {
 } from './games';
 import { clockDay, load, save, wipe } from './storage';
 
+
+type LeaveTo = 'home' | Activity | 'refresh';
 
 export class App {
   s: ChildState = load();
@@ -37,6 +41,10 @@ export class App {
   private inChild = false;
   private warned: string | null = null;
   private dirty = false; // prototype tools changed the clock/progress: reload to redraw cleanly
+  /** the activity on screen (Adventure, Free Play, Sound Play), if any: the grown-up menu is available while it runs */
+  private sess: { mode: Activity; abort: (to: LeaveTo) => void; cleanups: (() => void)[] } | null = null;
+  /** an activity chosen from the grown-up menu, started as soon as the current one has been torn down */
+  private pending: Activity | null = null;
 
   constructor(private root: HTMLElement) {
     this.stage = h('main', { id: 'stage' });
@@ -158,10 +166,12 @@ export class App {
     for (;;) await this.home();
   }
 
-  private async interlude(parts: (Node | string)[], label = '▶', testid = 'next'): Promise<void> {
+  /** interlude on a given stage: ([parts...], label?, testid?) */
+  private interludeIn(stage: HTMLElement, parts: (Node | string)[], label = '▶', testid = 'next'): Promise<void> { return this.interlude(parts, label, testid, stage); }
+  private async interlude(parts: (Node | string)[], label = '▶', testid = 'next', stage: HTMLElement = this.stage): Promise<void> {
     const b = bigButton(label, testid, 'go');
     b.el.setAttribute('aria-label', 'Next');
-    mount(this.stage, h('div', { class: 'scene' }, ...parts, h('div', { class: 'row' }, b.el)));
+    mount(stage, h('div', { class: 'scene' }, ...parts, h('div', { class: 'row' }, b.el)));
     await b.pressed;
     tap();
   }
@@ -282,6 +292,12 @@ export class App {
   private async home(): Promise<void> {
     this.inChild = false;
     this.setHint(null);
+    if (this.pending) { // an activity chosen from the grown-up menu: start it without showing the island in between
+      const next = this.pending;
+      this.pending = null;
+      await this.startActivity(next);
+      return;
+    }
     const s = this.s;
     const today = this.today();
     const done = s.adventureDays.includes(today);
@@ -326,14 +342,122 @@ export class App {
     );
     homeIdle(island.querySelector('.island-pet') as HTMLElement, play.el, asleep); // a slow glance at the Play button now and then (breathing and blinking are CSS)
     const which = await Promise.race([play.pressed.then(() => 'play' as const), free.pressed.then(() => 'free' as const)]);
-    if (which === 'free') await this.freePlay();
-    else if (s.band === 'B') await this.soundPlay();
-    else await this.adventure();
+    await this.startActivity(which === 'free' ? 'freeplay' : s.band === 'B' ? 'soundplay' : 'adventure');
   }
+
+  private startActivity(a: Activity): Promise<void> {
+    if (a === 'freeplay') return this.runSession('freeplay', () => this.freePlay());
+    if (a === 'soundplay') return this.runSession('soundplay', () => this.soundPlay(this.s.band !== 'B')); // from a band C profile it is a one-off: nothing saved changes
+    return this.runSession('adventure', () => this.adventure());
+  }
+
+  // ----- an activity runs as a SESSION, so the grown-up menu can leave it at any moment without leaving anything behind -----
+  /**
+   * Run an activity. If a grown-up leaves it from the menu, the activity is simply abandoned: its screen is retired (the old #stage element is
+   * replaced, so anything the abandoned game still does lands on a detached element), nothing it had not finished is recorded, and this returns.
+   */
+  private async runSession(mode: Activity, body: () => Promise<void>): Promise<void> {
+    let abort!: (to: LeaveTo) => void;
+    const aborted = new Promise<LeaveTo>((r) => (abort = r));
+    const sess = { mode, abort, cleanups: [] as (() => void)[] };
+    this.sess = sess;
+    this.root.classList.add('in-game');
+    this.root.querySelector('.parentbtn')?.setAttribute('aria-label', 'Grown-ups menu');
+    const run = body();
+    try {
+      const left = await Promise.race([run.then(() => null), aborted]);
+      if (left) {
+        run.catch(() => undefined); // the abandoned activity may never finish; if it fails later nobody is waiting
+        this.retireStage();
+        this.pending = left === 'refresh' ? (mode === 'freeplay' ? 'freeplay' : null) : left === 'home' ? null : left;
+      }
+    } finally {
+      for (const fn of sess.cleanups) { try { fn(); } catch { /* already gone */ } }
+      this.sess = null;
+      this.root.classList.remove('in-game');
+      this.root.querySelector('.parentbtn')?.setAttribute('aria-label', 'Grown-ups area');
+      this.inChild = false;
+      this.persist();
+    }
+  }
+
+  /** Replace the stage element: whatever an abandoned game still holds is now detached from the page (mount() ignores a detached stage). */
+  private retireStage(): void {
+    const old = this.stage;
+    const fresh = h('main', { id: 'stage' });
+    fresh.dataset.scene = old.dataset.scene ?? '0';
+    old.removeAttribute('id');
+    old.replaceWith(fresh);
+    this.stage = fresh;
+    clearParticles();
+    cancelSpeech();
+    window.speechSynthesis?.cancel();
+    this.hintCard.classList.remove('open');
+  }
+
+  /** Freeze the game under the menu: animations paused, voice-over stopped, play time not counted. Returns the function that resumes it. */
+  private pauseGame(): () => void {
+    const wasChild = this.inChild;
+    this.inChild = false;
+    const frozen = document.getAnimations().filter((a) => a.playState === 'running');
+    frozen.forEach((a) => { try { a.pause(); } catch { /* finished meanwhile */ } });
+    cancelSpeech();
+    window.speechSynthesis?.cancel();
+    this.persist(); // the clock is stopped at this exact value while the menu is open
+    return () => {
+      this.persist();
+      frozen.forEach((a) => { try { if (a.playState === 'paused') a.play(); } catch { /* the scene is gone */ } });
+      this.inChild = wasChild;
+    };
+  }
+
+  /** The gear button inside an activity: the gate, then the grown-up menu. */
+  private async openMenu(): Promise<void> {
+    const sess = this.sess;
+    if (!sess || this.menuOpen) return;
+    this.menuOpen = true;
+    const resume = this.pauseGame();
+    let keep = true;
+    try {
+      if (!(await this.gate())) return;
+      for (;;) {
+        const s = this.s;
+        const r = await grownupMenu({
+          mode: sess.mode, band: s.band, hasLearned: Object.keys(s.sounds).length > 0,
+          tapMode: () => s.easyTap, setTapMode: (e) => { s.easyTap = e; this.persist(); },
+          theme: s.theme, kind: s.companion?.kind ?? 'rexy', name: s.companion?.name ?? 'Your friend',
+        });
+        if (r.type === 'keep') return;
+        if (r.type === 'parent') {
+          await this.parentArea();
+          if (this.dirty) { location.reload(); return; }
+          continue; // back to the menu
+        }
+        keep = false;
+        if (r.type === 'home') sess.abort('home');
+        else if (r.type === 'activity') sess.abort(r.to);
+        else {
+          if (r.type === 'world' && s.companion) {
+            s.theme = r.pack;
+            s.companion = { ...s.companion, kind: sameSlotIn(s.companion.kind, r.pack) }; // the same friend slot in the new world; name and progress stay
+          } else if (r.type === 'friend' && s.companion) s.companion = { ...s.companion, kind: r.kind };
+          this.applyTheme();
+          this.persist();
+          sess.abort('refresh');
+        }
+        return;
+      }
+    } finally {
+      this.menuOpen = false;
+      if (keep) resume(); // leaving: the game is torn down, nothing to resume
+    }
+  }
+  private menuOpen = false;
 
   // ----- the daily adventure (6 steps) -----
   private async adventure(): Promise<void> {
     this.inChild = true;
+    const st = this.stage; // this session's screen (an abandoned adventure keeps writing to the old, detached one)
     const s = this.s;
     const today = this.today();
     setNight(false);
@@ -344,7 +468,7 @@ export class App {
     // 1. Hello
     void sayPhrase('hello', 'Hello!');
     const lastSound = [...Object.entries(s.sounds)].filter(([, r]) => r.introducedOn < today).sort((a, b) => b[1].introducedOn.localeCompare(a[1].introducedOn))[0];
-    await this.interlude([
+    await this.interludeIn(st, [
       companionEl(s, 'big'),
       h('p', { class: 'caption' }, `Hello ${s.nickname}! ${lastSound ? `Yesterday: ${slashed(lastSound[0])}.` : ''} Let’s play!`),
     ]);
@@ -358,20 +482,20 @@ export class App {
       await roundFeed(ctx, it.g, it.idx);
       this.persist();
     }
-    if (this.overLimit()) return this.goodnight(plan);
+    if (this.overLimit()) return this.goodnight(plan, null, st);
 
     // 3. New sound story (a sound-friend introduces the sound), then optional letter tracing
     if (plan.newSound) {
       const m = MNEMONICS[plan.newSound.id];
       saySeq([{ phrase: `story_${plan.newSound.id}`, text: STORY_SAY[plan.newSound.id] ?? '' }, { sound: plan.newSound.phoneme }]);
-      await this.interlude([
+      await this.interludeIn(st, [
         h('div', { class: 'story' }, h('span', { class: 'mn' }, friendEl(plan.newSound.id, 'story-friend')), h('span', { class: 'letter-big', 'data-testid': 'newsound' }, plan.newSound.id)),
         h('p', { class: 'caption' }, `${m?.name ?? ''}: ${m?.line ?? ''}`),
         h('button', { class: 'bubble-btn', 'aria-label': `Hear ${slashed(plan.newSound.id)}`, onClick: () => { tap(); blip(plan.newSound!.phoneme); } }, h('span', { class: 'speaker' }, '🔊'), h('span', { class: 'bubble-sound' }, slashed(plan.newSound.id))),
       ], '▶', 'story-next');
       if (plan.trace) await roundTrace(ctx, plan.newSound);
     } else {
-      await this.interlude([h('p', { class: 'caption' }, `No new sound today, ${s.nickname}. Let’s make our sounds strong!`)]);
+      await this.interludeIn(st, [h('p', { class: 'caption' }, `No new sound today, ${s.nickname}. Let’s make our sounds strong!`)]);
     }
 
     // 4. Practice: Feed, then one listening game, then the rest of the Feed, then one print/rhyme game (rising difficulty overall)
@@ -385,17 +509,17 @@ export class App {
     };
     await block(blocks.early, (it) => roundFeed(ctx, it.g, it.idx));
     this.persist();
-    if (this.overLimit()) return this.goodnight(plan);
+    if (this.overLimit()) return this.goodnight(plan, null, st);
 
     if (plan.second === 'robot') await block(plan.robotWords, (w, i) => roundRobot(ctx, w, i));
     else if (plan.second === 'drum') await block(plan.drumWords, (w) => roundDrum(ctx, w));
     else if (plan.newSound) await block([plan.newSound], (g) => roundSafari(ctx, g));
     this.persist();
-    if (this.overLimit()) return this.goodnight(plan);
+    if (this.overLimit()) return this.goodnight(plan, null, st);
 
     await block(blocks.late, (it) => roundFeed(ctx, it.g, it.idx));
     this.persist();
-    if (this.overLimit()) return this.goodnight(plan);
+    if (this.overLimit()) return this.goodnight(plan, null, st);
 
     // the printed-word block is two rounds plus the "make it real" word (three Bridge rounds in all, not four)
     if (plan.third === 'bridge') await block(plan.bridgeWords.slice(0, 2), (w) => roundBridge(ctx, w));
@@ -413,10 +537,10 @@ export class App {
       ctx.last = false;
       alive = word;
     }
-    await this.goodnight(plan, alive);
+    await this.goodnight(plan, alive, st);
   }
 
-  private async goodnight(plan: Plan, alive: Word | null = null): Promise<void> {
+  private async goodnight(plan: Plan, alive: Word | null = null, st: HTMLElement = this.stage): Promise<void> {
     const s = this.s;
     const today = this.today();
     const prize = plan.newSound?.id ?? plan.review[0]?.id ?? null;
@@ -440,7 +564,7 @@ export class App {
     // The chest always holds the sound's own friend (known in advance, never random). The child taps it to open it (it also opens by itself
     // after a few seconds, so nobody is ever stuck); the decoded word comes alive first, in the same continuous celebration.
     const card = h('div', { class: 'grownup-card', 'data-testid': 'mission-card' }, h('strong', {}, 'For the grown-up'), plan.mission); // the off-screen mission, in plain sight
-    finaleScene(this.stage, {
+    finaleScene(st, {
       pet: companionEl(s, 'big'),
       word: alive ? { text: alive.text, pic: pictureEl(alive.text, alive.emoji ?? '✨') } : null,
       friendId: prize, friendName: m?.name ?? '', phoneme: prize ? phonemeOf(prize) : null,
@@ -448,12 +572,13 @@ export class App {
     });
     await shown.pressed; // goodnight is a celebration, not a cut-off: the child chooses to close the day
     setNight(true);
-    await sleepScene(this.stage, { pet: companionEl(s, 'big sleepy'), caption: 'Zzz… the island is asleep.', label: 'Back to my island', testid: 'sleep-next', icon: '🏝️' });
+    await sleepScene(st, { pet: companionEl(s, 'big sleepy'), caption: 'Zzz… the island is asleep.', label: 'Back to my island', testid: 'sleep-next', icon: '🏝️' });
   }
 
   // ----- free play (mastered sounds only, up to the parent-set limit) -----
   private async freePlay(): Promise<void> {
     this.inChild = true;
+    const st = this.stage;
     setNight(false); // free play is daytime, even when the adventure is done
     const s = this.s;
     const ctx = this.ctx();
@@ -462,6 +587,7 @@ export class App {
     let leave = false;
     const backed = new Promise<null>((res) => back.addEventListener('click', () => { leave = true; res(null); }));
     this.root.querySelector('.top')?.append(back);
+    this.sess?.cleanups.push(() => back.remove()); // also when a grown-up leaves from the menu
     const race = <T,>(p: Promise<T>) => Promise.race([p, backed]);
     const pictured = bankFor(s.accent).filter((w) => w.emoji);
 
@@ -482,7 +608,7 @@ export class App {
       const games = availableGames(ctx, printBlendOpen(s), learned.length > 0);
       const pick = await race(new Promise<GameKind>((resolve) => {
         const grid = doorGrid(games, s.companion?.kind ?? 'rexy', (k) => { tap(); sfx.pop(); resolve(k); });
-        mount(this.stage, h('div', { class: 'scene' }, h('p', { class: 'caption' }, 'What shall we play?'), grid));
+        mount(st, h('div', { class: 'scene' }, h('p', { class: 'caption' }, 'What shall we play?'), grid));
         doorsHint(grid);
       }));
       if (!pick) break;
@@ -497,12 +623,13 @@ export class App {
   }
 
   // ----- Sound Play: co-play listening game for 2-3 year olds (band B) -----
-  private async soundPlay(): Promise<void> {
+  private async soundPlay(oneOff = false): Promise<void> {
     this.inChild = true;
+    const st = this.stage;
     setNight(false);
     const ctx = this.ctx();
     void sayPhrase('find_grownup', 'Find a grown-up to play with you!');
-    await this.interlude([companionEl(this.s, 'big'), h('p', { class: 'caption', 'data-testid': 'coplay' }, 'Find a grown-up to play with you!')]);
+    await this.interludeIn(st, [companionEl(this.s, 'big'), h('p', { class: 'caption', 'data-testid': 'coplay' }, 'Find a grown-up to play with you!')]);
     // age 2-3: rhythm and naming (no letters, nothing scored); rhyme recognition is a later (3-4) skill
     const pictured = bankFor(this.s.accent).filter((w) => w.emoji && TODDLER_WORDS.includes(w.text));
     const picks = shuffle(pictured, ctx.rng);
@@ -512,17 +639,22 @@ export class App {
     for (const w of picks.slice(2, 4)) await findIt(ctx, w, pickDistractors(pictured, w, 2, ctx.rng));
     await copyBeat(ctx, 3);
     const prompts = ['Find something in your house that goes “mmm”.', 'Clap the sounds in your name.', 'Find something soft that starts with “sss”.'];
-    for (const p of prompts) await this.interlude([h('p', { class: 'caption' }, p), h('p', {}, '(Away from the screen, together!)')]);
+    for (const p of prompts) await this.interludeIn(st, [h('p', { class: 'caption' }, p), h('p', {}, '(Away from the screen, together!)')]);
     this.setHint(null);
     this.inChild = false;
+    if (oneOff) { // started from the grown-up menu on a Phonics-journey profile: nothing saved changes (today's Adventure is still to play), and no goodnight
+      await this.interludeIn(st, [companionEl(this.s, 'big'), h('p', { class: 'caption' }, `All done! Well played, ${this.s.nickname}.`)], '🏝️', 'next');
+      return;
+    }
     if (!this.s.adventureDays.includes(this.today())) this.s.adventureDays.push(this.today()); // so the grown-up's Today and This week show that Sound Play happened
     this.persist();
     setNight(true);
-    await sleepScene(this.stage, { pet: companionEl(this.s, 'big sleepy'), caption: 'Goodnight! See you tomorrow.', label: 'Back to my island', testid: 'next', icon: '🏝️' });
+    await sleepScene(st, { pet: companionEl(this.s, 'big sleepy'), caption: 'Goodnight! See you tomorrow.', label: 'Back to my island', testid: 'next', icon: '🏝️' });
   }
 
   // ----- parent area (behind a gate) -----
   private async openParent(): Promise<void> {
+    if (this.sess) return this.openMenu(); // inside an activity the gear opens the grown-up menu (which also leads to this area)
     const wasChild = this.inChild;
     this.inChild = false;
     if (!(await this.gate())) {

@@ -348,7 +348,7 @@ export const wordKitchen = async (ctx: Ctx, word: Word, tiles: string[]): Promis
   const dish = h('div', { class: 'dish' }, pictureEl(word.text, word.emoji));
   const potWrap = h('div', { class: `pot-wrap w-${worldId()}` }, pot, dish);
   const slotEls = word.graphemes.map((_, i) => h('button', { class: 'kslot', 'data-testid': 'slot', 'aria-label': `place ${i + 1}`, onClick: () => unplace(i) }));
-  const assist = makeAssist(ctx.s.easyTap);
+  const assist = makeAssist(() => ctx.s.easyTap);
   let stopGhost: () => void = () => undefined;
   const tileEls = tiles.map((g, i) => {
     const t = h('button', { class: `tile ktile tone${i % 4}`, 'data-testid': 'ktile', 'data-letter': g, 'aria-label': `letter ${g}` }, g);
@@ -372,13 +372,14 @@ export const wordKitchen = async (ctx: Ctx, word: Word, tiles: string[]): Promis
         if (best < 0) return springBack(t, cur);
         await place(i, best, from);
       },
-      onTap: () => {
+      onTap: (info) => {
+        if (info?.sloppy) assist.sloppy();
         if (assist.allow) return void place(i);
         assist.miss();
         sfx.boing();
         t.animate([{ transform: 'translate(0,0)' }, { transform: 'translateY(-26px) scale(1.06)', offset: 0.5 }, { transform: 'translate(0,0)' }], { duration: 480, easing: 'ease-out' });
         stopGhost();
-        stopGhost = ghostDrag(sceneEl, tray, board);
+        stopGhost = ghostDrag(sceneEl, tray, board, { skipWhen: () => ctx.s.easyTap });
       },
     });
     return t;
@@ -530,7 +531,7 @@ export const wordKitchen = async (ctx: Ctx, word: Word, tiles: string[]): Promis
 
   const sceneEl = h('div', { class: 'scene kitchenscene' }, caption('Drag the letters onto the board to build the word!'), kitchen, board, tray);
   mount(ctx.stage, sceneEl);
-  stopGhost = ghostDrag(sceneEl, tray, board);
+  stopGhost = ghostDrag(sceneEl, tray, board, { skipWhen: () => ctx.s.easyTap });
   render();
   await sleep(300);
   saySeq([{ phrase: 'kitchen_prompt', text: 'Build the word.' }, { word: word.text }]);
@@ -610,13 +611,13 @@ export const traceTrail = async (ctx: Ctx, target: Grapheme): Promise<TrialResul
     ink(si).style.strokeDashoffset = `${guides[si]!.getTotalLength?.() ?? 200}`;
   };
   const ink = (i: number) => inks[i] as SVGPathElement;
-  const toSvg = (e: PointerEvent): Pt => {
+  const toSvg = (e: { clientX: number; clientY: number }): Pt => {
     const m = svg.getScreenCTM();
     if (!m) return { x: 0, y: 0 };
     const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(m.inverse());
     return { x: p.x, y: p.y };
   };
-  const update = async (e: PointerEvent) => {
+  const update = async (e: { clientX: number; clientY: number }) => {
     if (!drawing || si >= strokes.length) return; // finished: further touches do nothing
     const before = reached;
     reached = advanceTrace(pts, reached, toSvg(e), 17);
@@ -676,15 +677,38 @@ export const traceTrail = async (ctx: Ctx, target: Grapheme): Promise<TrialResul
       }
     }
   };
+  // The pen is forgiving: only the main button / one finger draws; a fast stroke (few pointermove events) is sampled along its path so no
+  // part of the trail is skipped; a release anywhere, a window blur or a buttonless hover ends the stroke instead of leaving it drawing.
+  let last: { x: number; y: number } | null = null;
+  let penId = -1;
+  const stop = () => {
+    drawing = false; last = null; penId = -1;
+    window.removeEventListener('pointerup', stopEv, true);
+    window.removeEventListener('pointercancel', stopEv, true);
+    window.removeEventListener('blur', stop);
+  };
+  const stopEv = (e: PointerEvent) => { if (e.pointerId === penId) stop(); };
   svg.addEventListener('pointerdown', (e) => {
+    if (!e.isPrimary || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    stop();
     try { svg.setPointerCapture(e.pointerId); } catch { /* pointer already ended */ }
     drawing = true;
+    penId = e.pointerId;
+    last = { x: e.clientX, y: e.clientY };
+    window.addEventListener('pointerup', stopEv, true);
+    window.addEventListener('pointercancel', stopEv, true);
+    window.addEventListener('blur', stop);
     void update(e);
   });
-  svg.addEventListener('pointermove', (e) => void update(e));
-  const stop = () => { drawing = false; };
-  svg.addEventListener('pointerup', stop);
-  svg.addEventListener('pointercancel', stop);
+  svg.addEventListener('pointermove', (e) => {
+    if (!drawing || e.pointerId !== penId) return;
+    if (e.pointerType === 'mouse' && e.buttons === 0) return stop();
+    const from = last ?? { x: e.clientX, y: e.clientY };
+    const steps = Math.max(1, Math.ceil(Math.hypot(e.clientX - from.x, e.clientY - from.y) / 8));
+    for (let k = 1; k <= steps; k++) void update({ clientX: from.x + ((e.clientX - from.x) * k) / steps, clientY: from.y + ((e.clientY - from.y) * k) / steps });
+    last = { x: e.clientX, y: e.clientY };
+  });
+  svg.addEventListener('contextmenu', (e) => e.preventDefault());
 
   const board = h('div', { class: `trace-board ${theme}`, 'data-testid': 'trace-board' }, svg);
   mount(ctx.stage, h('div', { class: 'scene tracescene' },

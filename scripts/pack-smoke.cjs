@@ -147,6 +147,17 @@ async function smokePack(browser, pack) {
       if (!(await page.locator(`[data-testid=fp-${g}]`).count())) { notes.push(`${g} not offered`); await page.click('[data-testid=freeplay-back]'); await page.waitForSelector('[data-testid=greeting]'); continue; }
       await page.click(`[data-testid=fp-${g}]`); played++;
       await page.waitForTimeout(500);
+      if (g === 'feed') { // the grown-up menu inside a game, in this world: gate, friends of THIS pack, all worlds, tap/drag, keep playing
+        stage = 'grown-up menu';
+        await page.click('[data-testid=parent-btn]'); await passGate(page); await page.waitForSelector('[data-testid=game-menu]');
+        await page.click('[data-testid=menu-friend]'); await page.waitForSelector('[data-testid=friend-pick]');
+        if ((await page.locator('[data-testid=friend-pick]').count()) !== 4) errors.push('menu: change friend does not offer 4 friends');
+        await page.click('[data-testid=menu-back]'); await page.click('[data-testid=menu-world]'); await page.waitForSelector('[data-testid=world-pick]');
+        if ((await page.locator('[data-testid=world-pick]').count()) < 12) errors.push('menu: change world offers fewer than 12 worlds');
+        await page.click('[data-testid=menu-back]'); await page.click('[data-testid=menu-tapmode]'); await page.click('[data-testid=menu-tapmode]');
+        await page.click('[data-testid=menu-keep]'); await page.waitForSelector('[data-testid=tile]', { timeout: 5000 });
+        stage = `free play: ${g}`;
+      }
       if (await winRound(page)) won++; else notes.push(`${g}: round not won in ${WIN_MS / 1000}s`);
       await page.waitForTimeout(600);
       if (!(await page.locator('[data-testid=gamegrid]').count())) await monkey(page, MONKEY_S); // round 2 of the pick: random play

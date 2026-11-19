@@ -98,6 +98,7 @@ const XFADE_IN = 220, XFADE_OUT = 90; // the old card leaves fast, so the two ar
  * screens it glides from where it stood to where it stands now instead of popping out and back in.
  */
 export const mount = (stage: HTMLElement, ...kids: Node[]): void => {
+  if (!stage.isConnected) return; // an abandoned game (its stage was retired) must not draw over the screen that replaced it, nor cancel that screen's timers
   runLeave();
   try { window.scrollTo(0, 0); } catch { /* no window to scroll (a test) */ } // every new screen opens at its top, never at the last screen's scroll position
   stage.querySelectorAll(':scope > .scene-ghost').forEach((g) => g.remove());

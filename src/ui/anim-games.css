@@ -122,6 +122,35 @@
 [data-pack=arctic] .bridge .river { background: repeating-linear-gradient(90deg, #5a9fc6 0 40px, #6fb0d4 40px 80px); }
 [data-pack=music] .bridge .river { background: repeating-linear-gradient(90deg, #7b4fd1 0 40px, #8d63df 40px 80px); }
 
+
+/* ---------- short windows (a laptop, or page zoom 125-150%): the tiles and the target must both be on screen, or nothing can be dragged ---------- */
+@media (max-height: 700px) and (min-width: 601px) {
+  #stage:has(.feed, .rocketscene, .kitchenscene, .bridgescene) { padding-top: 0; padding-bottom: 10px; }
+  #stage .scene.feed, #stage .rocketscene, #stage .kitchenscene, #stage .bridgescene { padding: 8px 12px 10px; gap: 6px; border-radius: 26px; }
+  #stage .scene.feed .caption, #stage .rocketscene .caption, #stage .kitchenscene .caption, #stage .bridgescene .caption { font-size: 1.2rem; min-height: 0; }
+  #stage .scene.feed .feed-dino { width: clamp(112px, 22vh, 170px); }
+  #stage .scene.feed .creature-row { gap: 14px; }
+  #stage .scene.feed .tile { min-width: 84px; min-height: 84px; font-size: 3rem; }
+  #stage .rocketscene .tile.pic { min-width: 84px; min-height: 84px; }
+  #stage .rocketscene .tile.pic .emoji, #stage .rocketscene .tile.pic .pic-wrap { font-size: 3rem; }
+  #stage .rocketscene .skypanel { min-height: 170px; padding: 8px 14px; }
+  #stage .rocketscene .skypanel .tile.target { min-width: 72px; min-height: 72px; }
+  #stage .rocketscene .rocket { width: auto; }
+  #stage .rocketscene .rocket svg { height: min(150px, 24vh); width: auto; max-width: 100%; }
+  #stage .rocketscene .fuel { height: 100px; }
+  #stage .kitchenscene .pot-wrap { width: 150px; margin-top: 26px; }
+  #stage .kitchenscene .dish .pic-wrap { width: 96px; }
+  #stage .kitchenscene .kitchen-pet { width: 84px; }
+  #stage .kitchenscene .tile.pic.target { min-width: 76px; min-height: 76px; }
+  #stage .kitchenscene .ktile { min-width: 72px; min-height: 72px; font-size: 2.6rem; }
+  #stage .kitchenscene .kslot { width: 64px; height: 64px; font-size: 2.4rem; }
+  #stage .kitchenscene .board { padding: 8px 12px; min-height: 76px; }
+  #stage .bridgescene .glyph { font-size: clamp(3.2rem, 11vh, 5rem); }
+  #stage .bridgescene .bridge { margin-top: 14px; min-height: 92px; padding-bottom: 14px; }
+  #stage .bridgescene .tile.wordtile { min-width: 84px; min-height: 76px; font-size: 2.3rem; }
+  #stage .bridgescene .soundbutton.dot { width: 56px; height: 56px; min-height: 56px; } #stage .bridgescene .soundbutton { min-height: 56px; }
+}
+
 /* ---------- Reduce Motion: no particles, no flights; the creature's face and the sound still say yes ---------- */
 @media (prefers-reduced-motion: reduce) {
   #fxp { display: none; }

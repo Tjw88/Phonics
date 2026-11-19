@@ -95,7 +95,7 @@ export const feedCreature = async (ctx: Ctx, target: Grapheme, options: Grapheme
   const bubble = h('button', {
     class: 'bubble-btn', 'data-testid': 'replay', 'aria-label': `Hear the sound ${slashed(target.id)} again`, onClick: () => { tap(); say(); },
   }, h('span', { class: 'speaker' }, '🔊'), h('span', { class: 'bubble-sound' }, slashed(target.id)));
-  const assist = makeAssist(ctx.s.easyTap || choices < 2); // one option = nothing to get wrong: a tap just works (a 3-year-old taps first)
+  const assist = makeAssist(() => ctx.s.easyTap || choices < 2); // read LIVE: a grown-up switching Tap vs Drag mid-round takes effect at once; // one option = nothing to get wrong: a tap just works (a 3-year-old taps first)
   let firstTry = true;
   let misses = 0;
   let resolve!: (r: TrialResult) => void;
@@ -148,7 +148,7 @@ export const feedCreature = async (ctx: Ctx, target: Grapheme, options: Grapheme
       class: `tile letter tone${i % 4}${choices === 1 ? ' glow' : ''}`, 'data-testid': 'tile', 'data-letter': g.id,
       'data-answer': g.id === target.id ? '1' : '0', 'aria-label': `letter ${g.id}`, style: `animation-delay:${i * 90}ms`,
     }, g.id);
-    tile.addEventListener('pointerdown', () => { tap(); sfx.pop(); });
+    tile.addEventListener('pointerdown', (e) => { if (e.button === 0 && e.isPrimary) { tap(); sfx.pop(); } });
     makeDraggable(tile, {
       target: () => mouth.getBoundingClientRect(),
       slop: 45,
@@ -165,7 +165,8 @@ export const feedCreature = async (ctx: Ctx, target: Grapheme, options: Grapheme
         }
         if (!tile.dataset.busy) dino.classList.remove('looking');
       },
-      onTap: () => {
+      onTap: (info) => {
+        if (info?.sloppy) assist.sloppy(); // a clumsy click with a little movement: place it, do not make the child learn the drag first
         if (assist.allow) return void attempt(tile, g, { x: 0, y: 0 });
         assist.miss(); // not yet: the letter hops toward the mouth to show where it wants to go
         const t = tile.getBoundingClientRect(), m = mouth.getBoundingClientRect();
@@ -173,7 +174,7 @@ export const feedCreature = async (ctx: Ctx, target: Grapheme, options: Grapheme
         tile.animate([{ transform: 'translate(0,0)' }, { transform: `translate(${dx}px, ${dy - 18}px) scale(1.05)`, offset: 0.5 }, { transform: 'translate(0,0)' }], { duration: 480, easing: 'ease-out' });
         sfx.boing();
         stopGhost();
-        stopGhost = ghostDrag(sceneEl, choices === 1 ? tile : tilesRow, mouth, { delay: 700 });
+        stopGhost = ghostDrag(sceneEl, choices === 1 ? tile : tilesRow, mouth, { delay: 700, skipWhen: () => ctx.s.easyTap });
         if (assist.allow) tile.classList.add('glow');
       },
     });
@@ -189,7 +190,7 @@ export const feedCreature = async (ctx: Ctx, target: Grapheme, options: Grapheme
     tilesRow,
   );
   mount(ctx.stage, sceneEl);
-  stopGhost = ghostDrag(sceneEl, choices === 1 ? tiles[0]! : tilesRow, mouth);
+  stopGhost = ghostDrag(sceneEl, choices === 1 ? tiles[0]! : tilesRow, mouth, { skipWhen: () => ctx.s.easyTap });
   await wait(250);
   saySeq([{ phrase: 'hungry_for', text: 'I’m hungry for' }, { sound: phonemeOf(target.id) }]);
   return done;
@@ -299,7 +300,7 @@ export const rhymeSets = (accent: AccentId): Word[][] => {
 export const rhymeRocket = async (ctx: Ctx, target: Word, answer: Word, distractors: Word[]): Promise<TrialResult> => {
   const options = shuffle([answer, ...distractors], ctx.rng);
   ctx.hint(`Ask: "What else rhymes with ${target.text}?" Clap the words together. Drag the rhyming picture into the rocket.`);
-  const assist = makeAssist(ctx.s.easyTap);
+  const assist = makeAssist(() => ctx.s.easyTap);
   let firstTry = true;
   let resolve!: (r: TrialResult) => void;
   const done = new Promise<TrialResult>((r) => (resolve = r));
@@ -354,7 +355,7 @@ export const rhymeRocket = async (ctx: Ctx, target: Word, answer: Word, distract
       class: `tile pic card${i % 3}`, 'data-testid': 'pic', 'data-answer': w === answer ? '1' : '0', 'aria-label': 'picture choice',
       style: `animation-delay:${i * 110}ms`,
     }, pictureEl(w.text, w.emoji));
-    b.addEventListener('pointerdown', () => { tap(); sfx.pop(); });
+    b.addEventListener('pointerdown', (e) => { if (e.button === 0 && e.isPrimary) { tap(); sfx.pop(); } });
     makeDraggable(b, {
       target: () => rocket.getBoundingClientRect(),
       slop: 50,
@@ -365,13 +366,14 @@ export const rhymeRocket = async (ctx: Ctx, target: Word, answer: Word, distract
         if (hit) await attempt(b, w, cur);
         else springBack(b, cur);
       },
-      onTap: () => {
+      onTap: (info) => {
+        if (info?.sloppy) assist.sloppy();
         if (assist.allow) return void attempt(b, w, { x: 0, y: 0 });
         assist.miss();
         sfx.boing();
         b.animate([{ transform: 'translate(0,0)' }, { transform: 'translateY(-20px) scale(1.06)', offset: 0.5 }, { transform: 'translate(0,0)' }], { duration: 480, easing: 'ease-out' });
         stopGhost();
-        stopGhost = ghostDrag(sceneEl, picsRow, rocket, { delay: 700 });
+        stopGhost = ghostDrag(sceneEl, picsRow, rocket, { delay: 700, skipWhen: () => ctx.s.easyTap });
       },
     });
     return b;
@@ -383,7 +385,7 @@ export const rhymeRocket = async (ctx: Ctx, target: Word, answer: Word, distract
     picsRow,
   );
   mount(ctx.stage, sceneEl);
-  stopGhost = ghostDrag(sceneEl, picsRow, rocket);
+  stopGhost = ghostDrag(sceneEl, picsRow, rocket, { skipWhen: () => ctx.s.easyTap });
   await wait(250);
   saySeq([{ phrase: 'which_rhymes', text: 'Which one rhymes?' }, { word: target.text }]);
   return done;
@@ -449,40 +451,74 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
     setTimeout(() => sl.isConnected && !reducedMotion() && sl.animate([{ transform: 'translateY(0px)' }, { transform: 'translateY(5px)' }, { transform: 'translateY(0px)' }], { duration: 240, easing: 'ease-out' }), 300);
   };
 
-  // slide a finger across the letters left to right to blend them (a gesture, not a button)
+  // slide a finger (or the mouse, button down) across the letters left to right to blend them (a gesture, not a button).
+  // Forgiving on purpose: the column is found by x (a little above and below the row counts), a fast flick that jumps over a letter still
+  // passes through it (the path is sampled), wandering back is fine, and the handlers live on the window so leaving the row or the window
+  // never strands the gesture.
   let visited: number[] = [];
   const lightClear = () => slots.forEach((sl) => sl.classList.remove('lit'));
-  const colAt = (x: number, y: number): number => {
-    const el = document.elementFromPoint(x, y)?.closest('.gcol') as HTMLElement | null;
-    return el ? Number(el.dataset.i) : -1;
-  };
   const wordRow = h('div', { class: 'row word', 'data-testid': 'word' });
   wordRow.style.touchAction = 'none';
-  wordRow.addEventListener('pointerdown', (e) => {
-    if (!allTapped()) return;
+  const colAt = (x: number, y: number): number => {
+    const row = wordRow.getBoundingClientRect();
+    if (y < row.top - 60 || y > row.bottom + 60) return -1;
+    let best = -1, bestD = 36; // (the gap between letters, and a little beyond the ends, still counts)
+    wordRow.querySelectorAll<HTMLElement>('.gcol').forEach((c) => {
+      const r = c.getBoundingClientRect();
+      const d = x < r.left ? r.left - x : x > r.right ? x - r.right : 0;
+      if (d < bestD) { bestD = d; best = Number(c.dataset.i); }
+    });
+    return best;
+  };
+  const advanceTo = (c: number) => {
+    if (c === 0 && visited.length !== 1) visited = []; // (a new start: from the first letter again)
+    if (c !== visited.length) return; // only the NEXT letter in order counts
+    visited.push(c);
+    blip(phs[c] as string, { maxMs: 260 });
+    play(glyphs[c] as HTMLElement, 'bounce', 400);
+    slots[c]?.classList.add('lit'); standOn(c); // the planks light up left to right, the creature follows
+    if (visited.length >= word.graphemes.length) {
+      visited = [];
+      wordRow.classList.add('merge');
+      bridge.classList.add('blended'); // the whole bridge glows: the sounds are one word
+      setTimeout(() => { speak(word.text); }, 250);
+      setTimeout(() => { wordRow.classList.remove('merge'); bridge.classList.remove('blended'); lightClear(); if (!bridge.classList.contains('built') && !visited.length) hopTo({ x: 0, y: 0 }, 420, 30); }, 1400);
+    }
+  };
+  let slide: { id: number; x: number; y: number } | null = null;
+  const slideMove = (e: PointerEvent) => {
+    if (!slide || e.pointerId !== slide.id) return;
+    if (e.pointerType === 'mouse' && e.buttons === 0) return slideEnd(e); // the release was never seen
+    const steps = Math.max(1, Math.ceil(Math.hypot(e.clientX - slide.x, e.clientY - slide.y) / 12));
+    for (let k = 1; k <= steps; k++) {
+      const c = colAt(slide.x + ((e.clientX - slide.x) * k) / steps, slide.y + ((e.clientY - slide.y) * k) / steps);
+      if (c >= 0) advanceTo(c);
+    }
+    slide.x = e.clientX; slide.y = e.clientY;
+  };
+  const slideEnd = (e?: PointerEvent) => {
+    if (e && slide && e.pointerId !== slide.id) return;
+    slide = null;
+    window.removeEventListener('pointermove', slideMove, true);
+    window.removeEventListener('pointerup', slideEnd, true);
+    window.removeEventListener('pointercancel', slideEnd, true);
+    window.removeEventListener('blur', slideEnd as () => void);
+  };
+  const slideStart = (e: PointerEvent) => {
+    if ((e.target as Element).closest('.wordtile, .btn, .bubble-btn')) return; // (the answer cards are for choosing, not for sliding)
+    if (!allTapped() || !e.isPrimary || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    slideEnd();
     visited = [];
     slideHint.hidden = true;
     lightClear();
+    slide = { id: e.pointerId, x: e.clientX, y: e.clientY };
     const c = colAt(e.clientX, e.clientY);
-    if (c >= 0) visited.push(c);
-  });
-  wordRow.addEventListener('pointermove', (e) => {
-    if (!allTapped() || e.buttons === 0) return;
-    const c = colAt(e.clientX, e.clientY);
-    if (c >= 0 && visited[visited.length - 1] !== c) {
-      visited.push(c);
-      blip(phs[c] as string, { maxMs: 260 });
-      play(glyphs[c] as HTMLElement, 'bounce', 400);
-      if (visited.every((v, k) => v === k)) { slots[c]?.classList.add('lit'); standOn(c); } // the planks light up left to right, the creature follows
-      if (visited.length >= word.graphemes.length && visited.every((v, k) => v === k)) {
-        visited = [];
-        wordRow.classList.add('merge');
-        bridge.classList.add('blended'); // the whole bridge glows: the sounds are one word
-        setTimeout(() => { speak(word.text); }, 250);
-        setTimeout(() => { wordRow.classList.remove('merge'); bridge.classList.remove('blended'); lightClear(); if (!bridge.classList.contains('built') && !visited.length) hopTo({ x: 0, y: 0 }, 420, 30); }, 1400);
-      }
-    }
-  });
+    if (c === 0 && !(e.target as Element).closest('.soundbutton')) advanceTo(0); // (a tap on the first sound button just plays that sound)
+    window.addEventListener('pointermove', slideMove, true);
+    window.addEventListener('pointerup', slideEnd, true);
+    window.addEventListener('pointercancel', slideEnd, true);
+    window.addEventListener('blur', slideEnd as () => void);
+  };
 
   const showChoices = () => {
     choicesBox.replaceChildren(
@@ -611,7 +647,9 @@ export const bridgeBuilder = async (ctx: Ctx, word: Word, distractors: Word[]): 
   const glyphs = word.graphemes.map((g) => h('span', { class: 'glyph' }, g));
   word.graphemes.forEach((_, i) => wordRow.append(h('div', { class: 'gcol', 'data-i': i }, glyphs[i], buttons[i])));
   wordRow.append(slideHint); // drawn over the letters (absolute), so it costs no height
-  mount(ctx.stage, h('div', { class: 'scene bridgescene' }, caps, wordRow, bridge, choicesBox));
+  const sceneRoot = h('div', { class: 'scene bridgescene' }, caps, wordRow, bridge, choicesBox);
+  sceneRoot.addEventListener('pointerdown', slideStart); // the swipe may start anywhere on the card (a little left of the first letter, on the bridge...)
+  mount(ctx.stage, sceneRoot);
   if (faded) {
     slots.forEach((sl) => sl.classList.add('filled'));
     showChoices(); // straight to blending; it speaks its own prompt
