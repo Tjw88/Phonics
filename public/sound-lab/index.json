@@ -1,0 +1,406 @@
+{
+ "voice": "en-GB-SoniaNeural",
+ "sounds": {
+  "s": {
+   "cur": {
+    "file": "s_cur.mp3",
+    "ms": 480
+   },
+   "nat": {
+    "file": "s_nat.mp3",
+    "ms": 289
+   },
+   "car": {
+    "file": "s_car.mp3",
+    "ms": 154
+   },
+   "short": {
+    "file": "s_short.mp3",
+    "ms": 200
+   }
+  },
+  "f": {
+   "cur": {
+    "file": "f_cur.mp3",
+    "ms": 480
+   },
+   "nat": {
+    "file": "f_nat.mp3",
+    "ms": 229
+   },
+   "car": {
+    "file": "f_car.mp3",
+    "ms": 109
+   },
+   "short": {
+    "file": "f_short.mp3",
+    "ms": 200
+   }
+  },
+  "sh": {
+   "cur": {
+    "file": "sh_cur.mp3",
+    "ms": 480
+   },
+   "nat": {
+    "file": "sh_nat.mp3",
+    "ms": 110
+   },
+   "car": {
+    "file": "sh_car.mp3",
+    "ms": 134
+   },
+   "short": {
+    "file": "sh_short.mp3",
+    "ms": 110
+   }
+  },
+  "th": {
+   "cur": {
+    "file": "th_cur.mp3",
+    "ms": 480
+   },
+   "nat": {
+    "file": "th_nat.mp3",
+    "ms": 279
+   },
+   "car": {
+    "file": "th_car.mp3",
+    "ms": 109
+   },
+   "short": {
+    "file": "th_short.mp3",
+    "ms": 200
+   }
+  },
+  "m": {
+   "cur": {
+    "file": "m_cur.mp3",
+    "ms": 430
+   },
+   "nat": {
+    "file": "m_nat.mp3",
+    "ms": 299
+   },
+   "car": {
+    "file": "m_car.mp3",
+    "ms": 120
+   },
+   "short": {
+    "file": "m_short.mp3",
+    "ms": 190
+   }
+  },
+  "n": {
+   "cur": {
+    "file": "n_cur.mp3",
+    "ms": 430
+   },
+   "nat": {
+    "file": "n_nat.mp3",
+    "ms": 299
+   },
+   "car": {
+    "file": "n_car.mp3",
+    "ms": 120
+   },
+   "short": {
+    "file": "n_short.mp3",
+    "ms": 190
+   }
+  },
+  "l": {
+   "cur": {
+    "file": "l_cur.mp3",
+    "ms": 430
+   },
+   "nat": {
+    "file": "l_nat.mp3",
+    "ms": 299
+   },
+   "car": {
+    "file": "l_car.mp3",
+    "ms": 120
+   },
+   "short": {
+    "file": "l_short.mp3",
+    "ms": 190
+   }
+  },
+  "r": {
+   "cur": {
+    "file": "r_cur.mp3",
+    "ms": 430
+   },
+   "nat": {
+    "file": "r_nat.mp3",
+    "ms": 269
+   },
+   "car": {
+    "file": "r_car.mp3",
+    "ms": 120
+   },
+   "short": {
+    "file": "r_short.mp3",
+    "ms": 190
+   }
+  },
+  "p": {
+   "cur": {
+    "file": "p_cur.mp3",
+    "ms": 148
+   },
+   "nat": {
+    "file": "p_nat.mp3",
+    "ms": 170
+   },
+   "car": {
+    "file": "p_car.mp3",
+    "ms": 49
+   },
+   "short": {
+    "file": "p_short.mp3",
+    "ms": 110
+   }
+  },
+  "t": {
+   "cur": {
+    "file": "t_cur.mp3",
+    "ms": 150
+   },
+   "nat": {
+    "file": "t_nat.mp3",
+    "ms": 150
+   },
+   "car": {
+    "file": "t_car.mp3",
+    "ms": 64
+   },
+   "short": {
+    "file": "t_short.mp3",
+    "ms": 110
+   }
+  },
+  "k": {
+   "cur": {
+    "file": "k_cur.mp3",
+    "ms": 170
+   },
+   "nat": {
+    "file": "k_nat.mp3",
+    "ms": 170
+   },
+   "car": {
+    "file": "k_car.mp3",
+    "ms": 64
+   },
+   "short": {
+    "file": "k_short.mp3",
+    "ms": 110
+   }
+  },
+  "d": {
+   "cur": {
+    "file": "d_cur.mp3",
+    "ms": 160
+   },
+   "nat": {
+    "file": "d_nat.mp3",
+    "ms": 160
+   },
+   "car": {
+    "file": "d_car.mp3",
+    "ms": 40
+   },
+   "short": {
+    "file": "d_short.mp3",
+    "ms": 110
+   }
+  },
+  "g": {
+   "cur": {
+    "file": "g_cur.mp3",
+    "ms": 180
+   },
+   "nat": {
+    "file": "g_nat.mp3",
+    "ms": 170
+   },
+   "car": {
+    "file": "g_car.mp3",
+    "ms": 40
+   },
+   "short": {
+    "file": "g_short.mp3",
+    "ms": 110
+   }
+  },
+  "ch": {
+   "cur": {
+    "file": "ch_cur.mp3",
+    "ms": 239
+   },
+   "nat": {
+    "file": "ch_nat.mp3",
+    "ms": 200
+   },
+   "car": {
+    "file": "ch_car.mp3",
+    "ms": 84
+   },
+   "short": {
+    "file": "ch_short.mp3",
+    "ms": 130
+   }
+  },
+  "a": {
+   "cur": {
+    "file": "a_cur.mp3",
+    "ms": 520
+   },
+   "nat": {
+    "file": "a_nat.mp3",
+    "ms": 280
+   },
+   "car": {
+    "file": "a_car.mp3",
+    "ms": 280
+   },
+   "short": {
+    "file": "a_short.mp3",
+    "ms": 180
+   }
+  },
+  "e": {
+   "cur": {
+    "file": "e_cur.mp3",
+    "ms": 520
+   },
+   "nat": {
+    "file": "e_nat.mp3",
+    "ms": 280
+   },
+   "car": {
+    "file": "e_car.mp3",
+    "ms": 280
+   },
+   "short": {
+    "file": "e_short.mp3",
+    "ms": 180
+   }
+  },
+  "i": {
+   "cur": {
+    "file": "i_cur.mp3",
+    "ms": 520
+   },
+   "nat": {
+    "file": "i_nat.mp3",
+    "ms": 280
+   },
+   "car": {
+    "file": "i_car.mp3",
+    "ms": 280
+   },
+   "short": {
+    "file": "i_short.mp3",
+    "ms": 180
+   }
+  },
+  "o": {
+   "cur": {
+    "file": "o_cur.mp3",
+    "ms": 519
+   },
+   "nat": {
+    "file": "o_nat.mp3",
+    "ms": 269
+   },
+   "car": {
+    "file": "o_car.mp3",
+    "ms": 280
+   },
+   "short": {
+    "file": "o_short.mp3",
+    "ms": 180
+   }
+  },
+  "u": {
+   "cur": {
+    "file": "u_cur.mp3",
+    "ms": 520
+   },
+   "nat": {
+    "file": "u_nat.mp3",
+    "ms": 280
+   },
+   "car": {
+    "file": "u_car.mp3",
+    "ms": 280
+   },
+   "short": {
+    "file": "u_short.mp3",
+    "ms": 180
+   }
+  },
+  "ee": {
+   "cur": {
+    "file": "ee_cur.mp3",
+    "ms": 520
+   },
+   "nat": {
+    "file": "ee_nat.mp3",
+    "ms": 319
+   },
+   "car": {
+    "file": "ee_car.mp3",
+    "ms": 380
+   },
+   "short": {
+    "file": "ee_short.mp3",
+    "ms": 260
+   }
+  },
+  "ai": {
+   "cur": {
+    "file": "ai_cur.mp3",
+    "ms": 659
+   },
+   "nat": {
+    "file": "ai_nat.mp3",
+    "ms": 319
+   },
+   "car": {
+    "file": "ai_car.mp3",
+    "ms": 380
+   },
+   "short": {
+    "file": "ai_short.mp3",
+    "ms": 260
+   }
+  }
+ },
+ "labels": {
+  "s": "s",
+  "f": "f",
+  "sh": "ʃ",
+  "th": "θ",
+  "m": "m",
+  "n": "n",
+  "l": "l",
+  "r": "ɹ",
+  "p": "p",
+  "t": "t",
+  "k": "k",
+  "d": "d",
+  "g": "ɡ",
+  "ch": "tʃ",
+  "a": "æ",
+  "e": "ɛ",
+  "i": "ɪ",
+  "o": "ɒ",
+  "u": "ʌ",
+  "ee": "iː",
+  "ai": "eɪ"
+ }
+}

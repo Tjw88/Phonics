@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sound lab: short letter sounds</title>
+<style>
+body{font:16px/1.4 system-ui,sans-serif;margin:0;padding:16px;background:#fffaf0;color:#1d3557;max-width:980px;margin-inline:auto}
+h1{font-size:1.4rem;margin:.2em 0}p{margin:.4em 0}.muted{color:#4a5d78;font-size:.92rem}
+table{border-collapse:collapse;width:100%;margin-top:12px}th,td{padding:6px 8px;border-bottom:1px solid #e6dcc4;text-align:center;vertical-align:middle}
+th{position:sticky;top:0;background:#fffaf0;font-size:.9rem}td.s{font-weight:700;font-size:1.3rem;text-align:left;width:70px}
+.v{display:flex;flex-direction:column;align-items:center;gap:4px}
+button.p{border:0;border-radius:12px;background:#2a9d8f;color:#fff;font-size:1rem;padding:10px 16px;min-width:64px;cursor:pointer}
+button.p:active,button.p.on{background:#e76f51}
+select{font-size:1rem;padding:4px;border-radius:8px}
+.ms{font-size:.75rem;color:#6b7a90}
+textarea{width:100%;min-height:90px;font:14px monospace;margin-top:8px}
+button.c{font-size:1rem;padding:10px 18px;border-radius:12px;border:2px solid #1d3557;background:#fff;cursor:pointer}
+@media(max-width:600px){td,th{padding:4px 2px}button.p{padding:8px 10px;min-width:48px}}
+</style></head><body>
+<h1>Sound lab: short, natural letter sounds</h1>
+<p>You said the current sounds are trilling, elongated and drawn out. Here are the same sounds made much shorter, at a normal speaking rate. Use headphones.</p>
+<p class="muted"><b>cur</b> = the sounds in the app now (long). <b>nat</b> = short, natural cut. <b>car</b> = cut from a syllable (the sound as it is really spoken before a vowel; shortest). <b>short</b> = nat, cut even shorter. Rate each 1 (bad) to 5 (what a good teacher says); leave blank to skip. Nobody, including the AI, has judged these by ear.</p>
+<table id="t"><thead><tr><th>sound</th><th>cur</th><th>nat</th><th>car</th><th>short</th></tr></thead><tbody></tbody></table>
+<p><b>Overall notes</b> (what length or character is right? too clipped? any that already sound right?)</p>
+<textarea id="notes" placeholder="e.g. vowels around 250 ms feel right, stops too clipped..."></textarea>
+<p><button class="c" id="copy">Copy my ratings</button> <span class="muted" id="msg"></span></p>
+<textarea id="out" readonly placeholder="Ratings appear here after you press Copy"></textarea>
+<script>
+(async () => {
+  const idx = await (await fetch('sound-lab/index.json')).json();
+  const V = ['cur', 'nat', 'car', 'short'], tb = document.querySelector('#t tbody');
+  let key = 'soundlab-ratings-v1', saved = {}; try { saved = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) {}
+  const cur = { a: null, b: null };
+  for (const [k, row] of Object.entries(idx.sounds)) {
+    const tr = document.createElement('tr'); const td0 = document.createElement('td'); td0.className = 's'; td0.textContent = '/' + k + '/'; tr.appendChild(td0);
+    for (const v of V) {
+      const td = document.createElement('td'); const d = row[v];
+      if (!d) { td.textContent = '-'; tr.appendChild(td); continue; }
+      const box = document.createElement('div'); box.className = 'v';
+      const b = document.createElement('button'); b.className = 'p'; b.textContent = '▶';
+      const au = new Audio('sound-lab/' + d.file); b.onclick = () => { if (cur.a) { cur.a.pause(); cur.a.currentTime = 0; cur.b && cur.b.classList.remove('on'); } cur.a = au; cur.b = b; b.classList.add('on'); au.currentTime = 0; au.play(); au.onended = () => b.classList.remove('on'); };
+      const ms = document.createElement('div'); ms.className = 'ms'; ms.textContent = d.ms + ' ms';
+      const sel = document.createElement('select'); sel.innerHTML = '<option value="">-</option>' + [1, 2, 3, 4, 5].map((n) => '<option>' + n + '</option>').join('');
+      sel.value = (saved[k] || {})[v] || ''; sel.onchange = () => { saved[k] = saved[k] || {}; saved[k][v] = sel.value; try { localStorage.setItem(key, JSON.stringify(saved)); } catch (e) {} };
+      box.append(b, ms, sel); td.appendChild(box); tr.appendChild(td);
+    }
+    tb.appendChild(tr);
+  }
+  const notes = document.getElementById('notes'); try { notes.value = localStorage.getItem(key + '-notes') || ''; } catch (e) {}
+  notes.oninput = () => { try { localStorage.setItem(key + '-notes', notes.value); } catch (e) {} };
+  document.getElementById('copy').onclick = async () => {
+    const lines = ['SOUND LAB ratings (1 bad .. 5 good; cur/nat/car/short)'];
+    for (const k of Object.keys(idx.sounds)) { const r = saved[k] || {}; if (V.some((v) => r[v])) lines.push('/' + k + '/ ' + V.map((v) => v + '=' + (r[v] || '-')).join(' ')); }
+    lines.push('NOTES: ' + notes.value);
+    const txt = lines.join('\n'); document.getElementById('out').value = txt;
+    try { await navigator.clipboard.writeText(txt); document.getElementById('msg').textContent = 'Copied. Paste it back to me.'; } catch (e) { document.getElementById('msg').textContent = 'Select the text below and copy it.'; }
+  };
+})();
+</script></body></html>
